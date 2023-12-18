@@ -1,0 +1,25 @@
+[package]
+name = "identity_registry"
+version = "0.0.1"
+description = "The Identity Registry Program (IRP) manages the configurable issuance and tracking of on-chain identities to enable on-chain transaction permissioning."
+authors = ["Bridgesplit Developers <developers@bridgesplit.com>"]
+repository = "https://github.com/bridgesplit/rwa"
+license-file = "../../LICENSE"
+edition = "2021"
+readme = "README.md"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "identity_registry"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang =  { version = "0.29.0", features = ["init-if-needed"] }
+anchor-spl = { version = "0.29.0" }
+asset_controller = { path = "../asset_controller", features = ["cpi"] }

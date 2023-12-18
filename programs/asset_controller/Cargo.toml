@@ -1,0 +1,24 @@
+[package]
+name = "asset_controller"
+version = "0.0.1"
+description = "The Asset Controller Program (ACP) enables core asset management functionality for newly issued assets, including transfer controls and transaction privacy."
+authors = ["Bridgesplit Developers <developers@bridgesplit.com>"]
+repository = "https://github.com/bridgesplit/rwa"
+license-file = "../../LICENSE"
+edition = "2021"
+readme = "README.md"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "asset_controller"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang =  { version = "0.29.0", features = ["init-if-needed"] }
+anchor-spl = { version = "0.29.0" }

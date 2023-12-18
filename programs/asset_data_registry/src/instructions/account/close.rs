@@ -1,0 +1,24 @@
+use crate::state::*;
+use anchor_lang::prelude::*;
+
+#[derive(Accounts)]
+#[instruction()]
+pub struct CloseDataAccount<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
+    #[account(mut)]
+    pub authority: Signer<'info>,
+    #[account(
+        seeds = [data_registry.asset_mint.key().as_ref(), DataRegistry::SEED],
+        bump,
+        constraint = data_registry.authority == authority.key(),
+    )]
+    pub data_registry: Box<Account<'info, DataRegistry>>,
+    #[account(
+        mut,
+        close = payer,
+        seeds = [data_registry.key().as_ref(), data_account.nonce.as_ref()],
+        bump,
+    )]
+    pub data_account: Box<Account<'info, DataAccount>>,
+}

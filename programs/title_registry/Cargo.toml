@@ -1,0 +1,24 @@
+[package]
+name = "title_registry"
+version = "0.0.1"
+description = "The Title Registry Program (TRP) is a dedicated program for reference and management of off-chain data necessary for verifying the enforceable property rights of a particular asset."
+authors = ["Bridgesplit Developers <developers@bridgesplit.com>"]
+repository = "https://github.com/bridgesplit/rwa"
+license-file = "../../LICENSE"
+edition = "2021"
+readme = "README.md"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "title_registry"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+default = []
+
+[dependencies]
+anchor-lang =  { version = "0.29.0", features = ["init-if-needed"] }
+anchor-spl = { version = "0.29.0" }
