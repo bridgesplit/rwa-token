@@ -1,0 +1,17 @@
+[features]
+seeds = false
+
+[registry]
+url = "https://anchor.projectserum.com"
+
+[provider]
+cluster = "localnet"
+wallet = "~/.config/solana/id.json"
+
+[workspace]
+members = [
+  "asset_controller",
+  "data_registry",
+  "identity_registry",
+  "policy_engine",
+]

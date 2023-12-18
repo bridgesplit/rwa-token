@@ -1,0 +1,45 @@
+{
+    "name": "rwa-sdk",
+    "version": "1.0.0",
+    "description": "rwa sdk",
+    "main": "dist/src/index.js",
+    "types": "dist/src/index.d.ts",
+    "scripts": {
+        "build": "rimraf dist && tsc -p tsconfig.json",
+        "build:docs": "typedoc",
+        "test": "ava"
+    },
+    "files": [
+        "/dist/src"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bridgesplit/rwa.git"
+    },
+    "author": "bridgesplit",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/bridgesplit/rwa/issues"
+    },
+    "homepage": "https://github.com/bridgesplit/rwa#readme",
+    "dependencies": {
+        "@coral-xyz/anchor": "^0.29.0",
+        "@solana/spl-token": "^0.3.11",
+        "@solana/web3.js": "^1.89.0",
+        "dotenv": "^16.4.4"
+    },
+    "devDependencies": {
+        "@ava/typescript": "^4.1.0",
+        "ava": "^6.1.1"
+    },
+    "ava": {
+        "typescript": {
+            "compile": false,
+            "rewritePaths": {
+                "src/": "dist/src/",
+                "tests/": "dist/tests/"
+            }
+        },
+        "timeout": "120s"
+    }
+}
