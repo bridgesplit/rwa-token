@@ -19,9 +19,6 @@ pub struct IssueTokens<'info> {
     pub owner: Signer<'info>,
     #[account(
         mut,
-        constraint = transaction_approval_account.owner == owner.key(),
-        constraint = transaction_approval_account.asset_mint == asset_mint.key(),
-        constraint = transaction_approval_account.instruction_name == INSTRUCTION_NAME,
         constraint = transaction_approval_account.amount == Some(amount),
     )]
     pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,

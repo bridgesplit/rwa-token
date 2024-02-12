@@ -1,7 +1,9 @@
+pub mod error;
 pub mod instructions;
 pub mod state;
 pub mod utils;
 
+pub use error::*;
 pub use instructions::*;
 pub use state::*;
 pub use utils::*;
@@ -32,12 +34,5 @@ pub mod identity_registry {
 
     pub fn revoke_identity_account(_ctx: Context<RevokeIdentityAccount>) -> Result<()> {
         Ok(())
-    }
-
-    pub fn check_identity_authorization(
-        ctx: Context<CheckIdentityAuthorization>,
-        args: ::asset_controller::GenerateTransationApprovalArgs,
-    ) -> Result<()> {
-        instructions::check_authorization::handler(ctx, args)
     }
 }

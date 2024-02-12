@@ -1,7 +1,7 @@
 [package]
-name = "identity_registry"
+name = "policy_engine"
 version = "0.0.1"
-description = "The Identity Registry Program (IRP) manages the configurable issuance and tracking of on-chain identities to enable on-chain transaction permissioning."
+description = "The Policy Engine Program (PEP) enables the creation of policies that can be used to control the flow of funds in a programmatic way."
 authors = ["Bridgesplit Developers <developers@bridgesplit.com>"]
 repository = "https://github.com/bridgesplit/rwa"
 license-file = "../../LICENSE"
@@ -10,7 +10,7 @@ readme = "README.md"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "identity_registry"
+name = "policy_engine"
 
 [features]
 no-entrypoint = []
@@ -22,4 +22,3 @@ default = []
 [dependencies]
 anchor-lang =  { path = "../../../anchor/lang", features = ["init-if-needed"] }
 anchor-spl = { path = "../../../anchor/spl" }
-asset_controller = { path = "../asset_controller", features = ["cpi"] }

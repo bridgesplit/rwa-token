@@ -9,7 +9,7 @@ pub struct RevokeIdentityAccount<'info> {
     #[account(mut)]
     pub authority: Signer<'info>,
     #[account(
-        seeds = [legal_registry.asset_mint.key().as_ref(), IdentityRegistry::SEED],
+        seeds = [legal_registry.asset_mint.key().as_ref()],
         bump,
         constraint = legal_registry.authority == authority.key(),
     )]
