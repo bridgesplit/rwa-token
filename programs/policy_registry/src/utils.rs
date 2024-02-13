@@ -138,7 +138,7 @@ pub fn deserialize_and_enforce_policy(
     } else if data[..8] == get_policy_discriminator(PolicyType::TransactionAmountVelocity) {
         let policy: TransactionAmountVelocity =
             AccountDeserialize::try_deserialize(&mut &data[8..])?;
-
+        enforce_identity_filter(identity, policy.identity_filter)?;
         let total_amount_transferred = get_total_amount_transferred_in_timeframe(
             transfer_amounts,
             transfer_timestamps,
@@ -152,6 +152,7 @@ pub fn deserialize_and_enforce_policy(
     } else if data[..8] == get_policy_discriminator(PolicyType::TransactionCountVelocity) {
         let policy: TransactionCountVelocity =
             AccountDeserialize::try_deserialize(&mut &data[8..])?;
+        enforce_identity_filter(identity, policy.identity_filter)?;
         let total_transactions =
             get_total_transactions_in_timeframe(transfer_timestamps, policy.timeframe, timestamp);
         if total_transactions + 1 > policy.limit {
