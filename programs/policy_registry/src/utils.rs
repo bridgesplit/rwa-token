@@ -75,7 +75,7 @@ pub fn update_transfer_history_if_required(
     amount: u64,
     timestamp: i64,
     max_timeframe: i64,
-) {
+) -> Result<(), Error> {
     let min_timestamp = timestamp - max_timeframe;
     let mut evicted = false;
     for (i, t) in transfer_timestamps.iter_mut().enumerate() {
@@ -102,17 +102,12 @@ pub fn update_transfer_history_if_required(
             if *t == 0 {
                 transfer_amounts[i] = amount;
                 transfer_timestamps[i] = timestamp;
-                return;
+                break;
             }
         }
+        return Ok(());
     } else {
-        // move all elements to the left and add amount and timestamp to the end
-        for i in 0..transfer_timestamps.len() - 1 {
-            transfer_amounts[i] = transfer_amounts[i + 1];
-            transfer_timestamps[i] = transfer_timestamps[i + 1];
-        }
-        transfer_amounts[transfer_amounts.len() - 1] = amount;
-        transfer_timestamps[transfer_timestamps.len() - 1] = timestamp;
+        return Err(PolicyRegistryErrors::TransferHistoryFull.into());
     }
 }
 
@@ -167,6 +162,6 @@ pub fn deserialize_and_enforce_policy(
         amount,
         timestamp,
         max_timeframe,
-    );
+    )?;
     Ok(())
 }
