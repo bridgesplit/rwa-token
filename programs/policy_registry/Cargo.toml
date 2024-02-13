@@ -1,5 +1,5 @@
 [package]
-name = "policy_engine"
+name = "policy_registry"
 version = "0.0.1"
 description = "The Policy Engine Program (PEP) enables the creation of policies that can be used to control the flow of funds in a programmatic way."
 authors = ["Bridgesplit Developers <developers@bridgesplit.com>"]
@@ -10,7 +10,7 @@ readme = "README.md"
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "policy_engine"
+name = "policy_registry"
 
 [features]
 no-entrypoint = []
@@ -22,3 +22,4 @@ default = []
 [dependencies]
 anchor-lang =  { path = "../../../anchor/lang", features = ["init-if-needed"] }
 anchor-spl = { path = "../../../anchor/spl" }
+num_enum = "0.7.2"

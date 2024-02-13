@@ -24,4 +24,5 @@ anchor-lang =  { path = "../../../anchor/lang", features = ["init-if-needed", "i
 anchor-spl = { path = "../../../anchor/spl", features = ["token_2022_extensions", "token_2022"] }
 spl-transfer-hook-interface = { version = "0.5.0" }
 spl-tlv-account-resolution = "0.4.0"
-policy_engine = { path = "../policy_engine", features = ["cpi"] }
+policy_registry = { path = "../policy_registry", features = ["cpi"] }
+identity_registry = { path = "../identity_registry", features = ["cpi"] }

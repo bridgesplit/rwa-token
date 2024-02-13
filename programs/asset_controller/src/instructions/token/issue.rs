@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::program_option::COption};
 use anchor_spl::{
     associated_token::AssociatedToken,
     token_interface::{mint_to, Mint, MintTo, Token2022, TokenAccount},
@@ -6,28 +6,32 @@ use anchor_spl::{
 
 use crate::TransactionApprovalAccount;
 
-const INSTRUCTION_NAME: &str = "issue_tokens";
+#[derive(AnchorDeserialize, AnchorSerialize)]
+pub struct IssueTokensArgs {
+    pub amount: u64,
+    pub to: Pubkey,
+}
 
 #[derive(Accounts)]
-#[instruction(amount: u64)]
+#[instruction(args: IssueTokensArgs)]
 pub struct IssueTokens<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account(mut)]
     pub authority: Signer<'info>,
-    #[account()]
-    pub owner: Signer<'info>,
     #[account(
         mut,
-        constraint = transaction_approval_account.amount == Some(amount),
+        constraint = transaction_approval_account.amount == Some(args.amount),
     )]
     pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
-    #[account()]
+    #[account(
+        constraint = asset_mint.mint_authority == COption::Some(authority.key()),
+    )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         mut,
         associated_token::mint = asset_mint,
-        associated_token::authority = owner,
+        associated_token::authority = args.to,
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     pub system_program: Program<'info, System>,

@@ -22,4 +22,3 @@ default = []
 [dependencies]
 anchor-lang =  { path = "../../../anchor/lang", features = ["init-if-needed"] }
 anchor-spl = { path = "../../../anchor/spl" }
-asset_controller = { path = "../asset_controller", features = ["cpi"] }

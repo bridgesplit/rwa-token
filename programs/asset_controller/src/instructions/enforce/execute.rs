@@ -52,6 +52,9 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     if approve_account.amount != Some(amount) {
         return Err(AssetControllerErrors::TransferAmountNotApproved.into());
     }
-   
+
+    // remove slot to make sure it's not used again
+    approve_account.slot = 0;
+
     Ok(())
 }

@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::Mint;
-use policy_engine::PolicyAccount;
+use identity_registry::IdentityAccount;
+use policy_registry::{deserialize_and_enforce_policy, PolicyAccount, PolicyRegistry};
 
 use crate::{state::*, AssetControllerErrors};
 
@@ -29,7 +30,9 @@ pub struct GenerateTransactionApproval<'info> {
         payer = payer,
     )]
     pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
+    pub policy_registry: Box<Account<'info, PolicyRegistry>>,
     pub policy_account: Box<Account<'info, PolicyAccount>>,
+    pub identity_account: Box<Account<'info, IdentityAccount>>,
     pub system_program: Program<'info, System>,
 }
 
@@ -45,12 +48,34 @@ pub fn handler(
         args.amount,
     );
     let remaining_accounts = ctx.remaining_accounts.to_vec();
-    let policies = ctx.accounts.policy_account.policies;
+    let policies = ctx.accounts.policy_registry.policies;
+    let mut transfer_amounts = ctx.accounts.policy_account.transfer_amounts;
+    let mut transfer_timestamps = ctx.accounts.policy_account.transfer_timestamps;
 
-    if remaining_accounts.len() < policies.len() {
-        return Err(AssetControllerErrors::PolicyAccountsMissing.into());
+    if let Some(amount) = args.amount {
+        if remaining_accounts.len() < policies.len() {
+            return Err(AssetControllerErrors::PolicyRegistrysMissing.into());
+        }
+
+        for (i, policy) in policies.iter().enumerate() {
+            let policy_account = &remaining_accounts[i];
+            if policy_account.key != policy {
+                return Err(AssetControllerErrors::PolicyRegistryMismatch.into());
+            } else {
+                // evaluate policy
+                deserialize_and_enforce_policy(
+                    &policy_account.data.borrow(),
+                    amount,
+                    Clock::get()?.unix_timestamp,
+                    ctx.accounts.identity_account.levels,
+                    ctx.accounts.policy_registry.max_timeframe,
+                    &mut transfer_amounts,
+                    &mut transfer_timestamps,
+                )?;
+            }
+        }
     }
-
-    // check for policy accounts and update values accordingly
+    ctx.accounts.policy_account.transfer_amounts = transfer_amounts;
+    ctx.accounts.policy_account.transfer_timestamps = transfer_timestamps;
     Ok(())
 }
