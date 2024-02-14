@@ -3,7 +3,7 @@ pub use anchor_lang::prelude::*;
 #[account()]
 pub struct TransactionApprovalAccount {
     /// asset mint
-    pub mint: Pubkey,
+    pub asset_mint: Pubkey,
     /// slot in which approve account has been generated
     pub slot: u64,
     /// from token account
@@ -18,13 +18,13 @@ impl TransactionApprovalAccount {
     pub const LEN: usize = 8 + 32 + 8 + 33 + 33 + 9;
     pub fn new(
         &mut self,
-        mint: Pubkey,
+        asset_mint: Pubkey,
         slot: u64,
         from: Option<Pubkey>,
         to: Option<Pubkey>,
         amount: Option<u64>,
     ) {
-        self.mint = mint;
+        self.asset_mint = asset_mint;
         self.slot = slot;
         self.from = from;
         self.to = to;

@@ -1,5 +1,7 @@
 use anchor_lang::prelude::*;
 
+use crate::DataRegistryErrors;
+
 #[account()]
 pub struct DataRegistry {
     pub version: u8,
@@ -21,6 +23,15 @@ impl DataRegistry {
         self.authority = authority;
         self.delegate = delegate;
     }
+    pub fn update_delegate(&mut self, delegate: Pubkey) {
+        self.delegate = delegate;
+    }
+    pub fn check_authority(&self, signer: Pubkey) -> Result<()> {
+        if self.authority != signer && self.delegate != signer {
+            return Err(DataRegistryErrors::UnauthorizedSigner.into());
+        }
+        Ok(())
+    }
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone)]
@@ -34,8 +45,6 @@ pub enum DataAccountType {
 #[account()]
 pub struct DataAccount {
     pub version: u8,
-    /// authority that can update a data account
-    pub authority: Pubkey,
     /// registry to which data account belongs to
     pub data_registry: Pubkey,
     /// type of the data account
@@ -58,6 +67,11 @@ impl DataAccount {
     ) {
         self.version = Self::VERSION;
         self.data_registry = data_regsitry;
+        self._type = _type;
+        self.name = name;
+        self.uri = uri;
+    }
+    pub fn update(&mut self, _type: DataAccountType, name: String, uri: String) {
         self._type = _type;
         self.name = name;
         self.uri = uri;

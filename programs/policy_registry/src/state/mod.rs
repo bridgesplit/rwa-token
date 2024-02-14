@@ -54,7 +54,7 @@ impl PolicyRegistry {
                     j += 1;
                 }
             }
-            return Ok(());
+            Ok(())
         } else {
             Err(PolicyRegistryErrors::PolicyNotFound.into())
         }

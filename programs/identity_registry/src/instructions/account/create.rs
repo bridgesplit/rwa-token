@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 #[instruction(owner: Pubkey)]
-pub struct RevokeIdentityAccount<'info> {
+pub struct CreateIdentityAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account()]
@@ -15,16 +15,17 @@ pub struct RevokeIdentityAccount<'info> {
     )]
     pub identity_registry: Box<Account<'info, IdentityRegistry>>,
     #[account(
-        mut,
-        close = payer,
-        seeds = [identity_registry.key().as_ref(), identity_account.owner.as_ref()],
+        init,
+        space = IdentityAccount::LEN,
+        seeds = [identity_registry.key().as_ref(), owner.as_ref()],
         bump,
-        constraint = identity_account.owner == owner
+        payer = payer,
     )]
     pub identity_account: Box<Account<'info, IdentityAccount>>,
+    pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<RevokeIdentityAccount>, owner: Pubkey) -> Result<()> {
+pub fn handler(ctx: Context<CreateIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
     // confirm signer is either authority or signer
     ctx.accounts
         .identity_registry
@@ -36,5 +37,8 @@ pub fn handler(ctx: Context<RevokeIdentityAccount>, owner: Pubkey) -> Result<()>
             return Err(IdentityRegistryErrors::UnauthorizedSigner.into());
         }
     }
+    ctx.accounts
+        .identity_account
+        .new(owner, ctx.accounts.identity_registry.key(), level);
     Ok(())
 }

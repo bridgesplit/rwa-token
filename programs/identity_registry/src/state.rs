@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::IdentityErrors;
+use crate::IdentityRegistryErrors;
 
 #[account()]
 pub struct IdentityRegistry {
@@ -18,6 +18,12 @@ impl IdentityRegistry {
         self.authority = authority;
         self.delegate = delegate;
         self.version = Self::VERSION;
+    }
+    pub fn check_authority(&self, authority: Pubkey) -> Result<()> {
+        if authority != self.authority {
+            return Err(IdentityRegistryErrors::UnauthorizedSigner.into());
+        }
+        Ok(())
     }
 }
 
@@ -47,7 +53,7 @@ impl IdentityAccount {
                 return Ok(());
             }
         }
-        return Err(IdentityErrors::MaxLevelsExceeded.into());
+        Err(IdentityRegistryErrors::MaxLevelsExceeded.into())
     }
 
     pub fn remove_level(&mut self, level: u8) -> Result<()> {
@@ -61,6 +67,6 @@ impl IdentityAccount {
                 return Ok(());
             }
         }
-        return Err(IdentityErrors::LevelNotFound.into());
+        Err(IdentityRegistryErrors::LevelNotFound.into())
     }
 }

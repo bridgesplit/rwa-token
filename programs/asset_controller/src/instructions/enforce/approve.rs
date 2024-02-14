@@ -45,6 +45,7 @@ pub struct GenerateTransactionApproval<'info> {
     )]
     pub policy_account: Account<'info, PolicyAccount>,
     #[account(
+        mut,
         seeds = [get_identity_registry_pda(asset_mint.key()).as_ref(), args.owner.as_ref()],
         bump,
         owner = identity_registry::id(),

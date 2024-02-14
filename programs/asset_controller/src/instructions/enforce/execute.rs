@@ -7,7 +7,7 @@ use crate::{state::*, AssetControllerErrors};
 #[instruction(amount: u64)]
 pub struct ExecuteTransferHook<'info> {
     #[account(
-        token::mint = mint,
+        token::mint = asset_mint,
         token::authority = owner_delegate,
         token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
     )]
@@ -15,16 +15,16 @@ pub struct ExecuteTransferHook<'info> {
     #[account(
         token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
     )]
-    pub mint: Box<InterfaceAccount<'info, Mint>>,
+    pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
-        token::mint = mint,
+        token::mint = asset_mint,
         token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
     )]
     pub destination_account: Box<InterfaceAccount<'info, TokenAccount>>,
     pub owner_delegate: SystemAccount<'info>,
     /// CHECK: meta list account
     #[account(
-        seeds = [META_LIST_ACCOUNT_SEED, mint.key().as_ref()],
+        seeds = [META_LIST_ACCOUNT_SEED, asset_mint.key().as_ref()],
         bump,
     )]
     pub extra_metas_account: UncheckedAccount<'info>,
@@ -37,7 +37,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     let approve_account = &mut ctx.accounts.approve_account;
 
     // make sure transfer mint is matching
-    if approve_account.mint != ctx.accounts.mint.key() {
+    if approve_account.asset_mint != ctx.accounts.asset_mint.key() {
         return Err(AssetControllerErrors::TransferMintNotApproved.into());
     }
     // make sure from token account is matching

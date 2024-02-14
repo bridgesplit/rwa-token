@@ -30,7 +30,7 @@ pub fn enforce_identity_filter(
                     return Err(PolicyRegistryErrors::IdentityFilterFailed.into());
                 }
             }
-            return Ok(());
+            Ok(())
         }
     }
 }
@@ -105,7 +105,7 @@ pub fn update_transfer_history(
                 break;
             }
         }
-        return Ok(());
+        Ok(())
     } else {
         // add amount and timestamp to next element, if not found, return error
         for (i, t) in transfer_timestamps.iter().enumerate() {
@@ -115,7 +115,7 @@ pub fn update_transfer_history(
                 return Ok(());
             }
         }
-        return Err(PolicyRegistryErrors::TransferHistoryFull.into());
+        Err(PolicyRegistryErrors::TransferHistoryFull.into())
     }
 }
 
@@ -195,10 +195,16 @@ mod tests {
         );
         // identity contains 1 or 2
         let identity = [1, 2, 0, 0, 0, 0, 0, 0, 0, 0];
-        assert_eq!(enforce_identity_filter(identity, IdentityFilter {
-            comparision_type: ComparisionType::Or,
-            identity_levels: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0],
-        }), Ok(()));
+        assert_eq!(
+            enforce_identity_filter(
+                identity,
+                IdentityFilter {
+                    comparision_type: ComparisionType::Or,
+                    identity_levels: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0],
+                }
+            ),
+            Ok(())
+        );
     }
 
     #[test]
