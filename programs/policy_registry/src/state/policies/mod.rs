@@ -3,7 +3,7 @@ use num_enum::IntoPrimitive;
 
 #[derive(AnchorDeserialize, AnchorSerialize, Clone)]
 pub struct IdentityFilter {
-    pub identity_levels: [u8; 16],
+    pub identity_levels: [u8; 10],
     pub comparision_type: ComparisionType,
 }
 

@@ -69,7 +69,7 @@ pub fn get_total_transactions_in_timeframe(
 /// for all timestamps, if timestamp is older than timestamp - max_timeframe. remove it, set corresponding amount to 0 and sort the array
 /// then set final amount and timestamp to final non empty index or evict first entry and set final amount and timestamp to final index
 /// timestamps are stored in ascending order
-pub fn update_transfer_history_if_required(
+pub fn update_transfer_history(
     transfer_amounts: &mut [u64; 10],
     transfer_timestamps: &mut [i64; 10],
     amount: u64,
@@ -86,13 +86,13 @@ pub fn update_transfer_history_if_required(
         }
     }
     if evicted {
-        transfer_timestamps.sort();
-        // move 0s to end of array since amounts cannot be sorted
+        // move 0s to end of array
         let mut i = 0;
         let mut j = 0;
         while i < transfer_amounts.len() {
             if transfer_amounts[i] != 0 {
                 transfer_amounts.swap(i, j);
+                transfer_timestamps.swap(i, j);
                 j += 1;
             }
             i += 1;
@@ -107,6 +107,14 @@ pub fn update_transfer_history_if_required(
         }
         return Ok(());
     } else {
+        // add amount and timestamp to next element, if not found, return error
+        for (i, t) in transfer_timestamps.iter().enumerate() {
+            if *t == 0 {
+                transfer_amounts[i] = amount;
+                transfer_timestamps[i] = timestamp;
+                return Ok(());
+            }
+        }
         return Err(PolicyRegistryErrors::TransferHistoryFull.into());
     }
 }
@@ -156,7 +164,7 @@ pub fn deserialize_and_enforce_policy(
     } else {
         return Err(PolicyRegistryErrors::InvalidPolicy.into());
     }
-    update_transfer_history_if_required(
+    update_transfer_history(
         transfer_amounts,
         transfer_timestamps,
         amount,
@@ -164,4 +172,108 @@ pub fn deserialize_and_enforce_policy(
         max_timeframe,
     )?;
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::state::IdentityFilter;
+
+    #[test]
+    fn test_enforce_identity_filter() {
+        // identity contains 1 and 2
+        let identity = [1, 2, 0, 0, 0, 0, 0, 0, 0, 0];
+        assert_eq!(
+            enforce_identity_filter(
+                identity,
+                IdentityFilter {
+                    comparision_type: ComparisionType::And,
+                    identity_levels: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0],
+                }
+            ),
+            Err(PolicyRegistryErrors::IdentityFilterFailed.into())
+        );
+        // identity contains 1 or 2
+        let identity = [1, 2, 0, 0, 0, 0, 0, 0, 0, 0];
+        assert_eq!(enforce_identity_filter(identity, IdentityFilter {
+            comparision_type: ComparisionType::Or,
+            identity_levels: [1, 2, 3, 0, 0, 0, 0, 0, 0, 0],
+        }), Ok(()));
+    }
+
+    #[test]
+    fn test_update_transfer_history() {
+        let mut transfer_amounts = [0; 10];
+        let mut transfer_timestamps = [0; 10];
+        let amount = 100;
+        let timestamp = 100;
+        let max_timeframe = 100;
+        update_transfer_history(
+            &mut transfer_amounts,
+            &mut transfer_timestamps,
+            amount,
+            timestamp,
+            max_timeframe,
+        )
+        .unwrap();
+        assert_eq!(transfer_amounts[0], amount);
+        assert_eq!(transfer_timestamps[0], timestamp);
+        let amount = 200;
+        let timestamp = 200;
+        update_transfer_history(
+            &mut transfer_amounts,
+            &mut transfer_timestamps,
+            amount,
+            timestamp,
+            max_timeframe,
+        )
+        .unwrap();
+        assert_eq!(transfer_amounts[1], amount);
+        assert_eq!(transfer_timestamps[1], timestamp);
+        let amount = 300;
+        let timestamp = 300;
+        update_transfer_history(
+            &mut transfer_amounts,
+            &mut transfer_timestamps,
+            amount,
+            timestamp,
+            max_timeframe,
+        )
+        .unwrap();
+        assert_eq!(transfer_amounts[1], amount);
+        assert_eq!(transfer_timestamps[1], timestamp);
+    }
+
+    #[test]
+    fn test_transfer_history_full() {
+        let mut transfer_amounts = [100; 10];
+        let mut transfer_timestamps = [100; 10];
+        let amount = 100;
+        let timestamp = 200;
+        let max_timeframe = 100;
+        assert_eq!(
+            update_transfer_history(
+                &mut transfer_amounts,
+                &mut transfer_timestamps,
+                amount,
+                timestamp,
+                max_timeframe
+            ),
+            Err(PolicyRegistryErrors::TransferHistoryFull.into())
+        );
+        // with smaller max_timeframe, it should work
+        let max_timeframe = 50;
+        assert_eq!(
+            update_transfer_history(
+                &mut transfer_amounts,
+                &mut transfer_timestamps,
+                amount,
+                timestamp,
+                max_timeframe
+            ),
+            Ok(())
+        );
+        assert_eq!(transfer_amounts, [100, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+        assert_eq!(transfer_timestamps, [200, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    }
 }
