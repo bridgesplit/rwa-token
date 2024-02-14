@@ -1,0 +1,32 @@
+{
+    "name": "rwa-sdk",
+    "version": "1.0.0",
+    "description": "rwa sdk",
+    "main": "src/index.ts",
+    "scripts": {
+        "clean": "rimraf dist/*",
+        "lint": "eslint . --ext .ts --fix",
+        "tsc": "tsc",
+        "build": "npm-run-all tsc",
+        "dev:start": "npm-run-all build start",
+        "dev": "ts-node src/index.ts",
+        "start": "ts-node src/index.ts",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bridgesplit/rwa.git"
+    },
+    "author": "bridgesplit",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/bridgesplit/rwa/issues"
+    },
+    "homepage": "https://github.com/bridgesplit/rwa#readme",
+    "dependencies": {
+        "@coral-xyz/anchor": "^0.29.0",
+        "@solana/spl-token": "^0.3.11",
+        "@solana/web3.js": "^1.89.0"
+    }
+}

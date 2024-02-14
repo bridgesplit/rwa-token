@@ -356,7 +356,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b34d609dfbaf33d6889b2b7106d3ca345eacad44200913df5ba02bfd31d2ba9"
 
 [[package]]
-name = "asset_controller"
+name = "asset_data_registry"
+version = "0.0.1"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+]
+
+[[package]]
+name = "asset_registry"
 version = "0.0.1"
 dependencies = [
  "anchor-lang",
@@ -365,14 +373,6 @@ dependencies = [
  "policy_registry",
  "spl-tlv-account-resolution 0.4.0",
  "spl-transfer-hook-interface 0.5.0",
-]
-
-[[package]]
-name = "asset_data_registry"
-version = "0.0.1"
-dependencies = [
- "anchor-lang",
- "anchor-spl",
 ]
 
 [[package]]

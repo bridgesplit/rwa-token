@@ -16,20 +16,20 @@ pub struct GenerateTransactionApproval<'info> {
     pub payer: Signer<'info>,
     #[account(
         mut,
-        constraint = authority.key() == asset_controller_data.transaction_approval_authority,
+        constraint = authority.key() == asset_registry.transaction_approval_authority,
     )]
     pub authority: Signer<'info>,
     #[account()]
     pub owner: Signer<'info>,
     #[account(
-        seeds = [asset_controller_data.asset_mint.key().as_ref(), ASSET_CONTROLLER_DATA_SEED.as_bytes()],
+        seeds = [asset_registry.asset_mint.key().as_ref(), ASSET_CONTROLLER_DATA_SEED.as_bytes()],
         bump,
     )]
-    pub asset_controller_data: Box<Account<'info, AssetControllerData>>,
+    pub asset_registry: Box<Account<'info, AssetRegistry>>,
     #[account(
         init,
         space = TransactionApprovalAccount::LEN,
-        seeds = [asset_controller_data.asset_mint.key().as_ref(), ASSET_CONTROLLER_DATA_SEED.as_bytes()],
+        seeds = [asset_registry.asset_mint.key().as_ref(), ASSET_CONTROLLER_DATA_SEED.as_bytes()],
         bump,
         payer = payer,
     )]
@@ -46,7 +46,7 @@ pub fn handler(
     transaction_approval_account.nonce = args.nonce;
     transaction_approval_account.owner = ctx.accounts.owner.key();
     transaction_approval_account.approval_authority = ctx.accounts.authority.key();
-    transaction_approval_account.asset_mint = ctx.accounts.asset_controller_data.asset_mint;
+    transaction_approval_account.asset_mint = ctx.accounts.asset_registry.asset_mint;
     transaction_approval_account.amount = args.amount;
     transaction_approval_account.instruction_name = args.instruction_name;
     transaction_approval_account.slot = ctx.accounts.clock.slot;
