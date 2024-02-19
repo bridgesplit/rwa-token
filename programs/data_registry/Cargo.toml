@@ -1,16 +1,15 @@
 [package]
-name = "asset_data_registry"
+name = "data_registry"
 version = "0.0.1"
 description = "The Data Registry Program (DRP) enables the ledger of generic asset data."
 authors = ["Bridgesplit Developers <developers@bridgesplit.com>"]
 repository = "https://github.com/bridgesplit/rwa"
-license-file = "../../LICENSE"
-edition = "2021"
-readme = "README.md"
+edition = "2018"
+
 
 [lib]
 crate-type = ["cdylib", "lib"]
-name = "asset_data_registry"
+name = "data_registry"
 
 [features]
 no-entrypoint = []
@@ -20,5 +19,5 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang =  { path = "../../../anchor/lang", features = ["init-if-needed"] }
-anchor-spl = { path = "../../../anchor/spl" }
+anchor-lang = { git = "ssh://git@github.com/bridgesplit/anchor", features = ["interface-instructions", "init-if-needed"] }
+anchor-spl = { git = "ssh://git@github.com/bridgesplit/anchor", features = ["token_2022_extensions", "token_2022"] }

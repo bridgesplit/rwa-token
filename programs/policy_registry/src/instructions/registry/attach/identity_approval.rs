@@ -1,11 +1,10 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::Mint;
 
 use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct AttachAlwaysRequireApproval<'info> {
+pub struct AttachIdentityApproval<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account()]
@@ -18,20 +17,20 @@ pub struct AttachAlwaysRequireApproval<'info> {
     #[account(
         init,
         signer,
-        space = AlwaysRequireApproval::LEN,
+        space = IdentityApproval::LEN,
         payer = payer,
     )]
-    pub policy_account: Box<Account<'info, AlwaysRequireApproval>>,
+    pub policy: Box<Account<'info, IdentityApproval>>,
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(
-    ctx: Context<AttachAlwaysRequireApproval>,
+    ctx: Context<AttachIdentityApproval>,
     identity_filter: IdentityFilter,
 ) -> Result<()> {
-    ctx.accounts.policy_account.new(identity_filter);
+    ctx.accounts.policy.new(identity_filter);
     ctx.accounts
         .policy_registry
-        .add_policy(ctx.accounts.policy_account.key())?;
+        .add_policy(ctx.accounts.policy.key())?;
     Ok(())
 }

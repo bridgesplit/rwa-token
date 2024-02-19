@@ -20,7 +20,7 @@ pub struct AttachTransactionAmountLimit<'info> {
         space = TransactionAmountLimit::LEN,
         payer = payer,
     )]
-    pub policy_account: Box<Account<'info, TransactionAmountLimit>>,
+    pub policy: Box<Account<'info, TransactionAmountLimit>>,
     pub system_program: Program<'info, System>,
 }
 
@@ -29,9 +29,9 @@ pub fn handler(
     limit: u64,
     identity_filter: IdentityFilter,
 ) -> Result<()> {
-    ctx.accounts.policy_account.new(limit, identity_filter);
+    ctx.accounts.policy.new(limit, identity_filter);
     ctx.accounts
         .policy_registry
-        .add_policy(ctx.accounts.policy_account.key())?;
+        .add_policy(ctx.accounts.policy.key())?;
     Ok(())
 }

@@ -10,8 +10,12 @@ pub enum AssetRegistryErrors {
     TransferToNotApproved,
     #[msg("Transfer hasnt been approved for the specified amount")]
     TransferAmountNotApproved,
-    #[msg("All poliicy accounts must be sent in the instruction")]
+    #[msg("All policy accounts must be sent in the instruction")]
     PolicyRegistrysMissing,
     #[msg("Invalid policy account passed")]
     PolicyRegistryMismatch,
+    #[msg("Invalid slot for approve account")]
+    TransferSlotNotApproved,
+    #[msg("Transfer history is full")]
+    TransferHistoryFull,
 }

@@ -3,8 +3,14 @@ use num_enum::IntoPrimitive;
 
 #[derive(AnchorDeserialize, AnchorSerialize, Clone)]
 pub struct IdentityFilter {
-    pub identity_levels: [u8; 10],
-    pub comparision_type: ComparisionType,
+    pub identity_levels: Vec<u8>,
+    pub comparision_type: u8,
+}
+
+impl IdentityFilter {
+    pub const LEN: usize = 1 // u8 size
+    * 10 // max 10 levels
+    + 1; // comparision_type
 }
 
 #[repr(u8)]
@@ -14,12 +20,12 @@ pub enum ComparisionType {
     Or,
 }
 
-pub mod always_require_approval;
+pub mod identity_approval;
 pub mod transaction_amount_limit;
 pub mod transaction_amount_velocity;
 pub mod transaction_count_velocity;
 
-pub use always_require_approval::*;
+pub use identity_approval::*;
 pub use transaction_amount_limit::*;
 pub use transaction_amount_velocity::*;
 pub use transaction_count_velocity::*;

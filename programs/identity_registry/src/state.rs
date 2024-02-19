@@ -11,7 +11,7 @@ pub struct IdentityRegistry {
 }
 
 impl IdentityRegistry {
-    pub const LEN: usize = 8 + 1 + 32 + 32 + 32;
+    pub const LEN: usize = 8 + std::mem::size_of::<IdentityRegistry>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Pubkey) {
         self.asset_mint = asset_mint;
@@ -32,11 +32,12 @@ pub struct IdentityAccount {
     pub version: u8,
     pub registry: Pubkey,
     pub owner: Pubkey,
+    // identity levels corresponding to the user
     pub levels: [u8; 10],
 }
 
 impl IdentityAccount {
-    pub const LEN: usize = 8 + 1 + 32 + 32 + 10;
+    pub const LEN: usize = 8 + std::mem::size_of::<IdentityAccount>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, owner: Pubkey, registry: Pubkey, level: u8) {
         self.registry = registry;

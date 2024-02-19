@@ -17,6 +17,7 @@ pub struct VoidTokens<'info> {
     pub owner: Signer<'info>,
     #[account(
         mut,
+        close = payer,
         constraint = transaction_approval_account.amount == Some(amount)
     )]
     pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,

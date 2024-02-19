@@ -27,9 +27,9 @@ pub struct CreateIdentityAccount<'info> {
 
 pub fn handler(ctx: Context<CreateIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
     // confirm signer is either authority or signer
-    ctx.accounts
-        .identity_registry
-        .check_authority(ctx.accounts.signer.key())?;
+    // ctx.accounts
+    //     .identity_registry
+    //     .check_authority(ctx.accounts.signer.key())?;
     if ctx.accounts.signer.key() == ctx.accounts.identity_registry.key() {
         // signer not required
     } else {

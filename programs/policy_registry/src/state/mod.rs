@@ -10,15 +10,23 @@ use crate::PolicyRegistryErrors;
 
 #[account()]
 pub struct PolicyRegistry {
+    /// asset mint
     pub asset_mint: Pubkey,
+    /// authority of the registry
     pub authority: Pubkey,
+    /// policy delegate
+    pub delegate: Pubkey,
+    /// max timeframe of all the policies
     pub max_timeframe: i64,
+    /// list of all policies
     pub policies: [Pubkey; 10],
 }
 
 impl PolicyRegistry {
-    pub const LEN: usize = 32 + 80 + 80;
-    pub fn new(&mut self, asset_mint: Pubkey) {
+    pub const LEN: usize = 8 + std::mem::size_of::<PolicyRegistry>();
+    pub fn new(&mut self, authority: Pubkey, delegate: Pubkey, asset_mint: Pubkey) {
+        self.authority = authority;
+        self.delegate = delegate;
         self.asset_mint = asset_mint;
     }
     /// add policy if there is space
@@ -62,7 +70,7 @@ impl PolicyRegistry {
 }
 
 pub enum PolicyType {
-    AlwaysRequireApproval,
+    IdentityApproval,
     TransactionCountVelocity,
     TransactionAmountVelocity,
     TransactionAmountLimit,
@@ -71,29 +79,10 @@ pub enum PolicyType {
 impl ToString for PolicyType {
     fn to_string(&self) -> String {
         match self {
-            PolicyType::AlwaysRequireApproval => "AlwaysRequireApproval".to_string(),
+            PolicyType::IdentityApproval => "IdentityApproval".to_string(),
             PolicyType::TransactionCountVelocity => "TransactionCountVelocity".to_string(),
             PolicyType::TransactionAmountVelocity => "TransactionAmountVelocity".to_string(),
             PolicyType::TransactionAmountLimit => "TransactionAmountLimit".to_string(),
         }
-    }
-}
-
-#[account()]
-pub struct PolicyAccount {
-    pub version: u8,
-    pub policy_registry: Pubkey,
-    pub owner: Pubkey,
-    pub transfer_amounts: [u64; 10],
-    pub transfer_timestamps: [i64; 10],
-}
-
-impl PolicyAccount {
-    pub const LEN: usize = 32 + 8 + 8 + 80;
-    pub const VERSION: u8 = 1;
-    pub fn new(&mut self, policy_registry: Pubkey, owner: Pubkey) {
-        self.version = Self::VERSION;
-        self.policy_registry = policy_registry;
-        self.owner = owner;
     }
 }

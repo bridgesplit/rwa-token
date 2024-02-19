@@ -16,6 +16,4 @@ pub enum PolicyRegistryErrors {
     PolicyNotFound,
     #[msg("Identity filter failed")]
     IdentityFilterFailed,
-    #[msg("Transfer history is full")]
-    TransferHistoryFull,
 }

@@ -1,19 +1,30 @@
 {
     "compilerOptions": {
-        "lib": ["es5", "es6", "esnext.asynciterable", "es2018", "esnext.bigint", "DOM"],
-        "types": ["node"],
-        "target": "ES2015",
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "outDir": "build",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "strict": false,
-        "noImplicitOverride": true,
-        "noFallthroughCasesInSwitch": true,
-        "allowSyntheticDefaultImports": true
-    }
-}
+      "outDir": "./dist",
+      "baseUrl": ".",
+      "rootDir": ".",
+      "target": "ES2020",
+      "module": "commonjs",
+      "sourceMap": true,
+      "declaration": true,
+      "declarationMap": false,
+      "removeComments": false,
+      "moduleResolution": "node",
+      "noEmit": false,
+      "preserveWatchOutput": true,
+      "emitDeclarationOnly": false,
+      "importHelpers": false,
+      "strict": true,
+      "noUnusedLocals": true,
+      "noFallthroughCasesInSwitch": true,
+      "downlevelIteration": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "incremental": false,
+      "resolveJsonModule": true,
+      "skipLibCheck": true,
+      "useUnknownInCatchVariables": false
+    },
+    "include": ["src", "tests"],
+    "exclude": ["node_modules", "dist", "build", "lib"]
+  }

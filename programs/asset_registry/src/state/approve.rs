@@ -4,30 +4,31 @@ pub use anchor_lang::prelude::*;
 pub struct TransactionApprovalAccount {
     /// asset mint
     pub asset_mint: Pubkey,
-    /// slot in which approve account has been generated
-    pub slot: u64,
     /// from token account
-    pub from: Option<Pubkey>,
+    pub from_token_account: Option<Pubkey>,
     /// to token account
-    pub to: Option<Pubkey>,
+    pub to_token_account: Option<Pubkey>,
     /// amount to be transferred
     pub amount: Option<u64>,
+    /// slot in which approve account has been generated
+    pub slot: u64,
 }
 
 impl TransactionApprovalAccount {
-    pub const LEN: usize = 8 + 32 + 8 + 33 + 33 + 9;
+    pub const SEED: &'static str = "transaction-approval-account";
+    pub const LEN: usize = 8 + std::mem::size_of::<TransactionApprovalAccount>();
     pub fn new(
         &mut self,
         asset_mint: Pubkey,
         slot: u64,
-        from: Option<Pubkey>,
-        to: Option<Pubkey>,
+        from_token_account: Option<Pubkey>,
+        to_token_account: Option<Pubkey>,
         amount: Option<u64>,
     ) {
         self.asset_mint = asset_mint;
         self.slot = slot;
-        self.from = from;
-        self.to = to;
+        self.from_token_account = from_token_account;
+        self.to_token_account = to_token_account;
         self.amount = amount;
     }
 }

@@ -2,18 +2,16 @@
     "name": "rwa-sdk",
     "version": "1.0.0",
     "description": "rwa sdk",
-    "main": "src/index.ts",
+    "main": "dist/src/index.js",
+    "types": "dist/src/index.d.ts",
     "scripts": {
-        "clean": "rimraf dist/*",
-        "lint": "eslint . --ext .ts --fix",
-        "tsc": "tsc",
-        "build": "npm-run-all tsc",
-        "dev:start": "npm-run-all build start",
-        "dev": "ts-node src/index.ts",
-        "start": "ts-node src/index.ts",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
+        "build": "rimraf dist && tsc -p tsconfig.json",
+        "build:docs": "typedoc",
+        "test": "ava"
     },
+    "files": [
+        "/dist/src"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/bridgesplit/rwa.git"
@@ -27,6 +25,21 @@
     "dependencies": {
         "@coral-xyz/anchor": "^0.29.0",
         "@solana/spl-token": "^0.3.11",
-        "@solana/web3.js": "^1.89.0"
+        "@solana/web3.js": "^1.89.0",
+        "dotenv": "^16.4.4"
+    },
+    "devDependencies": {
+        "@ava/typescript": "^4.1.0",
+        "ava": "^6.1.1"
+    },
+    "ava": {
+        "typescript": {
+            "compile": false,
+            "rewritePaths": {
+                "src/": "dist/src/",
+                "tests/": "dist/tests/"
+            }
+        },
+        "timeout": "120s"
     }
 }

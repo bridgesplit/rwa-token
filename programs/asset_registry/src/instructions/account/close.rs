@@ -15,8 +15,9 @@ pub struct CloseTokenAccount<'info> {
     pub owner: Signer<'info>,
     #[account(
         mut,
+        close = payer,
         constraint = transaction_approval_account.asset_mint == asset_mint.key(),
-        constraint = transaction_approval_account.from == Some(token_account.key())
+        constraint = transaction_approval_account.from_token_account == Some(token_account.key())
     )]
     pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
     #[account()]
@@ -27,12 +28,11 @@ pub struct CloseTokenAccount<'info> {
         associated_token::authority = owner
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
-    pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token2022>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn handler(ctx: Context<CloseTokenAccount>, amount: u64) -> Result<()> {
+pub fn handler(ctx: Context<CloseTokenAccount>) -> Result<()> {
     let accounts = CloseAccount {
         authority: ctx.accounts.owner.to_account_info(),
         account: ctx.accounts.token_account.to_account_info(),

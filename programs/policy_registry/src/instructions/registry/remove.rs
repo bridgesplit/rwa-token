@@ -4,7 +4,7 @@ use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct RemovePolicyAccount<'info> {
+pub struct RemovePolicy<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account()]
@@ -15,28 +15,28 @@ pub struct RemovePolicyAccount<'info> {
     )]
     pub policy_registry: Box<Account<'info, PolicyRegistry>>,
     #[account(mut)]
-    /// CHECK: can be any policy account
-    pub policy_account: UncheckedAccount<'info>,
+    /// CHECK: can be any policy
+    pub policy: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
 }
 
-impl RemovePolicyAccount<'_> {
-    pub fn close_policy_account(&self) -> Result<()> {
-        let lamports = self.policy_account.lamports();
+impl RemovePolicy<'_> {
+    pub fn close_policy(&self) -> Result<()> {
+        let lamports = self.policy.lamports();
         self.payer.add_lamports(lamports)?;
-        self.policy_account.sub_lamports(lamports)?;
-        self.policy_account.assign(self.system_program.key);
-        self.policy_account.realloc(0, false)?;
+        self.policy.sub_lamports(lamports)?;
+        self.policy.assign(self.system_program.key);
+        self.policy.realloc(0, false)?;
         Ok(())
     }
 }
 
-pub fn handler(ctx: Context<RemovePolicyAccount>) -> Result<()> {
+pub fn handler(ctx: Context<RemovePolicy>) -> Result<()> {
     ctx.accounts
         .policy_registry
-        .remove_policy(ctx.accounts.policy_account.key())?;
+        .remove_policy(ctx.accounts.policy.key())?;
 
     // close policy account
-    ctx.accounts.close_policy_account()?;
+    ctx.accounts.close_policy()?;
     Ok(())
 }

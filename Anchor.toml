@@ -10,5 +10,8 @@ wallet = "~/.config/solana/id.json"
 
 [workspace]
 members = [
-  "programs/",
+  "programs/asset_registry",
+  "programs/data_registry",
+  "programs/identity_registry",
+  "programs/policy_registry",
 ]

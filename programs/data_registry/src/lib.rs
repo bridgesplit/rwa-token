@@ -1,26 +1,29 @@
 pub mod error;
 pub mod instructions;
 pub mod state;
+pub mod utils;
 
 pub use error::*;
 pub use instructions::*;
 pub use state::*;
+pub use utils::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("AyrjGg1gAsWMyiHMjdtN1As4FrVuHmgmUMPGbJC2RFds");
+declare_id!("8WRaNVNMDqdwADbKYj7fBd47i2e5SFMSEs8TrA2Vd5io");
 
 #[program]
-pub mod asset_data_registry {
+pub mod data_registry {
     use super::*;
 
     /// registry functions
     /// create data registry
     pub fn create_data_registry(
         ctx: Context<CreateDataRegistry>,
-        args: CreateDataRegistryArgs,
+        authority: Pubkey,
+        delegate: Pubkey,
     ) -> Result<()> {
-        instructions::registry::create::handler(ctx, args)
+        instructions::registry::create::handler(ctx, authority, delegate)
     }
 
     /// delegate data registry

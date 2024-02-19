@@ -8,9 +8,6 @@ use crate::state::*;
 pub struct CreatePolicyRegistry<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    /// CHECK: can be any account
-    #[account()]
-    pub owner: UncheckedAccount<'info>,
     #[account(
         mint::token_program = TOKEN22
     )]
@@ -26,10 +23,14 @@ pub struct CreatePolicyRegistry<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<CreatePolicyRegistry>) -> Result<()> {
+pub fn handler(
+    ctx: Context<CreatePolicyRegistry>,
+    authority: Pubkey,
+    delegate: Pubkey,
+) -> Result<()> {
     ctx.accounts
         .policy_registry
-        .new(ctx.accounts.asset_mint.key());
+        .new(authority, delegate, ctx.accounts.asset_mint.key());
 
     Ok(())
 }

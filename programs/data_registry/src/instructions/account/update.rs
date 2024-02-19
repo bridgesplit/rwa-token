@@ -14,7 +14,7 @@ pub struct UpdateDataAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account()]
-    /// can be either authority or delegate
+    /// CHECK: can be either authority or delegate
     pub signer: UncheckedAccount<'info>,
     #[account(
         seeds = [data_registry.asset_mint.key().as_ref()],

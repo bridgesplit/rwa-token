@@ -20,7 +20,7 @@ pub struct AttachTransactionAmountVelocity<'info> {
         space = TransactionAmountVelocity::LEN,
         payer = payer,
     )]
-    pub policy_account: Box<Account<'info, TransactionAmountVelocity>>,
+    pub policy: Box<Account<'info, TransactionAmountVelocity>>,
     pub system_program: Program<'info, System>,
 }
 
@@ -30,12 +30,10 @@ pub fn handler(
     timeframe: i64,
     identity_filter: IdentityFilter,
 ) -> Result<()> {
-    ctx.accounts
-        .policy_account
-        .new(limit, timeframe, identity_filter);
+    ctx.accounts.policy.new(limit, timeframe, identity_filter);
     ctx.accounts
         .policy_registry
-        .add_policy(ctx.accounts.policy_account.key())?;
+        .add_policy(ctx.accounts.policy.key())?;
     ctx.accounts.policy_registry.update_max_timeframe(timeframe);
 
     Ok(())

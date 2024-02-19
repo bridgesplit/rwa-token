@@ -8,44 +8,53 @@ pub use instructions::*;
 pub use state::*;
 pub use utils::*;
 
-declare_id!("AyrjGg1gAsWMyiHMjdtN1As4FrVuHmgmUMPGbJC2RFds");
+declare_id!("DtrBDukceZpUnWmeNzqtoBQPdXW8p9xmWYG1z7qMt8qG");
 
 #[program]
 pub mod asset_registry {
     use super::*;
 
     /// create an rwa asset
-    pub fn create_asset(ctx: Context<CreateAsset>, args: CreateAssetArgs) -> Result<()> {
+    pub fn create_asset_registry(
+        ctx: Context<CreateAssetRegistry>,
+        args: CreateAssetRegistryArgs,
+    ) -> Result<()> {
         instructions::create::handler(ctx, args)
     }
 
     /// issue shares of the rwa asset
-    pub fn issue_tokens(ctx: Context<IssueTokens>, amount: u64) -> Result<()> {
-        instructions::issue::handler(ctx, amount)
+    pub fn issue_tokens(ctx: Context<IssueTokens>, args: IssueTokensArgs) -> Result<()> {
+        instructions::issue::handler(ctx, args)
     }
-
-    // /// transfer shares of the rwa asset
-    // pub fn transfer_tokens(ctx: Context<TransferTokens>, amount: u64) -> Result<()> {
-    //     instructions::transfer::handler(ctx, amount)
-    // }
 
     /// void shares of the rwa asset
     pub fn void_tokens(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
         instructions::void::handler(ctx, amount)
     }
 
-    // pub fn open_token_account(_ctx: Context<OpenTokenAccount>) -> Result<()> {
-    //     Ok(())
-    // }
+    /// create a token account
+    pub fn create_token_account(_ctx: Context<CreateTokenAccount>) -> Result<()> {
+        Ok(())
+    }
 
-    // pub fn close_token_account(ctx: Context<CloseTokenAccount>) -> Result<()> {
-    //     instructions::close::handler(ctx)
-    // }
+    /// close a token account
+    pub fn close_token_account(ctx: Context<CloseTokenAccount>) -> Result<()> {
+        instructions::close::handler(ctx)
+    }
+
+    /// transfer tokens
+    pub fn transfer_tokens<'info>(
+        ctx: Context<'_, '_, '_, 'info, TransferTokens<'info>>,
+        amount: u64,
+        to: Pubkey,
+    ) -> Result<()> {
+        instructions::transfer::handler(ctx, amount, to)
+    }
 
     /// generate an approve account for a transaction
     pub fn approve_transaction(
-        ctx: Context<GenerateTransactionApproval>,
-        args: GenerateTransactionApprovalArgs,
+        ctx: Context<ApproveTransaction>,
+        args: ApproveTransactionArgs,
     ) -> Result<()> {
         instructions::enforce::approve::handler(ctx, args)
     }

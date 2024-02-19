@@ -14,7 +14,7 @@ pub struct AssetRegistryAccount {
 }
 
 impl AssetRegistryAccount {
-    pub const LEN: usize = 8 + 1 + 32 + 32 + 32;
+    pub const LEN: usize = 8 + std::mem::size_of::<AssetRegistryAccount>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Pubkey) {
         self.asset_mint = asset_mint;

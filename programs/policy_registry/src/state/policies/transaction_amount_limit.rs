@@ -10,7 +10,7 @@ pub struct TransactionAmountLimit {
 }
 
 impl TransactionAmountLimit {
-    pub const LEN: usize = 8 + 8 + 8 + 16 + 1;
+    pub const LEN: usize = 8 + 1 + 8 + IdentityFilter::LEN;
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, limit: u64, identity_filter: IdentityFilter) {
         self.limit = limit;

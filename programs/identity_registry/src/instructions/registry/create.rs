@@ -8,8 +8,6 @@ pub struct CreateIdentityRegistry<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account(mut)]
-    pub authority: Signer<'info>,
-    #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
@@ -22,10 +20,14 @@ pub struct CreateIdentityRegistry<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<CreateIdentityRegistry>) -> Result<()> {
+pub fn handler(
+    ctx: Context<CreateIdentityRegistry>,
+    authority: Pubkey,
+    delegate: Pubkey,
+) -> Result<()> {
     let identity_registry = &mut ctx.accounts.identity_registry;
     identity_registry.asset_mint = ctx.accounts.asset_mint.key();
-    identity_registry.authority = ctx.accounts.authority.key();
-    identity_registry.delegate = ctx.accounts.authority.key();
+    identity_registry.authority = authority;
+    identity_registry.delegate = delegate;
     Ok(())
 }

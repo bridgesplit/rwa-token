@@ -10,30 +10,28 @@ pub use utils::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("AyrjGg1gAsWMyiHMjdtN1As4FrVuHmgmUMPGbJC2RFds");
+declare_id!("6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2");
 
 #[program]
 pub mod policy_registry {
     use super::*;
 
     /// create a policy registry
-    pub fn create_policy_registry(ctx: Context<CreatePolicyRegistry>) -> Result<()> {
-        instructions::registry::create::handler(ctx)
+    pub fn create_policy_registry(
+        ctx: Context<CreatePolicyRegistry>,
+        authority: Pubkey,
+        delegate: Pubkey,
+    ) -> Result<()> {
+        instructions::registry::create::handler(ctx, authority, delegate)
     }
 
-    /// create a policy account
-    pub fn create_policy_account(ctx: Context<CreatePolicyAccount>) -> Result<()> {
-        instructions::account::create::handler(ctx)
-    }
-
-    /// attach policy functions
-
+    /// attach policies
     /// attach a transaction count limit policy
-    pub fn attach_always_require_approval(
-        ctx: Context<AttachAlwaysRequireApproval>,
+    pub fn attach_identity_approval(
+        ctx: Context<AttachIdentityApproval>,
         identity_filter: IdentityFilter,
     ) -> Result<()> {
-        instructions::registry::attach::always_require_approval::handler(ctx, identity_filter)
+        instructions::registry::attach::identity_approval::handler(ctx, identity_filter)
     }
 
     /// attach a transaction amount limit policy
@@ -79,8 +77,8 @@ pub mod policy_registry {
         )
     }
 
-    /// remove policy account
-    pub fn remove_policy_account(ctx: Context<RemovePolicyAccount>) -> Result<()> {
+    /// remove policy
+    pub fn remove_policy(ctx: Context<RemovePolicy>) -> Result<()> {
         instructions::registry::remove::handler(ctx)
     }
 }

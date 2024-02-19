@@ -10,7 +10,7 @@ pub use utils::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("AyrjGg1gAsWMyiHMjdtN1As4FrVuHmgmUMPGbJC2RFds");
+declare_id!("qDnvwpjBYjH1vs1N1CSdbVkEkePp2acL7TphAYZDeoV");
 
 #[program]
 pub mod identity_registry {
@@ -18,8 +18,12 @@ pub mod identity_registry {
 
     /// registry functions
     /// create identity registry
-    pub fn create_identity_registry(ctx: Context<CreateIdentityRegistry>) -> Result<()> {
-        instructions::registry::create::handler(ctx)
+    pub fn create_identity_registry(
+        ctx: Context<CreateIdentityRegistry>,
+        authority: Pubkey,
+        delegate: Pubkey,
+    ) -> Result<()> {
+        instructions::registry::create::handler(ctx, authority, delegate)
     }
 
     /// delegate identity registry
