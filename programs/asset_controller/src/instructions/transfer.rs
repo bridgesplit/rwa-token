@@ -22,7 +22,7 @@ pub struct TransferTokens<'info> {
     )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
-        init,
+        init_if_needed,
         payer = payer,
         space = TransactionApprovalAccount::LEN,
         seeds = [TransactionApprovalAccount::SEED.as_ref(), asset_mint.key().as_ref()],

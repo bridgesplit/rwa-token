@@ -24,7 +24,7 @@ pub struct RevokeIdentityAccount<'info> {
     pub identity_account: Box<Account<'info, IdentityAccount>>,
 }
 
-pub fn handler(ctx: Context<RevokeIdentityAccount>, owner: Pubkey) -> Result<()> {
+pub fn handler(ctx: Context<RevokeIdentityAccount>, _owner: Pubkey) -> Result<()> {
     // confirm signer is either authority or signer
     ctx.accounts
         .identity_registry

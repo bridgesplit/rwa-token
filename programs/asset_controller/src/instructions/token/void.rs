@@ -1,8 +1,5 @@
 use anchor_lang::{prelude::*, solana_program::program_option::COption};
-use anchor_spl::{
-    associated_token::AssociatedToken,
-    token_interface::{burn, Burn, Mint, Token2022, TokenAccount},
-};
+use anchor_spl::token_interface::{burn, Burn, Mint, Token2022, TokenAccount};
 
 use crate::TransactionApprovalAccount;
 

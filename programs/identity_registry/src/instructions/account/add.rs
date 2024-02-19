@@ -24,7 +24,7 @@ pub struct AddLevelIdentityAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<AddLevelIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
+pub fn handler(ctx: Context<AddLevelIdentityAccount>, _owner: Pubkey, level: u8) -> Result<()> {
     // confirm signer is either authority or signer
     ctx.accounts
         .identity_registry

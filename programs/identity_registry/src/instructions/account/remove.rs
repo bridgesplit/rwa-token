@@ -24,7 +24,7 @@ pub struct RemoveLevelIdentityAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<RemoveLevelIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
+pub fn handler(ctx: Context<RemoveLevelIdentityAccount>, _owner: Pubkey, level: u8) -> Result<()> {
     // confirm signer is either authority or signer
     ctx.accounts
         .identity_registry
