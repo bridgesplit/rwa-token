@@ -17,20 +17,29 @@ pub struct DataRegistry {
 impl DataRegistry {
     pub const LEN: usize = 8 + std::mem::size_of::<DataRegistry>();
     pub const VERSION: u8 = 1;
-    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Pubkey) {
+    pub fn new(
+        &mut self,
+        address: Pubkey,
+        asset_mint: Pubkey,
+        authority: Pubkey,
+        delegate: Option<Pubkey>,
+    ) {
         self.version = Self::VERSION;
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate;
+        self.delegate = delegate.unwrap_or_else(|| address);
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
     }
-    pub fn check_authority(&self, signer: Pubkey) -> Result<()> {
-        if self.authority != signer && self.delegate != signer {
-            return Err(DataRegistryErrors::UnauthorizedSigner.into());
+    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
+        if signer == registry && self.delegate == registry {
+            return Ok(());
         }
-        Ok(())
+        if (signer == self.authority || signer == self.delegate) && is_signer {
+            return Ok(());
+        }
+        Err(DataRegistryErrors::UnauthorizedSigner.into())
     }
 }
 

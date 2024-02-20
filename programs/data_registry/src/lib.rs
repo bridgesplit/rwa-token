@@ -21,7 +21,7 @@ pub mod data_registry {
     pub fn create_data_registry(
         ctx: Context<CreateDataRegistry>,
         authority: Pubkey,
-        delegate: Pubkey,
+        delegate: Option<Pubkey>,
     ) -> Result<()> {
         instructions::registry::create::handler(ctx, authority, delegate)
     }

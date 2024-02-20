@@ -1,9 +1,9 @@
-use crate::{state::*, IdentityRegistryErrors};
+use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 #[instruction(owner: Pubkey)]
-pub struct RemoveLevelIdentityAccount<'info> {
+pub struct RemoveLevelFromIdentityAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account()]
@@ -12,6 +12,7 @@ pub struct RemoveLevelIdentityAccount<'info> {
     #[account(
         seeds = [identity_registry.asset_mint.key().as_ref()],
         bump,
+        constraint = identity_registry.verify_signer(identity_registry.key(), signer.key(), signer.is_signer).is_ok()
     )]
     pub identity_registry: Box<Account<'info, IdentityRegistry>>,
     #[account(
@@ -24,18 +25,11 @@ pub struct RemoveLevelIdentityAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<RemoveLevelIdentityAccount>, _owner: Pubkey, level: u8) -> Result<()> {
-    // confirm signer is either authority or signer
-    ctx.accounts
-        .identity_registry
-        .check_authority(ctx.accounts.signer.key())?;
-    if ctx.accounts.signer.key() == ctx.accounts.identity_registry.key() {
-        // signer not required
-    } else {
-        if !ctx.accounts.signer.is_signer {
-            return Err(IdentityRegistryErrors::UnauthorizedSigner.into());
-        }
-    }
+pub fn handler(
+    ctx: Context<RemoveLevelFromIdentityAccount>,
+    _owner: Pubkey,
+    level: u8,
+) -> Result<()> {
     ctx.accounts.identity_account.remove_level(level)?;
     Ok(())
 }

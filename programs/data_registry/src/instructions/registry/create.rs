@@ -25,10 +25,14 @@ pub struct CreateDataRegistry<'info> {
 pub fn handler(
     ctx: Context<CreateDataRegistry>,
     authority: Pubkey,
-    delegate: Pubkey,
+    delegate: Option<Pubkey>,
 ) -> Result<()> {
-    ctx.accounts
-        .data_registry
-        .new(ctx.accounts.asset_mint.key(), authority, delegate);
+    let registry_address = ctx.accounts.data_registry.key();
+    ctx.accounts.data_registry.new(
+        registry_address,
+        ctx.accounts.asset_mint.key(),
+        authority,
+        delegate,
+    );
     Ok(())
 }

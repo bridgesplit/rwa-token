@@ -21,7 +21,7 @@ pub mod identity_registry {
     pub fn create_identity_registry(
         ctx: Context<CreateIdentityRegistry>,
         authority: Pubkey,
-        delegate: Pubkey,
+        delegate: Option<Pubkey>,
     ) -> Result<()> {
         instructions::registry::create::handler(ctx, authority, delegate)
     }
@@ -45,8 +45,8 @@ pub mod identity_registry {
     }
 
     /// add level to identity account
-    pub fn add_level_identity_account(
-        ctx: Context<AddLevelIdentityAccount>,
+    pub fn add_level_to_identity_account(
+        ctx: Context<AddLevelToIdentityAccount>,
         owner: Pubkey,
         level: u8,
     ) -> Result<()> {
@@ -54,19 +54,19 @@ pub mod identity_registry {
     }
 
     /// remove level from identity account
-    pub fn remove_level_identity_account(
-        ctx: Context<RemoveLevelIdentityAccount>,
+    pub fn remove_level_from_identity_account(
+        ctx: Context<RemoveLevelFromIdentityAccount>,
         owner: Pubkey,
         level: u8,
     ) -> Result<()> {
         instructions::account::remove::handler(ctx, owner, level)
     }
 
-    /// revoke level from identity account
+    /// revoke user identity account by closing account
     pub fn revoke_identity_account(
         ctx: Context<RevokeIdentityAccount>,
         owner: Pubkey,
     ) -> Result<()> {
-        instructions::account::revoke::handler(ctx, owner)
+        Ok(())
     }
 }

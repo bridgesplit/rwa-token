@@ -19,6 +19,7 @@ pub struct CreateDataAccount<'info> {
     #[account(
         seeds = [data_registry.asset_mint.key().as_ref()],
         bump,
+        constraint = data_registry.verify_signer(data_registry.key(), signer.key(), signer.is_signer).is_ok()
     )]
     pub data_registry: Box<Account<'info, DataRegistry>>,
     #[account(
@@ -32,17 +33,6 @@ pub struct CreateDataAccount<'info> {
 }
 
 pub fn handler(ctx: Context<CreateDataAccount>, args: CreateDataAccountArgs) -> Result<()> {
-    // confirm signer is either authority or signer
-    ctx.accounts
-        .data_registry
-        .check_authority(ctx.accounts.signer.key())?;
-    if ctx.accounts.signer.key() == ctx.accounts.data_registry.key() {
-        // signer not required
-    } else {
-        if !ctx.accounts.signer.is_signer {
-            return Err(DataRegistryErrors::UnauthorizedSigner.into());
-        }
-    }
     ctx.accounts.data_account.new(
         ctx.accounts.data_registry.key(),
         args.type_,

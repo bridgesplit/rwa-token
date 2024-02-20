@@ -10,6 +10,8 @@ use crate::PolicyEngineErrors;
 
 #[account()]
 pub struct PolicyEngine {
+    /// version
+    pub version: u8,
     /// asset mint
     pub asset_mint: Pubkey,
     /// authority of the registry
@@ -23,11 +25,31 @@ pub struct PolicyEngine {
 }
 
 impl PolicyEngine {
+    pub const VERSION: u8 = 1;
     pub const LEN: usize = 8 + std::mem::size_of::<PolicyEngine>();
-    pub fn new(&mut self, authority: Pubkey, delegate: Pubkey, asset_mint: Pubkey) {
+    pub fn new(
+        &mut self,
+        engine: Pubkey,
+        authority: Pubkey,
+        delegate: Option<Pubkey>,
+        asset_mint: Pubkey,
+    ) {
+        self.version = Self::VERSION;
         self.authority = authority;
-        self.delegate = delegate;
+        self.delegate = delegate.unwrap_or_else(|| engine);
         self.asset_mint = asset_mint;
+    }
+    pub fn update_delegate(&mut self, delegate: Pubkey) {
+        self.delegate = delegate;
+    }
+    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
+        if signer == registry && self.delegate == registry {
+            return Ok(());
+        }
+        if (signer == self.authority || signer == self.delegate) && is_signer {
+            return Ok(());
+        }
+        Err(PolicyEngineErrors::UnauthorizedSigner.into())
     }
     /// add policy if there is space
     pub fn add_policy(&mut self, policy: Pubkey) -> Result<()> {

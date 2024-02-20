@@ -11,9 +11,9 @@ pub enum AssetControllerErrors {
     #[msg("Transfer hasnt been approved for the specified amount")]
     TransferAmountNotApproved,
     #[msg("All policy accounts must be sent in the instruction")]
-    PolicyEnginesMissing,
+    PolicyAccountsMissing,
     #[msg("Invalid policy account passed")]
-    PolicyEngineMismatch,
+    InvalidPolicyAccount,
     #[msg("Invalid slot for approve account")]
     TransferSlotNotApproved,
     #[msg("Transfer history is full")]

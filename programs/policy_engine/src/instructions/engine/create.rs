@@ -26,11 +26,15 @@ pub struct CreatePolicyEngine<'info> {
 pub fn handler(
     ctx: Context<CreatePolicyEngine>,
     authority: Pubkey,
-    delegate: Pubkey,
+    delegate: Option<Pubkey>,
 ) -> Result<()> {
-    ctx.accounts
-        .policy_engine
-        .new(authority, delegate, ctx.accounts.asset_mint.key());
+    let registry_address = ctx.accounts.policy_engine.key();
+    ctx.accounts.policy_engine.new(
+        registry_address,
+        authority,
+        delegate,
+        ctx.accounts.asset_mint.key(),
+    );
 
     Ok(())
 }

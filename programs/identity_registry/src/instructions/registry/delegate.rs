@@ -6,19 +6,19 @@ use anchor_lang::prelude::*;
 pub struct DelegateIdentityRegistry<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
+    #[account(
+        constraint = authority.key() == legal_registry.authority
+    )]
     pub authority: Signer<'info>,
     #[account(
         mut,
         seeds = [legal_registry.asset_mint.as_ref()],
         bump,
-        constraint = legal_registry.authority == authority.key()
     )]
     pub legal_registry: Box<Account<'info, IdentityRegistry>>,
 }
 
 pub fn handler(ctx: Context<DelegateIdentityRegistry>, delegate: Pubkey) -> Result<()> {
-    let legal_registry = &mut ctx.accounts.legal_registry;
-    legal_registry.delegate = delegate;
+    ctx.accounts.legal_registry.update_delegate(delegate);
     Ok(())
 }

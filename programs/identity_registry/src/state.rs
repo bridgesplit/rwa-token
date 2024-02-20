@@ -5,25 +5,40 @@ use crate::IdentityRegistryErrors;
 #[account()]
 pub struct IdentityRegistry {
     pub version: u8,
+    /// corresponding asset mint
     pub asset_mint: Pubkey,
+    /// authority to manage the registry
     pub authority: Pubkey,
+    /// registry delegate
     pub delegate: Pubkey,
 }
 
 impl IdentityRegistry {
     pub const LEN: usize = 8 + std::mem::size_of::<IdentityRegistry>();
     pub const VERSION: u8 = 1;
-    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Pubkey) {
+    pub fn new(
+        &mut self,
+        address: Pubkey,
+        asset_mint: Pubkey,
+        authority: Pubkey,
+        delegate: Option<Pubkey>,
+    ) {
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate;
+        self.delegate = delegate.unwrap_or_else(|| address);
         self.version = Self::VERSION;
     }
-    pub fn check_authority(&self, authority: Pubkey) -> Result<()> {
-        if authority != self.authority {
-            return Err(IdentityRegistryErrors::UnauthorizedSigner.into());
+    pub fn update_delegate(&mut self, delegate: Pubkey) {
+        self.delegate = delegate;
+    }
+    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
+        if signer == registry && self.delegate == registry {
+            return Ok(());
         }
-        Ok(())
+        if (signer == self.authority || signer == self.delegate) && is_signer {
+            return Ok(());
+        }
+        Err(IdentityRegistryErrors::UnauthorizedSigner.into())
     }
 }
 

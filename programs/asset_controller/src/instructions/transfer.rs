@@ -107,12 +107,12 @@ pub fn handler<'info>(
     let transfer_amounts = ctx.accounts.tracker_account.transfer_amounts;
     let transfer_timestamps = ctx.accounts.tracker_account.transfer_timestamps;
     if remaining_accounts.len() < policies.len() + TRANSFER_REMAINING_ACCOUNTS_LEN {
-        return Err(AssetControllerErrors::PolicyEnginesMissing.into());
+        return Err(AssetControllerErrors::PolicyAccountsMissing.into());
     }
     for (i, policy) in policies[..].iter().enumerate() {
         let tracker_account = &remaining_accounts[i + TRANSFER_REMAINING_ACCOUNTS_LEN];
         if tracker_account.key != *policy {
-            return Err(AssetControllerErrors::PolicyEngineMismatch.into());
+            return Err(AssetControllerErrors::InvalidPolicyAccount.into());
         }
         // evaluate policy
         deserialize_and_enforce_policy(

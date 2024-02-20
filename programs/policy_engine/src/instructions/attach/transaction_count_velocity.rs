@@ -7,11 +7,13 @@ use crate::state::*;
 pub struct AttachTransactionCountVelocity<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    pub authority: Signer<'info>,
+    /// CHECK: internal ix checks
+    pub signer: UncheckedAccount<'info>,
     #[account(
         mut,
-        constraint = policy_engine.authority == authority.key(),
+        seeds = [policy_engine.asset_mint.as_ref()],
+        bump,
+        constraint = policy_engine.verify_signer(policy_engine.key(), signer.key(), signer.is_signer).is_ok()
     )]
     pub policy_engine: Box<Account<'info, PolicyEngine>>,
     #[account(

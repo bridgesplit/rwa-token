@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 
 #[error_code]
 pub enum PolicyEngineErrors {
-    #[msg("Invalid policy account passed")]
+    #[msg("Invalid policy passed")]
     InvalidPolicy,
     #[msg("Transaction amount limit exceeded")]
     TransactionAmountLimitExceeded,
@@ -16,4 +16,6 @@ pub enum PolicyEngineErrors {
     PolicyNotFound,
     #[msg("Identity filter failed")]
     IdentityFilterFailed,
+    #[msg("Unauthorized signer")]
+    UnauthorizedSigner,
 }

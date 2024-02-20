@@ -23,11 +23,14 @@ pub struct CreateIdentityRegistry<'info> {
 pub fn handler(
     ctx: Context<CreateIdentityRegistry>,
     authority: Pubkey,
-    delegate: Pubkey,
+    delegate: Option<Pubkey>,
 ) -> Result<()> {
-    let identity_registry = &mut ctx.accounts.identity_registry;
-    identity_registry.asset_mint = ctx.accounts.asset_mint.key();
-    identity_registry.authority = authority;
-    identity_registry.delegate = delegate;
+    let registry_address = ctx.accounts.identity_registry.key();
+    ctx.accounts.identity_registry.new(
+        registry_address,
+        ctx.accounts.asset_mint.key(),
+        authority,
+        delegate,
+    );
     Ok(())
 }

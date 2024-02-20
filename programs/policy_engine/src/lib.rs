@@ -20,9 +20,9 @@ pub mod policy_engine {
     pub fn create_policy_engine(
         ctx: Context<CreatePolicyEngine>,
         authority: Pubkey,
-        delegate: Pubkey,
+        delegate: Option<Pubkey>,
     ) -> Result<()> {
-        instructions::create::handler(ctx, authority, delegate)
+        instructions::engine::create::handler(ctx, authority, delegate)
     }
 
     /// attach policies
@@ -40,11 +40,7 @@ pub mod policy_engine {
         limit: u64,
         identity_filter: IdentityFilter,
     ) -> Result<()> {
-        instructions::attach::transaction_amount_limit::handler(
-            ctx,
-            limit,
-            identity_filter,
-        )
+        instructions::attach::transaction_amount_limit::handler(ctx, limit, identity_filter)
     }
 
     /// attach a transaction amount velocity policy
