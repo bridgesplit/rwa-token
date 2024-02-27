@@ -31,7 +31,9 @@ pub fn handler(
     ctx: Context<AttachIdentityApproval>,
     identity_filter: IdentityFilter,
 ) -> Result<()> {
-    ctx.accounts.policy.new(identity_filter);
+    ctx.accounts
+        .policy
+        .new(ctx.accounts.policy_engine.key(), identity_filter);
     ctx.accounts
         .policy_engine
         .add_policy(ctx.accounts.policy.key())?;

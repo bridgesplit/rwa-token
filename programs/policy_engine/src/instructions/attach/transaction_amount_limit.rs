@@ -31,7 +31,9 @@ pub fn handler(
     limit: u64,
     identity_filter: IdentityFilter,
 ) -> Result<()> {
-    ctx.accounts.policy.new(limit, identity_filter);
+    ctx.accounts
+        .policy
+        .new(ctx.accounts.policy_engine.key(), limit, identity_filter);
     ctx.accounts
         .policy_engine
         .add_policy(ctx.accounts.policy.key())?;

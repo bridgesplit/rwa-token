@@ -32,7 +32,12 @@ pub fn handler(
     timeframe: i64,
     identity_filter: IdentityFilter,
 ) -> Result<()> {
-    ctx.accounts.policy.new(limit, timeframe, identity_filter);
+    ctx.accounts.policy.new(
+        ctx.accounts.policy_engine.key(),
+        limit,
+        timeframe,
+        identity_filter,
+    );
     ctx.accounts
         .policy_engine
         .add_policy(ctx.accounts.policy.key())?;
