@@ -13,8 +13,15 @@ pub struct TransactionCountVelocity {
 impl TransactionCountVelocity {
     pub const LEN: usize = 8 + 1 + 8 + 8 + IdentityFilter::LEN;
     pub const VERSION: u8 = 1;
-    pub fn new(&mut self, limit: u64, timeframe: i64, identity_filter: IdentityFilter) {
+    pub fn new(
+        &mut self,
+        policy_engine: Pubkey,
+        limit: u64,
+        timeframe: i64,
+        identity_filter: IdentityFilter,
+    ) {
         self.version = Self::VERSION;
+        self.policy_engine = policy_engine;
         self.limit = limit;
         self.timeframe = timeframe;
         self.identity_filter = identity_filter;
