@@ -1,18 +1,8 @@
-use anchor_lang::{error::Error, solana_program::hash, AccountDeserialize};
+use anchor_lang::{prelude::Result, AccountDeserialize};
 
 use crate::{state::*, PolicyEngineErrors};
 
-pub fn get_policy_discriminator(policy_type: PolicyType) -> [u8; 8] {
-    let discriminator_preimage = format!("account:{}", policy_type.to_string());
-    let mut discriminator = [0u8; 8];
-    discriminator.copy_from_slice(&hash::hash(discriminator_preimage.as_bytes()).to_bytes()[..8]);
-    discriminator
-}
-
-pub fn enforce_identity_filter(
-    identity: [u8; 10],
-    identity_filter: IdentityFilter,
-) -> Result<(), Error> {
+pub fn enforce_identity_filter(identity: [u8; 10], identity_filter: IdentityFilter) -> Result<()> {
     match identity_filter.comparision_type {
         0 => {
             // TODO: use proper enum
@@ -76,46 +66,42 @@ pub fn deserialize_and_enforce_policy(
     identity: [u8; 10],
     transfer_amounts: [u64; 10],
     transfer_timestamps: [i64; 10],
-) -> Result<(), Error> {
-    if data[..8] == get_policy_discriminator(PolicyType::IdentityApproval) {
-        let policy: IdentityApproval = AccountDeserialize::try_deserialize(&mut &data[..])?;
-        enforce_identity_filter(identity, policy.identity_filter)?;
-    } else if data[..8] == get_policy_discriminator(PolicyType::TransactionAmountLimit) {
-        let policy: TransactionAmountLimit = AccountDeserialize::try_deserialize(&mut &data[..])?;
-        if enforce_identity_filter(identity, policy.identity_filter).is_ok()
-            && amount > policy.limit
-        {
-            return Err(PolicyEngineErrors::TransactionAmountLimitExceeded.into());
+) -> Result<()> {
+    let policy_account: PolicyAccount = AccountDeserialize::try_deserialize(&mut &data[..])?;
+    match policy_account.policy {
+        Policy::IdentityApproval => {
+            enforce_identity_filter(identity, policy_account.identity_filter)?;
         }
-    } else if data[..8] == get_policy_discriminator(PolicyType::TransactionAmountVelocity) {
-        let policy: TransactionAmountVelocity =
-            AccountDeserialize::try_deserialize(&mut &data[..])?;
-        if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
-            let total_amount_transferred = get_total_amount_transferred_in_timeframe(
-                transfer_amounts,
-                transfer_timestamps,
-                policy.timeframe,
-                timestamp,
-            );
+        Policy::TransactionAmountLimit { limit } => {
+            if enforce_identity_filter(identity, policy_account.identity_filter).is_ok()
+                && amount > limit
+            {
+                return Err(PolicyEngineErrors::TransactionAmountLimitExceeded.into());
+            }
+        }
+        Policy::TransactionAmountVelocity { limit, timeframe } => {
+            if enforce_identity_filter(identity, policy_account.identity_filter).is_ok() {
+                let total_amount_transferred = get_total_amount_transferred_in_timeframe(
+                    transfer_amounts,
+                    transfer_timestamps,
+                    timeframe,
+                    timestamp,
+                );
 
-            if total_amount_transferred + amount > policy.limit {
-                return Err(PolicyEngineErrors::TransactionAmountVelocityExceeded.into());
+                if total_amount_transferred + amount > limit {
+                    return Err(PolicyEngineErrors::TransactionAmountVelocityExceeded.into());
+                }
             }
         }
-    } else if data[..8] == get_policy_discriminator(PolicyType::TransactionCountVelocity) {
-        let policy: TransactionCountVelocity = AccountDeserialize::try_deserialize(&mut &data[..])?;
-        if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
-            let total_transactions = get_total_transactions_in_timeframe(
-                transfer_timestamps,
-                policy.timeframe,
-                timestamp,
-            );
-            if total_transactions + 1 > policy.limit {
-                return Err(PolicyEngineErrors::TransactionCountVelocityExceeded.into());
+        Policy::TransactionCountVelocity { limit, timeframe } => {
+            if enforce_identity_filter(identity, policy_account.identity_filter).is_ok() {
+                let total_transactions =
+                    get_total_transactions_in_timeframe(transfer_timestamps, timeframe, timestamp);
+                if total_transactions + 1 > limit {
+                    return Err(PolicyEngineErrors::TransactionCountVelocityExceeded.into());
+                }
             }
         }
-    } else {
-        return Err(PolicyEngineErrors::InvalidPolicy.into());
     }
     Ok(())
 }

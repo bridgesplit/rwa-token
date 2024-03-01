@@ -15,7 +15,7 @@ export async function getCreateIdentityRegistryIx(
         .accountsStrict({
             payer: args.payer,
             assetMint: args.assetMint,
-            identityRegistry: getIdentityRegistryPda(args.assetMint),
+            identityRegistryAccount: getIdentityRegistryPda(args.assetMint),
             systemProgram: SystemProgram.programId
         })
         .instruction();

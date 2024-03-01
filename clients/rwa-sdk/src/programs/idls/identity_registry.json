@@ -20,7 +20,7 @@
           "isSigner": false
         },
         {
-          "name": "identityRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -60,7 +60,7 @@
           "isSigner": true
         },
         {
-          "name": "legalRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -239,7 +239,7 @@
   ],
   "accounts": [
     {
-      "name": "IdentityRegistry",
+      "name": "IdentityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

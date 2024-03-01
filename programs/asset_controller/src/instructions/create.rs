@@ -1,10 +1,10 @@
 /// creates a mint a new asset
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{spl_token_2022::extension::ExtensionType, Mint, Token2022};
-use spl_tlv_account_resolution::{account::ExtraAccountMeta, state::ExtraAccountMetaList};
+use spl_tlv_account_resolution::state::ExtraAccountMetaList;
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
 
-use crate::{get_meta_list_size, get_transaction_approval_account_pda, state::*};
+use crate::{get_extra_account_metas, get_meta_list_size, state::*};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateAssetControllerArgs {
@@ -36,14 +36,14 @@ pub struct CreateAssetController<'info> {
     #[account(
         init,
         payer = payer,
-        space = AssetControllerAccount::LEN,
+        space = 8 + AssetControllerAccount::INIT_SPACE,
         seeds = [asset_mint.key().as_ref()],
         bump,
     )]
     pub asset_controller: Box<Account<'info, AssetControllerAccount>>,
     #[account(
         init,
-        space = get_meta_list_size(),
+        space = get_meta_list_size()?,
         seeds = [META_LIST_ACCOUNT_SEED, asset_mint.key().as_ref()],
         bump,
         payer = payer,
@@ -65,16 +65,7 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
 
     // initialize the extra metas account
     let extra_metas_account = &ctx.accounts.extra_metas_account;
-    let metas = vec![
-        // transaction approval account
-        ExtraAccountMeta {
-            discriminator: 0,
-            address_config: get_transaction_approval_account_pda(ctx.accounts.asset_mint.key())
-                .to_bytes(),
-            is_signer: false.into(),
-            is_writable: true.into(),
-        },
-    ];
+    let metas = get_extra_account_metas()?;
     let mut data = extra_metas_account.try_borrow_mut_data()?;
     ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
 

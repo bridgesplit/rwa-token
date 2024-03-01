@@ -13,7 +13,7 @@ pub struct RemovePolicy<'info> {
         mut,
         constraint = policy_engine.authority == authority.key(),
     )]
-    pub policy_engine: Box<Account<'info, PolicyEngine>>,
+    pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
     #[account(mut)]
     /// CHECK: can be any policy
     pub policy: UncheckedAccount<'info>,

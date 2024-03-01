@@ -13,12 +13,12 @@ pub struct CreateDataRegistry<'info> {
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
-        space = DataRegistry::LEN,
+        space = 8 + DataRegistryAccount::INIT_SPACE,
         seeds = [asset_mint.key().as_ref()],
         bump,
         payer = payer,
     )]
-    pub data_registry: Box<Account<'info, DataRegistry>>,
+    pub data_registry: Box<Account<'info, DataRegistryAccount>>,
     pub system_program: Program<'info, System>,
 }
 

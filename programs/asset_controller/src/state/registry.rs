@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[account()]
+#[derive(InitSpace)]
 pub struct AssetControllerAccount {
     pub version: u8,
     /// mint pubkey
@@ -14,12 +15,25 @@ pub struct AssetControllerAccount {
 }
 
 impl AssetControllerAccount {
-    pub const LEN: usize = 8 + std::mem::size_of::<AssetControllerAccount>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Pubkey) {
         self.asset_mint = asset_mint;
         self.authority = authority;
         self.delegate = delegate;
         self.version = Self::VERSION;
+    }
+    pub fn verify_signer(
+        &self,
+        asset_controller: Pubkey,
+        signer: Pubkey,
+        is_signer: bool,
+    ) -> Result<()> {
+        if self.delegate == signer && signer == asset_controller {
+            return Ok(());
+        }
+        if (self.authority == signer || self.delegate == signer) && is_signer {
+            return Ok(());
+        }
+        Ok(())
     }
 }

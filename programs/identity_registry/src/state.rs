@@ -3,7 +3,8 @@ use anchor_lang::prelude::*;
 use crate::IdentityRegistryErrors;
 
 #[account()]
-pub struct IdentityRegistry {
+#[derive(InitSpace)]
+pub struct IdentityRegistryAccount {
     pub version: u8,
     /// corresponding asset mint
     pub asset_mint: Pubkey,
@@ -13,8 +14,7 @@ pub struct IdentityRegistry {
     pub delegate: Pubkey,
 }
 
-impl IdentityRegistry {
-    pub const LEN: usize = 8 + std::mem::size_of::<IdentityRegistry>();
+impl IdentityRegistryAccount {
     pub const VERSION: u8 = 1;
     pub fn new(
         &mut self,
@@ -43,6 +43,7 @@ impl IdentityRegistry {
 }
 
 #[account()]
+#[derive(InitSpace)]
 pub struct IdentityAccount {
     pub version: u8,
     pub registry: Pubkey,
@@ -52,7 +53,6 @@ pub struct IdentityAccount {
 }
 
 impl IdentityAccount {
-    pub const LEN: usize = 8 + std::mem::size_of::<IdentityAccount>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, owner: Pubkey, registry: Pubkey, level: u8) {
         self.registry = registry;

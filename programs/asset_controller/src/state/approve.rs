@@ -1,6 +1,7 @@
 pub use anchor_lang::prelude::*;
 
 #[account()]
+#[derive(InitSpace)]
 pub struct TransactionApprovalAccount {
     /// asset mint
     pub asset_mint: Pubkey,
@@ -16,7 +17,6 @@ pub struct TransactionApprovalAccount {
 
 impl TransactionApprovalAccount {
     pub const SEED: &'static str = "transaction-approval-account";
-    pub const LEN: usize = 8 + std::mem::size_of::<TransactionApprovalAccount>();
     pub fn new(
         &mut self,
         asset_mint: Pubkey,

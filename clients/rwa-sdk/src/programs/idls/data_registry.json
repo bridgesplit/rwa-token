@@ -51,7 +51,7 @@
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -122,7 +122,7 @@
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -138,11 +138,6 @@
         {
           "name": "dataAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],

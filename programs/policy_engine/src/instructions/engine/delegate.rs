@@ -14,12 +14,12 @@ pub struct UpdatePolicyEngineDelegate<'info> {
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
-        space = PolicyEngine::LEN,
+        space = 8 + PolicyEngineAccount::INIT_SPACE,
         seeds = [asset_mint.key().as_ref()],
         bump,
         payer = payer,
     )]
-    pub policy_engine: Box<Account<'info, PolicyEngine>>,
+    pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
     pub system_program: Program<'info, System>,
 }
 

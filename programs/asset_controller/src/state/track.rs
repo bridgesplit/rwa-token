@@ -3,6 +3,7 @@ use anchor_lang::prelude::*;
 use crate::AssetControllerErrors;
 
 #[account()]
+#[derive(InitSpace)]
 pub struct TrackerAccount {
     pub version: u8,
     // corresponding asset mint
@@ -16,7 +17,6 @@ pub struct TrackerAccount {
 }
 
 impl TrackerAccount {
-    pub const LEN: usize = 8 + std::mem::size_of::<TrackerAccount>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, asset_mint: Pubkey, owner: Pubkey) {
         self.version = Self::VERSION;

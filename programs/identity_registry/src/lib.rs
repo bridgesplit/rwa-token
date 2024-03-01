@@ -64,8 +64,8 @@ pub mod identity_registry {
 
     /// revoke user identity account by closing account
     pub fn revoke_identity_account(
-        ctx: Context<RevokeIdentityAccount>,
-        owner: Pubkey,
+        _ctx: Context<RevokeIdentityAccount>,
+        _owner: Pubkey,
     ) -> Result<()> {
         Ok(())
     }

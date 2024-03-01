@@ -5,18 +5,14 @@ use anchor_spl::token_interface::Mint;
 #[derive(Accounts)]
 #[instruction()]
 pub struct DelegateDataRegistry<'info> {
-    #[account(mut)]
+    #[account()]
     pub payer: Signer<'info>,
     #[account(
         constraint = authority.key() == data_registry.authority,
     )]
     pub authority: Box<InterfaceAccount<'info, Mint>>,
-    #[account(
-        mut,
-        seeds = [data_registry.asset_mint.as_ref()],
-        bump,
-    )]
-    pub data_registry: Box<Account<'info, DataRegistry>>,
+    #[account(mut)]
+    pub data_registry: Box<Account<'info, DataRegistryAccount>>,
 }
 
 pub fn handler(ctx: Context<DelegateDataRegistry>, delegate: Pubkey) -> Result<()> {

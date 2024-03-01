@@ -20,7 +20,7 @@ export type IdentityRegistry = {
           "isSigner": false
         },
         {
-          "name": "identityRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -60,7 +60,7 @@ export type IdentityRegistry = {
           "isSigner": true
         },
         {
-          "name": "legalRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -239,7 +239,7 @@ export type IdentityRegistry = {
   ],
   "accounts": [
     {
-      "name": "identityRegistry",
+      "name": "identityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -347,7 +347,7 @@ export const IDL: IdentityRegistry = {
           "isSigner": false
         },
         {
-          "name": "identityRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -387,7 +387,7 @@ export const IDL: IdentityRegistry = {
           "isSigner": true
         },
         {
-          "name": "legalRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -566,7 +566,7 @@ export const IDL: IdentityRegistry = {
   ],
   "accounts": [
     {
-      "name": "identityRegistry",
+      "name": "identityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

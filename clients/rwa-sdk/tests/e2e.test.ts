@@ -1,4 +1,4 @@
-import { getAttachIdentityApprovalIx, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTransferTokensIx } from '../src';
+import { getAttachPolicyAccountIx, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTransferTokensIx, Policy } from '../src';
 import { setupTests } from './setup';
 import { ComputeBudgetProgram, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
 import { expect, test, describe } from 'vitest'
@@ -28,7 +28,7 @@ describe("e2e tests", () => {
     });
 
     test('attach identity approval policy', async (t) => {
-        const attachPolicy = await getAttachIdentityApprovalIx({
+        const attachPolicy = await getAttachPolicyAccountIx({
             payer: setup.payer.toString(),
             owner: setup.authority.toString(),
             assetMint: mint,
@@ -36,6 +36,9 @@ describe("e2e tests", () => {
             identityFilter: {
                 identityLevels: [1],
                 comparisionType: 0,
+            },
+            policy: {
+                identityApproval: {},
             }
         });
         const feeIx = ComputeBudgetProgram.setComputeUnitPrice({
@@ -79,6 +82,7 @@ describe("e2e tests", () => {
             assetMint: mint,
             amount: 100,
             remainingAccounts,
+            decimals,
         });
         const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(transferTokensIx), [setup.payerKp]);
         expect(txnId).toBeTruthy();;

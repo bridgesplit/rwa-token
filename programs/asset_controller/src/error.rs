@@ -18,4 +18,6 @@ pub enum AssetControllerErrors {
     TransferSlotNotApproved,
     #[msg("Transfer history is full")]
     TransferHistoryFull,
+    #[msg("Unauthorized")]
+    Unauthorized,
 }

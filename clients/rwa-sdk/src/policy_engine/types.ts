@@ -1,3 +1,7 @@
+import { IdlTypes } from "@coral-xyz/anchor";
+import { PolicyEngine } from "../programs";
+import { IdlEnumFields } from "@coral-xyz/anchor/dist/cjs/idl";
+
 export interface PolicyEngineAccount {
     version: number;
     assetMint: string;
@@ -7,39 +11,12 @@ export interface PolicyEngineAccount {
     policies: string[];
 }
 
-export enum PolicyType {
-    IdentityApproval,
-    TransactionCountVelocity,
-    TransactionAmountVelocity,
-    TransactionAmountLimit,
-}
-
-export interface IdentityFilter {
-    identityLevels: number[];
-    comparisionType: number;
-}
-
-export interface IdentityApprovalAccount {
+export interface PolicyAccount {
     version: number;
+    policyEngine: string;
     identityFilter: IdentityFilter;
+    policy: Policy;
 }
 
-export interface TransactionAmountLimitAccount {
-    version: number;
-    limit: number;
-    identityFilter: IdentityFilter;
-}
-
-export interface TransactionAmountVelocityAccount {
-    version: number;
-    limit: number;
-    timeframe: number;
-    identityFilter: IdentityFilter;
-}
-
-export interface TransactionCountVelocityAccount {
-    version: number;
-    limit: number;
-    timeframe: number;
-    identityFilter: IdentityFilter;
-}
+export type IdentityFilter = IdlTypes<PolicyEngine>["IdentityFilter"];
+export type Policy = IdlTypes<PolicyEngine>["Policy"];

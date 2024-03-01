@@ -42,15 +42,6 @@ pub mod asset_controller {
         instructions::close::handler(ctx)
     }
 
-    /// transfer tokens
-    pub fn transfer_tokens<'info>(
-        ctx: Context<'_, '_, '_, 'info, TransferTokens<'info>>,
-        amount: u64,
-        to: Pubkey,
-    ) -> Result<()> {
-        instructions::transfer::handler(ctx, amount, to)
-    }
-
     /// generate an approve account for a transaction
     pub fn approve_transaction(
         ctx: Context<ApproveTransaction>,

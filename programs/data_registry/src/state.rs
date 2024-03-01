@@ -3,7 +3,8 @@ use anchor_lang::prelude::*;
 use crate::DataRegistryErrors;
 
 #[account()]
-pub struct DataRegistry {
+#[derive(InitSpace)]
+pub struct DataRegistryAccount {
     pub version: u8,
     pub asset_mint: Pubkey,
     /// can sign creation of new data accounts
@@ -14,8 +15,7 @@ pub struct DataRegistry {
     pub delegate: Pubkey,
 }
 
-impl DataRegistry {
-    pub const LEN: usize = 8 + std::mem::size_of::<DataRegistry>();
+impl DataRegistryAccount {
     pub const VERSION: u8 = 1;
     pub fn new(
         &mut self,
@@ -43,7 +43,7 @@ impl DataRegistry {
     }
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub enum DataAccountType {
     Title,
     Legal,
@@ -52,6 +52,7 @@ pub enum DataAccountType {
 }
 
 #[account()]
+#[derive(InitSpace)]
 pub struct DataAccount {
     pub version: u8,
     /// registry to which data account belongs to
@@ -59,13 +60,14 @@ pub struct DataAccount {
     /// type of the data account
     pub _type: DataAccountType,
     /// used by creator to store name of the document
+    #[max_len(32)]
     pub name: String,
     /// uri pointing to the data stored in the document
+    #[max_len(255)]
     pub uri: String,
 }
 
 impl DataAccount {
-    pub const LEN: usize = 8 + 32 + 255;
     pub const VERSION: u8 = 1;
     pub fn new(
         &mut self,

@@ -35,7 +35,7 @@ pub struct CreateTokenAccount<'info> {
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
         init,
-        space = TrackerAccount::LEN,
+        space = 8 + TrackerAccount::INIT_SPACE,
         seeds = [asset_mint.key().as_ref(), owner.key().as_ref()],
         bump,
         payer = payer,

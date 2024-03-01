@@ -1,10 +1,10 @@
 import { Keypair, PublicKey, SystemProgram, TransactionInstruction } from "@solana/web3.js";
-import { getCreatePolicyEngineIx, getPolicyEnginePda } from "../policy_engine";
+import { POLICY_REGISTRY_PROGRAM_ID, getCreatePolicyEngineIx, getPolicyEnginePda } from "../policy_engine";
 import { getCreateDataRegistryIx } from "../data_registry";
-import { getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda } from "../identity_registry";
+import { IDENTITY_REGISTRY_PROGRAM_ID, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda } from "../identity_registry";
 import { BN } from "@coral-xyz/anchor";
 import { CommonArgs, getProvider, ixReturn, parseRemainingAccounts } from "../utils";
-import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, getAssociatedTokenAddressSync } from "@solana/spl-token";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync } from "@solana/spl-token";
 import { getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTransactionApprovalAccountPda, getTrackerAccountPda } from "./utils";
 
 // common args but with authority compulsory
@@ -62,6 +62,7 @@ export interface TransferTokensArgs extends CommonArgs {
     to: string;
     amount: number;
     authority: string;
+    decimals: number;
     remainingAccounts?: string[];
 }
 
@@ -73,28 +74,45 @@ export async function getTransferTokensIx(args: TransferTokensArgs): Promise<Tra
         isWritable: false,
         isSigner: false,
     }, {
-        pubkey: getTransactionApprovalAccountPda(args.assetMint),
-        isWritable: true,
+        pubkey: POLICY_REGISTRY_PROGRAM_ID,
+        isWritable: false,
         isSigner: false,
-    }];
+    },
+    {
+        pubkey: getPolicyEnginePda(args.assetMint),
+        isWritable: false,
+        isSigner: false,
+    },
+    {
+        pubkey: IDENTITY_REGISTRY_PROGRAM_ID,
+        isWritable: false,
+        isSigner: false,
+    },
+    {
+        pubkey: getIdentityAccountPda(args.assetMint, args.from),
+        isWritable: false,
+        isSigner: false,
+    },
+    {
+        pubkey: getTrackerAccountPda(args.assetMint, args.from),
+        isWritable: false,
+        isSigner: false,
+    }
+
+    ];
     remainingAccounts.push(...parseRemainingAccounts(args.remainingAccounts));
-    const ix = await assetProgram.methods.transferTokens(new BN(args.amount), new PublicKey(args.to))
-        .accountsStrict({
-            payer: args.payer,
-            assetMint: args.assetMint,
-            transactionApprovalAccount: getTransactionApprovalAccountPda(args.assetMint),
-            trackerAccount: getTrackerAccountPda(args.assetMint, args.from),
-            signer: getAssetControllerPda(args.assetMint),
-            from: args.from,
-            fromTokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.from), false, TOKEN_2022_PROGRAM_ID),
-            toTokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.to), false, TOKEN_2022_PROGRAM_ID),
-            policyEngine: getPolicyEnginePda(args.assetMint),
-            identityAccount: getIdentityAccountPda(args.assetMint, args.to),
-            systemProgram: SystemProgram.programId,
-            tokenProgram: TOKEN_2022_PROGRAM_ID,
-        })
-        .remainingAccounts(remainingAccounts)
-        .instruction();
+    let ix = createTransferCheckedInstruction(
+        getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.from), false, TOKEN_2022_PROGRAM_ID),
+        new PublicKey(args.assetMint),
+        getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.to), false, TOKEN_2022_PROGRAM_ID),
+        new PublicKey(args.from),
+        args.amount,
+        args.decimals,
+        [],
+        TOKEN_2022_PROGRAM_ID,
+    );
+    ix.keys = ix.keys.concat(remainingAccounts);
+
     return ix;
 }
 

@@ -16,7 +16,7 @@ pub struct ApproveTransaction<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     /// CHECK: constraint checks
-    #[account(constraint = signer.key() == asset_controller.delegate)]
+    #[account(constraint = asset_controller.verify_signer(asset_controller.key(), signer.key(), signer.is_signer).is_ok())]
     pub signer: UncheckedAccount<'info>,
     #[account(
         mint::token_program = TOKEN22
@@ -25,7 +25,7 @@ pub struct ApproveTransaction<'info> {
     #[account(
         init,
         payer = payer,
-        space = TransactionApprovalAccount::LEN,
+        space = 8 + TransactionApprovalAccount::INIT_SPACE,
         seeds = [TransactionApprovalAccount::SEED.as_ref(), asset_mint.key().as_ref()],
         bump,
     )]

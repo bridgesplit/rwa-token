@@ -1,5 +1,9 @@
+use std::ops::Deref;
+
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{Mint, TokenAccount};
+use identity_registry::{program::IdentityRegistry, IdentityAccount};
+use policy_engine::{deserialize_and_enforce_policy, program::PolicyEngine, PolicyEngineAccount};
 
 use crate::{state::*, AssetControllerErrors};
 
@@ -28,39 +32,66 @@ pub struct ExecuteTransferHook<'info> {
         bump,
     )]
     pub extra_metas_account: UncheckedAccount<'info>,
-    #[account(mut)]
-    pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
+    pub policy_engine: Program<'info, PolicyEngine>,
+    #[account(
+        owner = policy_engine.key(),
+        constraint = policy_engine_account.asset_mint == asset_mint.key(),
+    )]
+    pub policy_engine_account: Account<'info, PolicyEngineAccount>,
+    pub identity_registry: Program<'info, IdentityRegistry>,
+    #[account(
+        mut,
+        owner = identity_registry.key(),
+        constraint = identity_account.owner == owner_delegate.key(),
+    )]
+    pub identity_account: Account<'info, IdentityAccount>,
+    #[account(
+        mut,
+        constraint = tracker_account.owner == owner_delegate.key(),
+        constraint = tracker_account.asset_mint == asset_mint.key(),
+    )]
+    pub tracker_account: Account<'info, TrackerAccount>,
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
-    // only token22 account can call this function
-    let transaction_approval_account = &mut ctx.accounts.transaction_approval_account;
-
-    // make sure slot is same
-    if transaction_approval_account.slot != Clock::get()?.slot {
-        return Err(AssetControllerErrors::TransferSlotNotApproved.into());
+    let remaining_accounts = ctx.remaining_accounts.to_vec();
+    let policies = ctx
+        .accounts
+        .policy_engine_account
+        .policies
+        .iter()
+        .filter(|x| x != &&Pubkey::default())
+        .collect::<Vec<_>>();
+    let transfer_amounts = ctx.accounts.tracker_account.transfer_amounts;
+    let transfer_timestamps = ctx.accounts.tracker_account.transfer_timestamps;
+    if remaining_accounts.len() < policies.len() {
+        return Err(AssetControllerErrors::PolicyAccountsMissing.into());
+    }
+    for (i, policy) in policies[..].iter().enumerate() {
+        // evaluate policy
+        let policy_account = &remaining_accounts[i];
+        if policy_account.key != *policy {
+            return Err(AssetControllerErrors::InvalidPolicyAccount.into());
+        }
+        let policy_account = remaining_accounts[i]
+            .data
+            .try_borrow_mut()
+            .map_err(|_| AssetControllerErrors::InvalidPolicyAccount)?;
+        deserialize_and_enforce_policy(
+            policy_account.deref(),
+            amount,
+            Clock::get()?.unix_timestamp,
+            ctx.accounts.identity_account.levels,
+            transfer_amounts,
+            transfer_timestamps,
+        )?;
     }
 
-    // make sure transfer mint is matching
-    if transaction_approval_account.asset_mint != ctx.accounts.asset_mint.key() {
-        return Err(AssetControllerErrors::TransferMintNotApproved.into());
-    }
-    // make sure from token account is matching
-    if transaction_approval_account.from_token_account != Some(ctx.accounts.source_account.key()) {
-        return Err(AssetControllerErrors::TransferFromNotApproved.into());
-    }
-    // make sure to token accounts is matching
-    if transaction_approval_account.to_token_account != Some(ctx.accounts.destination_account.key())
-    {
-        return Err(AssetControllerErrors::TransferToNotApproved.into());
-    }
-    // make sure amount is matching
-    if transaction_approval_account.amount != Some(amount) {
-        return Err(AssetControllerErrors::TransferAmountNotApproved.into());
-    }
-
-    // remove slot to make sure it's not used again
-    transaction_approval_account.slot = 0;
+    let timestamp = Clock::get()?.unix_timestamp;
+    let max_timeframe = ctx.accounts.policy_engine_account.max_timeframe;
+    ctx.accounts
+        .tracker_account
+        .update_transfer_history(amount, timestamp, max_timeframe)?;
 
     Ok(())
 }
