@@ -5,6 +5,7 @@ use crate::IdentityFilter;
 #[account()]
 pub struct TransactionCountVelocity {
     pub version: u8,
+    pub policy_engine: Pubkey,
     pub limit: u64,
     pub timeframe: i64,
     pub identity_filter: IdentityFilter,

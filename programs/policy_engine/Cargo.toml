@@ -16,6 +16,6 @@ cpi = ["no-entrypoint"]
 default = []
 
 [dependencies]
-anchor-lang = { git = "ssh://git@github.com/bridgesplit/anchor" }
-anchor-spl = { git = "ssh://git@github.com/bridgesplit/anchor" }
+anchor-lang = { git = "https://git@github.com/bridgesplit/anchor" }
+anchor-spl = { git = "https://git@github.com/bridgesplit/anchor" }
 num_enum = "0.7.2"
