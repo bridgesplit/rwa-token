@@ -98,7 +98,7 @@
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -112,13 +112,8 @@
           "isSigner": false
         },
         {
-          "name": "policy",
+          "name": "policyAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -227,7 +222,9 @@
           },
           {
             "name": "comparisionType",
-            "type": "u8"
+            "type": {
+              "defined": "ComparisionType"
+            }
           }
         ]
       }
@@ -238,10 +235,10 @@
         "kind": "enum",
         "variants": [
           {
-            "name": "And"
+            "name": "Or"
           },
           {
-            "name": "Or"
+            "name": "And"
           }
         ]
       }

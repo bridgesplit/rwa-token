@@ -8,6 +8,8 @@ pub use instructions::*;
 pub use state::*;
 pub use utils::*;
 
+pub use anchor_lang::prelude::*;
+
 declare_id!("DtrBDukceZpUnWmeNzqtoBQPdXW8p9xmWYG1z7qMt8qG");
 
 #[program]

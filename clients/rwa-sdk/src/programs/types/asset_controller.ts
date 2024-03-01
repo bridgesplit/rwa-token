@@ -55,22 +55,9 @@ export type AssetController = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true,
-          "docs": [
-            "only authority can issue tokens"
-          ]
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
+          "isMut": false,
+          "isSigner": true
         },
         {
           "name": "assetMint",
@@ -104,38 +91,18 @@ export type AssetController = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "owner",
           "isMut": false,
           "isSigner": true
         },
         {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "assetMint",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "tokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -165,11 +132,6 @@ export type AssetController = {
         {
           "name": "owner",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
           "isSigner": false
         },
         {
@@ -222,11 +184,6 @@ export type AssetController = {
           "isSigner": true
         },
         {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "assetMint",
           "isMut": false,
           "isSigner": false
@@ -248,52 +205,6 @@ export type AssetController = {
         }
       ],
       "args": []
-    },
-    {
-      "name": "approveTransaction",
-      "docs": [
-        "generate an approve account for a transaction"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "assetController",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "ApproveTransactionArgs"
-          }
-        }
-      ]
     },
     {
       "name": "executeTransaction",
@@ -361,55 +272,6 @@ export type AssetController = {
     }
   ],
   "accounts": [
-    {
-      "name": "transactionApprovalAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "assetMint",
-            "docs": [
-              "asset mint"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "fromTokenAccount",
-            "docs": [
-              "from token account"
-            ],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "toTokenAccount",
-            "docs": [
-              "to token account"
-            ],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "amount",
-            "docs": [
-              "amount to be transferred"
-            ],
-            "type": {
-              "option": "u64"
-            }
-          },
-          {
-            "name": "slot",
-            "docs": [
-              "slot in which approve account has been generated"
-            ],
-            "type": "u64"
-          }
-        ]
-      }
-    },
     {
       "name": "assetControllerAccount",
       "type": {
@@ -502,32 +364,6 @@ export type AssetController = {
             "name": "delegate",
             "type": {
               "option": "publicKey"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "ApproveTransactionArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "fromTokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "toTokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "amount",
-            "type": {
-              "option": "u64"
             }
           }
         ]
@@ -656,22 +492,9 @@ export const IDL: AssetController = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true,
-          "docs": [
-            "only authority can issue tokens"
-          ]
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
+          "isMut": false,
+          "isSigner": true
         },
         {
           "name": "assetMint",
@@ -705,38 +528,18 @@ export const IDL: AssetController = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "owner",
           "isMut": false,
           "isSigner": true
         },
         {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "assetMint",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "tokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -766,11 +569,6 @@ export const IDL: AssetController = {
         {
           "name": "owner",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
           "isSigner": false
         },
         {
@@ -823,11 +621,6 @@ export const IDL: AssetController = {
           "isSigner": true
         },
         {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "assetMint",
           "isMut": false,
           "isSigner": false
@@ -849,52 +642,6 @@ export const IDL: AssetController = {
         }
       ],
       "args": []
-    },
-    {
-      "name": "approveTransaction",
-      "docs": [
-        "generate an approve account for a transaction"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "assetController",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "ApproveTransactionArgs"
-          }
-        }
-      ]
     },
     {
       "name": "executeTransaction",
@@ -962,55 +709,6 @@ export const IDL: AssetController = {
     }
   ],
   "accounts": [
-    {
-      "name": "transactionApprovalAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "assetMint",
-            "docs": [
-              "asset mint"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "fromTokenAccount",
-            "docs": [
-              "from token account"
-            ],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "toTokenAccount",
-            "docs": [
-              "to token account"
-            ],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "amount",
-            "docs": [
-              "amount to be transferred"
-            ],
-            "type": {
-              "option": "u64"
-            }
-          },
-          {
-            "name": "slot",
-            "docs": [
-              "slot in which approve account has been generated"
-            ],
-            "type": "u64"
-          }
-        ]
-      }
-    },
     {
       "name": "assetControllerAccount",
       "type": {
@@ -1103,32 +801,6 @@ export const IDL: AssetController = {
             "name": "delegate",
             "type": {
               "option": "publicKey"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "ApproveTransactionArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "fromTokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "toTokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "amount",
-            "type": {
-              "option": "u64"
             }
           }
         ]

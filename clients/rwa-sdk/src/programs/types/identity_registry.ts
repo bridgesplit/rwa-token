@@ -16,7 +16,7 @@ export type IdentityRegistry = {
         },
         {
           "name": "assetMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -49,11 +49,6 @@ export type IdentityRegistry = {
         "delegate identity registry"
       ],
       "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
         {
           "name": "authority",
           "isMut": false,
@@ -123,11 +118,6 @@ export type IdentityRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -140,11 +130,6 @@ export type IdentityRegistry = {
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -166,11 +151,6 @@ export type IdentityRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -183,11 +163,6 @@ export type IdentityRegistry = {
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -343,7 +318,7 @@ export const IDL: IdentityRegistry = {
         },
         {
           "name": "assetMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
@@ -376,11 +351,6 @@ export const IDL: IdentityRegistry = {
         "delegate identity registry"
       ],
       "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
         {
           "name": "authority",
           "isMut": false,
@@ -450,11 +420,6 @@ export const IDL: IdentityRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -467,11 +432,6 @@ export const IDL: IdentityRegistry = {
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -493,11 +453,6 @@ export const IDL: IdentityRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -510,11 +465,6 @@ export const IDL: IdentityRegistry = {
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],

@@ -4,9 +4,9 @@ import 'dotenv/config';
 
 
 export function setupTests() {
-    const payerKp = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.PAYER_KEYPAIR ?? "")));
-    const authorityKp = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.AUTHORITY_KEYPAIR ?? "")));
-    const delegateKp = Keypair.fromSecretKey(Uint8Array.from(JSON.parse(process.env.DELEGATE_KEYPAIR ?? "")));
+    const payerKp = new Keypair();
+    const authorityKp = payerKp;
+    const delegateKp = authorityKp;
     const provider = getProvider();
     return {
         payerKp,

@@ -50,11 +50,6 @@ export type DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": false
@@ -121,11 +116,6 @@ export type DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -153,7 +143,7 @@ export type DataRegistry = {
   ],
   "accounts": [
     {
-      "name": "dataRegistry",
+      "name": "dataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -354,11 +344,6 @@ export const IDL: DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": false
@@ -425,11 +410,6 @@ export const IDL: DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -457,7 +437,7 @@ export const IDL: DataRegistry = {
   ],
   "accounts": [
     {
-      "name": "dataRegistry",
+      "name": "dataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

@@ -22,7 +22,6 @@ pub fn enforce_identity_filter(identity: [u8; 10], identity_filter: IdentityFilt
             }
             Ok(())
         }
-        _ => Err(PolicyEngineErrors::IdentityFilterFailed.into()),
     }
 }
 

@@ -1,22 +1,8 @@
-import { IdlTypes } from "@coral-xyz/anchor";
-import { PolicyEngine } from "../programs";
-import { IdlEnumFields } from "@coral-xyz/anchor/dist/cjs/idl";
+import {type IdlAccounts, type IdlTypes} from '@coral-xyz/anchor';
+import {type PolicyEngine} from '../programs';
 
-export interface PolicyEngineAccount {
-    version: number;
-    assetMint: string;
-    authority: string;
-    delegate: string;
-    maxTimeframe: number;
-    policies: string[];
-}
+export type PolicyEngineAccount = IdlAccounts<PolicyEngine>['policyEngineAccount'];
+export type PolicyAccount = IdlAccounts<PolicyEngine>['policyAccount'];
 
-export interface PolicyAccount {
-    version: number;
-    policyEngine: string;
-    identityFilter: IdentityFilter;
-    policy: Policy;
-}
-
-export type IdentityFilter = IdlTypes<PolicyEngine>["IdentityFilter"];
-export type Policy = IdlTypes<PolicyEngine>["Policy"];
+export type IdentityFilter = IdlTypes<PolicyEngine>['IdentityFilter'];
+export type Policy = IdlTypes<PolicyEngine>['Policy'];

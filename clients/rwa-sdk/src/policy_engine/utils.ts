@@ -1,21 +1,17 @@
-import { Idl, Program, Provider } from "@coral-xyz/anchor";
-import { PolicyEngineIdl } from "../programs/idls";
-import { PublicKey } from "@solana/web3.js";
-import { PolicyEngine } from "../programs/types";
+import {type Idl, Program, type Provider} from '@coral-xyz/anchor';
+import {PolicyEngineIdl} from '../programs/idls';
+import {PublicKey} from '@solana/web3.js';
+import {type PolicyEngine} from '../programs/types';
 
-export const POLICY_REGISTRY_PROGRAM_ID = new PublicKey("6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2");
+export const policyRegistryProgramId = new PublicKey('6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2');
 
-export const getPolicyProgram = (provider: Provider) => {
-    return new Program(
-        PolicyEngineIdl as Idl,
-        POLICY_REGISTRY_PROGRAM_ID,
-        provider
-    ) as unknown as Program<PolicyEngine>;
-}
+export const getPolicyEngineProgram = (provider: Provider) => new Program(
+	PolicyEngineIdl as Idl,
+	policyRegistryProgramId,
+	provider,
+) as unknown as Program<PolicyEngine>;
 
-export const getPolicyEnginePda = (assetMint: string) => {
-    return PublicKey.findProgramAddressSync(
-        [new PublicKey(assetMint).toBuffer()],
-        POLICY_REGISTRY_PROGRAM_ID
-    )[0];
-}
+export const getPolicyEnginePda = (assetMint: string) => PublicKey.findProgramAddressSync(
+	[new PublicKey(assetMint).toBuffer()],
+	policyRegistryProgramId,
+)[0];

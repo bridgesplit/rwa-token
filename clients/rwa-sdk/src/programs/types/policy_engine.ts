@@ -98,7 +98,7 @@ export type PolicyEngine = {
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -112,13 +112,8 @@ export type PolicyEngine = {
           "isSigner": false
         },
         {
-          "name": "policy",
+          "name": "policyAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -227,7 +222,9 @@ export type PolicyEngine = {
           },
           {
             "name": "comparisionType",
-            "type": "u8"
+            "type": {
+              "defined": "ComparisionType"
+            }
           }
         ]
       }
@@ -238,10 +235,10 @@ export type PolicyEngine = {
         "kind": "enum",
         "variants": [
           {
-            "name": "And"
+            "name": "Or"
           },
           {
-            "name": "Or"
+            "name": "And"
           }
         ]
       }
@@ -437,7 +434,7 @@ export const IDL: PolicyEngine = {
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -451,13 +448,8 @@ export const IDL: PolicyEngine = {
           "isSigner": false
         },
         {
-          "name": "policy",
+          "name": "policyAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -566,7 +558,9 @@ export const IDL: PolicyEngine = {
           },
           {
             "name": "comparisionType",
-            "type": "u8"
+            "type": {
+              "defined": "ComparisionType"
+            }
           }
         ]
       }
@@ -577,10 +571,10 @@ export const IDL: PolicyEngine = {
         "kind": "enum",
         "variants": [
           {
-            "name": "And"
+            "name": "Or"
           },
           {
-            "name": "Or"
+            "name": "And"
           }
         ]
       }
