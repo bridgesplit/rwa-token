@@ -4,8 +4,6 @@ use anchor_spl::{
     token_interface::{close_account, CloseAccount, Mint, Token2022, TokenAccount},
 };
 
-use crate::TransactionApprovalAccount;
-
 #[derive(Accounts)]
 #[instruction()]
 pub struct CloseTokenAccount<'info> {
@@ -13,13 +11,6 @@ pub struct CloseTokenAccount<'info> {
     pub payer: Signer<'info>,
     #[account()]
     pub owner: Signer<'info>,
-    #[account(
-        mut,
-        close = payer,
-        constraint = transaction_approval_account.asset_mint == asset_mint.key(),
-        constraint = transaction_approval_account.from_token_account == Some(token_account.key())
-    )]
-    pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
     #[account()]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(

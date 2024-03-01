@@ -19,7 +19,7 @@ pub struct CreateDataAccount<'info> {
     #[account(
         constraint = data_registry.verify_signer(data_registry.key(), signer.key(), signer.is_signer).is_ok()
     )]
-    pub data_registry: Box<Account<'info, DataRegistry>>,
+    pub data_registry: Box<Account<'info, DataRegistryAccount>>,
     #[account(
         init,
         signer,

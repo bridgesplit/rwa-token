@@ -1,26 +1,12 @@
-use anchor_lang::{prelude::*, solana_program::program_option::COption};
+use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{burn, Burn, Mint, Token2022, TokenAccount};
-
-use crate::TransactionApprovalAccount;
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
 pub struct VoidTokens<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    #[account(mut)]
-    pub authority: Signer<'info>,
     #[account()]
     pub owner: Signer<'info>,
-    #[account(
-        mut,
-        close = payer,
-        constraint = transaction_approval_account.amount == Some(amount)
-    )]
-    pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
-    #[account(
-        constraint = asset_mint.mint_authority == COption::Some(authority.key())
-    )]
+    #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         mut,
@@ -28,7 +14,6 @@ pub struct VoidTokens<'info> {
         associated_token::authority = owner,
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
-    pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token2022>,
 }
 

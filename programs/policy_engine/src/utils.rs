@@ -4,8 +4,7 @@ use crate::{state::*, PolicyEngineErrors};
 
 pub fn enforce_identity_filter(identity: [u8; 10], identity_filter: IdentityFilter) -> Result<()> {
     match identity_filter.comparision_type {
-        0 => {
-            // TODO: use proper enum
+        ComparisionType::Or => {
             // if any level is in the identities array, return Ok
             for (_i, level) in identity.iter().enumerate() {
                 if *level != 0 && identity_filter.identity_levels.contains(level) {
@@ -14,7 +13,7 @@ pub fn enforce_identity_filter(identity: [u8; 10], identity_filter: IdentityFilt
             }
             Err(PolicyEngineErrors::IdentityFilterFailed.into())
         }
-        1 => {
+        ComparisionType::And => {
             // if all levels are in the identities array, return Ok
             for level in identity_filter.identity_levels.iter() {
                 if *level != 0 && !identity.contains(level) {

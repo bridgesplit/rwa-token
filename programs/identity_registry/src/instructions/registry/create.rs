@@ -7,7 +7,7 @@ use anchor_spl::token_interface::Mint;
 pub struct CreateIdentityRegistry<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account(mut)]
+    #[account()]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,

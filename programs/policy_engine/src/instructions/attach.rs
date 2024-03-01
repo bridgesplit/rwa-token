@@ -12,8 +12,6 @@ pub struct AttachIdentityApproval<'info> {
     pub signer: UncheckedAccount<'info>,
     #[account(
         mut,
-        seeds = [policy_engine.asset_mint.as_ref()],
-        bump,
         constraint = policy_engine.verify_signer(policy_engine.key(), signer.key(), signer.is_signer).is_ok()
     )]
     pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,

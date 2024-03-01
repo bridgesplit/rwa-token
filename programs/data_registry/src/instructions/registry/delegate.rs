@@ -5,8 +5,6 @@ use anchor_spl::token_interface::Mint;
 #[derive(Accounts)]
 #[instruction()]
 pub struct DelegateDataRegistry<'info> {
-    #[account()]
-    pub payer: Signer<'info>,
     #[account(
         constraint = authority.key() == data_registry.authority,
     )]

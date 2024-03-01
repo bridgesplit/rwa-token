@@ -4,7 +4,7 @@ use anchor_spl::{
     token_interface::{Mint, Token2022, TokenAccount},
 };
 
-use crate::{TrackerAccount, TransactionApprovalAccount};
+use crate::TrackerAccount;
 
 #[derive(Accounts)]
 #[instruction()]
@@ -14,12 +14,6 @@ pub struct CreateTokenAccount<'info> {
     #[account()]
     /// CHECK: can be any account
     pub owner: UncheckedAccount<'info>,
-    #[account(
-        mut,
-        close = payer,
-        constraint = transaction_approval_account.asset_mint == asset_mint.key(),
-    )]
-    pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
     // Note: All ATAs are are initialized with ImmutableOwner because the mint is created with Token22.
     #[account(
         mint::token_program = token_program,

@@ -12,8 +12,6 @@ pub struct UpdateDataAccountArgs {
 #[instruction(args: UpdateDataAccountArgs)]
 pub struct UpdateDataAccount<'info> {
     #[account()]
-    pub payer: Signer<'info>,
-    #[account()]
     /// CHECK: can be either authority or delegate
     pub signer: UncheckedAccount<'info>,
     #[account(

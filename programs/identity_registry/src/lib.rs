@@ -67,6 +67,7 @@ pub mod identity_registry {
         _ctx: Context<RevokeIdentityAccount>,
         _owner: Pubkey,
     ) -> Result<()> {
+        // no extra steps needed, identity account is being properly closed
         Ok(())
     }
 }

@@ -4,14 +4,14 @@ use num_enum::IntoPrimitive;
 #[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace)]
 pub struct IdentityFilter {
     pub identity_levels: [u8; 10],
-    pub comparision_type: u8,
+    pub comparision_type: ComparisionType,
 }
 
 #[repr(u8)]
-#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone)]
+#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone, InitSpace)]
 pub enum ComparisionType {
-    And,
     Or,
+    And,
 }
 
 #[account()]

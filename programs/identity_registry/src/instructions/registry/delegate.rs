@@ -4,17 +4,11 @@ use anchor_lang::prelude::*;
 #[derive(Accounts)]
 #[instruction()]
 pub struct DelegateIdentityRegistry<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
     #[account(
         constraint = authority.key() == identity_registry_account.authority
     )]
     pub authority: Signer<'info>,
-    #[account(
-        mut,
-        seeds = [identity_registry_account.asset_mint.as_ref()],
-        bump,
-    )]
+    #[account(mut)]
     pub identity_registry_account: Box<Account<'info, IdentityRegistryAccount>>,
 }
 

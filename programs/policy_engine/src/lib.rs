@@ -34,7 +34,8 @@ pub mod policy_engine {
     }
 
     /// remove policy
-    pub fn remove_policy(ctx: Context<RemovePolicy>) -> Result<()> {
-        instructions::remove::handler(ctx)
+    pub fn remove_policy(_ctx: Context<RemovePolicy>) -> Result<()> {
+        // policy account is closed, no further action required
+        Ok(())
     }
 }
