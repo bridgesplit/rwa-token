@@ -2,7 +2,7 @@ use std::ops::Deref;
 
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{Mint, TokenAccount};
-use identity_registry::{program::IdentityRegistry, IdentityAccount};
+use identity_registry::{program::IdentityRegistry, IdentityAccount, SKIP_POLICY_LEVEL};
 use policy_engine::{deserialize_and_enforce_policy, program::PolicyEngine, PolicyEngineAccount};
 
 use crate::{state::*, AssetControllerErrors};
@@ -54,6 +54,15 @@ pub struct ExecuteTransferHook<'info> {
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
+    // if user has identity skip level, can skip enforcing policy
+    if ctx
+        .accounts
+        .identity_account
+        .levels
+        .contains(&SKIP_POLICY_LEVEL)
+    {
+        return Ok(());
+    }
     let remaining_accounts = ctx.remaining_accounts.to_vec();
     let policies = ctx
         .accounts

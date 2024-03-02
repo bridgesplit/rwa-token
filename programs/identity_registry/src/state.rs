@@ -14,6 +14,9 @@ pub struct IdentityRegistryAccount {
     pub delegate: Pubkey,
 }
 
+// level if attached to user account, will skip any policy checks
+pub const SKIP_POLICY_LEVEL: u8 = u8::MAX;
+
 impl IdentityRegistryAccount {
     pub const VERSION: u8 = 1;
     pub fn new(

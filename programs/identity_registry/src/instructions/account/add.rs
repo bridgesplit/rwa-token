@@ -2,7 +2,7 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(owner: Pubkey)]
+#[instruction(owner: Pubkey, level: u8)]
 pub struct AddLevelToIdentityAccount<'info> {
     #[account()]
     /// CHECK: signer check
