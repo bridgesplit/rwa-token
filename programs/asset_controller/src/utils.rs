@@ -1,9 +1,13 @@
-use anchor_lang::{prelude::Result, solana_program::pubkey::Pubkey};
+use anchor_lang::{
+    prelude::Result,
+    solana_program::{program::invoke, pubkey::Pubkey, system_instruction::transfer},
+    Lamports,
+};
 use spl_tlv_account_resolution::{
     account::ExtraAccountMeta, seeds::Seed, state::ExtraAccountMetaList,
 };
 
-use crate::id;
+use crate::{id, AccountInfo, Rent, SolanaSysvar};
 
 pub fn get_meta_list_size() -> Result<usize> {
     Ok(ExtraAccountMetaList::size_of(5).unwrap())
@@ -40,4 +44,19 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
 
 pub fn get_transaction_approval_account_pda(mint: Pubkey) -> Pubkey {
     Pubkey::find_program_address(&[mint.as_ref()], &id()).0
+}
+
+pub fn update_account_lamports_to_minimum_balance<'info>(
+    account: AccountInfo<'info>,
+    payer: AccountInfo<'info>,
+    system_program: AccountInfo<'info>,
+) -> Result<()> {
+    let extra_lamports = Rent::get()?.minimum_balance(account.data_len()) - account.get_lamports();
+    if extra_lamports > 0 {
+        invoke(
+            &transfer(payer.key, account.key, extra_lamports),
+            &[payer, account, system_program],
+        )?;
+    }
+    Ok(())
 }
