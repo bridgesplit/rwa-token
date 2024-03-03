@@ -26,8 +26,8 @@ pub fn enforce_identity_filter(identity: [u8; 10], identity_filter: IdentityFilt
 }
 
 pub fn get_total_amount_transferred_in_timeframe(
-    transfer_amounts: [u64; 10],
-    transfer_timestamps: [i64; 10],
+    transfer_amounts: [u64; 25],
+    transfer_timestamps: [i64; 25],
     timeframe: i64,
     timestamp: i64,
 ) -> u64 {
@@ -42,7 +42,7 @@ pub fn get_total_amount_transferred_in_timeframe(
 }
 
 pub fn get_total_transactions_in_timeframe(
-    transfer_timestamps: [i64; 10],
+    transfer_timestamps: [i64; 25],
     timeframe: i64,
     timestamp: i64,
 ) -> u64 {
@@ -62,8 +62,8 @@ pub fn deserialize_and_enforce_policy(
     amount: u64,
     timestamp: i64,
     identity: [u8; 10],
-    transfer_amounts: [u64; 10],
-    transfer_timestamps: [i64; 10],
+    transfer_amounts: [u64; 25],
+    transfer_timestamps: [i64; 25],
 ) -> Result<()> {
     let policy_account: PolicyAccount = AccountDeserialize::try_deserialize(&mut &data[..])?;
     match policy_account.policy {
