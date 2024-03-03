@@ -3,20 +3,20 @@ use anchor_lang::prelude::*;
 use crate::AssetControllerErrors;
 
 #[account()]
+#[derive(InitSpace)]
 pub struct TrackerAccount {
     pub version: u8,
     // corresponding asset mint
     pub asset_mint: Pubkey,
     // owner of the policy account
     pub owner: Pubkey,
-    // last 10 transfer amounts - evict only if max_timeframe has passed
-    pub transfer_amounts: [u64; 10],
-    // last 10 transfer timestamps - evict only if max_timeframe has passed
-    pub transfer_timestamps: [i64; 10],
+    // last 25 transfer amounts - evict only if max_timeframe has passed
+    pub transfer_amounts: [u64; 25],
+    // last 25 transfer timestamps - evict only if max_timeframe has passed
+    pub transfer_timestamps: [i64; 25],
 }
 
 impl TrackerAccount {
-    pub const LEN: usize = 8 + std::mem::size_of::<TrackerAccount>();
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, asset_mint: Pubkey, owner: Pubkey) {
         self.version = Self::VERSION;

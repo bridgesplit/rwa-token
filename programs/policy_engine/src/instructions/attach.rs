@@ -4,38 +4,37 @@ use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct AttachTransactionAmountLimit<'info> {
+pub struct AttachIdentityApproval<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
+    #[account()]
     /// CHECK: internal ix checks
     pub signer: UncheckedAccount<'info>,
     #[account(
         mut,
-        seeds = [policy_engine.asset_mint.as_ref()],
-        bump,
         constraint = policy_engine.verify_signer(policy_engine.key(), signer.key(), signer.is_signer).is_ok()
     )]
-    pub policy_engine: Box<Account<'info, PolicyEngine>>,
+    pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
     #[account(
         init,
         signer,
-        space = TransactionAmountLimit::LEN,
+        space = 8 + PolicyAccount::INIT_SPACE,
         payer = payer,
     )]
-    pub policy: Box<Account<'info, TransactionAmountLimit>>,
+    pub policy_account: Box<Account<'info, PolicyAccount>>,
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(
-    ctx: Context<AttachTransactionAmountLimit>,
-    limit: u64,
+    ctx: Context<AttachIdentityApproval>,
     identity_filter: IdentityFilter,
+    policy: Policy,
 ) -> Result<()> {
     ctx.accounts
-        .policy
-        .new(ctx.accounts.policy_engine.key(), limit, identity_filter);
+        .policy_account
+        .new(ctx.accounts.policy_engine.key(), identity_filter, policy);
     ctx.accounts
         .policy_engine
-        .add_policy(ctx.accounts.policy.key())?;
+        .add_policy(ctx.accounts.policy_account.key())?;
     Ok(())
 }

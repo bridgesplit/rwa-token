@@ -16,11 +16,11 @@
         },
         {
           "name": "assetMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
-          "name": "identityRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -50,17 +50,12 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": true
         },
         {
-          "name": "legalRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -123,11 +118,6 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -140,11 +130,6 @@
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -166,11 +151,6 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -183,11 +163,6 @@
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -239,7 +214,7 @@
   ],
   "accounts": [
     {
-      "name": "IdentityRegistry",
+      "name": "IdentityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

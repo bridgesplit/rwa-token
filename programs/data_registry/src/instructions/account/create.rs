@@ -1,4 +1,4 @@
-use crate::{state::*, DataRegistryErrors};
+use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
@@ -17,15 +17,13 @@ pub struct CreateDataAccount<'info> {
     /// CHECK: can be either authority or delegate
     pub signer: UncheckedAccount<'info>,
     #[account(
-        seeds = [data_registry.asset_mint.key().as_ref()],
-        bump,
         constraint = data_registry.verify_signer(data_registry.key(), signer.key(), signer.is_signer).is_ok()
     )]
-    pub data_registry: Box<Account<'info, DataRegistry>>,
+    pub data_registry: Box<Account<'info, DataRegistryAccount>>,
     #[account(
         init,
         signer,
-        space = DataAccount::LEN,
+        space = 8 + DataAccount::INIT_SPACE,
         payer = payer,
     )]
     pub data_account: Box<Account<'info, DataAccount>>,

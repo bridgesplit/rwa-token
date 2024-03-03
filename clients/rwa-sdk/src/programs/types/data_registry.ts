@@ -50,11 +50,6 @@ export type DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": false
@@ -121,11 +116,6 @@ export type DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -138,11 +128,6 @@ export type DataRegistry = {
         {
           "name": "dataAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -158,7 +143,7 @@ export type DataRegistry = {
   ],
   "accounts": [
     {
-      "name": "dataRegistry",
+      "name": "dataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -359,11 +344,6 @@ export const IDL: DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": false
@@ -430,11 +410,6 @@ export const IDL: DataRegistry = {
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -447,11 +422,6 @@ export const IDL: DataRegistry = {
         {
           "name": "dataAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -467,7 +437,7 @@ export const IDL: DataRegistry = {
   ],
   "accounts": [
     {
-      "name": "dataRegistry",
+      "name": "dataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

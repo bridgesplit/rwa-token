@@ -1,8 +1,6 @@
 use anchor_lang::{prelude::*, solana_program::program_option::COption};
 use anchor_spl::token_interface::{mint_to, Mint, MintTo, Token2022, TokenAccount};
 
-use crate::TransactionApprovalAccount;
-
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct IssueTokensArgs {
     pub amount: u64,
@@ -12,21 +10,8 @@ pub struct IssueTokensArgs {
 #[derive(Accounts)]
 #[instruction(args: IssueTokensArgs)]
 pub struct IssueTokens<'info> {
-    #[account(mut)]
-    pub payer: Signer<'info>,
-    #[account(
-        mut,
-        constraint = authority.key() == payer.key(),
-    )]
-    /// only authority can issue tokens
+    #[account()]
     pub authority: Signer<'info>,
-    #[account(
-        mut,
-        close = payer,
-        constraint = transaction_approval_account.amount == Some(args.amount),
-        constraint = transaction_approval_account.to_token_account == Some(token_account.key()),
-    )]
-    pub transaction_approval_account: Box<Account<'info, TransactionApprovalAccount>>,
     #[account(
         mut,
         constraint = asset_mint.mint_authority == COption::Some(authority.key()),

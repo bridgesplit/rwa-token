@@ -1,21 +1,17 @@
-import { Idl, Program, Provider } from "@coral-xyz/anchor";
-import { DataRegistryIdl } from "../programs/idls";
-import { PublicKey } from "@solana/web3.js";
-import { DataRegistry } from "../programs/types";
+import {type Idl, Program, type Provider} from '@coral-xyz/anchor';
+import {DataRegistryIdl} from '../programs/idls';
+import {PublicKey} from '@solana/web3.js';
+import {type DataRegistry} from '../programs/types';
 
-export const DATA_REGISTRY_PROGRAM_ID = new PublicKey("8WRaNVNMDqdwADbKYj7fBd47i2e5SFMSEs8TrA2Vd5io");
+export const dataRegistryProgramId = new PublicKey('8WRaNVNMDqdwADbKYj7fBd47i2e5SFMSEs8TrA2Vd5io');
 
-export const getDataProgram = (provider: Provider) => {
-    return new Program(
-        DataRegistryIdl as Idl,
-        DATA_REGISTRY_PROGRAM_ID,
-        provider
-    ) as unknown as Program<DataRegistry>;
-}
+export const getDataRegistryProgram = (provider: Provider) => new Program(
+	DataRegistryIdl as Idl,
+	dataRegistryProgramId,
+	provider,
+) as unknown as Program<DataRegistry>;
 
-export const getDataRegistryPda = (assetMint: string) => {
-    return PublicKey.findProgramAddressSync(
-        [new PublicKey(assetMint).toBuffer()],
-        DATA_REGISTRY_PROGRAM_ID
-    )[0];
-}
+export const getDataRegistryPda = (assetMint: string) => PublicKey.findProgramAddressSync(
+	[new PublicKey(assetMint).toBuffer()],
+	dataRegistryProgramId,
+)[0];

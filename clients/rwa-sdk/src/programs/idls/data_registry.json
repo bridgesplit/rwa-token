@@ -50,11 +50,6 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": false
@@ -121,11 +116,6 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -138,11 +128,6 @@
         {
           "name": "dataAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -158,7 +143,7 @@
   ],
   "accounts": [
     {
-      "name": "DataRegistry",
+      "name": "DataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

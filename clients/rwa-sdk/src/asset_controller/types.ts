@@ -1,22 +1,6 @@
-export interface TransactionApprovalAccount {
-    assetMint: string;
-    slot: number;
-    fromTokenAccount?: string;
-    toTokenAccount?: string;
-    amount?: number;
-}
+import {type IdlAccounts} from '@coral-xyz/anchor';
+import {type AssetController} from '../programs';
 
-export interface AssetControllerAccount {
-    version: number;
-    assetMint: string;
-    authority: string;
-    delegate: string;
-}
+export type AssetControllerAccount = IdlAccounts<AssetController>['assetControllerAccount'];
 
-export interface TrackerAccount {
-    version: number;
-    assetMint: string;
-    owner: string;
-    transferAmounts: Array<number>;
-    transferTimestamps: Array<number>;
-}
+export type TrackerAccount = IdlAccounts<AssetController>['trackerAccount'];

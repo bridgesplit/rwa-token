@@ -14,6 +14,7 @@
         "strict": false,
         "noImplicitOverride": true,
         "noFallthroughCasesInSwitch": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "strictNullChecks": true
     }
 }
