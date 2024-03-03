@@ -76,31 +76,30 @@ describe('e2e tests', () => {
 		expect(trackerAccount!.assetMint.toString()).toBe(mint);
 	});
 
-	// Test('issue tokens', async (t) => {
-	//     const issueTokens = await getSetupIssueTokensIxs({
-	//         authority: setup.authority.toString(),
-	//         payer: setup.payer.toString(),
-	//         owner: setup.authority.toString(),
-	//         assetMint: mint,
-	//         amount: 10000
-	//     })
-	//     const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens.ixs), [setup.payerKp, ...issueTokens.signers]);
-	//     expect(txnId).toBeTruthy();;
-	//     await setTimeout(() => { }, 5000);
-	// });
+	test('issue tokens', async t => {
+		const issueTokens = await getSetupIssueTokensIxs({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			amount: 10000,
+		});
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens.ixs), [setup.payerKp, ...issueTokens.signers]);
+		expect(txnId).toBeTruthy();
+	});
 
-	// test('transfer tokens', async (t) => {
-	//     const transferTokensIx = await getTransferTokensIx({
-	//         authority: setup.authority.toString(),
-	//         payer: setup.payer.toString(),
-	//         from: setup.authority.toString(),
-	//         to: setup.authority.toString(),
-	//         assetMint: mint,
-	//         amount: 100,
-	//         remainingAccounts,
-	//         decimals,
-	//     });
-	//     const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(transferTokensIx), [setup.payerKp]);
-	//     expect(txnId).toBeTruthy();;
-	// });
+	test('transfer tokens', async t => {
+		const transferTokensIx = await getTransferTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			from: setup.authority.toString(),
+			to: setup.authority.toString(),
+			assetMint: mint,
+			amount: 100,
+			remainingAccounts,
+			decimals,
+		});
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(transferTokensIx), [setup.payerKp]);
+		expect(txnId).toBeTruthy();
+	});
 });
