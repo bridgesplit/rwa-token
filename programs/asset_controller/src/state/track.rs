@@ -10,10 +10,10 @@ pub struct TrackerAccount {
     pub asset_mint: Pubkey,
     // owner of the policy account
     pub owner: Pubkey,
-    // last 10 transfer amounts - evict only if max_timeframe has passed
-    pub transfer_amounts: [u64; 10],
-    // last 10 transfer timestamps - evict only if max_timeframe has passed
-    pub transfer_timestamps: [i64; 10],
+    // last 25 transfer amounts - evict only if max_timeframe has passed
+    pub transfer_amounts: [u64; 25],
+    // last 25 transfer timestamps - evict only if max_timeframe has passed
+    pub transfer_timestamps: [i64; 25],
 }
 
 impl TrackerAccount {
