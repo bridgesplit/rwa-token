@@ -4,7 +4,7 @@ import {type Idl, Program, type Provider} from '@coral-xyz/anchor';
 import {AssetControllerIdl} from '../programs/idls';
 import {utf8} from '@coral-xyz/anchor/dist/cjs/utils/bytes';
 
-/** Address of the Asset Controller Program */
+/** Address of the asset controller program */
 export const assetControllerProgramId = new PublicKey('DtrBDukceZpUnWmeNzqtoBQPdXW8p9xmWYG1z7qMt8qG');
 
 /**
@@ -12,7 +12,6 @@ export const assetControllerProgramId = new PublicKey('DtrBDukceZpUnWmeNzqtoBQPd
  * @param provider - Solana anchor provider.
  * @returns Typed solana program to be used for transaction building.
  */
-
 export const getAssetControllerProgram = (provider: Provider) => new Program(
 	AssetControllerIdl as Idl,
 	assetControllerProgramId,
@@ -24,7 +23,6 @@ export const getAssetControllerProgram = (provider: Provider) => new Program(
  * @param assetMint - The string representation of the asset's mint address.
  * @returns The asset controller's pda.
  */
-
 export const getAssetControllerPda = (assetMint: string) => PublicKey.findProgramAddressSync(
 	[new PublicKey(assetMint).toBuffer()],
 	assetControllerProgramId,
@@ -35,7 +33,6 @@ export const getAssetControllerPda = (assetMint: string) => PublicKey.findProgra
  * @param assetMint - The string representation of the asset's mint address.
  * @returns The asset controller's extra metadata pda.
  */
-
 export const getExtraMetasListPda = (assetMint: string) => PublicKey.findProgramAddressSync(
 	[utf8.encode('extra-account-metas'), new PublicKey(assetMint).toBuffer()],
 	assetControllerProgramId,
@@ -47,7 +44,6 @@ export const getExtraMetasListPda = (assetMint: string) => PublicKey.findProgram
  * @param owner - The string representation of asset's owner.
  * @returns The asset controller's tracker pda.
  */
-
 export const getTrackerAccountPda = (assetMint: string, owner: string) => PublicKey.findProgramAddressSync(
 	[new PublicKey(assetMint).toBuffer(), new PublicKey(owner).toBuffer()],
 	assetControllerProgramId,

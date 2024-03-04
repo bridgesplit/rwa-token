@@ -165,7 +165,7 @@ export async function getCreateTokenAccountIx(
 	return ix;
 }
 
-//** Args to used to generate new asset controller*/
+/** Args used to generate new asset controller*/
 export type SetupAssetControllerArgs = {
 	authority: string;
 	decimals: number;
