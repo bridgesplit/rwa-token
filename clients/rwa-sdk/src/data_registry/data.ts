@@ -21,6 +21,7 @@ export async function getDataRegistryAccount(assetMint: string): Promise<DataReg
  * @param assetMint - The string representation of the asset mint.
  * @returns A promise resolving to an array of {@link DataAccount}, or `undefined` if it doesn't exist.
  */
+
 export async function getDataAccounts(assetMint: string): Promise<DataAccount[] | undefined> {
 	const provider = getProvider();
 	const dataRegistryProgram = getDataRegistryProgram(provider);
