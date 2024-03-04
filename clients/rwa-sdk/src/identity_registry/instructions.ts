@@ -10,7 +10,7 @@ export type CreateIdentityRegistryArgs = {
 /**
  * Builds the transaction instruction to create an identity registry.
  * @param args - {@link CreateIdentityRegistryArgs}.
- * @returns  Create identity registry transaction instruction.
+ * @returns Create identity registry transaction instruction.
  */
 export async function getCreateIdentityRegistryIx(
 	args: CreateIdentityRegistryArgs,

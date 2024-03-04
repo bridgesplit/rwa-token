@@ -17,7 +17,7 @@ export async function getDataRegistryAccount(assetMint: string): Promise<DataReg
 }
 
 /**
- * Retrieves data accounts associated with a specific asset mint.
+ * Retrieves all data accounts associated with a specific asset mint.
  * @param assetMint - The string representation of the asset mint.
  * @returns A promise resolving to an array of {@link DataAccount}, or `undefined` if it doesn't exist.
  */

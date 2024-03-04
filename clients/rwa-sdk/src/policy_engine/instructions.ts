@@ -5,10 +5,16 @@ import {type CommonArgs, getProvider, type IxReturn} from '../utils';
 import {getPolicyEnginePda, getPolicyEngineProgram} from './utils';
 import {type IdentityFilter, type Policy} from './types';
 
+/** Represents the arguments required to create a policy. */
 export type CreatePolicyEngineArgs = {
 	authority: string;
 } & CommonArgs;
 
+/**
+ * Generate instructions to create a new policy account.
+ * @param args {@link CreatePolicyEngineArgs}.
+ * @returns Create policy engine transaction instruction.
+ */
 export async function getCreatePolicyEngineIx(
 	args: CreatePolicyEngineArgs,
 ): Promise<TransactionInstruction> {
@@ -25,7 +31,7 @@ export async function getCreatePolicyEngineIx(
 	return ix;
 }
 
-/**  */
+/** Represents the arguments required to attach a policy to an assets. */
 export type AttachPolicyArgs = {
 	authority: string;
 	owner: string;
@@ -35,6 +41,8 @@ export type AttachPolicyArgs = {
 	policy: Policy;
 };
 
+
+/** TODO: Cleanup unused helper function*/
 export function padIdentityLevels(levels: number[]): number[] {
 	const maxLevels = 10;
 	return levels.concat(new Array(maxLevels - levels.length).fill(0));
@@ -51,7 +59,6 @@ export function padIdentityLevels(levels: number[]): number[] {
  * @param args {@link AttachPolicyArgs}
  * @returns - {@link IxReturn}, a list of transaction instructions and a new key pair responsible to sign it.
  */
-
 export async function getAttachPolicyAccountIx(
 	args: AttachPolicyArgs,
 ): Promise<IxReturn> {

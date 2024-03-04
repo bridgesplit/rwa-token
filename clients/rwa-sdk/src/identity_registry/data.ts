@@ -17,7 +17,7 @@ export async function getIdentityRegistryAccount(assetMint: string): Promise<Ide
 }
 
 /**
- * Retrieves identity account associated with a specific asset mint and owner.
+ * Retrieves all identity accounts associated with a specific asset mint and owner.
  * @param assetMint - The string representation of the asset mint.
  * @param owner - The string representation of the asset owner.
  * @returns A promise resolving to the {@link IdentityAccount}, or `undefined` if it doesn't exist.
