@@ -1,6 +1,6 @@
-import {getProvider} from '../utils';
-import {type AssetControllerAccount, type TrackerAccount} from './types';
-import {getAssetControllerPda, getAssetControllerProgram, getTrackerAccountPda} from './utils';
+import { getProvider } from '../utils';
+import { type AssetControllerAccount, type TrackerAccount } from './types';
+import { getAssetControllerPda, getAssetControllerProgram, getTrackerAccountPda } from './utils';
 
 export async function getAssetControllerAccount(assetMint: string): Promise<AssetControllerAccount | undefined> {
 	const provider = getProvider();
