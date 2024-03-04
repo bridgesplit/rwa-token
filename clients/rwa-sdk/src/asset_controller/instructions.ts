@@ -16,12 +16,17 @@ import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
 
-// Common args but with authority compulsory
+/** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {
 	decimals: number;
 	authority: string;
 } & CommonArgs;
 
+/**
+ * Builds the transaction instruction to create an Asset Controller.
+ * @param args - {@link CreateAssetControllerIx}
+ * @returns Create asset controller transaction instruction
+ */
 export async function getCreateAssetControllerIx(
 	args: CreateAssetControllerIx,
 ): Promise<TransactionInstruction> {
@@ -44,12 +49,18 @@ export async function getCreateAssetControllerIx(
 	return ix;
 }
 
+/** Common args but with authority, owner and amount.*/
 export type IssueTokenArgs = {
 	amount: number;
 	authority: string;
 	owner: string;
 } & CommonArgs;
 
+/**
+ * Creates transaction instruction to issue tokens for a specific amount for a specific asset.
+ * @param args {@link IssueTokenArgs}
+ * @returns A transaction instruction distributing the specified amount for the specific asset.
+ */
 export async function getIssueTokensIx(args: IssueTokenArgs): Promise<TransactionInstruction> {
 	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
@@ -65,15 +76,22 @@ export async function getIssueTokensIx(args: IssueTokenArgs): Promise<Transactio
 	return ix;
 }
 
+/** Common args but with transfer details.*/
 export type TransferTokensArgs = {
 	from: string;
 	to: string;
 	amount: number;
 	authority: string;
 	decimals: number;
+	/** Optional parameter for transfer controls (policies) and privacy (identity). */
 	remainingAccounts?: string[];
 } & CommonArgs;
 
+/**
+ * Creates a transaction instruction to transfer a token between addresses with transfer controls.
+ * @param args {@link TransferTokensArgs}
+ * @returns Transaction instruction to transfer RWA token.
+ */
 export async function getTransferTokensIx(args: TransferTokensArgs): Promise<TransactionInstruction> {
 	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
@@ -147,6 +165,7 @@ export async function getCreateTokenAccountIx(
 	return ix;
 }
 
+//** Args to used to generate new asset controller*/
 export type SetupAssetControllerArgs = {
 	authority: string;
 	decimals: number;
@@ -154,6 +173,12 @@ export type SetupAssetControllerArgs = {
 	delegate?: string;
 };
 
+/**
+* Generates a new asset controller.
+* This includes generation of a new key pair, a new asset registry, policy registry, data registry, identity registry.
+* @param args - {@link SetupAssetControllerArgs}
+* @returns - {@link IxReturn}, an object of the initialize transaction instructions and a new keypair.
+*/
 export async function getSetupAssetControllerIxs(
 	args: SetupAssetControllerArgs,
 ): Promise<IxReturn> {
@@ -187,6 +212,7 @@ export async function getSetupAssetControllerIxs(
 	};
 }
 
+/** Args used to setup user*/
 export type SetupUserArgs = {
 	payer: string;
 	owner: string;
@@ -194,6 +220,13 @@ export type SetupUserArgs = {
 	level: number;
 };
 
+/**
+ * Generate instructions to set up a user for permissioned based assets.
+ * This function constructs the instructions necessary for setting up a user, which includes
+ * creating an identity account, indicating permissions, and a token account for the user.
+ * @param args {@link SetupUserArgs}
+ * @returns - {@link IxReturn}, a promise that resolves to a list of generated transaction instructions.
+ */
 export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
 	const identityAccountIx = await getCreateIdentityAccountIx({
 		payer: args.payer,
@@ -212,12 +245,19 @@ export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
 	};
 }
 
+/** Args used to setup and issue tokens. */
 export type SetupIssueTokensArgs = {
 	authority: string;
 	owner: string;
 	amount: number;
 } & CommonArgs;
 
+
+/**
+ * Creates a list of transaction instructions to issue tokens for a specific amount for a specific asset.
+ * @param args - {@link SetupIssueTokensArgs}
+ * @returns - {@link IxReturn}, a promise that resolves to a list of generated transaction instructions for issuing RWA tokens at specific amounts.
+ */
 export async function getSetupIssueTokensIxs(
 	args: SetupIssueTokensArgs,
 ): Promise<IxReturn> {

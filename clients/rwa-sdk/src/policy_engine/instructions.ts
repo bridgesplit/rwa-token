@@ -25,6 +25,7 @@ export async function getCreatePolicyEngineIx(
 	return ix;
 }
 
+/**  */
 export type AttachPolicyArgs = {
 	authority: string;
 	owner: string;
@@ -38,6 +39,18 @@ export function padIdentityLevels(levels: number[]): number[] {
 	const maxLevels = 10;
 	return levels.concat(new Array(maxLevels - levels.length).fill(0));
 }
+
+/**
+ * Generate instructions to connect an identity policy account to an asset.
+ * 
+ * This function constructs an instruction to attach a policy account to an asset
+ * using the provided arguments. It creates a new policy account, calls the policy
+ * engine program to attach the policy account, and returns the generated instruction
+ * along with the required signers.
+ * 
+ * @param args {@link AttachPolicyArgs}
+ * @returns - {@link IxReturn}, a list of transaction instructions and a new key pair responsible to sign it.
+ */
 
 export async function getAttachPolicyAccountIx(
 	args: AttachPolicyArgs,

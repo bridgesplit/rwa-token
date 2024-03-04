@@ -28,6 +28,7 @@ export function parseRemainingAccounts(remainingAccounts?: string[]) {
 	}));
 }
 
+/** Common args for all RWA instructions */
 export type CommonArgs = {
 	assetMint: string;
 	payer: string;

@@ -2,6 +2,12 @@ import { getProvider } from '../utils';
 import { type AssetControllerAccount, type TrackerAccount } from './types';
 import { getAssetControllerPda, getAssetControllerProgram, getTrackerAccountPda } from './utils';
 
+
+/**
+ * Retrieves a asset controller account associated with a specific asset mint.
+ * @param assetMint - The string representation of the asset mint.
+ * @returns A promise resolving to the fetched asset controller account, or `undefined` if it doesn't exist.
+ */
 export async function getAssetControllerAccount(assetMint: string): Promise<AssetControllerAccount | undefined> {
 	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
@@ -11,6 +17,12 @@ export async function getAssetControllerAccount(assetMint: string): Promise<Asse
 		.catch(() => undefined);
 }
 
+/**
+ * Retrieves a tracker account pda associated with a specific asset mint and owner.
+ * @param assetMint - The string representation of the asset mint.
+ * @param owner - The string representation of the owner's public key.
+ * @returns A promise resolving to the fetched tracker account, or `undefined` if it doesn't exist.
+ */
 export async function getTrackerAccount(assetMint: string, owner: string): Promise<TrackerAccount | undefined> {
 	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
