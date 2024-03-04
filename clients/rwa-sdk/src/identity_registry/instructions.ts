@@ -2,10 +2,16 @@ import {PublicKey, SystemProgram, type TransactionInstruction} from '@solana/web
 import {type CommonArgs, getProvider} from '../utils';
 import {getIdentityAccountPda, getIdentityRegistryProgram, getIdentityRegistryPda} from './utils';
 
+/** Common args but with authority. */
 export type CreateIdentityRegistryArgs = {
 	authority: string;
 } & CommonArgs;
 
+/**
+ * Builds the transaction instruction to create an identity registry.
+ * @param args - {@link CreateIdentityRegistryArgs}.
+ * @returns  Create identity registry transaction instruction.
+ */
 export async function getCreateIdentityRegistryIx(
 	args: CreateIdentityRegistryArgs,
 ): Promise<TransactionInstruction> {
@@ -22,11 +28,17 @@ export async function getCreateIdentityRegistryIx(
 	return ix;
 }
 
+/** Common args but with level and owner. */
 export type CreateIdentityAccountArgs = {
 	level: number;
 	owner: string;
 } & CommonArgs;
 
+/**
+ * Builds the transaction instruction to create an identity account.
+ * @param args - {@link CreateIdentityAccountArgs}.
+ * @returns Create identity account transaction instruction.
+ */
 export async function getCreateIdentityAccountIx(
 	args: CreateIdentityAccountArgs,
 ): Promise<TransactionInstruction> {

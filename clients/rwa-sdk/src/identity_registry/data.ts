@@ -2,6 +2,11 @@ import {getProvider} from '../utils';
 import {type IdentityRegistryAccount, type IdentityAccount} from './types';
 import {getIdentityAccountPda, getIdentityRegistryPda, getIdentityRegistryProgram} from './utils';
 
+/**
+ * Retrieves identity registry account associated with a specific asset mint.
+ * @param assetMint - The string representation of the asset mint.
+ * @returns A promise resolving to {@link IdentityRegistryAccount}, or `undefined` if it doesn't exist.
+ */
 export async function getIdentityRegistryAccount(assetMint: string): Promise<IdentityRegistryAccount | undefined> {
 	const provider = getProvider();
 	const identityRegistryProgram = getIdentityRegistryProgram(provider);
@@ -11,6 +16,12 @@ export async function getIdentityRegistryAccount(assetMint: string): Promise<Ide
 		.catch(() => undefined);
 }
 
+/**
+ * Retrieves identity account associated with a specific asset mint and owner.
+ * @param assetMint - The string representation of the asset mint.
+ * @param owner - The string representation of the asset owner.
+ * @returns A promise resolving to the {@link IdentityAccount}, or `undefined` if it doesn't exist.
+ */
 export async function getIdentityAccount(assetMint: string, owner: string): Promise<IdentityAccount | undefined> {
 	const provider = getProvider();
 	const identityRegistryProgram = getIdentityRegistryProgram(provider);
