@@ -4,7 +4,8 @@
     "description": "RWA sdk",
     "homepage": "https://github.com/bridgesplit/rwa#readme",
     "scripts": {
-        "test": "vitest --testTimeout=60000"
+        "test": "vitest --testTimeout=60000",
+        "lint": "eslint -f unix \"src/**/*.{ts,tsx}\""
     },
     "dependencies": {
         "@coral-xyz/anchor": "^0.29.0",
@@ -15,7 +16,6 @@
     "devDependencies": {
         "@typescript-eslint/eslint-plugin": ">=7.0.2",
         "@typescript-eslint/parser": ">=7.0.2",
-        "eslint": ">=8.56.0",
         "eslint-config-xo": "^0.44.0",
         "eslint-config-xo-typescript": "^3.0.0",
         "typescript": ">=5.0.0",
