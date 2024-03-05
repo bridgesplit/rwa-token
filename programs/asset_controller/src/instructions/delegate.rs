@@ -2,8 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::token_interface::Mint;
 
 use crate::state::*;
-/// Represents a delegate asset instruction and its associated accounts.
-/// This instruction allows the authority to delegate an asset to another entity.
+/// Represents a delegate asset instruction and its associated accounts for an asset controller.
 #[derive(Accounts)]
 #[instruction(delegate: Pubkey)]
 pub struct DelegateAsset<'info> {
@@ -16,6 +15,7 @@ pub struct DelegateAsset<'info> {
     pub asset_controller: Box<Account<'info, AssetControllerAccount>>,
 }
 
+/// This instruction allows the authority to delegate an asset to another entity.
 pub fn handler(ctx: Context<DelegateAsset>, delegate: Pubkey) -> Result<()> {
     ctx.accounts.asset_controller.delegate = delegate;
     Ok(())

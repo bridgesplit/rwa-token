@@ -21,7 +21,6 @@ pub struct VoidTokens<'info> {
 /// by setting up the required accounts, calling the burn instruction through CPI,
 /// and handling any errors that may occur during the process.
 /// Effectivley 'voiding' shares of RWA asset.
-
 pub fn handler(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
     //Prepares accounts for burn via CPI
     let accounts = Burn {

@@ -93,7 +93,7 @@ impl<'info> CreateAssetController<'info> {
     }
 }
 
-/// This handler initializes a delegate for the asset controller.
+/// Initializes a delegate for the asset controller.
 /// It defaults to the authority of the transaction if no authority was provided.
 /// It initializes the extra metas account used for storing additional information.
 /// Additionally, it initializes the token metadata account using the name, symbol, and URI provided in `args` to initialize the token metadata.
