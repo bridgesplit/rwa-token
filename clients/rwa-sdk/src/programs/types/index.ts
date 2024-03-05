@@ -1,4 +1,4 @@
-export { AssetController } from "./asset_controller";
-export { DataRegistry } from "./data_registry";
-export { IdentityRegistry } from "./identity_registry";
-export { PolicyEngine } from "./policy_engine";
+export type {AssetController} from './asset_controller';
+export type {DataRegistry} from './data_registry';
+export type {IdentityRegistry} from './identity_registry';
+export type {PolicyEngine} from './policy_engine';

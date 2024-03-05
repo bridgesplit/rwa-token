@@ -14,6 +14,11 @@ export type AssetController = {
           "isSigner": true
         },
         {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "assetMint",
           "isMut": true,
           "isSigner": true
@@ -329,7 +334,7 @@ export type AssetController = {
             "type": {
               "array": [
                 "u64",
-                10
+                25
               ]
             }
           },
@@ -338,7 +343,7 @@ export type AssetController = {
             "type": {
               "array": [
                 "i64",
-                10
+                25
               ]
             }
           }
@@ -357,8 +362,16 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "authority",
-            "type": "publicKey"
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
           },
           {
             "name": "delegate",
@@ -451,6 +464,11 @@ export const IDL: AssetController = {
           "isSigner": true
         },
         {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "assetMint",
           "isMut": true,
           "isSigner": true
@@ -766,7 +784,7 @@ export const IDL: AssetController = {
             "type": {
               "array": [
                 "u64",
-                10
+                25
               ]
             }
           },
@@ -775,7 +793,7 @@ export const IDL: AssetController = {
             "type": {
               "array": [
                 "i64",
-                10
+                25
               ]
             }
           }
@@ -794,8 +812,16 @@ export const IDL: AssetController = {
             "type": "u8"
           },
           {
-            "name": "authority",
-            "type": "publicKey"
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
           },
           {
             "name": "delegate",

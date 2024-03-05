@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
@@ -15,11 +17,15 @@ import {
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
+import {BN} from '@coral-xyz/anchor';
 
 // Common args but with authority compulsory
 export type CreateAssetControllerIx = {
 	decimals: number;
 	authority: string;
+	name: string;
+	uri: string;
+	symbol: string;
 } & CommonArgs;
 
 export async function getCreateAssetControllerIx(
@@ -29,7 +35,9 @@ export async function getCreateAssetControllerIx(
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createAssetController({
 		decimals: args.decimals,
-		authority: new PublicKey(args.authority),
+		name: args.name,
+		uri: args.uri,
+		symbol: args.symbol,
 		delegate: args.delegate ? new PublicKey(args.delegate) : null,
 	})
 		.accountsStrict({
@@ -39,6 +47,7 @@ export async function getCreateAssetControllerIx(
 			extraMetasAccount: getExtraMetasListPda(args.assetMint),
 			systemProgram: SystemProgram.programId,
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			authority: args.authority,
 		})
 		.instruction();
 	return ix;
@@ -54,7 +63,7 @@ export async function getIssueTokensIx(args: IssueTokenArgs): Promise<Transactio
 	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.issueTokens({
-		amount: args.amount,
+		amount: new BN(args.amount),
 		to: new PublicKey(args.owner),
 	}).accountsStrict({
 		authority: new PublicKey(args.authority),
@@ -75,8 +84,6 @@ export type TransferTokensArgs = {
 } & CommonArgs;
 
 export async function getTransferTokensIx(args: TransferTokensArgs): Promise<TransactionInstruction> {
-	const provider = getProvider();
-	const assetProgram = getAssetControllerProgram(provider);
 	const remainingAccounts = [{
 		pubkey: getExtraMetasListPda(args.assetMint),
 		isWritable: false,
@@ -152,6 +159,9 @@ export type SetupAssetControllerArgs = {
 	decimals: number;
 	payer: string;
 	delegate?: string;
+	name: string;
+	uri: string;
+	symbol: string;
 };
 
 export async function getSetupAssetControllerIxs(
