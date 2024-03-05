@@ -4,7 +4,7 @@
     "description": "RWA sdk",
     "homepage": "https://github.com/bridgesplit/rwa#readme",
     "scripts": {
-        "test": "vitest --testTimeout=60000"
+        "test": "vitest run --testTimeout=60000"
     },
     "dependencies": {
         "@coral-xyz/anchor": "^0.29.0",
