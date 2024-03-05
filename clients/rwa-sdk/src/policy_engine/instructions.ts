@@ -1,9 +1,9 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import {type CommonArgs, getProvider, type IxReturn} from '../utils';
-import {getPolicyEnginePda, getPolicyEngineProgram} from './utils';
-import {type IdentityFilter, type Policy} from './types';
+import { type CommonArgs, getProvider, type IxReturn } from '../utils';
+import { getPolicyEnginePda, getPolicyEngineProgram } from './utils';
+import { type IdentityFilter, type Policy } from './types';
 
 /** Represents the arguments required to create a policy. */
 export type CreatePolicyEngineArgs = {

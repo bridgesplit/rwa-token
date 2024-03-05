@@ -1,6 +1,6 @@
-import {PublicKey, SystemProgram, type TransactionInstruction} from '@solana/web3.js';
-import {type CommonArgs, getProvider} from '../utils';
-import {getIdentityAccountPda, getIdentityRegistryProgram, getIdentityRegistryPda} from './utils';
+import { PublicKey, SystemProgram, type TransactionInstruction } from '@solana/web3.js';
+import { type CommonArgs, getProvider } from '../utils';
+import { getIdentityAccountPda, getIdentityRegistryProgram, getIdentityRegistryPda } from './utils';
 
 /** Common args but with authority. */
 export type CreateIdentityRegistryArgs = {

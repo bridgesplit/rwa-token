@@ -1,6 +1,6 @@
-import {getProvider} from '../utils';
-import {type DataRegistryAccount, type DataAccount} from './types';
-import {getDataRegistryPda, getDataRegistryProgram} from './utils';
+import { getProvider } from '../utils';
+import { type DataRegistryAccount, type DataAccount } from './types';
+import { getDataRegistryPda, getDataRegistryProgram } from './utils';
 
 /**
  * Retrieves data registry account associated with a specific asset mint.
@@ -27,7 +27,7 @@ export async function getDataAccounts(assetMint: string): Promise<DataAccount[] 
 	const dataRegistryPda = getDataRegistryPda(assetMint);
 	const dataAccounts = await provider.connection.getProgramAccounts(dataRegistryProgram.programId, {
 		filters:
-            [{memcmp: {offset: 9, bytes: dataRegistryPda.toBase58()}}],
+			[{ memcmp: { offset: 9, bytes: dataRegistryPda.toBase58() } }],
 	});
 	return dataAccounts.map(account => dataRegistryProgram.coder.accounts.decode('DataAccount', account.account.data));
 }

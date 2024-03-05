@@ -1,5 +1,5 @@
-import {type IdlAccounts, type IdlTypes} from '@coral-xyz/anchor';
-import {type PolicyEngine} from '../programs';
+import { type IdlAccounts, type IdlTypes } from '@coral-xyz/anchor';
+import { type PolicyEngine } from '../programs';
 
 /** Represents on chain policy engine account. */
 export type PolicyEngineAccount = IdlAccounts<PolicyEngine>['policyEngineAccount'];

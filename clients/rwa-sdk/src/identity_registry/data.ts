@@ -1,6 +1,6 @@
-import {getProvider} from '../utils';
-import {type IdentityRegistryAccount, type IdentityAccount} from './types';
-import {getIdentityAccountPda, getIdentityRegistryPda, getIdentityRegistryProgram} from './utils';
+import { getProvider } from '../utils';
+import { type IdentityRegistryAccount, type IdentityAccount } from './types';
+import { getIdentityAccountPda, getIdentityRegistryPda, getIdentityRegistryProgram } from './utils';
 
 /**
  * Retrieves identity registry account associated with a specific asset mint.

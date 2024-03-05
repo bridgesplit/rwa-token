@@ -1,5 +1,5 @@
-import {type IdlAccounts} from '@coral-xyz/anchor';
-import {type IdentityRegistry} from '../programs';
+import { type IdlAccounts } from '@coral-xyz/anchor';
+import { type IdentityRegistry } from '../programs';
 
 /** Represents on chain identity registry account. */
 export type IdentityRegistryAccount = IdlAccounts<IdentityRegistry>['identityRegistryAccount'];
