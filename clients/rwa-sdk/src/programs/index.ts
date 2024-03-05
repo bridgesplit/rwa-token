@@ -1,2 +1,2 @@
-export * from "./idls";
-export * from "./types";
+export * from './idls';
+export * from './types';
