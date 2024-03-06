@@ -3,8 +3,8 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import {policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda} from '../policy_engine';
-import {getCreateDataRegistryIx} from '../data_registry';
+import { policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda } from '../policy_engine';
+import { getCreateDataRegistryIx } from '../data_registry';
 import {
 	identityRegistryProgramId, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda,
 } from '../identity_registry';
@@ -17,7 +17,7 @@ import {
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
-import {BN} from '@coral-xyz/anchor';
+import { BN } from '@coral-xyz/anchor';
 
 /** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {
@@ -194,7 +194,7 @@ export async function getSetupAssetControllerIxs(
 ): Promise<IxReturn> {
 	const mintKp = new Keypair();
 	const mint = mintKp.publicKey;
-	const updatedArgs = {...args, assetMint: mint.toString()};
+	const updatedArgs = { ...args, assetMint: mint.toString() };
 	// Get asset registry create ix
 	const assetControllerCreateIx = await getCreateAssetControllerIx(
 		updatedArgs,

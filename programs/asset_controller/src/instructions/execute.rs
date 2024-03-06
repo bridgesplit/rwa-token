@@ -52,9 +52,6 @@ pub struct ExecuteTransferHook<'info> {
     )]
     pub tracker_account: Account<'info, TrackerAccount>,
 }
-
-
-
 /// This function evalutes policies assocated with a token transfer operation.
 /// It enforces them if necessary and updates the transfer history accordingly.
 /// Lastly, it ensures compliance with predefined policies and constraints.

@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import {BN} from '@coral-xyz/anchor';
+import { BN } from '@coral-xyz/anchor';
 import {
 	getAttachPolicyAccountIx, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTransferTokensIx, Policy,
 } from '../src';
-import {setupTests} from './setup';
-import {Transaction, sendAndConfirmTransaction} from '@solana/web3.js';
-import {expect, test, describe} from 'vitest';
+import { setupTests } from './setup';
+import { Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+import { expect, test, describe } from 'vitest';
 
 describe('e2e tests', () => {
 	let mint: string;
@@ -51,7 +51,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				identityApproval: {},
@@ -70,7 +70,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				transactionAmountLimit: {
@@ -91,7 +91,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				transactionAmountVelocity: {
@@ -113,7 +113,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				transactionCountVelocity: {
