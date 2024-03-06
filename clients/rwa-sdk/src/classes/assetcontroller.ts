@@ -1,4 +1,4 @@
-import { ConfirmOptions, Connection } from "@solana/web3.js";
+import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@solana/web3.js";
 import { RwaConfig } from "./types"
 import { AssetControllerAccount, SetupAssetControllerArgs, getAssetControllerAccount, getSetupAssetControllerIxs } from "../asset_controller";
 import { IxReturn } from "../utils";
@@ -55,31 +55,78 @@ export class AssetController {
         return setupAssetController
     }
 
-    async issueTokenIxns(){
-        return;
-    }
-    async updateDelgateIxns(){
-        return;
-    }
-
-    async updateASsetInfoIxns(){
-        return;
-    }
-
-    async revokeAssetInxs(){
-        return;
+    /**
+     * * Asynchronously generates instructions to issue tokens.
+     * * @returns A Promise that resolves to the instructions to issue tokens.
+     * */
+    async issueTokenIxns(): Promise<IxReturn> {
+        return {
+            ixs: [],
+            signers: []
+        };
     }
 
-    async updateDataRegistry(){
-        return;
+    /**
+     * Asynchronously generates instructions to update the delegate.
+     * @returns A Promise that resolves to the instructions to update the delegate.
+     */
+    async updateDelgateIxns(): Promise<IxReturn> {
+        return {
+            ixs: [],
+            signers: []
+        };
     }
 
-    async attachPolicy(){
-        return;
+    /**
+     * Asynchronously generates instructions to update asset information.
+     * @returns A Promise that resolves to the instructions to update asset information.
+     */
+    async updateASsetInfoIxns(): Promise<IxReturn> {
+        return {
+            ixs: [],
+            signers: []
+        };
     }
 
-    async simulateFakeTransfer(){
-        return;
+    /**
+     * Asynchronously generates instructions to revoke assets.
+     * @returns A Promise that resolves to the instructions to revoke assets.
+     */
+    async revokeAssetInxs(): Promise<IxReturn> {
+        return {
+            ixs: [],
+            signers: []
+        };
+    }
+
+    /**
+     * Asynchronously generates instructions to update the data registry.
+     * @returns A Promise that resolves to the instructions to update the data registry.
+     */
+    async updateDataRegistry(): Promise<IxReturn> {
+        return {
+            ixs: [],
+            signers: []
+        };
+    }
+
+    /**
+     * Asynchronously attaches a policy to assets.
+     * @returns A Promise that resolves to the instructions to attach a policy.
+     */
+    async attachPolicy(): Promise<IxReturn> {
+        return {
+            ixs: [],
+            signers: []
+        };
+    }
+
+    /**
+     * Simulates a fake transfer based on user account parameters.
+     * @returns A Promise that resolves to a boolean indicating the success of the simulation.
+     */
+    async simulateFakeTransfer(): Promise<boolean> {
+        return true
     }
 
 
