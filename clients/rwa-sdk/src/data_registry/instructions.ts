@@ -31,17 +31,17 @@ export async function getCreateDataRegistryIx(
 }
 
 // export enum DataAccountType {
-// 	Title = "Title",
-// 	Legal = "Legal",
-// 	Tax = "Tax",
-// 	Miscellaneous = "Miscellaneous",
+// 	Title,
+// 	Legal,
+// 	Tax,
+// 	Miscellaneous
 // }
 
-// export interface UpdateDataAccountArgs {
+// export type UpdateDataAccountArgs = {
 // 	type: DataAccountType;
 // 	name: string;
 // 	uri: string;
-// }
+// };
 
 // export type UpdateDataAccountArgsStatic = {
 // 	updateAccountArgs: UpdateDataAccountArgs,
@@ -61,11 +61,9 @@ export async function getCreateDataRegistryIx(
 
 // 	const ix = await dataProgram.methods.updateDataAccount(args.updateAccountArgs)
 // 		.accounts({
-// 			payer: args.payer,
 // 			signer: args.assetMint,
 // 			dataRegistry: getDataRegistryPda(args.assetMint),
 // 			dataAccount: args.dataAccount,
-// 			systemProgram: SystemProgram.programId,
 // 		})
 // 		.instruction();
 

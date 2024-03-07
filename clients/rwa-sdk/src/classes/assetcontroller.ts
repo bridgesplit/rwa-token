@@ -75,9 +75,9 @@ export class AssetController {
         return voidTokenIx
     }
 
-
     /**
      * Asynchronously attaches a policy to assets.
+     * @param - {@link AttachPolicyArgs}
      * @returns A Promise that resolves to the instructions to attach a policy.
      */
     async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
@@ -90,6 +90,7 @@ export class AssetController {
      * @returns A Promise that resolves to a boolean indicating the success of the simulation.
      */
     async simulateFakeTransfer(): Promise<boolean> {
+        //TODO: Spec out. Determine if this is useful.
         return true
     }
 
@@ -103,13 +104,14 @@ export class AssetController {
 
     }
 
+    /**
+     * Asynchronously reduces a user identity account level
+     * @returns A Promise that resolves to the instructions to reduce the level of a user identity account.
+     */
     async reduceUserAccount(removeLevelArgs: RemoveLevelFromIdentityAccount): Promise<TransactionInstruction> {
         const reduceLevelIx = await getRemoveLevelFromIdentityAccount(removeLevelArgs)
         return reduceLevelIx
     }
-
-
-
 
     // Getters
     static getConnection(config: RwaConfig): Connection {
