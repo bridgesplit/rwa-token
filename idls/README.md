@@ -1,6 +1,6 @@
 # IDL Directory
 ## PIDs (testing)
-asset_controller - DtrBDukceZpUnWmeNzqtoBQPdXW8p9xmWYG1z7qMt8qG \
-data_registry - 8WRaNVNMDqdwADbKYj7fBd47i2e5SFMSEs8TrA2Vd5io \
-identity_registry - qDnvwpjBYjH1vs1N1CSdbVkEkePp2acL7TphAYZDeoV \
-policy_engine - 6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2
+asset_controller - acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan \
+data_registry - dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw \
+identity_registry - idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf \
+policy_engine - po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau
