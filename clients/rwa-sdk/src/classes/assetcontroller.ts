@@ -1,76 +1,52 @@
 import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@solana/web3.js";
 import { RwaConfig } from "./types"
-import { AssetControllerAccount, SetupAssetControllerArgs, getAssetControllerAccount, getSetupAssetControllerIxs } from "../asset_controller";
+import { SetupAssetControllerArgs, SetupIssueTokensArgs, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getVoidTokens, voidTokenArgs } from "../asset_controller";
 import { IxReturn } from "../utils";
 import { getProvider } from "@coral-xyz/anchor";
+import { AttachPolicyArgs, getAttachPolicyAccountIx } from "../policy_engine";
+import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, getAddLevelToIdentityAccount, getRemoveLevelFromIdentityAccount } from "../identity_registry";
 
 export class AssetController {
     rwaConfig: RwaConfig;
-    assetInfo?: AssetControllerAccount | undefined; // Make assetInfo optional
-    isOwner?: boolean; // Make isOwner optional
-    isDelegate?: boolean; // Make isDelegate optional
 
-    // Constructor signature 1: With all parameters
-    constructor(
-        rwaConfig: RwaConfig,
-        assetInfo: AssetControllerAccount | undefined,
-        isOwner: boolean,
-        isDelegate: boolean
-    );
-
-    // Constructor signature 2: Without assetInfo, isOwner, and isDelegate
     constructor(
         rwaConfig: RwaConfig
-    );
-
-    // Implementation of constructor
-    constructor(
-        rwaConfig: RwaConfig,
-        assetInfo?: AssetControllerAccount | undefined,
-        isOwner?: boolean,
-        isDelegate?: boolean
     ) {
-        this.rwaConfig = rwaConfig;
-        this.assetInfo = assetInfo;
-        this.isOwner = isOwner;
-        this.isDelegate = isDelegate;
+        this.rwaConfig = rwaConfig
     }
 
-    static async initialize(
-        rwaConfig: RwaConfig, // Pass RwaConfig to initialize
-        mint: string
-    ): Promise<AssetController> {
-        //TODO: get asset info from on-chain and return new assetController with its info
-        const assetAccount = await getAssetControllerAccount(mint);
-        // Create a new instance of AssetController using retrieved assetAccount and provided rwaConfig
-        // Default isOwner and isDelegate to false. However need to do the check
-        return new AssetController(rwaConfig, assetAccount, false, false);
-    }
+    /**
+     * Asynchronously generates instructions to setup a new asset controller.
+     * @returns A Promise that resolves to the instructions to create an asset controller.
+     */
     async setUpNewRegistry(
         createAssetControllerArgs: SetupAssetControllerArgs
     ): Promise<IxReturn> {
-        const setupAssetController = await getSetupAssetControllerIxs(
+        const setupControllerIx = await getSetupAssetControllerIxs(
             createAssetControllerArgs,
         );
-        return setupAssetController
+
+        return setupControllerIx
     }
 
     /**
-     * * Asynchronously generates instructions to issue tokens.
-     * * @returns A Promise that resolves to the instructions to issue tokens.
-     * */
-    async issueTokenIxns(): Promise<IxReturn> {
-        return {
-            ixs: [],
-            signers: []
-        };
+     * Asynchronously generates instructions to issue tokens.
+     * @returns A Promise that resolves to the instructions to issue tokens.
+     */
+    async issueTokenIxns(setupIssueArgs: SetupIssueTokensArgs): Promise<IxReturn> {
+        const issueTokensIx = await getSetupIssueTokensIxs(
+            setupIssueArgs
+        )
+        return issueTokensIx
     }
 
     /**
-     * Asynchronously generates instructions to update the delegate.
+     * Asynchronously generates instructions to update the asset controller delegate.
      * @returns A Promise that resolves to the instructions to update the delegate.
      */
-    async updateDelgateIxns(): Promise<IxReturn> {
+    async updateAssetControllerDelgateIxns(): Promise<IxReturn> {
+
+        // TODO: Missing instrunctions
         return {
             ixs: [],
             signers: []
@@ -81,7 +57,9 @@ export class AssetController {
      * Asynchronously generates instructions to update asset information.
      * @returns A Promise that resolves to the instructions to update asset information.
      */
-    async updateASsetInfoIxns(): Promise<IxReturn> {
+    async updateAssetsDataRegistryInfoIxns(): Promise<IxReturn> {
+
+        //TODO: Missing instructions maybe rename to updateDataRegistry
         return {
             ixs: [],
             signers: []
@@ -92,33 +70,19 @@ export class AssetController {
      * Asynchronously generates instructions to revoke assets.
      * @returns A Promise that resolves to the instructions to revoke assets.
      */
-    async revokeAssetInxs(): Promise<IxReturn> {
-        return {
-            ixs: [],
-            signers: []
-        };
+    async voidTokenIxns(voidTokenArgs: voidTokenArgs): Promise<IxReturn> {
+        const voidTokenIx = await getVoidTokens(voidTokenArgs)
+        return voidTokenIx
     }
 
-    /**
-     * Asynchronously generates instructions to update the data registry.
-     * @returns A Promise that resolves to the instructions to update the data registry.
-     */
-    async updateDataRegistry(): Promise<IxReturn> {
-        return {
-            ixs: [],
-            signers: []
-        };
-    }
 
     /**
      * Asynchronously attaches a policy to assets.
      * @returns A Promise that resolves to the instructions to attach a policy.
      */
-    async attachPolicy(): Promise<IxReturn> {
-        return {
-            ixs: [],
-            signers: []
-        };
+    async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
+        const attachPolicyIx = await getAttachPolicyAccountIx(policyArgs)
+        return attachPolicyIx
     }
 
     /**
@@ -128,6 +92,23 @@ export class AssetController {
     async simulateFakeTransfer(): Promise<boolean> {
         return true
     }
+
+    /**
+     * Asynchronously update user account identity
+     * @returns A Promise that resolves to the instructions to update user account identity.
+     */
+    async upgradeUserAccount(addLevelArgs: AddLevelToIdentityAccountArgs): Promise<TransactionInstruction> {
+        const addLevelIx = await getAddLevelToIdentityAccount(addLevelArgs)
+        return addLevelIx
+
+    }
+
+    async reduceUserAccount(removeLevelArgs: RemoveLevelFromIdentityAccount): Promise<TransactionInstruction> {
+        const reduceLevelIx = await getRemoveLevelFromIdentityAccount(removeLevelArgs)
+        return reduceLevelIx
+    }
+
+
 
 
     // Getters

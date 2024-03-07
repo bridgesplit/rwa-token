@@ -3,6 +3,7 @@ import { RwaConfig } from "./types"
 import { AssetControllerAccount, SetupAssetControllerArgs, getAssetControllerAccount, getSetupAssetControllerIxs } from "../asset_controller";
 import { IxReturn } from "../utils";
 import { getProvider } from "@coral-xyz/anchor";
+import { AssetController } from "./assetcontroller";
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).
@@ -13,6 +14,7 @@ export class RwaClient {
      * Configuration for the RWA client.
      */
     rwaConfig: RwaConfig;
+    assetController: AssetController;
 
     /**
      * Constructs a new instance of the RwaClient.
@@ -20,6 +22,7 @@ export class RwaClient {
      */
     constructor(rwaConfig: RwaConfig) {
         this.rwaConfig = rwaConfig;
+        this.assetController = new AssetController(rwaConfig);
     }
     /**
      * Retrieves all policy accounts.

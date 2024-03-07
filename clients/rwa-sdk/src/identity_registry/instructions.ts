@@ -55,3 +55,57 @@ export async function getCreateIdentityAccountIx(
 		.instruction();
 	return ix;
 }
+
+
+export type AddLevelToIdentityAccountArgs = {
+	owner: string,
+	level: number,
+} & CommonArgs
+
+/**
+ * Builds the transaction instruction to add a level to identity account
+ * @param args - {@link AddLevelToIdentityAccountArgs}.
+ * @returns Add level to identity account transaction instruction.
+ */
+export async function getAddLevelToIdentityAccount(
+	args: AddLevelToIdentityAccountArgs,
+): Promise<TransactionInstruction> {
+	const provider = getProvider();
+	const identityProgram = getIdentityRegistryProgram(provider);
+	const ix = await identityProgram.methods.addLevelToIdentityAccount(new PublicKey(args.owner), args.level)
+		.accountsStrict({
+			//TOOD: Have @MACHA check this
+			signer: args.signer ? args.signer : getIdentityRegistryPda(args.assetMint),
+			identityRegistry: getIdentityRegistryPda(args.assetMint),
+			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+		})
+		.instruction();
+	return ix;
+}
+
+export type RemoveLevelFromIdentityAccount = {
+	owner: string,
+	level: number,
+} & CommonArgs
+
+/**
+ * Builds the transaction instruction to remove a level from identity account
+ * @param args - {@link RemoveLevelFromIdentityAccount}.
+ * @returns Add level to identity account transaction instruction.
+ */
+export async function getRemoveLevelFromIdentityAccount(
+	args: AddLevelToIdentityAccountArgs,
+): Promise<TransactionInstruction> {
+	const provider = getProvider();
+	const identityProgram = getIdentityRegistryProgram(provider);
+	const ix = await identityProgram.methods.removeLevelFromIdentityAccount(new PublicKey(args.owner), args.level)
+		.accountsStrict({
+			//TOOD: Have @MACHA check this
+			signer: args.signer ? args.signer : getIdentityRegistryPda(args.assetMint),
+			identityRegistry: getIdentityRegistryPda(args.assetMint),
+			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+		})
+		.instruction();
+	return ix;
+}
+

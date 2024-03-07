@@ -9,6 +9,7 @@ import { Commitment, Connection, Transaction, sendAndConfirmTransaction } from '
 import { expect, test, describe } from 'vitest';
 import { AssetController } from '../src/classes/assetcontroller';
 import { RwaConfig } from '../src/classes/types';
+import { RwaClient } from '../src/classes/rwa';
 
 describe('e2e tests', () => {
 	let mint: string;
@@ -59,8 +60,8 @@ describe('e2e tests', () => {
 			symbol: 'TST'
 		};
 
-		const assetController = new AssetController(rwaConfig)
-		const setupIx = await assetController.setUpNewRegistry(SetupAssetControllerArgs)
+		const rwaClient = new RwaClient(rwaConfig)
+		const setupIx = await rwaClient.assetController.setUpNewRegistry(SetupAssetControllerArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupIx.ixs), [setup.payerKp, ...setupIx.signers]);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();

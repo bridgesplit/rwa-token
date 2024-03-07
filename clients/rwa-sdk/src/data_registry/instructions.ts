@@ -1,6 +1,8 @@
 import { PublicKey, SystemProgram, type TransactionInstruction } from '@solana/web3.js';
 import { type CommonArgs, getProvider } from '../utils';
 import { getDataRegistryProgram, getDataRegistryPda } from './utils';
+import { getDataAccounts, getDataRegistryAccount } from './data';
+import { DataRegistryAccount } from './types';
 
 /** Common args but with authority. */
 export type CreateDataRegistryArgs = {
@@ -27,3 +29,45 @@ export async function getCreateDataRegistryIx(
 		.instruction();
 	return ix;
 }
+
+// export enum DataAccountType {
+// 	Title = "Title",
+// 	Legal = "Legal",
+// 	Tax = "Tax",
+// 	Miscellaneous = "Miscellaneous",
+// }
+
+// export interface UpdateDataAccountArgs {
+// 	type: DataAccountType;
+// 	name: string;
+// 	uri: string;
+// }
+
+// export type UpdateDataAccountArgsStatic = {
+// 	updateAccountArgs: UpdateDataAccountArgs,
+// 	dataAccount: PublicKey,
+// } & CommonArgs
+
+// /**
+//  * Builds the transaction instruction to update a data registry.
+//  * @param args - {@link UpdateDataAccountArgs}.
+//  * @returns Create update data registry transaction instruction.
+//  */
+// export async function getUpdateDataRegistryIx(
+// 	args: UpdateDataAccountArgsStatic,
+// ): Promise<TransactionInstruction> {
+// 	const provider = getProvider();
+// 	const dataProgram = getDataRegistryProgram(provider);
+
+// 	const ix = await dataProgram.methods.updateDataAccount(args.updateAccountArgs)
+// 		.accounts({
+// 			payer: args.payer,
+// 			signer: args.assetMint,
+// 			dataRegistry: getDataRegistryPda(args.assetMint),
+// 			dataAccount: args.dataAccount,
+// 			systemProgram: SystemProgram.programId,
+// 		})
+// 		.instruction();
+
+// 	return ix;
+// }
