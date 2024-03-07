@@ -32,7 +32,7 @@ pub fn handler(
 ) -> Result<()> {
     ctx.accounts
         .policy_account
-        .new(ctx.accounts.policy_engine.key(), identity_filter, policy);
+        .new(ctx.accounts.policy_engine.asset_mint, identity_filter, policy);
     ctx.accounts
         .policy_engine
         .add_policy(ctx.accounts.policy_account.key())?;

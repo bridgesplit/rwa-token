@@ -10,7 +10,7 @@ pub use utils::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("qDnvwpjBYjH1vs1N1CSdbVkEkePp2acL7TphAYZDeoV");
+declare_id!("idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf");
 
 #[program]
 pub mod identity_registry {

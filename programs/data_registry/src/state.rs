@@ -55,8 +55,8 @@ pub enum DataAccountType {
 #[derive(InitSpace)]
 pub struct DataAccount {
     pub version: u8,
-    /// registry to which data account belongs to
-    pub data_registry: Pubkey,
+    /// asset mint to which data account belongs to
+    pub asset_mint: Pubkey,
     /// type of the data account
     pub _type: DataAccountType,
     /// used by creator to store name of the document
@@ -71,13 +71,13 @@ impl DataAccount {
     pub const VERSION: u8 = 1;
     pub fn new(
         &mut self,
-        data_regsitry: Pubkey,
+        asset_mint: Pubkey,
         _type: DataAccountType,
         name: String,
         uri: String,
     ) {
         self.version = Self::VERSION;
-        self.data_registry = data_regsitry;
+        self.asset_mint = asset_mint;
         self._type = _type;
         self.name = name;
         self.uri = uri;

@@ -8,7 +8,7 @@ pub use instructions::*;
 pub use state::*;
 pub use utils::*;
 
-declare_id!("6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2");
+declare_id!("po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau");
 
 #[program]
 pub mod policy_engine {

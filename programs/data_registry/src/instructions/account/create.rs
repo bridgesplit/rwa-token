@@ -32,7 +32,7 @@ pub struct CreateDataAccount<'info> {
 
 pub fn handler(ctx: Context<CreateDataAccount>, args: CreateDataAccountArgs) -> Result<()> {
     ctx.accounts.data_account.new(
-        ctx.accounts.data_registry.key(),
+        ctx.accounts.data_registry.asset_mint,
         args.type_,
         args.name,
         args.uri,
