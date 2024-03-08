@@ -1,20 +1,23 @@
-import { ConfirmOptions, Connection } from "@solana/web3.js";
 import { RwaConfig } from "./types"
-import { AssetControllerAccount, SetupAssetControllerArgs, getAssetControllerAccount, getSetupAssetControllerIxs } from "../asset_controller";
-import { IxReturn } from "../utils";
-import { getProvider } from "@coral-xyz/anchor";
 import { AssetController } from "./assetcontroller";
+import { IdentityRegistry } from "./identityRegistry";
+import { PolicyEngine } from "./policyengine";
+import { DataRegistry } from "./dataregistry";
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).
- * - Assuming this will be handled by Helius?
  */
+
+// TODO: Getter functions. I am assuming this will be handled by Helius DAS api.
 export class RwaClient {
     /**
      * Configuration for the RWA client.
      */
     rwaConfig: RwaConfig;
     assetController: AssetController;
+    dataRegistry: DataRegistry;
+    identityRegistry: IdentityRegistry;
+    policyEngine: PolicyEngine
 
     /**
      * Constructs a new instance of the RwaClient.
@@ -23,6 +26,10 @@ export class RwaClient {
     constructor(rwaConfig: RwaConfig) {
         this.rwaConfig = rwaConfig;
         this.assetController = new AssetController(rwaConfig);
+        this.dataRegistry = new DataRegistry(rwaConfig);
+        this.identityRegistry = new IdentityRegistry(rwaConfig);
+        this.policyEngine = new PolicyEngine(rwaConfig);
+
     }
     /**
      * Retrieves all policy accounts.

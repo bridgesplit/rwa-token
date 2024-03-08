@@ -296,19 +296,22 @@ export type voidTokenArgs = {
  * @param closeAccountArgs - Object containing account, destination, and authority information.
  * @returns A promise that resolves to a TransactionInstruction.
  */
-export async function getVoidTokens(
+export async function getVoidTokensIx(
 	args: voidTokenArgs,
 ): Promise<IxReturn> {
 	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
-	const ix = await assetProgram.methods.voidTokens(args.amount)
+	const ix = await assetProgram.methods.voidTokens({
+		from: new PublicKey(args.owner),
+		amount: new BN(args.amount),
+	})
 		.accountsStrict({
 			owner: new PublicKey(args.owner),
 			assetMint: new PublicKey(args.assetMint),
 			tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 		}).instruction();
-		// TODO: double check signers
+	// TODO: double check signers
 	return {
 		ixs: [
 			ix,

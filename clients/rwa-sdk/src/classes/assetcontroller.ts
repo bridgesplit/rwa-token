@@ -1,9 +1,7 @@
-import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@solana/web3.js";
+import { ConfirmOptions, Connection, TransactionInstruction } from "@solana/web3.js";
 import { RwaConfig } from "./types"
-import { SetupAssetControllerArgs, SetupIssueTokensArgs, SetupUserArgs, TransferTokensArgs, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTransferTokensIx, getVoidTokens, voidTokenArgs } from "../asset_controller";
+import { SetupAssetControllerArgs, SetupIssueTokensArgs, TransferTokensArgs, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getTransferTokensIx, getVoidTokensIx, voidTokenArgs } from "../asset_controller";
 import { IxReturn } from "../utils";
-import { AttachPolicyArgs, getAttachPolicyAccountIx } from "../policy_engine";
-import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, getAddLevelToIdentityAccount, getRemoveLevelFromIdentityAccount } from "../identity_registry";
 
 /**
  * Represents the client for Asset Controller for an RWA.
@@ -34,18 +32,6 @@ export class AssetController {
     }
 
     /**
-     * Asynchronously generates instructions to setup a user.
-     * @param - {@link SetupUserArgs}
-     * @returns A Promise that resolves to the instructions to setup a user.
-     *
-     * It is required for at least a single user to be setup before issuing tokens.
-     */
-    async setupUserIxns(setupUserArgs: SetupUserArgs): Promise<IxReturn> {
-        const setupUserIx = await getSetupUserIxs(setupUserArgs)
-        return setupUserIx
-    }
-
-    /**
      * Asynchronously generates instructions to issue tokens.
      * @returns A Promise that resolves to the instructions to issue tokens.
      */
@@ -58,47 +44,24 @@ export class AssetController {
     }
 
     /**
-     * Asynchronously attaches a policy to assets.
-     * @param - {@link AttachPolicyArgs}
-     * @returns A Promise that resolves to the instructions to attach a policy.
-     */
-    async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
-        const attachPolicyIx = await getAttachPolicyAccountIx(policyArgs)
-        return attachPolicyIx
-    }
-
-    /**
      * Asynchronously generates instructions to update the asset controller delegate.
      * @returns A Promise that resolves to the instructions to update the delegate.
      */
+    // TODO: Missing instructions
     async updateAssetControllerDelgateIxns(): Promise<IxReturn> {
-
-        // TODO: Missing instrunctions
         return {
             ixs: [],
             signers: []
         };
     }
 
-    /**
-     * Asynchronously generates instructions to update asset information.
-     * @returns A Promise that resolves to the instructions to update asset information.
-     */
-    async updateAssetsDataRegistryInfoIxns(): Promise<IxReturn> {
-
-        //TODO: Missing instructions maybe rename to updateDataRegistry
-        return {
-            ixs: [],
-            signers: []
-        };
-    }
 
     /**
      * Asynchronously generates instructions to revoke assets.
      * @returns A Promise that resolves to the instructions to revoke assets.
      */
     async voidTokenIxns(voidTokenArgs: voidTokenArgs): Promise<IxReturn> {
-        const voidTokenIx = await getVoidTokens(voidTokenArgs)
+        const voidTokenIx = await getVoidTokensIx(voidTokenArgs)
         return voidTokenIx
     }
 
@@ -106,8 +69,8 @@ export class AssetController {
      * Simulates a fake transfer based on user account parameters.
      * @returns A Promise that resolves to a boolean indicating the success of the simulation.
      */
+    //TODO: Spec out. Determine if this is useful.
     async simulateFakeTransfer(): Promise<boolean> {
-        //TODO: Spec out. Determine if this is useful.
         return true
     }
 
@@ -118,26 +81,6 @@ export class AssetController {
     async transfer(transferArgs: TransferTokensArgs): Promise<TransactionInstruction> {
         const transferIx = await getTransferTokensIx(transferArgs)
         return transferIx
-    }
-
-
-    /**
-     * Asynchronously update user account identity
-     * @returns A Promise that resolves to the instructions to update user account identity.
-     */
-    async upgradeUserAccount(addLevelArgs: AddLevelToIdentityAccountArgs): Promise<TransactionInstruction> {
-        const addLevelIx = await getAddLevelToIdentityAccount(addLevelArgs)
-        return addLevelIx
-
-    }
-
-    /**
-     * Asynchronously reduces a user identity account level
-     * @returns A Promise that resolves to the instructions to reduce the level of a user identity account.
-     */
-    async reduceUserAccount(removeLevelArgs: RemoveLevelFromIdentityAccount): Promise<TransactionInstruction> {
-        const reduceLevelIx = await getRemoveLevelFromIdentityAccount(removeLevelArgs)
-        return reduceLevelIx
     }
 
     /** Helpful asset controller getters */

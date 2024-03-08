@@ -3,12 +3,11 @@
 import { BN } from '@coral-xyz/anchor';
 import {
 	AttachPolicyArgs,
-	getAttachPolicyAccountIx, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTransferTokensIx, IssueTokenArgs, Policy, SetupUserArgs, TransferTokensArgs, voidTokenArgs,
+	getTrackerAccount, IssueTokenArgs, SetupUserArgs, TransferTokensArgs, voidTokenArgs,
 } from '../src';
 import { setupTests } from './setup';
 import { Commitment, Connection, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
 import { expect, test, describe } from 'vitest';
-import { AssetController } from '../src/classes/assetcontroller';
 import { RwaConfig } from '../src/classes/types';
 import { RwaClient } from '../src/classes/rwa';
 
@@ -85,7 +84,7 @@ describe('e2e class tests', () => {
 			},
 		};
 
-		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
+		const policyIx = await rwaClient.policyEngine.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
 		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -109,7 +108,7 @@ describe('e2e class tests', () => {
 			},
 		}
 
-		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
+		const policyIx = await rwaClient.policyEngine.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
 		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -133,7 +132,7 @@ describe('e2e class tests', () => {
 			},
 		}
 
-		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
+		const policyIx = await rwaClient.policyEngine.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
 		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -157,7 +156,7 @@ describe('e2e class tests', () => {
 			},
 		}
 
-		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
+		const policyIx = await rwaClient.policyEngine.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
 		expect(txnId).toBeTruthy();
 
@@ -171,7 +170,7 @@ describe('e2e class tests', () => {
 			assetMint: mint,
 			level: 1,
 		}
-		const setupIx = await rwaClient.assetController.setupUserIxns(setupUserArgs)
+		const setupIx = await rwaClient.identityRegistry.setupUserIxns(setupUserArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupIx.ixs), [setup.payerKp, ...setupIx.signers]);
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(mint, setup.authority.toString());
