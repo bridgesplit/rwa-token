@@ -5,7 +5,7 @@ import {
 	AttachPolicyArgs,
 	CreateDataAccountArgs,
 	getDataAccounts,
-	getTrackerAccount, IssueTokenArgs, SetupUserArgs, TransferTokensArgs, UpdateDataAccountArgs, voidTokenArgs,
+	getTrackerAccount, IssueTokenArgs, SetupUserArgs, TransferTokensArgs, UpdateDataAccountArgs, VoidTokensArgs,
 } from '../src';
 import { setupTests } from './setup';
 import { Commitment, Connection, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
@@ -205,7 +205,7 @@ describe('e2e class tests', () => {
 			amount: 1000000,
 		}
 		const issueIx = await rwaClient.assetController.issueTokenIxns(issueArgs)
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueIx.ixs), [setup.payerKp, ...issueIx.signers]);
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueIx), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 
 	})
@@ -227,19 +227,6 @@ describe('e2e class tests', () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	test('revoke tokens through class', async () => {
-		const voidArgs: voidTokenArgs = {
-			payer: setup.payer.toString(),
-			amount: 500000,
-			owner: setup.authority.toString(),
-			assetMint: mint,
-			authority: setup.authority.toString(),
-		}
-		const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs)
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...voidIx.ixs), [setup.payerKp, ...voidIx.signers]);
-		expect(txnId).toBeTruthy();
-	})
-
 	test('transfer tokens through class', async () => {
 		const transferArgs: TransferTokensArgs = {
 			authority: setup.authority.toString(),
@@ -247,13 +234,26 @@ describe('e2e class tests', () => {
 			from: setup.authority.toString(),
 			to: setup.authority.toString(),
 			assetMint: mint,
-			amount: 100,
+			amount: 2000,
 			remainingAccounts,
 			decimals,
 		}
 
 		const transferIx = await rwaClient.assetController.transfer(transferArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(transferIx), [setup.payerKp]);
+		expect(txnId).toBeTruthy();
+	})
+
+	test('revoke tokens through class', async () => {
+		const voidArgs: VoidTokensArgs = {
+			payer: setup.payer.toString(),
+			amount: 100,
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			authority: setup.authority.toString(),
+		}
+		const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs)
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(voidIx), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 	})
 });

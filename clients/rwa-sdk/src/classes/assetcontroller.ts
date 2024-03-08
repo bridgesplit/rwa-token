@@ -1,6 +1,6 @@
 import { ConfirmOptions, Connection, TransactionInstruction } from "@solana/web3.js";
 import { RwaConfig } from "./types"
-import { SetupAssetControllerArgs, SetupIssueTokensArgs, TransferTokensArgs, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getTransferTokensIx, getVoidTokensIx, voidTokenArgs } from "../asset_controller";
+import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs, getIssueTokensIx, getSetupAssetControllerIxs, getTransferTokensIx, getVoidTokensIx } from "../asset_controller";
 import { IxReturn } from "../utils";
 
 /**
@@ -35,10 +35,9 @@ export class AssetController {
      * Asynchronously generates instructions to issue tokens.
      * @returns A Promise that resolves to the instructions to issue tokens.
      */
-    async issueTokenIxns(setupIssueArgs: SetupIssueTokensArgs): Promise<IxReturn> {
-        // Should this include seperate e.g setupuser & issuetokens?
-        const issueTokensIx = await getSetupIssueTokensIxs(
-            setupIssueArgs
+    async issueTokenIxns(IssueArgs: IssueTokenArgs): Promise<TransactionInstruction> {
+        const issueTokensIx = await getIssueTokensIx(
+            IssueArgs
         )
         return issueTokensIx
     }
@@ -60,7 +59,7 @@ export class AssetController {
      * Asynchronously generates instructions to revoke assets.
      * @returns A Promise that resolves to the instructions to revoke assets.
      */
-    async voidTokenIxns(voidTokenArgs: voidTokenArgs): Promise<IxReturn> {
+    async voidTokenIxns(voidTokenArgs: VoidTokensArgs): Promise<TransactionInstruction> {
         const voidTokenIx = await getVoidTokensIx(voidTokenArgs)
         return voidTokenIx
     }

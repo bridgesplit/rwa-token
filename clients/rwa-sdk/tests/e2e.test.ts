@@ -3,7 +3,7 @@
 import { BN } from '@coral-xyz/anchor';
 import {
 	getAssetControllerPda,
-	getAttachPolicyAccountIx, getCreateDataAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
+	getAttachPolicyAccountIx, getCreateDataAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getIssueTokensIx, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
 } from '../src';
 import { setupTests } from './setup';
 import { Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
@@ -167,14 +167,14 @@ describe('e2e tests', () => {
 	});
 
 	test('issue tokens', async t => {
-		const issueTokens = await getSetupIssueTokensIxs({
+		const issueTokens = await getIssueTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			amount: 1000000,
 		});
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens.ixs), [setup.payerKp, ...issueTokens.signers]);
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 	});
 
