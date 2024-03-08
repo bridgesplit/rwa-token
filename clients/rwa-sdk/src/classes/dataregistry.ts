@@ -1,5 +1,4 @@
 import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@solana/web3.js";
-import { RwaConfig } from "./types"
 import { IxReturn } from "../utils";
 import { CreateDataAccountArgs, DelegateDataRegistryArgs, UpdateDataAccountArgs, getCreateDataAccountIx, getDelegateDataRegistryIx, getUpdateDataAccountIx } from "../data_registry";
 

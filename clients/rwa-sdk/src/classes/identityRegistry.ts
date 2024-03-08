@@ -1,5 +1,4 @@
 import { TransactionInstruction } from "@solana/web3.js";
-import { RwaConfig } from "./types"
 import { SetupUserArgs, getSetupUserIxs } from "../asset_controller";
 import { IxReturn } from "../utils";
 import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, getAddLevelToIdentityAccount, getRemoveLevelFromIdentityAccount } from "../identity_registry";

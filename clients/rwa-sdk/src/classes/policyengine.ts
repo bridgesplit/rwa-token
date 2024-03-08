@@ -1,5 +1,4 @@
 import { ConfirmOptions, Connection } from "@solana/web3.js";
-import { RwaConfig } from "./types"
 import { IxReturn } from "../utils";
 import { AttachPolicyArgs, getAttachPolicyAccountIx } from "../policy_engine";
 
@@ -15,18 +14,5 @@ export class PolicyEngine {
     async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
         const attachPolicyIx = await getAttachPolicyAccountIx(policyArgs)
         return attachPolicyIx
-    }
-
-    /** Helpful asset controller getters */
-    static getConnection(config: RwaConfig): Connection {
-        return config.connection;
-    }
-
-    static getRpcUrl(config: RwaConfig): string {
-        return config.rpcUrl;
-    }
-
-    static getConfirmationOptions(config: RwaConfig): ConfirmOptions {
-        return config.confirmationOptions;
     }
 }

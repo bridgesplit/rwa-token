@@ -1,5 +1,4 @@
-import { ConfirmOptions, Connection, TransactionInstruction } from "@solana/web3.js";
-import { RwaConfig } from "./types"
+import { TransactionInstruction } from "@solana/web3.js";
 import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs, getIssueTokensIx, getSetupAssetControllerIxs, getTransferTokensIx, getVoidTokensIx } from "../asset_controller";
 import { IxReturn } from "../utils";
 
