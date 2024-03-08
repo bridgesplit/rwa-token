@@ -86,7 +86,25 @@ export async function getIssueTokensIx(args: IssueTokenArgs): Promise<Transactio
 	return ix;
 }
 
-/** Common args but with transfer details.*/
+export type VoidTokensArgs = {
+	amount: number;
+	owner: string;
+} & CommonArgs;
+
+export async function getVoidTokensIx(args: VoidTokensArgs): Promise<TransactionInstruction> {
+	const provider = getProvider();
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods.voidTokens({
+		amount: new BN(args.amount),
+	}).accountsStrict({
+		assetMint: new PublicKey(args.assetMint),
+		tokenProgram: TOKEN_2022_PROGRAM_ID,
+		tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
+		owner: args.owner,
+	}).instruction();
+	return ix;
+}
+
 export type TransferTokensArgs = {
 	from: string;
 	to: string;
@@ -256,19 +274,12 @@ export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
 	};
 }
 
-/** Args used to setup and issue tokens. */
 export type SetupIssueTokensArgs = {
 	authority: string;
 	owner: string;
 	amount: number;
 } & CommonArgs;
 
-
-/**
- * Creates a list of transaction instructions to issue tokens for a specific amount for a specific asset.
- * @param args - {@link SetupIssueTokensArgs}
- * @returns - {@link IxReturn}, a promise that resolves to a list of generated transaction instructions for issuing RWA tokens at specific amounts.
- */
 export async function getSetupIssueTokensIxs(
 	args: SetupIssueTokensArgs,
 ): Promise<IxReturn> {
@@ -278,45 +289,6 @@ export async function getSetupIssueTokensIxs(
 	return {
 		ixs: [
 			issueTokensIx,
-		],
-		signers: [],
-	};
-}
-
-
-export type voidTokenArgs = {
-	payer: string;
-	amount: number
-	authority: string
-	owner: string
-} & CommonArgs
-
-/**
- * Revokes a specific asset.
- * @param closeAccountArgs - Object containing account, destination, and authority information.
- * @returns A promise that resolves to a TransactionInstruction.
- */
-
-// TODO: Double check instruction with @Macha, void tokens does nto pass test right now.
-export async function getVoidTokensIx(
-	args: voidTokenArgs,
-): Promise<IxReturn> {
-	const provider = getProvider();
-	const assetProgram = getAssetControllerProgram(provider);
-	const ix = await assetProgram.methods.voidTokens({
-		from: new PublicKey(args.owner),
-		amount: new BN(args.amount),
-	})
-		.accountsStrict({
-			owner: new PublicKey(args.owner),
-			assetMint: new PublicKey(args.assetMint),
-			tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
-			tokenProgram: TOKEN_2022_PROGRAM_ID,
-		}).instruction();
-
-	return {
-		ixs: [
-			ix,
 		],
 		signers: [],
 	};
