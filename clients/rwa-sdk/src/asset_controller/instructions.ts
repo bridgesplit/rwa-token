@@ -273,23 +273,3 @@ export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
 		signers: [],
 	};
 }
-
-export type SetupIssueTokensArgs = {
-	authority: string;
-	owner: string;
-	amount: number;
-} & CommonArgs;
-
-export async function getSetupIssueTokensIxs(
-	args: SetupIssueTokensArgs,
-): Promise<IxReturn> {
-	// Get issue tokens ix
-	const issueTokensIx = await getIssueTokensIx(args);
-
-	return {
-		ixs: [
-			issueTokensIx,
-		],
-		signers: [],
-	};
-}
