@@ -3,7 +3,9 @@
 import { BN } from '@coral-xyz/anchor';
 import {
 	AttachPolicyArgs,
-	getTrackerAccount, IssueTokenArgs, SetupUserArgs, TransferTokensArgs, voidTokenArgs,
+	CreateDataAccountArgs,
+	getDataAccounts,
+	getTrackerAccount, IssueTokenArgs, SetupUserArgs, TransferTokensArgs, UpdateDataAccountArgs, voidTokenArgs,
 } from '../src';
 import { setupTests } from './setup';
 import { Commitment, Connection, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
@@ -17,6 +19,7 @@ describe('e2e class tests', () => {
 	const setup = setupTests();
 	const decimals = 2;
 	const remainingAccounts: string[] = [];
+	let dataAccount: string
 
 	test('setup provider', async () => {
 		await setup.provider.connection.confirmTransaction(
@@ -68,6 +71,21 @@ describe('e2e class tests', () => {
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
 	});
+
+	test('setup data account through class', async t => {
+		const createDataAccountArgs: CreateDataAccountArgs = {
+			type: { legal: {} },
+			name: 'Test Data Account',
+			uri: 'https://test.com',
+			payer: setup.payer.toString(),
+			assetMint: mint
+		}
+		const createDataAccountIx = await rwaClient.dataRegistry.setupDataAccount(createDataAccountArgs)
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...createDataAccountIx.ixs), [setup.payerKp, createDataAccountIx.signers[0]]);
+		expect(txnId).toBeTruthy();
+		dataAccount = createDataAccountIx.signers[0].publicKey.toString()
+	});
+
 
 	test('attach identity approval policy through class', async () => {
 		const policyArgs: AttachPolicyArgs = {
@@ -191,6 +209,23 @@ describe('e2e class tests', () => {
 		expect(txnId).toBeTruthy();
 
 	})
+
+
+	test('update data account through class', async t => {
+		const updateDataAccountArgs: UpdateDataAccountArgs = {
+			dataAccount: dataAccount,
+			name: 'Example Token Updatse',
+			uri: 'newUri',
+			type: { tax: {} },
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			authority: setup.authority.toString(),
+		}
+		const updateDataIx = await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs)
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(updateDataIx), [setup.payerKp, setup.authorityKp]);
+		expect(txnId).toBeTruthy();
+	});
 
 	test('revoke tokens through class', async () => {
 		const voidArgs: voidTokenArgs = {

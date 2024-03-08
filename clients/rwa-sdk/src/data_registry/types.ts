@@ -1,4 +1,4 @@
-import {type IdlTypes, type IdlAccounts, IdlTypes} from '@coral-xyz/anchor';
+import {type IdlTypes, type IdlAccounts} from '@coral-xyz/anchor';
 import {type DataRegistry} from '../programs';
 
 /** Represents on chain data registry account. */
