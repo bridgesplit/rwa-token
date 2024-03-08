@@ -28,7 +28,7 @@ impl IdentityRegistryAccount {
     ) {
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or_else(|| address);
+        self.delegate = delegate.unwrap_or(address);
         self.version = Self::VERSION;
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {

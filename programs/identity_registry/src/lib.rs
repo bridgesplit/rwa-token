@@ -1,3 +1,5 @@
+#![allow(ambiguous_glob_reexports, clippy::new_ret_no_self)]
+
 pub mod error;
 pub mod instructions;
 pub mod state;

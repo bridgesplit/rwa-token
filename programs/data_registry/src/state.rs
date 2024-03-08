@@ -27,7 +27,7 @@ impl DataRegistryAccount {
         self.version = Self::VERSION;
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or_else(|| address);
+        self.delegate = delegate.unwrap_or(address);
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
