@@ -25,10 +25,10 @@ export class RwaClient {
      */
     constructor(rwaConfig: RwaConfig) {
         this.rwaConfig = rwaConfig;
-        this.assetController = new AssetController(rwaConfig);
-        this.dataRegistry = new DataRegistry(rwaConfig);
-        this.identityRegistry = new IdentityRegistry(rwaConfig);
-        this.policyEngine = new PolicyEngine(rwaConfig);
+        this.assetController = new AssetController();
+        this.dataRegistry = new DataRegistry();
+        this.identityRegistry = new IdentityRegistry();
+        this.policyEngine = new PolicyEngine();
 
     }
     /**

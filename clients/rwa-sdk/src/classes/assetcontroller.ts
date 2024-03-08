@@ -7,16 +7,6 @@ import { IxReturn } from "../utils";
  * Represents the client for Asset Controller for an RWA.
  */
 export class AssetController {
-    rwaConfig: RwaConfig;
-
-    /**
-     * Constructs a new instance of RwaConfigManager.
-     * @param {RwaConfig} rwaConfig - The RWA configuration object.
-     */
-    constructor(rwaConfig: RwaConfig) {
-        this.rwaConfig = rwaConfig;
-    }
-
     /**
      * Asynchronously generates instructions to setup a new asset controller.
      * @returns A Promise that resolves to the instructions to create an asset controller.
@@ -80,18 +70,5 @@ export class AssetController {
     async transfer(transferArgs: TransferTokensArgs): Promise<TransactionInstruction> {
         const transferIx = await getTransferTokensIx(transferArgs)
         return transferIx
-    }
-
-    /** Helpful asset controller getters */
-    static getConnection(config: RwaConfig): Connection {
-        return config.connection;
-    }
-
-    static getRpcUrl(config: RwaConfig): string {
-        return config.rpcUrl;
-    }
-
-    static getConfirmationOptions(config: RwaConfig): ConfirmOptions {
-        return config.confirmationOptions;
     }
 }

@@ -7,11 +7,6 @@ import { AttachPolicyArgs, getAttachPolicyAccountIx } from "../policy_engine";
  * Represents the client Policy Engine for an RWA.
  */
 export class PolicyEngine {
-    rwaConfig: RwaConfig;
-    constructor(rwaConfig: RwaConfig) {
-        this.rwaConfig = rwaConfig;
-    }
-
     /**
      * Asynchronously attaches a policy to assets.
      * @param - {@link AttachPolicyArgs}
