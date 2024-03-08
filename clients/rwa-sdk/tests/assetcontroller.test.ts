@@ -253,7 +253,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 		}
 		const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs)
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(voidIx), [setup.payerKp]);
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(voidIx), [setup.payerKp, setup.authorityKp]);
 		expect(txnId).toBeTruthy();
 	})
 });
