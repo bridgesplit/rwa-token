@@ -1,8 +1,9 @@
-import { RwaConfig } from "./types"
+import { Config } from "./types"
 import { AssetController } from "./assetcontroller";
 import { IdentityRegistry } from "./identityRegistry";
 import { PolicyEngine } from "./policyengine";
 import { DataRegistry } from "./dataregistry";
+import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).
@@ -13,7 +14,8 @@ export class RwaClient {
     /**
      * Configuration for the RWA client.
      */
-    rwaConfig: RwaConfig;
+    config: Config;
+    provider: AnchorProvider;
     assetController: AssetController;
     dataRegistry: DataRegistry;
     identityRegistry: IdentityRegistry;
@@ -23,8 +25,9 @@ export class RwaClient {
      * Constructs a new instance of the RwaClient.
      * @param rwaConfig The configuration for the RWA client.
      */
-    constructor(rwaConfig: RwaConfig) {
-        this.rwaConfig = rwaConfig;
+    constructor(rwaConfig: Config, wallet: Wallet) {
+        this.config = rwaConfig;
+        this.provider = new AnchorProvider(rwaConfig.connection, wallet, rwaConfig.confirmationOptions);
         this.assetController = new AssetController();
         this.dataRegistry = new DataRegistry();
         this.identityRegistry = new IdentityRegistry();
