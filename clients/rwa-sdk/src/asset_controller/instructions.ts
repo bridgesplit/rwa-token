@@ -290,6 +290,7 @@ export type voidTokenArgs = {
 	authority: string
 	owner: string
 } & CommonArgs
+
 /**
  * Revokes a specific asset.
  * @param closeAccountArgs - Object containing account, destination, and authority information.

@@ -1,18 +1,22 @@
 import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@solana/web3.js";
 import { RwaConfig } from "./types"
-import { SetupAssetControllerArgs, SetupIssueTokensArgs, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getVoidTokens, voidTokenArgs } from "../asset_controller";
+import { SetupAssetControllerArgs, SetupIssueTokensArgs, SetupUserArgs, TransferTokensArgs, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTransferTokensIx, getVoidTokens, voidTokenArgs } from "../asset_controller";
 import { IxReturn } from "../utils";
-import { getProvider } from "@coral-xyz/anchor";
 import { AttachPolicyArgs, getAttachPolicyAccountIx } from "../policy_engine";
 import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, getAddLevelToIdentityAccount, getRemoveLevelFromIdentityAccount } from "../identity_registry";
 
+/**
+ * Represents the client for Asset Controller for an RWA.
+ */
 export class AssetController {
     rwaConfig: RwaConfig;
 
-    constructor(
-        rwaConfig: RwaConfig
-    ) {
-        this.rwaConfig = rwaConfig
+    /**
+     * Constructs a new instance of RwaConfigManager.
+     * @param {RwaConfig} rwaConfig - The RWA configuration object.
+     */
+    constructor(rwaConfig: RwaConfig) {
+        this.rwaConfig = rwaConfig;
     }
 
     /**
@@ -30,14 +34,37 @@ export class AssetController {
     }
 
     /**
+     * Asynchronously generates instructions to setup a user.
+     * @param - {@link SetupUserArgs}
+     * @returns A Promise that resolves to the instructions to setup a user.
+     *
+     * It is required for at least a single user to be setup before issuing tokens.
+     */
+    async setupUserIxns(setupUserArgs: SetupUserArgs): Promise<IxReturn> {
+        const setupUserIx = await getSetupUserIxs(setupUserArgs)
+        return setupUserIx
+    }
+
+    /**
      * Asynchronously generates instructions to issue tokens.
      * @returns A Promise that resolves to the instructions to issue tokens.
      */
     async issueTokenIxns(setupIssueArgs: SetupIssueTokensArgs): Promise<IxReturn> {
+        // Should this include seperate e.g setupuser & issuetokens?
         const issueTokensIx = await getSetupIssueTokensIxs(
             setupIssueArgs
         )
         return issueTokensIx
+    }
+
+    /**
+     * Asynchronously attaches a policy to assets.
+     * @param - {@link AttachPolicyArgs}
+     * @returns A Promise that resolves to the instructions to attach a policy.
+     */
+    async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
+        const attachPolicyIx = await getAttachPolicyAccountIx(policyArgs)
+        return attachPolicyIx
     }
 
     /**
@@ -76,16 +103,6 @@ export class AssetController {
     }
 
     /**
-     * Asynchronously attaches a policy to assets.
-     * @param - {@link AttachPolicyArgs}
-     * @returns A Promise that resolves to the instructions to attach a policy.
-     */
-    async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
-        const attachPolicyIx = await getAttachPolicyAccountIx(policyArgs)
-        return attachPolicyIx
-    }
-
-    /**
      * Simulates a fake transfer based on user account parameters.
      * @returns A Promise that resolves to a boolean indicating the success of the simulation.
      */
@@ -93,6 +110,16 @@ export class AssetController {
         //TODO: Spec out. Determine if this is useful.
         return true
     }
+
+    /**
+     * Simulates a fake transfer based on user account parameters.
+     * @returns A Promise that resolves to a boolean indicating the success of the simulation.
+     */
+    async transfer(transferArgs: TransferTokensArgs): Promise<TransactionInstruction> {
+        const transferIx = await getTransferTokensIx(transferArgs)
+        return transferIx
+    }
+
 
     /**
      * Asynchronously update user account identity
@@ -113,7 +140,7 @@ export class AssetController {
         return reduceLevelIx
     }
 
-    // Getters
+    /** Helpful asset controller getters */
     static getConnection(config: RwaConfig): Connection {
         return config.connection;
     }

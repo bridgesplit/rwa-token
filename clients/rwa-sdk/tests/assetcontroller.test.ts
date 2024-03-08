@@ -3,7 +3,7 @@
 import { BN } from '@coral-xyz/anchor';
 import {
 	AttachPolicyArgs,
-	getAttachPolicyAccountIx, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTransferTokensIx, Policy, voidTokenArgs,
+	getAttachPolicyAccountIx, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTransferTokensIx, IssueTokenArgs, Policy, SetupUserArgs, TransferTokensArgs, voidTokenArgs,
 } from '../src';
 import { setupTests } from './setup';
 import { Commitment, Connection, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
@@ -87,6 +87,7 @@ describe('e2e class tests', () => {
 
 		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
+		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
 
 	})
@@ -110,6 +111,7 @@ describe('e2e class tests', () => {
 
 		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
+		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
 
 	})
@@ -133,6 +135,7 @@ describe('e2e class tests', () => {
 
 		const policyIx = await rwaClient.assetController.attachPolicy(policyArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...policyIx.ixs), [setup.payerKp, ...policyIx.signers]);
+		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
 
 	})
@@ -160,10 +163,40 @@ describe('e2e class tests', () => {
 
 	})
 
-	test('revoke tokens', async () => {
+
+	test('setup a user through class', async () => {
+		const setupUserArgs: SetupUserArgs = {
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			level: 1,
+		}
+		const setupIx = await rwaClient.assetController.setupUserIxns(setupUserArgs)
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupIx.ixs), [setup.payerKp, ...setupIx.signers]);
+		expect(txnId).toBeTruthy();
+		const trackerAccount = await getTrackerAccount(mint, setup.authority.toString());
+		expect(trackerAccount).toBeTruthy();
+		expect(trackerAccount!.assetMint.toString()).toBe(mint);
+	})
+
+	test('issue tokens through class', async () => {
+		const issueArgs: IssueTokenArgs = {
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			amount: 1000000,
+		}
+		const issueIx = await rwaClient.assetController.issueTokenIxns(issueArgs)
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueIx.ixs), [setup.payerKp, ...issueIx.signers]);
+		expect(txnId).toBeTruthy();
+
+	})
+
+	test('revoke tokens through class', async () => {
 		const voidArgs: voidTokenArgs = {
 			payer: setup.payer.toString(),
-			amount: 100,
+			amount: 500000,
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
@@ -171,6 +204,22 @@ describe('e2e class tests', () => {
 		const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs)
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...voidIx.ixs), [setup.payerKp, ...voidIx.signers]);
 		expect(txnId).toBeTruthy();
+	})
 
+	test('transfer tokens through class', async () => {
+		const transferArgs: TransferTokensArgs = {
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			from: setup.authority.toString(),
+			to: setup.authority.toString(),
+			assetMint: mint,
+			amount: 100,
+			remainingAccounts,
+			decimals,
+		}
+
+		const transferIx = await rwaClient.assetController.transfer(transferArgs)
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(transferIx), [setup.payerKp]);
+		expect(txnId).toBeTruthy();
 	})
 });
