@@ -296,6 +296,8 @@ export type voidTokenArgs = {
  * @param closeAccountArgs - Object containing account, destination, and authority information.
  * @returns A promise that resolves to a TransactionInstruction.
  */
+
+// TODO: Double check instruction with @Macha, void tokens does nto pass test right now.
 export async function getVoidTokensIx(
 	args: voidTokenArgs,
 ): Promise<IxReturn> {
@@ -311,7 +313,7 @@ export async function getVoidTokensIx(
 			tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 		}).instruction();
-	// TODO: double check signers
+
 	return {
 		ixs: [
 			ix,

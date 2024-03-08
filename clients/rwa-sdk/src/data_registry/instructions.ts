@@ -30,6 +30,8 @@ export async function getCreateDataRegistryIx(
 	return ix;
 }
 
+
+// TODO: Fix the below function for updating the data registry. @Macha
 // export enum DataAccountType {
 // 	Title,
 // 	Legal,
