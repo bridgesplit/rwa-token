@@ -1,8 +1,9 @@
+import { AssetController } from "./assetcontrollerclass";
+import { DataRegistry } from "./dataregistryclass";
+import { IdentityRegistry } from "./identityregistryclass";
+import { PolicyEngine } from "./policyengineclass";
 import { RwaConfig } from "./types"
-import { AssetController } from "./assetcontroller";
-import { IdentityRegistry } from "./identityRegistry";
-import { PolicyEngine } from "./policyengine";
-import { DataRegistry } from "./dataregistry";
+
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).

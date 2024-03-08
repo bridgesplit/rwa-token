@@ -1,4 +1,4 @@
-import { ConfirmOptions, Connection, PublicKey } from "@solana/web3.js"
+import { ConfirmOptions, Connection } from "@solana/web3.js"
 
 export type RwaConfig = {
     connection: Connection;

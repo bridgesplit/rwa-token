@@ -5,13 +5,13 @@ import {
 	AttachPolicyArgs,
 	CreateDataAccountArgs,
 	getDataAccounts,
-	getTrackerAccount, IssueTokenArgs, SetupUserArgs, TransferTokensArgs, UpdateDataAccountArgs, VoidTokensArgs,
+	getTrackerAccount, IssueTokenArgs, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, UpdateDataAccountArgs, VoidTokensArgs,
 } from '../src';
 import { setupTests } from './setup';
 import { Commitment, Connection, Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
 import { expect, test, describe } from 'vitest';
 import { RwaConfig } from '../src/classes/types';
-import { RwaClient } from '../src/classes/rwa';
+import { RwaClient } from '../src/classes/rwaclass';
 
 describe('e2e class tests', () => {
 	let rwaClient: RwaClient
@@ -57,7 +57,7 @@ describe('e2e class tests', () => {
 	});
 
 	test('initalize asset controller through class', async () => {
-		const SetupAssetControllerArgs = {
+		const SetupAssetControllerArgs: SetupAssetControllerArgs = {
 			decimals,
 			payer: setup.payer.toString(),
 			authority: setup.authority.toString(),
