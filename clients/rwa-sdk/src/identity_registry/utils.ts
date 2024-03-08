@@ -4,13 +4,8 @@ import { PublicKey } from '@solana/web3.js';
 import { type IdentityRegistry } from '../programs/types';
 
 /** Address of the identity registry program. */
-export const identityRegistryProgramId = new PublicKey('qDnvwpjBYjH1vs1N1CSdbVkEkePp2acL7TphAYZDeoV');
+export const identityRegistryProgramId = new PublicKey('idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf');
 
-/**
- * Returns the identit registry program as a typed anchor program.
- * @param provider - Solana anchor provider.
- * @returns Typed solana program to be used for transaction building.
- */
 export const getIdentityRegistryProgram = (provider: Provider) => new Program(
 	IdentityRegistryIdl as Idl,
 	identityRegistryProgramId,

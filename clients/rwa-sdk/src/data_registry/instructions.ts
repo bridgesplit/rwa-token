@@ -1,10 +1,10 @@
-import { PublicKey, SystemProgram, type TransactionInstruction } from '@solana/web3.js';
-import { type CommonArgs, getProvider } from '../utils';
-import { getDataRegistryProgram, getDataRegistryPda } from './utils';
-import { getDataAccounts, getDataRegistryAccount } from './data';
-import { DataRegistryAccount } from './types';
+import {
+	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
+} from '@solana/web3.js';
+import {type CommonArgs, getProvider, type IxReturn} from '../utils';
+import {getDataRegistryProgram, getDataRegistryPda} from './utils';
+import {type DataAccountType} from './types';
 
-/** Common args but with authority. */
 export type CreateDataRegistryArgs = {
 	authority: string;
 } & CommonArgs;
@@ -30,44 +30,80 @@ export async function getCreateDataRegistryIx(
 	return ix;
 }
 
+export type CreateDataAccountArgs = {
+	type: DataAccountType;
+	name: string;
+	uri: string;
+} & CommonArgs;
 
-// TODO: Fix the below function for updating the data registry. @Macha
-// export enum DataAccountType {
-// 	Title,
-// 	Legal,
-// 	Tax,
-// 	Miscellaneous
-// }
+export async function getCreateDataAccountIx(
+	args: CreateDataAccountArgs,
+): Promise<IxReturn> {
+	const provider = getProvider();
+	const dataProgram = getDataRegistryProgram(provider);
+	const dataAccountKp = new Keypair();
+	const ix = await dataProgram.methods.createDataAccount({
+		type: args.type,
+		name: args.name,
+		uri: args.uri,
+	})
+		.accountsStrict({
+			payer: args.payer,
+			signer: args.signer ? args.signer : getDataRegistryPda(args.assetMint),
+			dataRegistry: getDataRegistryPda(args.assetMint),
+			dataAccount: dataAccountKp.publicKey,
+			systemProgram: SystemProgram.programId,
+		})
+		.instruction();
+	return {
+		ixs: [ix],
+		signers: [dataAccountKp],
+	};
+}
 
-// export type UpdateDataAccountArgs = {
-// 	type: DataAccountType;
-// 	name: string;
-// 	uri: string;
-// };
+export type UpdateDataAccountArgs = {
+	dataAccount: string;
+	name: string;
+	uri: string;
+	type: DataAccountType;
+} & CommonArgs;
 
-// export type UpdateDataAccountArgsStatic = {
-// 	updateAccountArgs: UpdateDataAccountArgs,
-// 	dataAccount: PublicKey,
-// } & CommonArgs
+export async function getUpdateDataAccountIx(
+	args: UpdateDataAccountArgs,
+): Promise<TransactionInstruction> {
+	const provider = getProvider();
+	const dataProgram = getDataRegistryProgram(provider);
+	const ix = await dataProgram.methods.updateDataAccount({
+		name: args.name,
+		uri: args.uri,
+		type: args.type,
+	})
+		.accountsStrict({
+			signer: args.signer ? args.signer : getDataRegistryPda(args.assetMint),
+			dataRegistry: getDataRegistryPda(args.assetMint),
+			dataAccount: args.dataAccount,
+		})
+		.instruction();
+	return ix;
+}
 
-// /**
-//  * Builds the transaction instruction to update a data registry.
-//  * @param args - {@link UpdateDataAccountArgs}.
-//  * @returns Create update data registry transaction instruction.
-//  */
-// export async function getUpdateDataRegistryIx(
-// 	args: UpdateDataAccountArgsStatic,
-// ): Promise<TransactionInstruction> {
-// 	const provider = getProvider();
-// 	const dataProgram = getDataRegistryProgram(provider);
+export type DelegateDataRegistryArgs = {
+	delegate: string;
+	authority: string;
+} & CommonArgs;
 
-// 	const ix = await dataProgram.methods.updateDataAccount(args.updateAccountArgs)
-// 		.accounts({
-// 			signer: args.assetMint,
-// 			dataRegistry: getDataRegistryPda(args.assetMint),
-// 			dataAccount: args.dataAccount,
-// 		})
-// 		.instruction();
-
-// 	return ix;
-// }
+export async function getDelegateDataRegistryIx(
+	args: DelegateDataRegistryArgs,
+): Promise<TransactionInstruction> {
+	const provider = getProvider();
+	const dataProgram = getDataRegistryProgram(provider);
+	const ix = await dataProgram.methods.delegateDataRegsitry(
+		new PublicKey(args.delegate),
+	)
+		.accountsStrict({
+			dataRegistry: getDataRegistryPda(args.assetMint),
+			authority: args.authority,
+		})
+		.instruction();
+	return ix;
+}

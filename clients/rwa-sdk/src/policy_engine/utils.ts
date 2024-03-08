@@ -4,7 +4,7 @@ import { PublicKey } from '@solana/web3.js';
 import { type PolicyEngine } from '../programs/types';
 
 /** Program address for the policy engine program. */
-export const policyRegistryProgramId = new PublicKey('6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2');
+export const policyRegistryProgramId = new PublicKey('po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau');
 
 /**
  * Returns the policy engine program as a typed anchor program.

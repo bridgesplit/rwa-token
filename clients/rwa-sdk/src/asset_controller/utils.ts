@@ -4,8 +4,7 @@ import { type Idl, Program, type Provider } from '@coral-xyz/anchor';
 import { AssetControllerIdl } from '../programs/idls';
 import { utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
 
-/** Address of the asset controller program */
-export const assetControllerProgramId = new PublicKey('DtrBDukceZpUnWmeNzqtoBQPdXW8p9xmWYG1z7qMt8qG');
+export const assetControllerProgramId = new PublicKey('acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan');
 
 /**
  * Returns the asset controller program as a typed anchor program.
