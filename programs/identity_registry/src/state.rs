@@ -50,8 +50,8 @@ impl IdentityRegistryAccount {
 pub struct IdentityAccount {
     /// version of the account
     pub version: u8,
-    /// asset mint to which the identity is attached
-    pub asset_mint: Pubkey,
+    /// identity registry to which the account belongs
+    pub identity_registry: Pubkey,
     /// owner of the identity account
     pub owner: Pubkey,
     // identity levels corresponding to the user
@@ -60,8 +60,8 @@ pub struct IdentityAccount {
 
 impl IdentityAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(&mut self, owner: Pubkey, asset_mint: Pubkey, level: u8) {
-        self.asset_mint = asset_mint;
+    pub fn new(&mut self, owner: Pubkey, identity_registry: Pubkey, level: u8) {
+        self.identity_registry = identity_registry;
         self.owner = owner;
         self.version = Self::VERSION;
         self.levels[0] = level;

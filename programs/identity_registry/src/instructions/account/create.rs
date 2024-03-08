@@ -27,6 +27,6 @@ pub struct CreateIdentityAccount<'info> {
 pub fn handler(ctx: Context<CreateIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
     ctx.accounts
         .identity_account
-        .new(owner, ctx.accounts.identity_registry.asset_mint, level);
+        .new(owner, ctx.accounts.identity_registry.key(), level);
     Ok(())
 }

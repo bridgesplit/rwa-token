@@ -17,7 +17,7 @@ pub struct RemovePolicy<'info> {
     #[account(
         mut,
         close = payer,
-        constraint = policy_account.asset_mint == policy_engine.asset_mint,
+        constraint = policy_account.policy_engine == policy_engine.key(),
     )]
     pub policy_account: Box<Account<'info, PolicyAccount>>,
 }

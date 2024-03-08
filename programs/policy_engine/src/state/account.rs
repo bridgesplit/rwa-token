@@ -18,8 +18,11 @@ pub enum ComparisionType {
 #[derive(InitSpace)]
 pub struct PolicyAccount {
     pub version: u8,
-    pub asset_mint: Pubkey,
+    /// Engine account that the policy belongs to
+    pub policy_engine: Pubkey,
+    /// Identity filter to apply to the policy
     pub identity_filter: IdentityFilter,
+    /// Different policies that can be applied to the policy account
     pub policy: Policy,
 }
 
@@ -32,9 +35,9 @@ pub enum Policy {
 }
 
 impl PolicyAccount {
-    pub fn new(&mut self, asset_mint: Pubkey, identity_filter: IdentityFilter, policy: Policy) {
+    pub fn new(&mut self, policy_engine: Pubkey, identity_filter: IdentityFilter, policy: Policy) {
         self.version = 1;
-        self.asset_mint = asset_mint;
+        self.policy_engine = policy_engine;
         self.identity_filter = identity_filter;
         self.policy = policy;
     }
