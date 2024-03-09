@@ -28,7 +28,7 @@ impl IdentityRegistryAccount {
     ) {
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or_else(|| address);
+        self.delegate = delegate.unwrap_or(address);
         self.version = Self::VERSION;
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
@@ -48,8 +48,11 @@ impl IdentityRegistryAccount {
 #[account()]
 #[derive(InitSpace)]
 pub struct IdentityAccount {
+    /// version of the account
     pub version: u8,
-    pub registry: Pubkey,
+    /// identity registry to which the account belongs
+    pub identity_registry: Pubkey,
+    /// owner of the identity account
     pub owner: Pubkey,
     // identity levels corresponding to the user
     pub levels: [u8; 10],
@@ -57,8 +60,8 @@ pub struct IdentityAccount {
 
 impl IdentityAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(&mut self, owner: Pubkey, registry: Pubkey, level: u8) {
-        self.registry = registry;
+    pub fn new(&mut self, owner: Pubkey, identity_registry: Pubkey, level: u8) {
+        self.identity_registry = identity_registry;
         self.owner = owner;
         self.version = Self::VERSION;
         self.levels[0] = level;

@@ -74,6 +74,25 @@ export async function getIssueTokensIx(args: IssueTokenArgs): Promise<Transactio
 	return ix;
 }
 
+export type VoidTokensArgs = {
+	amount: number;
+	owner: string;
+} & CommonArgs;
+
+export async function getVoidTokensIx(args: VoidTokensArgs): Promise<TransactionInstruction> {
+	const provider = getProvider();
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods.voidTokens({
+		amount: new BN(args.amount),
+	}).accountsStrict({
+		assetMint: new PublicKey(args.assetMint),
+		tokenProgram: TOKEN_2022_PROGRAM_ID,
+		tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
+		owner: args.owner,
+	}).instruction();
+	return ix;
+}
+
 export type TransferTokensArgs = {
 	from: string;
 	to: string;
@@ -217,26 +236,6 @@ export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
 		ixs: [
 			identityAccountIx,
 			createTaIx,
-		],
-		signers: [],
-	};
-}
-
-export type SetupIssueTokensArgs = {
-	authority: string;
-	owner: string;
-	amount: number;
-} & CommonArgs;
-
-export async function getSetupIssueTokensIxs(
-	args: SetupIssueTokensArgs,
-): Promise<IxReturn> {
-	// Get issue tokens ix
-	const issueTokensIx = await getIssueTokensIx(args);
-
-	return {
-		ixs: [
-			issueTokensIx,
 		],
 		signers: [],
 	};

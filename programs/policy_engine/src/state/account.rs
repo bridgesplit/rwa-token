@@ -18,8 +18,11 @@ pub enum ComparisionType {
 #[derive(InitSpace)]
 pub struct PolicyAccount {
     pub version: u8,
+    /// Engine account that the policy belongs to
     pub policy_engine: Pubkey,
+    /// Identity filter to apply to the policy
     pub identity_filter: IdentityFilter,
+    /// Different policies that can be applied to the policy account
     pub policy: Policy,
 }
 

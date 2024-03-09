@@ -3,7 +3,7 @@ import {PolicyEngineIdl} from '../programs/idls';
 import {PublicKey} from '@solana/web3.js';
 import {type PolicyEngine} from '../programs/types';
 
-export const policyRegistryProgramId = new PublicKey('6FcM5R2KcdUGcdLunzLm3XLRFr7FiF6Hdz3EWni8YPa2');
+export const policyRegistryProgramId = new PublicKey('po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau');
 
 export const getPolicyEngineProgram = (provider: Provider) => new Program(
 	PolicyEngineIdl as Idl,

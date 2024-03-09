@@ -27,7 +27,7 @@ impl DataRegistryAccount {
         self.version = Self::VERSION;
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or_else(|| address);
+        self.delegate = delegate.unwrap_or(address);
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
@@ -55,7 +55,7 @@ pub enum DataAccountType {
 #[derive(InitSpace)]
 pub struct DataAccount {
     pub version: u8,
-    /// registry to which data account belongs to
+    /// data registry to which the account belongs
     pub data_registry: Pubkey,
     /// type of the data account
     pub _type: DataAccountType,
@@ -71,13 +71,13 @@ impl DataAccount {
     pub const VERSION: u8 = 1;
     pub fn new(
         &mut self,
-        data_regsitry: Pubkey,
+        data_registry: Pubkey,
         _type: DataAccountType,
         name: String,
         uri: String,
     ) {
         self.version = Self::VERSION;
-        self.data_registry = data_regsitry;
+        self.data_registry = data_registry;
         self._type = _type;
         self.name = name;
         self.uri = uri;

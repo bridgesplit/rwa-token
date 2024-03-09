@@ -1,3 +1,5 @@
+#![allow(ambiguous_glob_reexports, clippy::new_ret_no_self)]
+
 pub mod error;
 pub mod instructions;
 pub mod state;
@@ -10,7 +12,7 @@ pub use utils::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("8WRaNVNMDqdwADbKYj7fBd47i2e5SFMSEs8TrA2Vd5io");
+declare_id!("dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw");
 
 #[program]
 pub mod data_registry {

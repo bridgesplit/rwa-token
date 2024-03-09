@@ -1,3 +1,5 @@
+#![allow(ambiguous_glob_reexports, clippy::new_ret_no_self)]
+
 pub mod error;
 pub mod instructions;
 pub mod state;
@@ -10,7 +12,7 @@ pub use utils::*;
 
 use anchor_lang::prelude::*;
 
-declare_id!("qDnvwpjBYjH1vs1N1CSdbVkEkePp2acL7TphAYZDeoV");
+declare_id!("idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf");
 
 #[program]
 pub mod identity_registry {

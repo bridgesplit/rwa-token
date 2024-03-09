@@ -3,7 +3,7 @@ import {DataRegistryIdl} from '../programs/idls';
 import {PublicKey} from '@solana/web3.js';
 import {type DataRegistry} from '../programs/types';
 
-export const dataRegistryProgramId = new PublicKey('8WRaNVNMDqdwADbKYj7fBd47i2e5SFMSEs8TrA2Vd5io');
+export const dataRegistryProgramId = new PublicKey('dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw');
 
 export const getDataRegistryProgram = (provider: Provider) => new Program(
 	DataRegistryIdl as Idl,

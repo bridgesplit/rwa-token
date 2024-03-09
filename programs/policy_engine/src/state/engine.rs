@@ -30,7 +30,7 @@ impl PolicyEngineAccount {
     ) {
         self.version = Self::VERSION;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or_else(|| engine);
+        self.delegate = delegate.unwrap_or(engine);
         self.asset_mint = asset_mint;
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {

@@ -1,3 +1,5 @@
+#![allow(ambiguous_glob_reexports, clippy::new_ret_no_self)]
+
 pub mod error;
 pub mod instructions;
 pub mod state;
@@ -10,7 +12,7 @@ pub use utils::*;
 
 pub use anchor_lang::prelude::*;
 
-declare_id!("DtrBDukceZpUnWmeNzqtoBQPdXW8p9xmWYG1z7qMt8qG");
+declare_id!("acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan");
 
 #[program]
 pub mod asset_controller {
