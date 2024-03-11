@@ -10,6 +10,7 @@ pub struct VoidTokens<'info> {
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         mut,
+        associated_token::token_program = token_program,
         associated_token::mint = asset_mint,
         associated_token::authority = owner,
     )]
