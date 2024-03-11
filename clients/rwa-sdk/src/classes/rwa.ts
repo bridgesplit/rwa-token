@@ -24,6 +24,7 @@ export class RwaClient {
     /**
      * Constructs a new instance of the RwaClient.
      * @param rwaConfig The configuration for the RWA client.
+     * @param wallet Anchor wallet used for provider
      */
     constructor(rwaConfig: Config, wallet: Wallet) {
         this.config = rwaConfig;
@@ -34,6 +35,15 @@ export class RwaClient {
         this.policyEngine = new PolicyEngine();
 
     }
+
+    /**
+     * Retrieves all policy accounts.
+     * @returns A Promise resolving to an array of policy accounts.
+     */
+    async getProvider() {
+        return this.provider;
+    }
+
     /**
      * Retrieves all policy accounts.
      * @returns A Promise resolving to an array of policy accounts.

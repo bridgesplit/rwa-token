@@ -4,6 +4,7 @@ import {
 import {type CommonArgs, getProvider, type IxReturn} from '../utils';
 import {getDataRegistryProgram, getDataRegistryPda} from './utils';
 import {type DataAccountType} from './types';
+import { AnchorProvider } from '@coral-xyz/anchor';
 
 export type CreateDataRegistryArgs = {
 	authority: string;
@@ -39,7 +40,7 @@ export type CreateDataAccountArgs = {
 export async function getCreateDataAccountIx(
 	args: CreateDataAccountArgs,
 ): Promise<IxReturn> {
-	const provider = getProvider();
+	const provider = getProvider()
 	const dataProgram = getDataRegistryProgram(provider);
 	const dataAccountKp = new Keypair();
 	const ix = await dataProgram.methods.createDataAccount({

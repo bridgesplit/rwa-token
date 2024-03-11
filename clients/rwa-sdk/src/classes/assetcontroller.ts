@@ -1,6 +1,7 @@
 import { TransactionInstruction } from "@solana/web3.js";
 import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs, getIssueTokensIx, getSetupAssetControllerIxs, getTransferTokensIx, getVoidTokensIx } from "../asset_controller";
 import { IxReturn } from "../utils";
+import { RwaClient } from "./rwa";
 
 /**
  * Represents the client for Asset Controller for an RWA.

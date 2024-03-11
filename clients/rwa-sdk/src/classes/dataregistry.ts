@@ -1,6 +1,7 @@
 import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@solana/web3.js";
 import { IxReturn } from "../utils";
 import { CreateDataAccountArgs, DelegateDataRegistryArgs, UpdateDataAccountArgs, getCreateDataAccountIx, getDelegateDataRegistryIx, getUpdateDataAccountIx } from "../data_registry";
+import { AnchorProvider } from "@coral-xyz/anchor";
 
 /**
  * Represents the client for Data Registry for an RWA.
