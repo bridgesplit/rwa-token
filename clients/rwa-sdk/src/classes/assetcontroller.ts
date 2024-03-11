@@ -7,6 +7,13 @@ import { RwaClient } from "./rwa";
  * Represents the client for Asset Controller for an RWA.
  */
 export class AssetController {
+    private rwaClient: RwaClient;
+
+    constructor(rwaClient: RwaClient) {
+        this.rwaClient = rwaClient;
+    }
+
+
     /**
      * Asynchronously generates instructions to setup a new asset controller.
      * @returns A Promise that resolves to the instructions to create an asset controller.
@@ -16,6 +23,7 @@ export class AssetController {
     ): Promise<IxReturn> {
         const setupControllerIx = await getSetupAssetControllerIxs(
             createAssetControllerArgs,
+            this.rwaClient.provider
         );
 
         return setupControllerIx

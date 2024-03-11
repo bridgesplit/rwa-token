@@ -4,6 +4,7 @@ import {
 import { type CommonArgs, getProvider, type IxReturn } from '../utils';
 import { getPolicyEnginePda, getPolicyEngineProgram } from './utils';
 import { type IdentityFilter, type Policy } from './types';
+import { AnchorProvider } from '@coral-xyz/anchor';
 
 /** Represents the arguments required to create a policy. */
 export type CreatePolicyEngineArgs = {
@@ -17,8 +18,8 @@ export type CreatePolicyEngineArgs = {
  */
 export async function getCreatePolicyEngineIx(
 	args: CreatePolicyEngineArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const policyProgram = getPolicyEngineProgram(provider);
 	const ix = await policyProgram.methods.createPolicyEngine(new PublicKey(args.authority), args.delegate ? new PublicKey(args.delegate) : null)
 		.accountsStrict({

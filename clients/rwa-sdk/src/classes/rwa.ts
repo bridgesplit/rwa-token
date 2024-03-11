@@ -1,6 +1,6 @@
 import { Config } from "./types"
 import { AssetController } from "./assetcontroller";
-import { IdentityRegistry } from "./identityRegistry";
+import { IdentityRegistry } from "./identityRegistry"
 import { PolicyEngine } from "./policyengine";
 import { DataRegistry } from "./dataregistry";
 import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
@@ -26,10 +26,10 @@ export class RwaClient {
      * @param rwaConfig The configuration for the RWA client.
      * @param wallet Anchor wallet used for provider
      */
-    constructor(rwaConfig: Config, wallet: Wallet) {
-        this.config = rwaConfig;
-        this.provider = new AnchorProvider(rwaConfig.connection, wallet, rwaConfig.confirmationOptions);
-        this.assetController = new AssetController();
+    constructor(config: Config, wallet: Wallet) {
+        this.config = config;
+        this.provider = new AnchorProvider(config.connection, wallet, config.confirmationOptions);
+        this.assetController = new AssetController(this);
         this.dataRegistry = new DataRegistry();
         this.identityRegistry = new IdentityRegistry();
         this.policyEngine = new PolicyEngine();

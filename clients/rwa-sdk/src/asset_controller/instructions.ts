@@ -18,7 +18,7 @@ import {
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
-import { BN } from '@coral-xyz/anchor';
+import { AnchorProvider, BN } from '@coral-xyz/anchor';
 
 /** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {
@@ -36,8 +36,9 @@ export type CreateAssetControllerIx = {
  */
 export async function getCreateAssetControllerIx(
 	args: CreateAssetControllerIx,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
+	// const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createAssetController({
 		decimals: args.decimals,
@@ -210,6 +211,7 @@ export type SetupAssetControllerArgs = {
 */
 export async function getSetupAssetControllerIxs(
 	args: SetupAssetControllerArgs,
+	provider: AnchorProvider
 ): Promise<IxReturn> {
 	const mintKp = new Keypair();
 	const mint = mintKp.publicKey;
@@ -217,18 +219,22 @@ export async function getSetupAssetControllerIxs(
 	// Get asset registry create ix
 	const assetControllerCreateIx = await getCreateAssetControllerIx(
 		updatedArgs,
+		provider
 	);
 	// Get policy registry create ix
 	const policyEngineCreateIx = await getCreatePolicyEngineIx(
 		updatedArgs,
+		provider
 	);
 	// Get data registry create ix
 	const dataRegistryCreateIx = await getCreateDataRegistryIx(
 		updatedArgs,
+		provider
 	);
 	// Get identity registry create ix
 	const identityRegistryCreateIx = await getCreateIdentityRegistryIx(
 		updatedArgs,
+		provider
 	);
 	return {
 		ixs: [

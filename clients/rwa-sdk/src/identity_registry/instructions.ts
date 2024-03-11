@@ -1,6 +1,7 @@
 import { PublicKey, SystemProgram, type TransactionInstruction } from '@solana/web3.js';
 import { type CommonArgs, getProvider } from '../utils';
 import { getIdentityAccountPda, getIdentityRegistryProgram, getIdentityRegistryPda } from './utils';
+import { AnchorProvider } from '@coral-xyz/anchor';
 
 /** Common args but with authority. */
 export type CreateIdentityRegistryArgs = {
@@ -14,8 +15,8 @@ export type CreateIdentityRegistryArgs = {
  */
 export async function getCreateIdentityRegistryIx(
 	args: CreateIdentityRegistryArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const identityProgram = getIdentityRegistryProgram(provider);
 	const ix = await identityProgram.methods.createIdentityRegistry(new PublicKey(args.authority), args.delegate ? new PublicKey(args.delegate) : null)
 		.accountsStrict({

@@ -4,6 +4,7 @@ import {
 import {type CommonArgs, getProvider, type IxReturn} from '../utils';
 import {getDataRegistryProgram, getDataRegistryPda} from './utils';
 import {type DataAccountType} from './types';
+import { AnchorProvider } from '@coral-xyz/anchor';
 
 export type CreateDataRegistryArgs = {
 	authority: string;
@@ -16,8 +17,8 @@ export type CreateDataRegistryArgs = {
  */
 export async function getCreateDataRegistryIx(
 	args: CreateDataRegistryArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const dataProgram = getDataRegistryProgram(provider);
 	const ix = await dataProgram.methods.createDataRegistry(new PublicKey(args.authority), args.delegate ? new PublicKey(args.delegate) : null)
 		.accountsStrict({
