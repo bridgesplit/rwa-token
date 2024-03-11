@@ -1,5 +1,5 @@
 import { PublicKey, SystemProgram, type TransactionInstruction } from '@solana/web3.js';
-import { type CommonArgs, getProvider } from '../utils';
+import { type CommonArgs } from '../utils';
 import { getIdentityAccountPda, getIdentityRegistryProgram, getIdentityRegistryPda } from './utils';
 import { AnchorProvider } from '@coral-xyz/anchor';
 
@@ -42,8 +42,8 @@ export type CreateIdentityAccountArgs = {
  */
 export async function getCreateIdentityAccountIx(
 	args: CreateIdentityAccountArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const identityProgram = getIdentityRegistryProgram(provider);
 	const ix = await identityProgram.methods.createIdentityAccount(new PublicKey(args.owner), args.level)
 		.accountsStrict({
@@ -70,8 +70,8 @@ export type AddLevelToIdentityAccountArgs = {
  */
 export async function getAddLevelToIdentityAccount(
 	args: AddLevelToIdentityAccountArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const identityProgram = getIdentityRegistryProgram(provider);
 	const ix = await identityProgram.methods.addLevelToIdentityAccount(new PublicKey(args.owner), args.level)
 		.accountsStrict({
@@ -96,8 +96,8 @@ export type RemoveLevelFromIdentityAccount = {
  */
 export async function getRemoveLevelFromIdentityAccount(
 	args: AddLevelToIdentityAccountArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const identityProgram = getIdentityRegistryProgram(provider);
 	const ix = await identityProgram.methods.removeLevelFromIdentityAccount(new PublicKey(args.owner), args.level)
 		.accountsStrict({

@@ -35,7 +35,8 @@ export class AssetController {
      */
     async issueTokenIxns(IssueArgs: IssueTokenArgs): Promise<TransactionInstruction> {
         const issueTokensIx = await getIssueTokensIx(
-            IssueArgs
+            IssueArgs,
+            this.rwaClient.provider
         )
         return issueTokensIx
     }
@@ -58,7 +59,10 @@ export class AssetController {
      * @returns A Promise that resolves to the instructions to revoke assets.
      */
     async voidTokenIxns(voidTokenArgs: VoidTokensArgs): Promise<TransactionInstruction> {
-        const voidTokenIx = await getVoidTokensIx(voidTokenArgs)
+        const voidTokenIx = await getVoidTokensIx(
+            voidTokenArgs,
+            this.rwaClient.provider
+        )
         return voidTokenIx
     }
 

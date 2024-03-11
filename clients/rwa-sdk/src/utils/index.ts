@@ -6,6 +6,8 @@ import {
 /** Retrieves the provider used for interacting with the Solana blockchain.
  * @returns The initialized provider for interacting with the Solana blockchain.
 */
+
+/* Used for local testing, rwa client builds its own provider. */
 export const getProvider = () => {
 	const connectionUrl = process.env.RPC_URL ?? 'http://localhost:8899';
 	const connection = new Connection(connectionUrl);

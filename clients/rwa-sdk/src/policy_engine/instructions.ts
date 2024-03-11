@@ -1,7 +1,7 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import { type CommonArgs, getProvider, type IxReturn } from '../utils';
+import { type CommonArgs, type IxReturn } from '../utils';
 import { getPolicyEnginePda, getPolicyEngineProgram } from './utils';
 import { type IdentityFilter, type Policy } from './types';
 import { AnchorProvider } from '@coral-xyz/anchor';
@@ -62,8 +62,8 @@ export function padIdentityLevels(levels: number[]): number[] {
  */
 export async function getAttachPolicyAccountIx(
 	args: AttachPolicyArgs,
+	provider: AnchorProvider
 ): Promise<IxReturn> {
-	const provider = getProvider();
 	const policyProgram = getPolicyEngineProgram(provider);
 	const policyAccount = new Keypair();
 	const ix = await policyProgram.methods.attachPolicyAccount(

@@ -1,7 +1,7 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import {type CommonArgs, getProvider, type IxReturn} from '../utils';
+import {type CommonArgs, type IxReturn} from '../utils';
 import {getDataRegistryProgram, getDataRegistryPda} from './utils';
 import {type DataAccountType} from './types';
 import { AnchorProvider } from '@coral-xyz/anchor';
@@ -39,8 +39,8 @@ export type CreateDataAccountArgs = {
 
 export async function getCreateDataAccountIx(
 	args: CreateDataAccountArgs,
+	provider: AnchorProvider
 ): Promise<IxReturn> {
-	const provider = getProvider();
 	const dataProgram = getDataRegistryProgram(provider);
 	const dataAccountKp = new Keypair();
 	const ix = await dataProgram.methods.createDataAccount({
@@ -71,8 +71,8 @@ export type UpdateDataAccountArgs = {
 
 export async function getUpdateDataAccountIx(
 	args: UpdateDataAccountArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const dataProgram = getDataRegistryProgram(provider);
 	const ix = await dataProgram.methods.updateDataAccount({
 		name: args.name,
@@ -95,8 +95,8 @@ export type DelegateDataRegistryArgs = {
 
 export async function getDelegateDataRegistryIx(
 	args: DelegateDataRegistryArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const dataProgram = getDataRegistryProgram(provider);
 	const ix = await dataProgram.methods.delegateDataRegsitry(
 		new PublicKey(args.delegate),

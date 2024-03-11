@@ -10,7 +10,7 @@ import {
 	identityRegistryProgramId, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda,
 } from '../identity_registry';
 import {
-	type CommonArgs, getProvider, type IxReturn, parseRemainingAccounts,
+	type CommonArgs, type IxReturn, parseRemainingAccounts,
 } from '../utils';
 import {
 	ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_2022_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync,
@@ -38,7 +38,6 @@ export async function getCreateAssetControllerIx(
 	args: CreateAssetControllerIx,
 	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	// const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createAssetController({
 		decimals: args.decimals,
@@ -72,8 +71,7 @@ export type IssueTokenArgs = {
  * @param args {@link IssueTokenArgs}
  * @returns A transaction instruction distributing the specified amount for the specific asset.
  */
-export async function getIssueTokensIx(args: IssueTokenArgs): Promise<TransactionInstruction> {
-	const provider = getProvider();
+export async function getIssueTokensIx(args: IssueTokenArgs, provider: AnchorProvider): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.issueTokens({
 		amount: new BN(args.amount),
@@ -92,8 +90,7 @@ export type VoidTokensArgs = {
 	owner: string;
 } & CommonArgs;
 
-export async function getVoidTokensIx(args: VoidTokensArgs): Promise<TransactionInstruction> {
-	const provider = getProvider();
+export async function getVoidTokensIx(args: VoidTokensArgs, provider: AnchorProvider): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.voidTokens({
 		amount: new BN(args.amount),
@@ -174,8 +171,8 @@ export type CreateTokenAccountArgs = {
 
 export async function getCreateTokenAccountIx(
 	args: CreateTokenAccountArgs,
+	provider: AnchorProvider
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createTokenAccount()
 		.accountsStrict({
@@ -262,15 +259,15 @@ export type SetupUserArgs = {
  * @param args {@link SetupUserArgs}
  * @returns - {@link IxReturn}, a promise that resolves to a list of generated transaction instructions.
  */
-export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
+export async function getSetupUserIxs(args: SetupUserArgs, provider: AnchorProvider): Promise<IxReturn> {
 	const identityAccountIx = await getCreateIdentityAccountIx({
 		payer: args.payer,
 		signer: getIdentityRegistryPda(args.assetMint).toString(),
 		assetMint: args.assetMint,
 		owner: args.owner,
 		level: args.level,
-	});
-	const createTaIx = await getCreateTokenAccountIx(args);
+	}, provider);
+	const createTaIx = await getCreateTokenAccountIx(args, provider);
 	return {
 		ixs: [
 			identityAccountIx,

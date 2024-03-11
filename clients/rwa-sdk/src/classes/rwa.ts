@@ -30,9 +30,9 @@ export class RwaClient {
         this.config = config;
         this.provider = new AnchorProvider(config.connection, wallet, config.confirmationOptions);
         this.assetController = new AssetController(this);
-        this.dataRegistry = new DataRegistry();
-        this.identityRegistry = new IdentityRegistry();
-        this.policyEngine = new PolicyEngine();
+        this.dataRegistry = new DataRegistry(this);
+        this.identityRegistry = new IdentityRegistry(this);
+        this.policyEngine = new PolicyEngine(this);
 
     }
 

@@ -2,17 +2,24 @@ import { ConfirmOptions, Connection, Keypair, TransactionInstruction } from "@so
 import { IxReturn } from "../utils";
 import { CreateDataAccountArgs, DelegateDataRegistryArgs, UpdateDataAccountArgs, getCreateDataAccountIx, getDelegateDataRegistryIx, getUpdateDataAccountIx } from "../data_registry";
 import { AnchorProvider } from "@coral-xyz/anchor";
+import { RwaClient } from "./rwa";
 
 /**
  * Represents the client for Data Registry for an RWA.
  */
 export class DataRegistry {
+    private rwaClient: RwaClient;
+
+    constructor(rwaClient: RwaClient) {
+        this.rwaClient = rwaClient;
+    }
+
     /**
      * Asynchronously generates instructions to update asset information.
      * @returns A Promise that resolves to the instructions to update asset information.
     */
     async setupDataAccount(createDataAccountArgs: CreateDataAccountArgs): Promise<IxReturn> {
-        const createDataAccountIx = await getCreateDataAccountIx(createDataAccountArgs)
+        const createDataAccountIx = await getCreateDataAccountIx(createDataAccountArgs, this.rwaClient.provider)
         return createDataAccountIx
     }
 
@@ -21,7 +28,7 @@ export class DataRegistry {
      * @returns A Promise that resolves to the instructions to update asset information.
     */
     async updateAssetsDataAccountInfoIxns(updateArgs: UpdateDataAccountArgs): Promise<TransactionInstruction> {
-        const updateIx = await getUpdateDataAccountIx(updateArgs)
+        const updateIx = await getUpdateDataAccountIx(updateArgs, this.rwaClient.provider)
         return updateIx
     }
 
@@ -30,7 +37,7 @@ export class DataRegistry {
      * @returns A Promise that resolves to the instructions to update asset information.
     */
     async delegateDataRegistry(delegateDataRegistryArgs: DelegateDataRegistryArgs): Promise<TransactionInstruction> {
-        const delegateIx = await getDelegateDataRegistryIx(delegateDataRegistryArgs)
+        const delegateIx = await getDelegateDataRegistryIx(delegateDataRegistryArgs, this.rwaClient.provider)
         return delegateIx
     }
 
