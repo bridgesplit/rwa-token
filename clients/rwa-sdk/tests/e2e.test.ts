@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { BN } from '@coral-xyz/anchor';
+import {BN} from '@coral-xyz/anchor';
 import {
 	getAssetControllerPda,
 	getAttachPolicyAccountIx, getCreateDataAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getIssueTokensIx, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
 } from '../src';
-import { setupTests } from './setup';
-import { Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
-import { expect, test, describe } from 'vitest';
+import {setupTests} from './setup';
+import {Transaction, sendAndConfirmTransaction} from '@solana/web3.js';
+import {expect, test, describe} from 'vitest';
 
 describe('e2e tests', () => {
 	let mint: string;
@@ -38,7 +38,7 @@ describe('e2e tests', () => {
 		};
 		const setupAssetController = await getSetupAssetControllerIxs(
 			createAssetControllerArgs,
-			setup.provider
+			setup.provider,
 		);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupAssetController.ixs), [setup.payerKp, ...setupAssetController.signers]);
 		mint = setupAssetController.signers[0].publicKey.toString();
@@ -52,13 +52,13 @@ describe('e2e tests', () => {
 
 	test('create data account', async t => {
 		const createDataAccountIx = await getCreateDataAccountIx({
-			type: { legal: {} },
+			type: {legal: {}},
 			name: 'Test Data Account',
 			uri: 'https://test.com',
 			payer: setup.payer.toString(),
 			assetMint: mint,
 		},
-			setup.provider);
+		setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...createDataAccountIx.ixs), [setup.payerKp, createDataAccountIx.signers[0]]);
 		expect(txnId).toBeTruthy();
 		console.log('data account: ', createDataAccountIx.signers[0].publicKey.toString());
@@ -72,7 +72,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policy: {
 				identityApproval: {},
@@ -92,7 +92,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policy: {
 				transactionAmountLimit: {
@@ -114,7 +114,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policy: {
 				transactionAmountVelocity: {
@@ -137,7 +137,7 @@ describe('e2e tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policy: {
 				transactionCountVelocity: {

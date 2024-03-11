@@ -1,6 +1,6 @@
-import { AnchorProvider } from '@coral-xyz/anchor';
-import { type IdentityRegistryAccount, type IdentityAccount } from './types';
-import { getIdentityAccountPda, getIdentityRegistryPda, getIdentityRegistryProgram } from './utils';
+import {type AnchorProvider} from '@coral-xyz/anchor';
+import {type IdentityRegistryAccount, type IdentityAccount} from './types';
+import {getIdentityAccountPda, getIdentityRegistryPda, getIdentityRegistryProgram} from './utils';
 
 /**
  * Retrieves identity registry account associated with a specific asset mint.
