@@ -11,6 +11,7 @@ export const policyRegistryProgramId = new PublicKey('po1cPf1eyUJJPqULw4so3T4JU9
  * @param provider - Solana anchor provider.
  * @returns Typed solana program to be used for transaction building.
  */
+
 export const getPolicyEngineProgram = (provider: Provider) => new Program(
 	PolicyEngineIdl as Idl,
 	policyRegistryProgramId,

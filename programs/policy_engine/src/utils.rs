@@ -6,7 +6,7 @@ pub fn enforce_identity_filter(identity: [u8; 10], identity_filter: IdentityFilt
     match identity_filter.comparision_type {
         ComparisionType::Or => {
             // if any level is in the identities array, return Ok
-            for (_i, level) in identity.iter().enumerate() {
+            for level in identity.iter() {
                 if *level != 0 && identity_filter.identity_levels.contains(level) {
                     return Ok(());
                 }
