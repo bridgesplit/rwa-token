@@ -4,8 +4,8 @@ import {
 	AccountInfo,
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import { policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda } from '../policy_engine';
-import { getCreateDataRegistryIx } from '../data_registry';
+import {policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda} from '../policy_engine';
+import {getCreateDataRegistryIx} from '../data_registry';
 import {
 	identityRegistryProgramId, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda,
 } from '../identity_registry';
@@ -18,7 +18,7 @@ import {
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
-import { AnchorProvider, BN } from '@coral-xyz/anchor';
+import {type AnchorProvider, BN} from '@coral-xyz/anchor';
 
 /** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {
@@ -36,7 +36,7 @@ export type CreateAssetControllerIx = {
  */
 export async function getCreateAssetControllerIx(
 	args: CreateAssetControllerIx,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createAssetController({
@@ -59,7 +59,7 @@ export async function getCreateAssetControllerIx(
 	return ix;
 }
 
-/** Common args but with authority, owner and amount.*/
+/** Common args but with authority, owner and amount. */
 export type IssueTokenArgs = {
 	amount: number;
 	authority: string;
@@ -92,9 +92,8 @@ export type VoidTokensArgs = {
 
 export async function getVoidTokensIx(args: VoidTokensArgs, provider: AnchorProvider): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
-	const ix = await assetProgram.methods.voidTokens({
-		amount: new BN(args.amount),
-	}).accountsStrict({
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	const ix = await assetProgram.methods.voidTokens(new BN(args.amount)).accountsStrict({
 		assetMint: new PublicKey(args.assetMint),
 		tokenProgram: TOKEN_2022_PROGRAM_ID,
 		tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
@@ -171,7 +170,7 @@ export type CreateTokenAccountArgs = {
 
 export async function getCreateTokenAccountIx(
 	args: CreateTokenAccountArgs,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createTokenAccount()
@@ -189,7 +188,7 @@ export async function getCreateTokenAccountIx(
 	return ix;
 }
 
-/** Args used to generate new asset controller*/
+/** Args used to generate new asset controller */
 export type SetupAssetControllerArgs = {
 	authority: string;
 	decimals: number;
@@ -208,30 +207,30 @@ export type SetupAssetControllerArgs = {
 */
 export async function getSetupAssetControllerIxs(
 	args: SetupAssetControllerArgs,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<IxReturn> {
 	const mintKp = new Keypair();
 	const mint = mintKp.publicKey;
-	const updatedArgs = { ...args, assetMint: mint.toString() };
+	const updatedArgs = {...args, assetMint: mint.toString()};
 	// Get asset registry create ix
 	const assetControllerCreateIx = await getCreateAssetControllerIx(
 		updatedArgs,
-		provider
+		provider,
 	);
 	// Get policy registry create ix
 	const policyEngineCreateIx = await getCreatePolicyEngineIx(
 		updatedArgs,
-		provider
+		provider,
 	);
 	// Get data registry create ix
 	const dataRegistryCreateIx = await getCreateDataRegistryIx(
 		updatedArgs,
-		provider
+		provider,
 	);
 	// Get identity registry create ix
 	const identityRegistryCreateIx = await getCreateIdentityRegistryIx(
 		updatedArgs,
-		provider
+		provider,
 	);
 	return {
 		ixs: [
@@ -244,7 +243,7 @@ export async function getSetupAssetControllerIxs(
 	};
 }
 
-/** Args used to setup user*/
+/** Args used to setup user */
 export type SetupUserArgs = {
 	payer: string;
 	owner: string;

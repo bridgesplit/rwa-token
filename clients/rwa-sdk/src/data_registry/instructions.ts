@@ -4,7 +4,7 @@ import {
 import {type CommonArgs, type IxReturn} from '../utils';
 import {getDataRegistryProgram, getDataRegistryPda} from './utils';
 import {type DataAccountType} from './types';
-import { AnchorProvider } from '@coral-xyz/anchor';
+import {type AnchorProvider} from '@coral-xyz/anchor';
 
 export type CreateDataRegistryArgs = {
 	authority: string;
@@ -17,7 +17,7 @@ export type CreateDataRegistryArgs = {
  */
 export async function getCreateDataRegistryIx(
 	args: CreateDataRegistryArgs,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
 	const dataProgram = getDataRegistryProgram(provider);
 	const ix = await dataProgram.methods.createDataRegistry(new PublicKey(args.authority), args.delegate ? new PublicKey(args.delegate) : null)
@@ -39,7 +39,7 @@ export type CreateDataAccountArgs = {
 
 export async function getCreateDataAccountIx(
 	args: CreateDataAccountArgs,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<IxReturn> {
 	const dataProgram = getDataRegistryProgram(provider);
 	const dataAccountKp = new Keypair();
@@ -71,7 +71,7 @@ export type UpdateDataAccountArgs = {
 
 export async function getUpdateDataAccountIx(
 	args: UpdateDataAccountArgs,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
 	const dataProgram = getDataRegistryProgram(provider);
 	const ix = await dataProgram.methods.updateDataAccount({
@@ -95,7 +95,7 @@ export type DelegateDataRegistryArgs = {
 
 export async function getDelegateDataRegistryIx(
 	args: DelegateDataRegistryArgs,
-	provider: AnchorProvider
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
 	const dataProgram = getDataRegistryProgram(provider);
 	const ix = await dataProgram.methods.delegateDataRegsitry(

@@ -1,8 +1,8 @@
-import { PublicKey } from '@solana/web3.js';
-import { type AssetController } from '../programs/types';
-import { type Idl, Program, type Provider } from '@coral-xyz/anchor';
-import { AssetControllerIdl } from '../programs/idls';
-import { utf8 } from '@coral-xyz/anchor/dist/cjs/utils/bytes';
+import {PublicKey} from '@solana/web3.js';
+import {type AssetController} from '../programs/types';
+import {type Idl, Program, type Provider} from '@coral-xyz/anchor';
+import {AssetControllerIdl} from '../programs/idls';
+import {utf8} from '@coral-xyz/anchor/dist/cjs/utils/bytes';
 
 export const assetControllerProgramId = new PublicKey('acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan');
 

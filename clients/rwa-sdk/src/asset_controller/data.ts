@@ -1,7 +1,6 @@
-import { AnchorProvider } from '@coral-xyz/anchor';
-import { type AssetControllerAccount, type TrackerAccount } from './types';
-import { getAssetControllerPda, getAssetControllerProgram, getTrackerAccountPda } from './utils';
-
+import {type AnchorProvider} from '@coral-xyz/anchor';
+import {type AssetControllerAccount, type TrackerAccount} from './types';
+import {getAssetControllerPda, getAssetControllerProgram, getTrackerAccountPda} from './utils';
 
 /**
  * Retrieves a asset controller account associated with a specific asset mint.
