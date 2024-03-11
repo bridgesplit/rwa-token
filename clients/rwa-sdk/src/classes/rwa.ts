@@ -40,14 +40,6 @@ export class RwaClient {
      * Retrieves all policy accounts.
      * @returns A Promise resolving to an array of policy accounts.
      */
-    async getProvider() {
-        return this.provider;
-    }
-
-    /**
-     * Retrieves all policy accounts.
-     * @returns A Promise resolving to an array of policy accounts.
-     */
     async getPolicyAccounts() {
         return;
     }

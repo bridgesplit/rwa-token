@@ -55,10 +55,6 @@ describe('e2e class tests', () => {
 			await rwaClient.provider.connection.requestAirdrop(setup.delegateKp.publicKey, 1000000000),
 		);
 
-
-		//start here
-
-
 	});
 
 	test('initalize asset controller through class', async () => {
