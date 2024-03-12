@@ -1,8 +1,7 @@
 /// creates a mint a new asset
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{
-    spl_token_2022::extension::ExtensionType, token_metadata_initialize, Mint, Token2022,
-    TokenMetadataInitialize, TokenMetadataInitializeArgs,
+    token_metadata_initialize, Mint, Token2022, TokenMetadataInitialize,
 };
 use spl_tlv_account_resolution::state::ExtraAccountMetaList;
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
@@ -21,14 +20,6 @@ pub struct CreateAssetControllerArgs {
     pub delegate: Option<Pubkey>,
 }
 
-pub const MINT_EXTENSIONS: [ExtensionType; 5] = [
-    ExtensionType::TransferHook,
-    ExtensionType::MetadataPointer,
-    ExtensionType::GroupMemberPointer,
-    ExtensionType::GroupPointer,
-    ExtensionType::PermanentDelegate,
-];
-
 #[derive(Accounts)]
 #[instruction(args: CreateAssetControllerArgs)]
 pub struct CreateAssetController<'info> {
@@ -45,7 +36,6 @@ pub struct CreateAssetController<'info> {
         mint::decimals = args.decimals,
         mint::authority = authority,
         mint::freeze_authority = authority,
-        mint::extensions = MINT_EXTENSIONS.to_vec(),
         extensions::transfer_hook::authority = asset_controller.key(),
         extensions::transfer_hook::program_id = crate::id(),
         extensions::metadata_pointer::authority = asset_controller.key(),
@@ -79,7 +69,7 @@ pub struct CreateAssetController<'info> {
 }
 
 impl<'info> CreateAssetController<'info> {
-    fn initialize_token_metadata(&self, args: TokenMetadataInitializeArgs) -> Result<()> {
+    fn initialize_token_metadata(&self, name: String, symbol: String, uri: String) -> Result<()> {
         let cpi_accounts = TokenMetadataInitialize {
             token_program_id: self.token_program.to_account_info(),
             mint: self.asset_mint.to_account_info(),
@@ -88,7 +78,7 @@ impl<'info> CreateAssetController<'info> {
             update_authority: self.asset_controller.to_account_info(),
         };
         let cpi_ctx = CpiContext::new(self.token_program.to_account_info(), cpi_accounts);
-        token_metadata_initialize(cpi_ctx, args)?;
+        token_metadata_initialize(cpi_ctx, name, symbol, uri)?;
         Ok(())
     }
 }
@@ -112,11 +102,7 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
 
     // initialize token metadata
     ctx.accounts
-        .initialize_token_metadata(TokenMetadataInitializeArgs {
-            name: args.name,
-            symbol: args.symbol,
-            uri: args.uri,
-        })?;
+        .initialize_token_metadata(args.name, args.symbol, args.uri)?;
 
     // transfer minimum rent to mint account
     update_account_lamports_to_minimum_balance(
