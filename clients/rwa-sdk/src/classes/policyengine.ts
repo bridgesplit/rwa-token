@@ -1,8 +1,8 @@
-import { type IxReturn } from "../utils";
+import { type IxReturn } from "../../../rwa-token-sdk/src/utils";
 import {
   type AttachPolicyArgs,
   getAttachPolicyAccountIx,
-} from "../policy_engine";
+} from "../../../rwa-token-sdk/src/policy_engine";
 import { type RwaClient } from "./rwa";
 
 /**

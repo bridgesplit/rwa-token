@@ -1,5 +1,5 @@
 import { type TransactionInstruction } from "@solana/web3.js";
-import { type IxReturn } from "../utils";
+import { type IxReturn } from "../../../rwa-token-sdk/src/utils";
 import {
   type CreateDataAccountArgs,
   type DelegateDataRegistryArgs,
@@ -7,7 +7,7 @@ import {
   getCreateDataAccountIx,
   getDelegateDataRegistryIx,
   getUpdateDataAccountIx,
-} from "../data_registry";
+} from "../../../rwa-token-sdk/src/data_registry";
 import { type RwaClient } from "./rwa";
 
 /**

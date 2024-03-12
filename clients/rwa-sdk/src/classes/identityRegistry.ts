@@ -1,12 +1,15 @@
 import { type TransactionInstruction } from "@solana/web3.js";
-import { type SetupUserArgs, getSetupUserIxs } from "../asset_controller";
-import { type IxReturn } from "../utils";
+import {
+  type SetupUserArgs,
+  getSetupUserIxs,
+} from "../../../rwa-token-sdk/src/asset_controller";
+import { type IxReturn } from "../../../rwa-token-sdk/src/utils";
 import {
   type AddLevelToIdentityAccountArgs,
   type RemoveLevelFromIdentityAccount,
   getAddLevelToIdentityAccount,
   getRemoveLevelFromIdentityAccount,
-} from "../identity_registry";
+} from "../../../rwa-token-sdk/src/identity_registry";
 import { type RwaClient } from "./rwa";
 
 /**

@@ -8,8 +8,8 @@ import {
   getSetupAssetControllerIxs,
   getTransferTokensIx,
   getVoidTokensIx,
-} from "../asset_controller";
-import { IxReturn } from "../utils";
+} from "../../../rwa-token-sdk/src/asset_controller";
+import { IxReturn } from "../../../rwa-token-sdk/src/utils";
 import { RwaClient } from "./rwa";
 
 /**
