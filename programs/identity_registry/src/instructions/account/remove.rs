@@ -20,6 +20,7 @@ pub struct RemoveLevelFromIdentityAccount<'info> {
     pub identity_account: Box<Account<'info, IdentityAccount>>,
 }
 
+///Removes level args from identity account.
 pub fn handler(
     ctx: Context<RemoveLevelFromIdentityAccount>,
     _owner: Pubkey,

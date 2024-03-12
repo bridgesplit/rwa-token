@@ -19,6 +19,7 @@ pub struct AddLevelToIdentityAccount<'info> {
     pub identity_account: Box<Account<'info, IdentityAccount>>,
 }
 
+///Adds level args to identity account.
 pub fn handler(ctx: Context<AddLevelToIdentityAccount>, _owner: Pubkey, level: u8) -> Result<()> {
     ctx.accounts.identity_account.add_level(level)?;
     Ok(())
