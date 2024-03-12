@@ -1,5 +1,5 @@
 export * from "./rwa";
-export * from "./assetcontrollerclass";
+export * from "./assetcontroller";
 export * from "./dataregistry";
-export * from "./identityRegistry";
+export * from "./identityregistry";
 export * from "./policyengine";

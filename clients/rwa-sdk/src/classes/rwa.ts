@@ -1,6 +1,6 @@
 import { type Config } from "./types";
 import { AssetController } from "./assetcontroller";
-import { IdentityRegistry } from "./identityRegistry";
+import { IdentityRegistry } from "./identityregistry";
 import { PolicyEngine } from "./policyengine";
 import { DataRegistry } from "./dataregistry";
 import { AnchorProvider, type Wallet } from "@coral-xyz/anchor";
