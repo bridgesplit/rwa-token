@@ -1,12 +1,15 @@
-import { IxReturn } from "../utils";
-import { AttachPolicyArgs, getAttachPolicyAccountIx } from "../policy_engine";
-import { RwaClient } from "./rwa";
+import { type IxReturn } from "../utils";
+import {
+  type AttachPolicyArgs,
+  getAttachPolicyAccountIx,
+} from "../policy_engine";
+import { type RwaClient } from "./rwa";
 
 /**
  * Represents the client Policy Engine for an RWA.
  */
 export class PolicyEngine {
-  private rwaClient: RwaClient;
+  private readonly rwaClient: RwaClient;
 
   constructor(rwaClient: RwaClient) {
     this.rwaClient = rwaClient;

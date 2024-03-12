@@ -1,19 +1,19 @@
-import { TransactionInstruction } from "@solana/web3.js";
-import { SetupUserArgs, getSetupUserIxs } from "../asset_controller";
-import { IxReturn } from "../utils";
+import { type TransactionInstruction } from "@solana/web3.js";
+import { type SetupUserArgs, getSetupUserIxs } from "../asset_controller";
+import { type IxReturn } from "../utils";
 import {
-  AddLevelToIdentityAccountArgs,
-  RemoveLevelFromIdentityAccount,
+  type AddLevelToIdentityAccountArgs,
+  type RemoveLevelFromIdentityAccount,
   getAddLevelToIdentityAccount,
   getRemoveLevelFromIdentityAccount,
 } from "../identity_registry";
-import { RwaClient } from "./rwa";
+import { type RwaClient } from "./rwa";
 
 /**
  * Represents the client for Identity Registry for an RWA.
  */
 export class IdentityRegistry {
-  private rwaClient: RwaClient;
+  private readonly rwaClient: RwaClient;
 
   constructor(rwaClient: RwaClient) {
     this.rwaClient = rwaClient;

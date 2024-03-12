@@ -1,20 +1,20 @@
-import { TransactionInstruction } from "@solana/web3.js";
-import { IxReturn } from "../utils";
+import { type TransactionInstruction } from "@solana/web3.js";
+import { type IxReturn } from "../utils";
 import {
-  CreateDataAccountArgs,
-  DelegateDataRegistryArgs,
-  UpdateDataAccountArgs,
+  type CreateDataAccountArgs,
+  type DelegateDataRegistryArgs,
+  type UpdateDataAccountArgs,
   getCreateDataAccountIx,
   getDelegateDataRegistryIx,
   getUpdateDataAccountIx,
 } from "../data_registry";
-import { RwaClient } from "./rwa";
+import { type RwaClient } from "./rwa";
 
 /**
  * Represents the client for Data Registry for an RWA.
  */
 export class DataRegistry {
-  private rwaClient: RwaClient;
+  private readonly rwaClient: RwaClient;
 
   constructor(rwaClient: RwaClient) {
     this.rwaClient = rwaClient;

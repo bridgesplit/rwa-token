@@ -1,9 +1,9 @@
-import { Config } from "./types";
+import { type Config } from "./types";
 import { AssetController } from "./assetcontroller";
 import { IdentityRegistry } from "./identityRegistry";
 import { PolicyEngine } from "./policyengine";
 import { DataRegistry } from "./dataregistry";
-import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
+import { AnchorProvider, type Wallet } from "@coral-xyz/anchor";
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).
