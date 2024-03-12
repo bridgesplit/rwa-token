@@ -14,6 +14,8 @@ import { type RwaClient } from "./rwa";
 
 /**
  * Represents the client for Asset Controller for an RWA.
+ *
+ * Missing functions: Freeze token, unfreeze tokens
  */
 export class AssetController {
   private readonly rwaClient: RwaClient;
@@ -24,6 +26,7 @@ export class AssetController {
 
   /**
    * Asynchronously generates instructions to setup a new asset controller.
+   * @param - {@link SetupAssetControllerArgs}
    * @returns A Promise that resolves to the instructions to create an asset controller.
    */
   async setUpNewRegistry(
@@ -39,6 +42,7 @@ export class AssetController {
 
   /**
    * Asynchronously generates instructions to issue tokens.
+   * @param - {@link IssueTokenArgs}
    * @returns A Promise that resolves to the instructions to issue tokens.
    */
   async issueTokenIxns(
@@ -54,8 +58,9 @@ export class AssetController {
   /**
    * Asynchronously generates instructions to update the asset controller delegate.
    * @returns A Promise that resolves to the instructions to update the delegate.
+   *
+   * TODO: Missing instructions.
    */
-  // TODO: Missing instructions
   async updateAssetControllerDelgateIxns(): Promise<IxReturn> {
     return {
       ixs: [],
@@ -65,6 +70,7 @@ export class AssetController {
 
   /**
    * Asynchronously generates instructions to revoke assets.
+   * @param - {@link VoidTokensArgs}
    * @returns A Promise that resolves to the instructions to revoke assets.
    */
   async voidTokenIxns(
@@ -75,15 +81,6 @@ export class AssetController {
       this.rwaClient.provider
     );
     return voidTokenIx;
-  }
-
-  /**
-   * Simulates a fake transfer based on user account parameters.
-   * @returns A Promise that resolves to a boolean indicating the success of the simulation.
-   */
-  // TODO: Spec out. Determine if this is useful.
-  async simulateFakeTransfer(): Promise<boolean> {
-    return true;
   }
 
   /**

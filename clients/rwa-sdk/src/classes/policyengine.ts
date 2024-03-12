@@ -7,6 +7,8 @@ import { type RwaClient } from "./rwa";
 
 /**
  * Represents the client Policy Engine for an RWA.
+ *
+ * TODO: Missing remove policy.
  */
 export class PolicyEngine {
   private readonly rwaClient: RwaClient;
