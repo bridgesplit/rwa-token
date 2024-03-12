@@ -7,6 +7,7 @@ export function setupTests() {
 	const authorityKp = payerKp;
 	const delegateKp = authorityKp;
 	const provider = getProvider();
+
 	return {
 		payerKp,
 		payer: payerKp.publicKey,

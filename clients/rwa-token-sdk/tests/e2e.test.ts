@@ -3,7 +3,7 @@
 import {BN} from '@coral-xyz/anchor';
 import {
 	getAssetControllerPda,
-	getAttachPolicyAccountIx, getCreateDataAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
+	getAttachPolicyAccountIx, getCreateDataAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getIssueTokensIx, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
 } from '../src';
 import {setupTests} from './setup';
 import {Transaction, sendAndConfirmTransaction} from '@solana/web3.js';
@@ -38,6 +38,7 @@ describe('e2e tests', () => {
 		};
 		const setupAssetController = await getSetupAssetControllerIxs(
 			createAssetControllerArgs,
+			setup.provider,
 		);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupAssetController.ixs), [setup.payerKp, ...setupAssetController.signers]);
 		mint = setupAssetController.signers[0].publicKey.toString();
@@ -56,7 +57,8 @@ describe('e2e tests', () => {
 			uri: 'https://test.com',
 			payer: setup.payer.toString(),
 			assetMint: mint,
-		});
+		},
+		setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...createDataAccountIx.ixs), [setup.payerKp, createDataAccountIx.signers[0]]);
 		expect(txnId).toBeTruthy();
 		console.log('data account: ', createDataAccountIx.signers[0].publicKey.toString());
@@ -75,7 +77,7 @@ describe('e2e tests', () => {
 			policy: {
 				identityApproval: {},
 			},
-		});
+		}, setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
 		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -97,7 +99,7 @@ describe('e2e tests', () => {
 					limit: new BN(100),
 				},
 			},
-		});
+		}, setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
 		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -120,7 +122,7 @@ describe('e2e tests', () => {
 					timeframe: new BN(60),
 				},
 			},
-		});
+		}, setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
 		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -143,7 +145,7 @@ describe('e2e tests', () => {
 					timeframe: new BN(60),
 				},
 			},
-		});
+		}, setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
 		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
@@ -156,10 +158,10 @@ describe('e2e tests', () => {
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			level: 1,
-		});
+		}, setup.provider);
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, ...setupUser.signers]);
 		expect(txnId).toBeTruthy();
-		const trackerAccount = await getTrackerAccount(mint, setup.authority.toString());
+		const trackerAccount = await getTrackerAccount(mint, setup.authority.toString(), setup.provider);
 		expect(trackerAccount).toBeTruthy();
 		expect(trackerAccount!.assetMint.toString()).toBe(mint);
 		console.log('tracker account: ', getTrackerAccountPda(mint, setup.authority.toString()).toString());
@@ -167,14 +169,14 @@ describe('e2e tests', () => {
 	});
 
 	test('issue tokens', async t => {
-		const issueTokens = await getSetupIssueTokensIxs({
+		const issueTokens = await getIssueTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			amount: 1000000,
-		});
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens.ixs), [setup.payerKp, ...issueTokens.signers]);
+		}, setup.provider);
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 	});
 

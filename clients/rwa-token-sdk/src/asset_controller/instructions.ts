@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
+	AccountInfo,
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
 import {policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda} from '../policy_engine';
@@ -9,17 +10,17 @@ import {
 	identityRegistryProgramId, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda,
 } from '../identity_registry';
 import {
-	type CommonArgs, getProvider, type IxReturn, parseRemainingAccounts,
+	type CommonArgs, type IxReturn, parseRemainingAccounts,
 } from '../utils';
 import {
-	ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_2022_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync,
+	ASSOCIATED_TOKEN_PROGRAM_ID, Account, TOKEN_2022_PROGRAM_ID, createTransferCheckedInstruction, getAssociatedTokenAddressSync,
 } from '@solana/spl-token';
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
-import {BN} from '@coral-xyz/anchor';
+import {type AnchorProvider, BN} from '@coral-xyz/anchor';
 
-// Common args but with authority compulsory
+/** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {
 	decimals: number;
 	authority: string;
@@ -28,10 +29,15 @@ export type CreateAssetControllerIx = {
 	symbol: string;
 } & CommonArgs;
 
+/**
+ * Builds the transaction instruction to create an Asset Controller.
+ * @param args - {@link CreateAssetControllerIx}
+ * @returns Create asset controller transaction instruction
+ */
 export async function getCreateAssetControllerIx(
 	args: CreateAssetControllerIx,
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createAssetController({
 		decimals: args.decimals,
@@ -53,14 +59,19 @@ export async function getCreateAssetControllerIx(
 	return ix;
 }
 
+/** Common args but with authority, owner and amount. */
 export type IssueTokenArgs = {
 	amount: number;
 	authority: string;
 	owner: string;
 } & CommonArgs;
 
-export async function getIssueTokensIx(args: IssueTokenArgs): Promise<TransactionInstruction> {
-	const provider = getProvider();
+/**
+ * Creates transaction instruction to issue tokens for a specific amount for a specific asset.
+ * @param args {@link IssueTokenArgs}
+ * @returns A transaction instruction distributing the specified amount for the specific asset.
+ */
+export async function getIssueTokensIx(args: IssueTokenArgs, provider: AnchorProvider): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.issueTokens({
 		amount: new BN(args.amount),
@@ -79,12 +90,10 @@ export type VoidTokensArgs = {
 	owner: string;
 } & CommonArgs;
 
-export async function getVoidTokensIx(args: VoidTokensArgs): Promise<TransactionInstruction> {
-	const provider = getProvider();
+export async function getVoidTokensIx(args: VoidTokensArgs, provider: AnchorProvider): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
-	const ix = await assetProgram.methods.voidTokens({
-		amount: new BN(args.amount),
-	}).accountsStrict({
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+	const ix = await assetProgram.methods.voidTokens(new BN(args.amount)).accountsStrict({
 		assetMint: new PublicKey(args.assetMint),
 		tokenProgram: TOKEN_2022_PROGRAM_ID,
 		tokenAccount: getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.owner), false, TOKEN_2022_PROGRAM_ID),
@@ -99,9 +108,15 @@ export type TransferTokensArgs = {
 	amount: number;
 	authority: string;
 	decimals: number;
+	/** Optional parameter for transfer controls (policies) and privacy (identity). */
 	remainingAccounts?: string[];
 } & CommonArgs;
 
+/**
+ * Creates a transaction instruction to transfer a token between addresses with transfer controls.
+ * @param args {@link TransferTokensArgs}
+ * @returns Transaction instruction to transfer RWA token.
+ */
 export async function getTransferTokensIx(args: TransferTokensArgs): Promise<TransactionInstruction> {
 	const remainingAccounts = [{
 		pubkey: getExtraMetasListPda(args.assetMint),
@@ -155,8 +170,8 @@ export type CreateTokenAccountArgs = {
 
 export async function getCreateTokenAccountIx(
 	args: CreateTokenAccountArgs,
+	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
-	const provider = getProvider();
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods.createTokenAccount()
 		.accountsStrict({
@@ -173,6 +188,7 @@ export async function getCreateTokenAccountIx(
 	return ix;
 }
 
+/** Args used to generate new asset controller */
 export type SetupAssetControllerArgs = {
 	authority: string;
 	decimals: number;
@@ -183,8 +199,15 @@ export type SetupAssetControllerArgs = {
 	symbol: string;
 };
 
+/**
+* Generates a new asset controller.
+* This includes generation of a new key pair, a new asset registry, policy registry, data registry, identity registry.
+* @param args - {@link SetupAssetControllerArgs}
+* @returns - {@link IxReturn}, an object of the initialize transaction instructions and a new keypair.
+*/
 export async function getSetupAssetControllerIxs(
 	args: SetupAssetControllerArgs,
+	provider: AnchorProvider,
 ): Promise<IxReturn> {
 	const mintKp = new Keypair();
 	const mint = mintKp.publicKey;
@@ -192,18 +215,22 @@ export async function getSetupAssetControllerIxs(
 	// Get asset registry create ix
 	const assetControllerCreateIx = await getCreateAssetControllerIx(
 		updatedArgs,
+		provider,
 	);
 	// Get policy registry create ix
 	const policyEngineCreateIx = await getCreatePolicyEngineIx(
 		updatedArgs,
+		provider,
 	);
 	// Get data registry create ix
 	const dataRegistryCreateIx = await getCreateDataRegistryIx(
 		updatedArgs,
+		provider,
 	);
 	// Get identity registry create ix
 	const identityRegistryCreateIx = await getCreateIdentityRegistryIx(
 		updatedArgs,
+		provider,
 	);
 	return {
 		ixs: [
@@ -216,6 +243,7 @@ export async function getSetupAssetControllerIxs(
 	};
 }
 
+/** Args used to setup user */
 export type SetupUserArgs = {
 	payer: string;
 	owner: string;
@@ -223,15 +251,22 @@ export type SetupUserArgs = {
 	level: number;
 };
 
-export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
+/**
+ * Generate instructions to set up a user for permissioned based assets.
+ * This function constructs the instructions necessary for setting up a user, which includes
+ * creating an identity account, indicating permissions, and a token account for the user.
+ * @param args {@link SetupUserArgs}
+ * @returns - {@link IxReturn}, a promise that resolves to a list of generated transaction instructions.
+ */
+export async function getSetupUserIxs(args: SetupUserArgs, provider: AnchorProvider): Promise<IxReturn> {
 	const identityAccountIx = await getCreateIdentityAccountIx({
 		payer: args.payer,
 		signer: getIdentityRegistryPda(args.assetMint).toString(),
 		assetMint: args.assetMint,
 		owner: args.owner,
 		level: args.level,
-	});
-	const createTaIx = await getCreateTokenAccountIx(args);
+	}, provider);
+	const createTaIx = await getCreateTokenAccountIx(args, provider);
 	return {
 		ixs: [
 			identityAccountIx,

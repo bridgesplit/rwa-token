@@ -12,6 +12,8 @@ pub struct DelegateIdentityRegistry<'info> {
     pub identity_registry_account: Box<Account<'info, IdentityRegistryAccount>>,
 }
 
+
+/// Updates the delegate of the identity registry.
 pub fn handler(ctx: Context<DelegateIdentityRegistry>, delegate: Pubkey) -> Result<()> {
     ctx.accounts
         .identity_registry_account
