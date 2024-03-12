@@ -39,6 +39,7 @@ export class IdentityRegistry {
 
   /**
    * Asynchronously update user account identity
+   * @param - {@link AddLevelToIdentityAccountArgs}
    * @returns A Promise that resolves to the instructions to update user account identity.
    * */
   async addIdentityLevelToUserAccount(
@@ -53,6 +54,7 @@ export class IdentityRegistry {
 
   /**
    * Asynchronously reduces a user identity account level
+   * @param - {@link RemoveLevelFromIdentityAccount}
    * @returns A Promise that resolves to the instructions to reduce the level of a user identity account.
    */
   async removeIdentityLevelFromUserAccount(

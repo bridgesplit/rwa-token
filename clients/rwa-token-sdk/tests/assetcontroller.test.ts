@@ -6,7 +6,6 @@ import {
   type AttachPolicyArgs,
   type CreateDataAccountArgs,
   getAssetControllerPda,
-  getDataAccounts,
   getDataRegistryPda,
   getIdentityAccountPda,
   getIdentityRegistryPda,
@@ -21,7 +20,6 @@ import {
 } from "../src";
 import { setupTests } from "./setup";
 import {
-  Commitment,
   type ConfirmOptions,
   Connection,
   Transaction,

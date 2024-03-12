@@ -7,9 +7,9 @@ import { AnchorProvider, type Wallet } from "@coral-xyz/anchor";
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).
+ *
+ * TODO: Determine wether or not view holders, view policies, view identities for a token, view data is handled by SDK?
  */
-
-// TODO: Determine wether or not view holders, view policies, view identities for a token, view data is handled by SDK?
 export class RwaClient {
   /**
    * Configuration for the RWA client.
