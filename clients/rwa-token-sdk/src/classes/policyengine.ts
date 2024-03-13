@@ -2,8 +2,10 @@ import { type IxReturn } from "../../../rwa-token-sdk/src/utils";
 import {
   type AttachPolicyArgs,
   getAttachPolicyAccountIx,
+  getPolicyEnginePda,
 } from "../../../rwa-token-sdk/src/policy_engine";
 import { type RwaClient } from "./rwa";
+import { PublicKey } from "@solana/web3.js";
 
 /**
  * Represents the client Policy Engine for an RWA.
@@ -28,5 +30,14 @@ export class PolicyEngine {
       this.rwaClient.provider
     );
     return attachPolicyIx;
+  }
+
+  /**
+   * Retrieves the policy registry pda account for a specific asset mint.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @returns The policy registry pda as a public key.
+   */
+  getPolicyEnginePda(assetMint: string): PublicKey {
+    return getPolicyEnginePda(assetMint);
   }
 }

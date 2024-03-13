@@ -1,4 +1,4 @@
-import { type TransactionInstruction } from "@solana/web3.js";
+import { PublicKey, type TransactionInstruction } from "@solana/web3.js";
 import {
   type IssueTokenArgs,
   type SetupAssetControllerArgs,
@@ -8,6 +8,9 @@ import {
   getSetupAssetControllerIxs,
   getTransferTokensIx,
   getVoidTokensIx,
+  getAssetControllerPda,
+  getTrackerAccountPda,
+  getExtraMetasListPda,
 } from "../../../rwa-token-sdk/src/asset_controller";
 import { type IxReturn } from "../../../rwa-token-sdk/src/utils";
 import { type RwaClient } from "./rwa";
@@ -56,19 +59,6 @@ export class AssetController {
   }
 
   /**
-   * Asynchronously generates instructions to update the asset controller delegate.
-   * @returns A Promise that resolves to the instructions to update the delegate.
-   *
-   * TODO: Missing instructions.
-   */
-  async updateAssetControllerDelgateIxns(): Promise<IxReturn> {
-    return {
-      ixs: [],
-      signers: [],
-    };
-  }
-
-  /**
    * Asynchronously generates instructions to revoke assets.
    * @param - {@link VoidTokensArgs}
    * @returns A Promise that resolves to the instructions to revoke assets.
@@ -92,5 +82,34 @@ export class AssetController {
   ): Promise<TransactionInstruction> {
     const transferIx = await getTransferTokensIx(transferArgs);
     return transferIx;
+  }
+
+  /**
+   * Retrieves the asset controller pda account for a specific asset mint.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @returns The asset controllers pda as a public key.
+   */
+  getAssetControllerPda(assetMint: string): PublicKey {
+    return getAssetControllerPda(assetMint);
+  }
+
+  /**
+   * Retrieves the asset controller's metadata pda account for a specific asset mint.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @returns The asset controller's extra metadata pda.
+   */
+  getExtraMetasListPda(assetMint: string): PublicKey {
+    return getExtraMetasListPda(assetMint);
+  }
+
+  /**
+   * Retrieves the tracker pda for a specific asset controller mint and owner.
+   * Tracks the transfers happening from user account. Important for enforcing policies.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @param owner - The string representation of asset's owner.
+   * @returns The asset controller's tracker pda.
+   */
+  getTrackerAccountPda(assetMint: string, owner: string): PublicKey {
+    return getTrackerAccountPda(assetMint, owner);
   }
 }

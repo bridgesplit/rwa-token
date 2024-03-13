@@ -26,8 +26,8 @@ import {
   sendAndConfirmTransaction,
 } from "@solana/web3.js";
 import { expect, test, describe } from "vitest";
-import { type Config } from "../../rwa-sdk/src/classes/types";
-import { RwaClient } from "../../rwa-sdk/src/classes/rwa";
+import { type Config } from "../src/classes/types";
+import { RwaClient } from "../src/classes/rwa";
 
 describe("e2e class tests", () => {
   let rwaClient: RwaClient;
@@ -98,10 +98,22 @@ describe("e2e class tests", () => {
     expect(txnId).toBeTruthy();
 
     console.log("mint: ", mint);
-    console.log("data registry: ", getDataRegistryPda(mint).toString());
-    console.log("asset controller: ", getAssetControllerPda(mint).toString());
-    console.log("policy engine: ", getPolicyEnginePda(mint).toString());
-    console.log("identity registry: ", getIdentityRegistryPda(mint).toString());
+    console.log(
+      "data registry: ",
+      rwaClient.dataRegistry.getDataRegistryPda(mint).toString()
+    );
+    console.log(
+      "asset controller: ",
+      rwaClient.assetController.getAssetControllerPda(mint).toString()
+    );
+    console.log(
+      "policy engine: ",
+      rwaClient.policyEngine.getPolicyEnginePda(mint).toString()
+    );
+    console.log(
+      "identity registry: ",
+      rwaClient.identityRegistry.getIdentityRegistryPda(mint).toString()
+    );
   });
 
   test("setup data account through class", async (t) => {
@@ -278,7 +290,9 @@ describe("e2e class tests", () => {
     );
     console.log(
       "identity account: ",
-      getIdentityAccountPda(mint, setup.authority.toString()).toString()
+      rwaClient.identityRegistry
+        .getIdentityAccountPda(mint, setup.authority.toString())
+        .toString()
     );
   });
 

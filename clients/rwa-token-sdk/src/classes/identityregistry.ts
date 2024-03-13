@@ -1,4 +1,4 @@
-import { type TransactionInstruction } from "@solana/web3.js";
+import { PublicKey, type TransactionInstruction } from "@solana/web3.js";
 import {
   type SetupUserArgs,
   getSetupUserIxs,
@@ -9,6 +9,8 @@ import {
   type RemoveLevelFromIdentityAccount,
   getAddLevelToIdentityAccount,
   getRemoveLevelFromIdentityAccount,
+  getIdentityRegistryPda,
+  getIdentityAccountPda,
 } from "../../../rwa-token-sdk/src/identity_registry";
 import { type RwaClient } from "./rwa";
 
@@ -65,5 +67,24 @@ export class IdentityRegistry {
       this.rwaClient.provider
     );
     return reduceLevelIx;
+  }
+
+  /**
+   * Retrieves the identity registry pda account for a specific asset mint.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @returns The identity registry pda as a public key.
+   */
+  getIdentityRegistryPda(assetMint: string): PublicKey {
+    return getIdentityRegistryPda(assetMint);
+  }
+
+  /**
+   * Retrieves the identity account pda public key for a specific asset mint.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @param owner - The string representation of the asset's owner.
+   * @returns The identity account pda.
+   */
+  getIdentityAccountPda(assetMint: string, owner: string): PublicKey {
+    return getIdentityAccountPda(assetMint, owner);
   }
 }

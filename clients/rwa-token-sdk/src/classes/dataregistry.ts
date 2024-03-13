@@ -1,4 +1,4 @@
-import { type TransactionInstruction } from "@solana/web3.js";
+import { PublicKey, type TransactionInstruction } from "@solana/web3.js";
 import { type IxReturn } from "../../../rwa-token-sdk/src/utils";
 import {
   type CreateDataAccountArgs,
@@ -7,6 +7,7 @@ import {
   getCreateDataAccountIx,
   getDelegateDataRegistryIx,
   getUpdateDataAccountIx,
+  getDataRegistryPda,
 } from "../../../rwa-token-sdk/src/data_registry";
 import { type RwaClient } from "./rwa";
 
@@ -60,5 +61,14 @@ export class DataRegistry {
       this.rwaClient.provider
     );
     return delegateIx;
+  }
+
+  /**
+   * Retrieves the data registry pda account for a specific asset mint.
+   * @param assetMint - The string representation of the asset's mint address.
+   * @returns The data registry pda as a public key.
+   */
+  getDataRegistryPda(assetMint: string): PublicKey {
+    return getDataRegistryPda(assetMint);
   }
 }
