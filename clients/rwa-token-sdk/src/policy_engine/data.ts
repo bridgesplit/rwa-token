@@ -1,6 +1,6 @@
-import { AnchorProvider } from '@coral-xyz/anchor';
-import { type PolicyEngineAccount, type PolicyAccount } from './types';
-import { getPolicyEnginePda, getPolicyEngineProgram } from './utils';
+import {type AnchorProvider} from '@coral-xyz/anchor';
+import {type PolicyEngineAccount, type PolicyAccount} from './types';
+import {getPolicyEnginePda, getPolicyEngineProgram} from './utils';
 
 /**
  * Retrieves policy engine account associated with a specific asset mint.
@@ -25,7 +25,7 @@ export async function getPolicyAccounts(assetMint: string, provider: AnchorProvi
 	const policyEnginePda = getPolicyEnginePda(assetMint);
 	const policyAccounts = await provider.connection.getProgramAccounts(policyEngineProgram.programId, {
 		filters:
-			[{ memcmp: { offset: 9, bytes: policyEnginePda.toBase58() } }],
+			[{memcmp: {offset: 9, bytes: policyEnginePda.toBase58()}}],
 	});
 	return policyAccounts.map(account => policyEngineProgram.coder.accounts.decode('PolicyAccount', account.account.data));
 }
