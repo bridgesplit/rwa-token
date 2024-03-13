@@ -15,6 +15,7 @@
         "noImplicitOverride": true,
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "skipLibCheck": true
     }
 }
