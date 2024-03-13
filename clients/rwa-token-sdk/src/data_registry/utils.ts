@@ -1,7 +1,7 @@
 import {type Idl, Program, type Provider} from '@coral-xyz/anchor';
 import {DataRegistryIdl} from '../programs/idls';
 import {PublicKey} from '@solana/web3.js';
-import {type DataRegistry} from '../programs/types';
+import {type DataRegistryIdlType} from '../programs/types';
 
 export const dataRegistryProgramId = new PublicKey('dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw');
 
@@ -14,7 +14,7 @@ export const getDataRegistryProgram = (provider: Provider) => new Program(
 	DataRegistryIdl as Idl,
 	dataRegistryProgramId,
 	provider,
-) as unknown as Program<DataRegistry>;
+) as unknown as Program<DataRegistryIdlType>;
 
 /**
  * Retrieves the data registry pda public key for a specific asset mint.

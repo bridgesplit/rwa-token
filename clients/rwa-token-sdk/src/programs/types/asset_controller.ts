@@ -1,4 +1,4 @@
-export type AssetController = {
+export type AssetControllerIdlType = {
 	'version': '0.0.1';
 	'name': 'asset_controller';
 	'instructions': [
@@ -448,7 +448,7 @@ export type AssetController = {
 	];
 };
 
-export const IDL: AssetController = {
+export const IDL: AssetControllerIdlType = {
 	version: '0.0.1',
 	name: 'asset_controller',
 	instructions: [
