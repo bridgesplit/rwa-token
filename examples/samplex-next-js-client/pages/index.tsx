@@ -2,6 +2,7 @@ import Image from "next/image";
 import { previewBannerURL, projectDescription, projectName } from "@/scripts/config";
 import Head from "next/head";
 import { AssetController } from "@/components/assetcontroller/assetController";
+import SetupProviderComponent from "@/components/setup";
 
 export default function Home() {
 
@@ -40,6 +41,7 @@ export default function Home() {
       </Head>
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
+        <SetupProviderComponent />
         <AssetController />
       </div>
     </>

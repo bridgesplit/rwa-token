@@ -5,6 +5,7 @@ import bs58 from "bs58";
 import { MouseEventHandler, useState } from "react";
 import crypto from 'crypto';
 import { ToastContent, ToastOptions, toast as showToast } from "react-toastify";
+import { WalletContextState } from "@solana/wallet-adapter-react";
 
 export function shortenAddress(string: string | undefined) {
     if (string === undefined) {
@@ -80,20 +81,24 @@ export const errorPopup = (error?: string) => {
 }
 
 export const connections = [
-    "https://wandering-multi-hexagon.solana-mainnet.quiknode.pro/1ed143c42870d43b9b3c14edef33b5da431ea14e/",
-    "https://sly-ancient-water.solana-mainnet.quiknode.pro/1f85f307b91244eabbf3e8edc31913a1e9f0ee65/",
-    "https://green-polished-fire.solana-mainnet.quiknode.pro/0b8461a7cacccb991a0872d883157a01b7698b93/",
-    "https://methodical-alien-diamond.solana-mainnet.quiknode.pro/915c906e06afd5bad621a099696d66253b38028a/",
-    "https://hidden-purple-sponge.solana-mainnet.quiknode.pro/b2c98d2a6bcce7004f7c48e047b42f97c8e61a69/",
-    "https://little-nameless-market.solana-mainnet.quiknode.pro/f32b801f07671c87541eb4867a0c4a3d2ed26bb8/",
-    "https://bitter-evocative-glitter.solana-mainnet.quiknode.pro/aadeca4760637868fbcdf730332c5d848fd99b05/",
-    "https://lingering-winter-vineyard.solana-mainnet.quiknode.pro/cac2c64de80fb7bd7895357dbd96a436320d0441/",
-    "https://sparkling-wispy-dust.solana-mainnet.quiknode.pro/555ff48e42a059a53cc40fe214985817aa037436/",
-    "https://small-delicate-ensemble.solana-mainnet.quiknode.pro/4470569f19498f848dca510b6757b179ba1cdb16/"
+    "https://mainnet.helius-rpc.com/?api-key=dedb8e41-faf1-4d98-b9b5-fb82c4b59076",
+    "https://mainnet.helius-rpc.com/?api-key=0a216b11-b590-49c0-b48b-53e7d5f55c39",
+    "https://mainnet.helius-rpc.com/?api-key=5899ce49-071c-4a22-a6e0-c0e9217d5a5a",
+    "https://mainnet.helius-rpc.com/?api-key=a5b537c9-82f1-4224-8a8c-4e9185084352",
+    "https://mainnet.helius-rpc.com/?api-key=8336ffaf-11a2-4191-a2aa-cf929c0124fa"
+]
+
+export const devnetconnections = [
+    "https://devnet.helius-rpc.com/?api-key=e54baa62-eb3c-4b96-9d5f-c52ccb42c685",
+    "https://devnet.helius-rpc.com/?api-key=cb256a6b-58b5-40eb-81c9-c962f30738dc"
 ]
 
 export const randomConnection = () => {
-    return new Connection(connections[Math.floor(Math.random() * connections.length)], { commitment: "confirmed", confirmTransactionInitialTimeout: 60000 });
+    let connect = devnetconnections[Math.floor(Math.random() * devnetconnections.length)]
+    return {
+        connection: new Connection(connect, { commitment: "confirmed", confirmTransactionInitialTimeout: 60000 }),
+        url: connect
+    }
 }
 
 export const createConnection = (conn: string) => {
@@ -159,3 +164,6 @@ export const toast = {
         showToast.dismiss()
     }
 };
+
+export const sendV0SolanaTransaction = async (wallet: WalletContextState, connection: Connection, instructions: TransactionInstruction[], lastAttempt?: number) => {
+}

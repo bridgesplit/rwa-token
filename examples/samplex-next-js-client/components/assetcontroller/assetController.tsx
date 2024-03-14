@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { Modal } from './modal';
 
 /* SDK Imports */
-import { RwaClient } from '../../../../clients/rwa-token-sdk/src/classes'
-import { SetupAssetControllerArgs } from '../../../../clients/rwa-token-sdk/src/asset_controller/instructions'
-import { sendAndConfirmTransaction } from '@solana/web3.js';
+import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from '../../src/asset_controller'
+import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { useRwaClient } from '@/hooks/useRwaClient';
+import { Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+
 interface ModalProps {
     closeModal: () => void;
     handleSubmit: (inputValues: Record<string, string>) => void;
@@ -14,6 +16,11 @@ interface ModalProps {
     } | null;
 }
 export const AssetController = () => {
+    // const wallet = useAnchorWallet();
+    // const { rwaClient, status } = useRwaClient();
+    // if (!rwaClient || !wallet) {
+    //     return null;
+    // }
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<ModalProps["modalContent"]>(null);
     // let rwaClient: rwaClient = new RwaClient()
@@ -33,16 +40,6 @@ export const AssetController = () => {
     // Function to handle form submission
     const handleSubmit = async (inputValues: any) => {
         console.log('Submitting with input:', inputValues);
-
-        //run function
-
-        // const txnId = await sendAndConfirmTransaction(
-        //     rwaClient.provider.connection,
-        //     new Transaction().add(...fn.ixs),
-        //     [fn.payerKp, ...fn.signers],
-        // );
-        // mint = setupIx.signers[0].publicKey.toString();
-
         closeModal();
     };
 
@@ -57,39 +54,60 @@ export const AssetController = () => {
         },
         {
             message: 'Issue Tokens',
-            args: [{ name: 'Recipient' }, { name: 'Amount' }],
+            args: createArgs<IssueTokenArgs>({
+                amount: 0,
+                authority: '',
+                owner: '',
+                assetMint: '',
+                payer: ''
+            }),
         },
         {
             message: 'Void Tokens',
-            args: [{ name: 'Token ID' }],
+            args: createArgs<VoidTokensArgs>({
+                amount: 0,
+                owner: '',
+                assetMint: '',
+                payer: ''
+            }),
         },
         {
             message: 'Transfer Token',
-            args: [{ name: 'Token ID' }, { name: 'Recipient' }],
+            args: createArgs<TransferTokensArgs>({
+                from: '',
+                to: '',
+                amount: 0,
+                authority: '',
+                decimals: 0,
+                assetMint: '',
+                payer: ''
+            }),
         },
     ];
 
-    return (<div className="container mx-auto mt-10 text-center text-black border border-black">
-        <div className="flex justify-center items-center">
-            <div className="w-[80%] h-[200px] flex items-center justify-between bg-red-100">
-                {actions.map((action, index) => (
-                    <button
-                        key={index}
-                        className="btn"
-                        onClick={() => handleOpenModal(action)}
-                    >
-                        {action.message}
-                    </button>
-                ))}
+    return (
+
+        <div className="container mx-auto mt-10 text-center text-black border border-black">
+            <div className="flex justify-center items-center">
+                <div className="w-[80%] h-[200px] flex items-center justify-between bg-red-100">
+                    {actions.map((action, index) => (
+                        <button
+                            key={index}
+                            className="btn"
+                            onClick={() => handleOpenModal(action)}
+                        >
+                            {action.message}
+                        </button>
+                    ))}
+                </div>
             </div>
+            {showModal && (
+                <Modal
+                    closeModal={closeModal}
+                    handleSubmit={handleSubmit}
+                    modalContent={modalContent}
+                />
+            )}
         </div>
-        {showModal && (
-            <Modal
-                closeModal={closeModal}
-                handleSubmit={handleSubmit}
-                modalContent={modalContent}
-            />
-        )}
-    </div>
     );
 };
