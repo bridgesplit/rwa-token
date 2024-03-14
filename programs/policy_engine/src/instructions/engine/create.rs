@@ -23,6 +23,10 @@ pub struct CreatePolicyEngine<'info> {
     pub system_program: Program<'info, System>,
 }
 
+/// Creates a new policy engine with a specific authority and delegate.
+/// Authority is responsible for the policy engine.
+/// Delegate is an optional public key responsible for the policy engine.
+/// Returns a `Result` indicating success or failure.
 pub fn handler(
     ctx: Context<CreatePolicyEngine>,
     authority: Pubkey,

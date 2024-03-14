@@ -22,6 +22,11 @@ pub struct CreateDataRegistry<'info> {
     pub system_program: Program<'info, System>,
 }
 
+/// Creates a new data registry with a specific authority and delegate.
+/// Authority is responsible for the data registry.
+/// Delegate is an optional public key responsible for the data registery.
+/// Part of the initalization of the RWA asset.
+/// Returns a `Result` indicating success or failure.
 pub fn handler(
     ctx: Context<CreateDataRegistry>,
     authority: Pubkey,

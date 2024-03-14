@@ -47,7 +47,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - run: cd clients/rwa-sdk && yarn install
+      - run: cd clients/rwa-token-sdk && yarn install
       - run: cd programs && cargo fmt -- --check
       - run: cd programs && cargo clippy -- -D warnings
       - run: cd programs && ./anchor build

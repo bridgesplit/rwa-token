@@ -20,6 +20,11 @@ pub struct CreateIdentityRegistry<'info> {
     pub system_program: Program<'info, System>,
 }
 
+/// Creates a new identity registry with a specific authority and delegate.
+/// Authority is responsible for the identity registry.
+/// Delegate is an optional public key responsible for the identity registry. 
+/// Part of the initalization of the RWA asset.
+/// Returns a `Result` indicating success or failure.
 pub fn handler(
     ctx: Context<CreateIdentityRegistry>,
     authority: Pubkey,

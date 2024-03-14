@@ -30,6 +30,8 @@ pub struct CreateDataAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
+
+/// Initializes a data registry account in the data registry.
 pub fn handler(ctx: Context<CreateDataAccount>, args: CreateDataAccountArgs) -> Result<()> {
     ctx.accounts.data_account.new(
         ctx.accounts.data_registry.key(),

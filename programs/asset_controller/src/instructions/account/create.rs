@@ -40,6 +40,9 @@ pub struct CreateTokenAccount<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
+/// Creates a new token account associated with a specific RWA asset mint.
+/// Part of the initalization of the RWA asset.
+/// Returns a `Result` indicating success or failure.
 pub fn handler(ctx: Context<CreateTokenAccount>) -> Result<()> {
     ctx.accounts
         .tracker_account

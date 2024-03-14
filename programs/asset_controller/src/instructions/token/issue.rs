@@ -27,6 +27,10 @@ pub struct IssueTokens<'info> {
     pub token_program: Program<'info, Token2022>,
 }
 
+/// This handler this function orchestrates the minting of tokens
+/// by setting up the required accounts, calling the mint instruction through CPI,
+/// and handling any errors that may occur during the process.
+/// Effectivley 'issuing' shares of RWA asset.
 pub fn handler(ctx: Context<IssueTokens>, args: IssueTokensArgs) -> Result<()> {
     let accounts = MintTo {
         mint: ctx.accounts.asset_mint.to_account_info(),
