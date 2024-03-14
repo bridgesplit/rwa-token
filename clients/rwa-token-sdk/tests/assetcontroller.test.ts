@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
-import {BN, Wallet} from '@coral-xyz/anchor';
+import { BN, Wallet } from '@coral-xyz/anchor';
 import {
 	type AttachPolicyArgs,
 	type CreateDataAccountArgs,
@@ -13,16 +13,16 @@ import {
 	type UpdateDataAccountArgs,
 	type VoidTokensArgs,
 } from '../src';
-import {setupTests} from './setup';
+import { setupTests } from './setup';
 import {
 	type ConfirmOptions,
 	Connection,
 	Transaction,
 	sendAndConfirmTransaction,
 } from '@solana/web3.js';
-import {expect, test, describe} from 'vitest';
-import {type Config} from '../src/classes/types';
-import {RwaClient} from '../src/classes';
+import { expect, test, describe } from 'vitest';
+import { type Config } from '../src/classes/types';
+import { RwaClient } from '../src/classes';
 
 describe('e2e class tests', () => {
 	let rwaClient: RwaClient;
@@ -81,7 +81,7 @@ describe('e2e class tests', () => {
 			symbol: 'TFT',
 		};
 
-		const setupIx = await rwaClient.assetController.setUpNewRegistry(
+		const setupIx = await rwaClient.assetController.setupNewRegistry(
 			setupAssetControllerArgs,
 		);
 		const txnId = await sendAndConfirmTransaction(
@@ -113,7 +113,7 @@ describe('e2e class tests', () => {
 
 	test('setup data account through class', async t => {
 		const createDataAccountArgs: CreateDataAccountArgs = {
-			type: {legal: {}},
+			type: { legal: {} },
 			name: 'Test Data Account',
 			uri: 'https://test.com',
 			payer: setup.payer.toString(),
@@ -143,7 +143,7 @@ describe('e2e class tests', () => {
 			payer: setup.payer.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				identityApproval: {},
@@ -172,7 +172,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				transactionAmountLimit: {
@@ -202,7 +202,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				transactionAmountVelocity: {
@@ -233,7 +233,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: {or: {}},
+				comparisionType: { or: {} },
 			},
 			policy: {
 				transactionCountVelocity: {
@@ -331,14 +331,14 @@ describe('e2e class tests', () => {
 			dataAccount,
 			name: 'Example Token Updatse',
 			uri: 'newUri',
-			type: {tax: {}},
+			type: { tax: {} },
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 		};
 		const updateDataIx
-      = await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
+			= await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(updateDataIx),

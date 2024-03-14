@@ -74,8 +74,8 @@ export class AssetController {
 	}
 
 	/**
-   * Simulates a fake transfer based on user account parameters.
-   * @returns A Promise that resolves to a boolean indicating the success of the simulation.
+   * Executes a token transfer.
+   * @returns A promise that resolves to transaction instruction.
    */
 	async transfer(
 		transferArgs: TransferTokensArgs,
