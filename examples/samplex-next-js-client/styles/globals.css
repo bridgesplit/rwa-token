@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 255, 255, 255;
+  --background-mid-rgb: 253, 250, 246;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-mid-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      rgb(var(--background-start-rgb)),
+      rgb(var(--background-mid-rgb)),
+      rgb(var(--background-end-rgb))
+    );
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.nav-button {
+  padding: 0 16px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  background-color: #4a90e2; /* Blue background color */
+  color: #fff; /* White text color */
+  font-weight: 600; /* Semi-bold font */
+  padding: 0.5rem 1rem; /* Padding */
+  border: 2px solid #4a90e2; /* Blue border */
+  border-radius: 0.25rem; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow */
+  cursor: pointer; /* Cursor style */
+  transition: background-color 0.3s, border-color 0.3s; /* Smooth transitions */
+  outline: none; /* Remove outline */
+}
+
+.btn:hover {
+  background-color: #0077cc; /* Darker blue on hover */
+  border-color: #0077cc; /* Darker blue border on hover */
+}
+
+.btn:focus {
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.5); /* Blue ring when focused */
+}
