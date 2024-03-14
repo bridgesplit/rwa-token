@@ -1,5 +1,5 @@
-import {type AnchorProvider} from '@coral-xyz/anchor';
-import {type AssetControllerAccount, type TrackerAccount} from './types';
+import { type AnchorProvider } from '@coral-xyz/anchor';
+import { type AssetControllerAccount, type TrackerAccount } from './types';
 import {
 	getAssetControllerPda,
 	getAssetControllerProgram,

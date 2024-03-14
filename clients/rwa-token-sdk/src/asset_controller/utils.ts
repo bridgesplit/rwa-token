@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
-import { type AssetController } from "../programs/types";
+import { type AssetControllerIdlType } from "../programs/types";
 import { type Idl, Program, type Provider } from "@coral-xyz/anchor";
 import { AssetControllerIdl } from "../programs/idls";
 import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
@@ -18,7 +18,7 @@ export const getAssetControllerProgram = (provider: Provider) =>
     AssetControllerIdl as Idl,
     assetControllerProgramId,
     provider
-  ) as unknown as Program<AssetController>;
+  ) as unknown as Program<AssetControllerIdlType>;
 
 /**
  * Retrieves the asset controller's public key for a specific asset mint.
