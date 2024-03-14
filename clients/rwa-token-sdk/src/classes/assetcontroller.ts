@@ -1,4 +1,4 @@
-import {type PublicKey, type TransactionInstruction} from '@solana/web3.js';
+import { type PublicKey, type TransactionInstruction } from '@solana/web3.js';
 import {
 	type IssueTokenArgs,
 	type SetupAssetControllerArgs,
@@ -12,8 +12,8 @@ import {
 	getTrackerAccountPda,
 	getExtraMetasListPda,
 } from '../asset_controller';
-import {type IxReturn} from '../utils';
-import {type RwaClient} from './rwa';
+import { type IxReturn } from '../utils';
+import { type RwaClient } from './rwa';
 
 /**
  * Represents the client for Asset Controller for an RWA.
@@ -32,7 +32,7 @@ export class AssetController {
    * @param - {@link SetupAssetControllerArgs}
    * @returns A Promise that resolves to the instructions to create an asset controller.
    */
-	async setUpNewRegistry(
+	async setupNewRegistry(
 		createAssetControllerArgs: SetupAssetControllerArgs,
 	): Promise<IxReturn> {
 		const setupControllerIx = await getSetupAssetControllerIxs(
