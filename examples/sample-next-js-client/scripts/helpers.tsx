@@ -183,7 +183,9 @@ export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: 
         signedTx.sign([...signers])
 
     }
-    const signature = await connection.sendRawTransaction(signedTx?.serialize()!);
+
+    console.log(signedTx)
+    const signature = await connection.sendRawTransaction(signedTx?.serialize()!, { skipPreflight: true });
 
     // waits for transaction to confirm
     let confirmed = false

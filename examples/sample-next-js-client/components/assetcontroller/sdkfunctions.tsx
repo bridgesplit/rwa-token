@@ -1,8 +1,7 @@
-import { IssueTokenArgs, RwaClient, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from "@/src";
-import { FormInputValues } from "./types";
-import { Connection, Transaction, sendAndConfirmTransaction } from "@solana/web3.js";
-import { sendV0SolanaTransaction } from "@/scripts/helpers";
-import { AnchorWallet } from "@solana/wallet-adapter-react";
+
+import { sendV0SolanaTransaction } from "../../scripts/helpers";
+import { IssueTokenArgs, RwaClient, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from "../../src";
+import { FormInputValues } from "../types";
 
 
 export const handleMessage = (ix: { message: string; inputValues: FormInputValues }, rwaClient: RwaClient): void => {
@@ -52,7 +51,7 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
     // Function to handle IssueTokens instruction
     async function handleIssueTokens(inputValues: IssueTokenArgs): Promise<void> {
         const issueIx = await rwaClient?.assetController.issueTokenIxns(inputValues)
-
+        console.log('setting up user')
         try {
             const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, [issueIx], 0);
             if (confirmed) {
@@ -92,14 +91,3 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
         console.log('Instruction not found in handler')
     }
 };
-
-/*
-
-Test Asset owned by EYhnBtcxoZ4SX2u6n5Kyg1ZZvLnhhda3df11QC8X8xrk
-
-mint:  CENmm4nmpGD3jtdr7tLxKt71vjT3Nc1JTwW1VSQFMjUR
-VM1994 sdkfunctions.tsx:24 data registry:  BpFXNiCe3K79JaJxEtYuk4BbVG119ZroyABA4TbrP5dZ
-VM1994 sdkfunctions.tsx:25 asset controller:  y761kyXh36XCF1sb3RuaXgS19GaJp9eJSxTS7PVcwT2
-VM1994 sdkfunctions.tsx:26 policy engine:  DHCZJqv5tvTG7haxmwEsJuEnThF7xMYd75wDGtnzV1ac
-VM1994 sdkfunctions.tsx:27 identity registry:  HMMGVyZzUqPxnHLCUhp7Zbqq4xoRMLWQe7Fcac71ZVGS
-*/

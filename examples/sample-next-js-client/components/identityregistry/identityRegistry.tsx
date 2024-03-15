@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { Modal } from '../modal';
 
 /* SDK Imports */
-import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from '../../src/asset_controller'
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { ModalIx, ModalProps } from '../types';
 import { handleMessage } from './sdkfunctions';
 import { useRwaClient } from '../../hooks/useRwaClient';
-import { RwaClient } from '../../src';
+import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, RwaClient, SetupUserArgs } from '../../src';
 
-export const AssetController = () => {
+export const IdentityRegistry = () => {
     const wallet = useAnchorWallet();
     const { rwaClient, status } = useRwaClient();
     const [showModal, setShowModal] = useState(false);
@@ -40,46 +39,39 @@ export const AssetController = () => {
 
     const actions = [
         {
-            message: 'SetupAssetController',
-            args: createArgs<SetupAssetControllerArgs>({ authority: '', decimals: 2, payer: '', delegate: '', name: '', uri: '', symbol: '' }),
-        },
-        {
-            message: 'IssueTokens',
-            args: createArgs<IssueTokenArgs>({
-                amount: 0,
-                authority: '',
+            message: 'SetupUser',
+            args: createArgs<SetupUserArgs>({
+                payer: '',
                 owner: '',
                 assetMint: '',
-                payer: ''
+                level: 0
             }),
+
         },
         {
-            message: 'VoidTokens',
-            args: createArgs<VoidTokensArgs>({
-                amount: 0,
+            message: 'AddIdentityLevelTouser',
+            args: createArgs<AddLevelToIdentityAccountArgs>({
                 owner: '',
+                level: 0,
                 assetMint: '',
                 payer: ''
             }),
         },
         {
-            message: 'TransferToken',
-            args: createArgs<TransferTokensArgs>({
-                from: '',
-                to: '',
-                amount: 0,
-                authority: '',
-                decimals: 0,
+            message: 'RemoveLevelFromUserAccount',
+            args: createArgs<RemoveLevelFromIdentityAccount>({
+                owner: '',
+                level: 0,
                 assetMint: '',
                 payer: ''
             }),
-        },
+        }
     ];
 
     return (
 
         <div className="container mx-auto mt-10 text-center text-black border border-black">
-            <h1>Asset Controller</h1>
+            <h1>Identity Registry</h1>
             <div className="flex justify-center items-center">
                 <div className="w-[80%] h-[200px] flex items-center justify-between">
                     {actions.map((action, index) => (
