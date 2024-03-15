@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
-
-
-interface ModalProps {
-    closeModal: () => void;
-    handleSubmit: (inputValues: Record<string, string>) => void;
-    modalContent: {
-        message: string;
-        args: { name: string }[];
-    } | null;
-}
+import { FormInputValues, ModalProps } from './types';
 
 export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) => {
-    const [inputValues, setInputValues] = useState({});
+    // Initialize inputValues as an object with keys matching FormInputValues
+    if (!modalContent?.message) {
+        return null
+    }
+    const [inputValues, setInputValues] = useState<Record<string, string | number | undefined>>({});
 
     // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, argName: string) => {
@@ -43,7 +38,7 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
                 <p>{modalContent?.message}</p>
                 {renderInputs()}
                 <button
-                    onClick={() => handleSubmit(inputValues)}
+                    onClick={() => handleSubmit({ message: modalContent.message, inputValues: inputValues as FormInputValues })}
                     className="btn bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md mt-4"
                 >
                     Submit Transaction

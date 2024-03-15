@@ -6,24 +6,15 @@ import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidToken
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { useRwaClient } from '@/hooks/useRwaClient';
 import { Transaction, sendAndConfirmTransaction } from '@solana/web3.js';
+import { FormInputValues, ModalIx, ModalProps } from './types';
+import { handleMessage } from './sdkfunctions';
+import { RwaClient } from '@/src';
 
-interface ModalProps {
-    closeModal: () => void;
-    handleSubmit: (inputValues: Record<string, string>) => void;
-    modalContent: {
-        message: string;
-        args: { name: string }[];
-    } | null;
-}
 export const AssetController = () => {
-    // const wallet = useAnchorWallet();
-    // const { rwaClient, status } = useRwaClient();
-    // if (!rwaClient || !wallet) {
-    //     return null;
-    // }
+    const wallet = useAnchorWallet();
+    const { rwaClient, status } = useRwaClient();
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState<ModalProps["modalContent"]>(null);
-    // let rwaClient: rwaClient = new RwaClient()
 
     // Function to handle opening modal
     const handleOpenModal = (content: ModalProps["modalContent"]) => {
@@ -37,9 +28,9 @@ export const AssetController = () => {
         setModalContent(null);
     };
 
-    // Function to handle form submission
-    const handleSubmit = async (inputValues: any) => {
-        console.log('Submitting with input:', inputValues);
+
+    const handleSubmit = async (ix: ModalIx) => {
+        handleMessage(ix, rwaClient as RwaClient)
         closeModal();
     };
 
@@ -47,13 +38,14 @@ export const AssetController = () => {
         return Object.keys(obj).map(key => ({ name: key }));
     };
 
+
     const actions = [
         {
-            message: 'Setting up registry',
+            message: 'SetupAssetController',
             args: createArgs<SetupAssetControllerArgs>({ authority: '', decimals: 2, payer: '', delegate: '', name: '', uri: '', symbol: '' }),
         },
         {
-            message: 'Issue Tokens',
+            message: 'IssueTokens',
             args: createArgs<IssueTokenArgs>({
                 amount: 0,
                 authority: '',
@@ -63,7 +55,7 @@ export const AssetController = () => {
             }),
         },
         {
-            message: 'Void Tokens',
+            message: 'VoidTokens',
             args: createArgs<VoidTokensArgs>({
                 amount: 0,
                 owner: '',
@@ -72,7 +64,7 @@ export const AssetController = () => {
             }),
         },
         {
-            message: 'Transfer Token',
+            message: 'TransferToken',
             args: createArgs<TransferTokensArgs>({
                 from: '',
                 to: '',

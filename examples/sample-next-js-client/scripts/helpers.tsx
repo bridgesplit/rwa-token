@@ -1,11 +1,11 @@
 import { BlockheightBasedTransactionConfirmationStrategy, Connection, Keypair, LAMPORTS_PER_SOL, PublicKey, SendOptions, Signer, SystemProgram, Transaction, TransactionInstruction, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
-import { createAssociatedTokenAccountInstruction, createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "../node_modules/@solana/spl-token";
+import { createAssociatedTokenAccountInstruction, createTransferInstruction, getAssociatedTokenAddress, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import axios from "axios";
 import bs58 from "bs58";
 import { MouseEventHandler, useState } from "react";
 import crypto from 'crypto';
 import { ToastContent, ToastOptions, toast as showToast } from "react-toastify";
-import { WalletContextState } from "@solana/wallet-adapter-react";
+import { AnchorWallet, WalletContextState } from "@solana/wallet-adapter-react";
 
 export function shortenAddress(string: string | undefined) {
     if (string === undefined) {
@@ -165,5 +165,73 @@ export const toast = {
     }
 };
 
-export const sendV0SolanaTransaction = async (wallet: WalletContextState, connection: Connection, instructions: TransactionInstruction[], lastAttempt?: number) => {
+export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: Connection, instructions: TransactionInstruction[], lastAttempt?: number): Promise<boolean> => {
+    // starts at 0 to keep track and make sure it doesn't keep trying forever
+    let attempt = (lastAttempt ?? 0) + 1
+    const blockhashResponse = await connection.getLatestBlockhashAndContext('finalized');
+    const lastValidHeight = blockhashResponse.value.lastValidBlockHeight;
+
+    // creates transaction, requests wallet to sign, and sends transaction
+    const messageV0 = new TransactionMessage({
+        payerKey: wallet.publicKey!,
+        recentBlockhash: blockhashResponse.value.blockhash,
+        instructions: instructions
+    }).compileToV0Message();
+    const transaction = new VersionedTransaction(messageV0);
+    const signedTx = await wallet.signTransaction?.(transaction)
+    const signature = await connection.sendRawTransaction(signedTx?.serialize()!);
+
+    // waits for transaction to confirm
+    let confirmed = false
+    confirmed = await confirmSignatureStatus(signature, connection, lastValidHeight)
+
+    // handles dropped transactions, and will try up to 5 times
+    if (attempt <= 5) {
+        if (confirmed === false) {
+            console.log("Transaction failed, please try again!")
+            return await sendV0SolanaTransaction(wallet, connection, instructions, attempt)
+        } else {
+            return true
+        }
+    } else {
+        console.log("Transaction failed after 5 tries.")
+        return false
+    }
+}
+
+export const confirmSignatureStatus = async (signature: string, connection: Connection, lastValidHeight: number) => {
+    let hashExpired = false;
+    let txSuccess = false;
+    while (!hashExpired && !txSuccess) {
+        const { value: status } = await connection.getSignatureStatus(signature);
+
+        // Break loop if transaction has succeeded
+        if (status?.err === null && ((status.confirmationStatus === 'confirmed') || (status.confirmationStatus === 'finalized'))) {
+            txSuccess = true;
+            console.log(`Transaction Success. View on explorer: https://solscan.io/tx/${signature}`);
+            break;
+        }
+        hashExpired = await isBlockhashExpired(connection, lastValidHeight);
+
+        // Break loop if blockhash has expired
+        if (hashExpired) {
+            console.log(`Blockhash has expired.`);
+            return false
+        }
+
+        // Break loop if blockhash has expired
+        if (status?.err !== null && status?.err !== undefined) {
+            console.log(`Transaction failed. View on explorer: https://solscan.io/tx/${signature}`);
+            return false
+        }
+
+        // Check again after 2.5 sec
+        await wait(2500);
+    }
+    return txSuccess
+}
+
+export const isBlockhashExpired = async (connection: Connection, lastValidBlockHeight: number) => {
+    let currentBlockHeight = (await connection.getBlockHeight('finalized'));
+    return (currentBlockHeight > lastValidBlockHeight - 150); // If currentBlockHeight is greater than, blockhash has expired.
 }
