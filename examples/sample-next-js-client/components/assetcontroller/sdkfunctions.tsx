@@ -21,14 +21,9 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
         console.log('setting up controller')
 
         const setupIx = await rwaClient?.assetController.setupNewRegistry(inputValues)
-        // const txnId = await sendAndConfirmTransaction(
-        //     rwaClient.provider.connection,
-        //     new Transaction().add(...ix.ixs),
-        //     [ix.payerKp, ...ix.signers],
-        // );
-
+        console.log(setupIx.ixs, setupIx.signers)
         try {
-            const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, setupIx.ixs, 0);
+            const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, setupIx.ixs, 0, setupIx.signers);
             if (confirmed) {
                 console.log('Transaction confirmed:', confirmed);
 

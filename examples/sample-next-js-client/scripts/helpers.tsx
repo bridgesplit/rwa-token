@@ -165,7 +165,7 @@ export const toast = {
     }
 };
 
-export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: Connection, instructions: TransactionInstruction[], lastAttempt?: number): Promise<boolean> => {
+export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: Connection, instructions: TransactionInstruction[], lastAttempt?: number, signers?: Keypair[]): Promise<boolean> => {
     // starts at 0 to keep track and make sure it doesn't keep trying forever
     let attempt = (lastAttempt ?? 0) + 1
     const blockhashResponse = await connection.getLatestBlockhashAndContext('finalized');
@@ -179,6 +179,10 @@ export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: 
     }).compileToV0Message();
     const transaction = new VersionedTransaction(messageV0);
     const signedTx = await wallet.signTransaction?.(transaction)
+    if (signers) {
+        signedTx.sign([...signers])
+
+    }
     const signature = await connection.sendRawTransaction(signedTx?.serialize()!);
 
     // waits for transaction to confirm
