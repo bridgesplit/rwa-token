@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal } from './modal';
+import { Modal } from '../modal';
 
 /* SDK Imports */
 import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from '../../src/asset_controller'

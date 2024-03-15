@@ -1,16 +1,31 @@
 import React, { useState } from 'react';
-import { FormInputValues, ModalProps } from './types';
+import { FormInputValues, ModalProps } from './assetcontroller/types';
+import { toast } from 'react-toastify'
 
 export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) => {
-    // Initialize inputValues as an object with keys matching FormInputValues
+
     if (!modalContent?.message) {
-        return null
+        return null; // Don't render the modal if there's no content
     }
+
     const [inputValues, setInputValues] = useState<Record<string, string | number | undefined>>({});
 
     // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, argName: string) => {
         setInputValues({ ...inputValues, [argName]: e.target.value });
+    };
+
+    // Function to validate input values. This just makes sure user cant submit missing arguments for now.
+    const validateInputValues = (): boolean => {
+        // Iterate over modalContent.args and validate input values based on their types
+        for (const arg of modalContent.args) {
+            const inputValue = inputValues[arg.name];
+            if (typeof inputValue === 'undefined') {
+                toast.error('You have empty args.')
+                return false;
+            }
+        }
+        return true;
     };
 
     // Function to render input fields dynamically
@@ -28,6 +43,17 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
         ));
     };
 
+    // Function to handle form submission
+    const handleSubmitForm = () => {
+        if (validateInputValues()) {
+            // All input values are valid, proceed with form submission
+            handleSubmit({ message: modalContent.message, inputValues: inputValues as FormInputValues });
+        } else {
+            // Show error message or handle invalid input values
+            console.error('Invalid input values');
+        }
+    };
+
     return (
         <div className="fixed z-10 inset-0 flex items-center justify-center">
             <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
@@ -38,7 +64,7 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
                 <p>{modalContent?.message}</p>
                 {renderInputs()}
                 <button
-                    onClick={() => handleSubmit({ message: modalContent.message, inputValues: inputValues as FormInputValues })}
+                    onClick={handleSubmitForm}
                     className="btn bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md mt-4"
                 >
                     Submit Transaction
@@ -46,4 +72,4 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
             </div>
         </div>
     );
-};
+}
