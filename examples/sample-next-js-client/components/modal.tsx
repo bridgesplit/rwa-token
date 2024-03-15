@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FormInputValues, ModalProps } from './assetcontroller/types';
+import { FormInputValues, ModalProps } from './types';
 import { toast } from 'react-toastify'
 
 export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) => {

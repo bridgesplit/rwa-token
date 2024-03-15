@@ -1,10 +1,14 @@
-import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from "@/src/asset_controller";
+import { AddLevelToIdentityAccountArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
+
 
 export type FormInputValues =
     | SetupAssetControllerArgs
     | IssueTokenArgs
     | VoidTokensArgs
-    | TransferTokensArgs;
+    | TransferTokensArgs
+    | SetupUserArgs
+    | AddLevelToIdentityAccountArgs
+    | RemoveLevelFromIdentityAccount
 
 export interface ModalIx {
     message: string,
