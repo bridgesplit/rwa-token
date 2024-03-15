@@ -18,13 +18,13 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
     // Function to validate input values. This just makes sure user cant submit missing arguments for now.
     const validateInputValues = (): boolean => {
         // Iterate over modalContent.args and validate input values based on their types
-        for (const arg of modalContent.args) {
-            const inputValue = inputValues[arg.name];
-            if (typeof inputValue === 'undefined') {
-                toast.error('You have empty args.')
-                return false;
-            }
-        }
+        // for (const arg of modalContent.args) {
+        //     const inputValue = inputValues[arg.name];
+        //     if (typeof inputValue === 'undefined' && inputValue !== 'delegate') {
+        //         toast.error('You have empty args.')
+        //         return false;
+        //     }
+        // }
         return true;
     };
 

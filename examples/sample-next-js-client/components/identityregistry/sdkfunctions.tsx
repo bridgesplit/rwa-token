@@ -15,9 +15,7 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
     };
 
     async function handleSetupUser(inputValues: SetupUserArgs): Promise<void> {
-        // OWNER is the identity registry
         const setupIx = await rwaClient?.identityRegistry.setupUserIxns(inputValues)
-
         try {
             const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, setupIx.ixs, 0);
             if (confirmed) {
@@ -27,13 +25,31 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
             console.log(err)
 
         }
-
     }
     async function handleAddIdentityLevelToUserAccount(inputValues: AddLevelToIdentityAccountArgs): Promise<void> {
+        const addLevelIx = await rwaClient?.identityRegistry.addIdentityLevelToUserAccount(inputValues)
+        try {
+            const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, [addLevelIx], 0);
+            if (confirmed) {
+                console.log('Transaction confirmed:', confirmed);
+            }
+        } catch (err) {
+            console.log(err)
+
+        }
 
     }
     async function handleRemoveLevelFromUserAccount(inputValues: RemoveLevelFromIdentityAccount): Promise<void> {
+        const removeLevelIx = await rwaClient?.identityRegistry.removeIdentityLevelFromUserAccount(inputValues)
+        try {
+            const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, [removeLevelIx], 0);
+            if (confirmed) {
+                console.log('Transaction confirmed:', confirmed);
+            }
+        } catch (err) {
+            console.log(err)
 
+        }
     }
 
 
