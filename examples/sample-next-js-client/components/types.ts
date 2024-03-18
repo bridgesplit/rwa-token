@@ -1,4 +1,4 @@
-import { AddLevelToIdentityAccountArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
+import { AddLevelToIdentityAccountArgs, AttachPolicyArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
 
 
 export type FormInputValues =
@@ -8,7 +8,9 @@ export type FormInputValues =
     | TransferTokensArgs
     | SetupUserArgs
     | AddLevelToIdentityAccountArgs
+    | AttachPolicyArgs
     | RemoveLevelFromIdentityAccount
+    | Record<string, any>
 
 export interface ModalIx {
     message: string,
@@ -23,6 +25,17 @@ export interface ModalProps {
     } | null;
 }
 
+
+interface ModalContent<T> {
+    message: string;
+    args: T;
+}
+
+export interface ModalPropsTyped<T extends FormInputValues> {
+    closeModal: () => void;
+    handleSubmit: (payload: { message: string; inputValues: T }) => void;
+    modalContent: ModalContent<T> | null;
+}
 /*
 
 Test Asset WITH DELEGATE owned by EYhnBtcxoZ4SX2u6n5Kyg1ZZvLnhhda3df11QC8X8xrk
