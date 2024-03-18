@@ -5,6 +5,7 @@ import { IdentityRegistry } from "../components/identityregistry/identityRegistr
 import { AssetController } from "../components/assetcontroller/assetController";
 import SetupProviderComponent from "../components/setup";
 import { PolicyEngineTyped } from "../components/policyengine/policyEngineTyped";
+import { DataRegistry } from "../components/dataregistry/dataregistry";
 
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
         <AssetController />
         <PolicyEngineTyped />
         <IdentityRegistry />
+        <DataRegistry />
       </div>
     </>
   )

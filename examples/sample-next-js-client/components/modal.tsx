@@ -8,7 +8,7 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
         return null; // Don't render the modal if there's no content
     }
 
-    const [inputValues, setInputValues] = useState<Record<string, string | number | undefined>>({});
+    const [inputValues, setInputValues] = useState<Record<string, string | number | undefined | Record<string, unknown>>>({});
 
     // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, argName: string) => {
@@ -33,20 +33,24 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
         return modalContent?.args.map((arg) => (
             <div key={arg.name} className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">{arg.name}</label>
-                <input
-                    type="text"
-                    onChange={(e) => handleInputChange(e, arg.name)}
-                    className="border border-gray-300 p-2 w-full rounded-md"
-                    placeholder={`Enter ${arg.name}...`}
-                />
+                {arg.name !== 'type' ? (
+                    <input
+                        type="text"
+                        onChange={(e) => handleInputChange(e, arg.name)}
+                        className="border border-gray-300 p-2 w-full rounded-md"
+                        placeholder={`Enter ${arg.name}...`}
+                    />
+                ) : (
+                    <span>Disbaled type inputs.</span>
+                )}
             </div>
         ));
     };
-
     // Function to handle form submission
     const handleSubmitForm = () => {
         if (validateInputValues()) {
             // All input values are valid, proceed with form submission
+
             handleSubmit({ message: modalContent.message, inputValues: inputValues as FormInputValues });
         } else {
             // Show error message or handle invalid input values
