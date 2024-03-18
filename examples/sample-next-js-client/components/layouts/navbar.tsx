@@ -9,27 +9,23 @@ export const Navbar = () => {
 
     const links = [
         {
-            name: "Link 1",
-            href: "/"
+            name: "Documentation",
+            href: "https://app.gitbook.com/o/tE2uL5NkXWwhcwPPuc2K/s/UF1556iDGKFaYa0UQN1W/"
         },
         {
-            name: "Link 2",
-            href: "/"
+            name: "RWA Notion",
+            href: "https://www.notion.so/bridgesplit/RWA-Tokenization-Hub-d826a2de40844475ba4b45860321293f"
         },
         {
-            name: "Link 3",
-            href: "/"
-        },
-        {
-            name: "Link 4",
-            href: "/"
-        },
+            name: "Github",
+            href: "https://github.com/bridgesplit/rwa-token"
+        }
     ]
 
     return (
         <div className="w-full h-[70px] border-b border-[#1D1E20] py-4 px-7 flex justify-between items-center">
             <div className="flex gap-2 items-center">
-                <h1 className="text-black font-semibold text-xl">Bridgesplit RWA Testing Dashboard</h1>
+                <h1 className="text-black font-semibold text-xl">Bridgesplit Medici Testing Dashboard</h1>
             </div>
             <div className="text-black flex gap-3 items-center">
                 {links.map((o) => {

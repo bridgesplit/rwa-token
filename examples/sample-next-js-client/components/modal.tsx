@@ -8,13 +8,16 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
         return null; // Don't render the modal if there's no content
     }
 
-    const [inputValues, setInputValues] = useState<Record<string, string | number | undefined>>({});
+    const [inputValues, setInputValues] = useState<Record<string, any>>({});
 
     // Function to handle input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, argName: string) => {
         setInputValues({ ...inputValues, [argName]: e.target.value });
     };
 
+    const handleDropDownChange = (e: React.ChangeEvent<HTMLSelectElement>, argName: string) => {
+        setInputValues({ ...inputValues, [argName]: e.target.value });
+    };
     // Function to validate input values. This just makes sure user cant submit missing arguments for now.
     const validateInputValues = (): boolean => {
         // Iterate over modalContent.args and validate input values based on their types
@@ -33,16 +36,29 @@ export const Modal = ({ closeModal, handleSubmit, modalContent }: ModalProps) =>
         return modalContent?.args.map((arg) => (
             <div key={arg.name} className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">{arg.name}</label>
-                <input
-                    type="text"
-                    onChange={(e) => handleInputChange(e, arg.name)}
-                    className="border border-gray-300 p-2 w-full rounded-md"
-                    placeholder={`Enter ${arg.name}...`}
-                />
+                {arg.name === 'policy' || arg.name === 'identityFilter' ? (
+                    <select
+                        onChange={(e) => handleDropDownChange(e, arg.name)}
+                        className="border border-gray-300 p-2 w-full rounded-md"
+                    >
+                        {/* Render options for the dropdown */}
+                        {/* For example, you can render predefined options or dynamically generate options */}
+                        <option value="">Identity Approval</option>
+                        <option value="option1">Option 1</option>
+                        <option value="option2">Option 2</option>
+                        {/* Add more options as needed */}
+                    </select>
+                ) : (
+                    <input
+                        type="text"
+                        onChange={(e) => handleInputChange(e, arg.name)}
+                        className="border border-gray-300 p-2 w-full rounded-md"
+                        placeholder={`Enter ${arg.name}...`}
+                    />
+                )}
             </div>
         ));
     };
-
     // Function to handle form submission
     const handleSubmitForm = () => {
         if (validateInputValues()) {
