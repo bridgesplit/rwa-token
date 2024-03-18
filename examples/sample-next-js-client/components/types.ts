@@ -48,7 +48,7 @@ identity registry:  HMMGVyZzUqPxnHLCUhp7Zbqq4xoRMLWQe7Fcac71ZVGS
 */
 
 /*
-Test Asset WITHOUT DELEGATE by D1NBHwWhRMfqTh6RLo9v3mor4sPyHrkuAZTvbRS9UUGQ
+Test Asset WITHOUT DELEGATE by D1NBHwWhRMfqTh6RLo9v3mor4sPyHrkuAZTvbRS9UUGQ, has level 2 identity policy
 
 mint:  7PjaBJ2ozdQZitcNefJXmkKUED3akfqhVLqQ3x3YQmjo
 data registry:  2itNTmMoet1Uzv6tPfCPeJB1Sb4X44jyz5FdAkUnEAGX

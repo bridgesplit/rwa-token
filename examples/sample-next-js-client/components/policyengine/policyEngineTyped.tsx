@@ -42,8 +42,7 @@ export const PolicyEngineTyped = () => {
 
     // Function to handle form submission
     const handleSubmit = <T,>(ix: { message: string; inputValues: T }) => {
-        // handleMessage(ix, rwaClient as RwaClient);
-        console.log(ix)
+        handleMessage<T>(ix, rwaClient as RwaClient);
         closeModal();
     };
 

@@ -32,7 +32,9 @@ export const ModalTyped = <T extends FormInputValues>({ closeModal, handleSubmit
             <div key={parentKey + key} className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2">{parentKey + key}</label>
                 {
-                    key === 'policy' ? <>{modalContent.message}</> :
+                    key === 'policy' ?
+                        modalContent.message
+                        :
                         typeof value === 'object' && value !== null ? (
                             Object.keys(value).length === 0 ? (
                                 <input

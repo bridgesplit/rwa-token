@@ -6,11 +6,15 @@ import { AttachPolicyArgs, RwaClient } from "../../src";
 
 
 
-export const handleMessage = (ix: { message: string; inputValues: FormInputValues }, rwaClient: RwaClient): void => {
+export const handleMessage = <T,>(ix: { message: string; inputValues: T }, rwaClient: RwaClient): void => {
 
     //TODO: Fix any typing
     const instructionHandlers: Record<string, (inputValues: any) => void> = {
-        'AttachPolicy': handleAttachPolicy,
+        'IdentityApprovalPolicy': handleAttachPolicy,
+        'TransactionCountVelocity': handleAttachPolicy,
+        'TransactionAmountVelocity': handleAttachPolicy,
+        'TransactionAmountLimitPolicy': handleAttachPolicy,
+
     };
 
     async function handleAttachPolicy(inputValues: AttachPolicyArgs): Promise<void> {
