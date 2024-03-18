@@ -1,10 +1,5 @@
-import React, { useState } from 'react';
-import { useAnchorWallet } from '@solana/wallet-adapter-react';
-import axios from 'axios';
-import { randomConnection } from '@/scripts/helpers';
-import { RwaClient } from '@/src/classes/rwa';
-import { Wallet } from '@coral-xyz/anchor';
-import { useRwaClient } from '@/hooks/useRwaClient';
+import React from 'react';
+import { useRwaClient } from '../hooks/useRwaClient';
 
 
 export const SetupProviderComponent = () => {

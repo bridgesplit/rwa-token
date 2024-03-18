@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { RwaClient } from '../src/classes' // Import your RwaClient library
-import { randomConnection } from '@/scripts/helpers';
 import { Wallet } from '@coral-xyz/anchor';
+import { randomConnection } from '../scripts/helpers';
 
 export const useRwaClient = () => {
     const [status, setStatus] = useState('');

@@ -4,6 +4,7 @@ import Head from "next/head";
 import { IdentityRegistry } from "../components/identityregistry/identityRegistry";
 import { AssetController } from "../components/assetcontroller/assetController";
 import SetupProviderComponent from "../components/setup";
+import { PolicyEngineTyped } from "../components/policyengine/policyEngineTyped";
 
 
 export default function Home() {
@@ -45,6 +46,7 @@ export default function Home() {
         <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
         <SetupProviderComponent />
         <AssetController />
+        <PolicyEngineTyped />
         <IdentityRegistry />
       </div>
     </>

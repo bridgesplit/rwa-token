@@ -1,4 +1,4 @@
-import { AddLevelToIdentityAccountArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
+import { AddLevelToIdentityAccountArgs, AttachPolicyArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
 
 
 export type FormInputValues =
@@ -8,7 +8,9 @@ export type FormInputValues =
     | TransferTokensArgs
     | SetupUserArgs
     | AddLevelToIdentityAccountArgs
+    | AttachPolicyArgs
     | RemoveLevelFromIdentityAccount
+    | Record<string, any>
 
 export interface ModalIx {
     message: string,
@@ -23,6 +25,17 @@ export interface ModalProps {
     } | null;
 }
 
+
+interface ModalContent<T> {
+    message: string;
+    args: T;
+}
+
+export interface ModalPropsTyped<T extends FormInputValues> {
+    closeModal: () => void;
+    handleSubmit: (payload: { message: string; inputValues: T }) => void;
+    modalContent: ModalContent<T> | null;
+}
 /*
 
 Test Asset WITH DELEGATE owned by EYhnBtcxoZ4SX2u6n5Kyg1ZZvLnhhda3df11QC8X8xrk
@@ -35,7 +48,7 @@ identity registry:  HMMGVyZzUqPxnHLCUhp7Zbqq4xoRMLWQe7Fcac71ZVGS
 */
 
 /*
-Test Asset WITHOUT DELEGATE by D1NBHwWhRMfqTh6RLo9v3mor4sPyHrkuAZTvbRS9UUGQ
+Test Asset WITHOUT DELEGATE by D1NBHwWhRMfqTh6RLo9v3mor4sPyHrkuAZTvbRS9UUGQ, has level 2 identity policy
 
 mint:  7PjaBJ2ozdQZitcNefJXmkKUED3akfqhVLqQ3x3YQmjo
 data registry:  2itNTmMoet1Uzv6tPfCPeJB1Sb4X44jyz5FdAkUnEAGX
