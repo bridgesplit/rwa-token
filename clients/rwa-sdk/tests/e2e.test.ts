@@ -1,13 +1,14 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
+
 import {BN} from '@coral-xyz/anchor';
 import {
 	getAssetControllerPda,
-	getAttachPolicyAccountIx, getCreateDataAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupIssueTokensIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
+	getAttachToPolicyAccountIx,
+	getCreateDataAccountIx, getCreatePolicAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getIssueTokensIx, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
 } from '../src';
 import {setupTests} from './setup';
-import {Transaction, sendAndConfirmTransaction} from '@solana/web3.js';
+import {PublicKey, Transaction, sendAndConfirmTransaction} from '@solana/web3.js';
 import {expect, test, describe} from 'vitest';
+import {createAssociatedTokenAccountInstruction, getAssociatedTokenAddressSync, TOKEN_2022_PROGRAM_ID} from '@solana/spl-token';
 
 describe('e2e tests', () => {
 	let mint: string;
@@ -22,9 +23,9 @@ describe('e2e tests', () => {
 		await setup.provider.connection.confirmTransaction(
 			await setup.provider.connection.requestAirdrop(setup.authorityKp.publicKey, 1000000000),
 		);
-		await setup.provider.connection.confirmTransaction(
-			await setup.provider.connection.requestAirdrop(setup.delegateKp.publicKey, 1000000000),
-		);
+		// Await setup.provider.connection.confirmTransaction(
+		// 	await setup.provider.connection.requestAirdrop(setup.user2, 1000000000),
+		// );
 	});
 
 	test('setup registries', async () => {
@@ -62,8 +63,8 @@ describe('e2e tests', () => {
 		console.log('data account: ', createDataAccountIx.signers[0].publicKey.toString());
 	});
 
-	test('attach identity approval policy', async t => {
-		const attachPolicy = await getAttachPolicyAccountIx({
+	test('create policy account and attach identity approval policy', async t => {
+		const attachPolicy = await getCreatePolicAccountIx({
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
@@ -72,18 +73,16 @@ describe('e2e tests', () => {
 				identityLevels: [1],
 				comparisionType: {or: {}},
 			},
-			policy: {
+			policyType: {
 				identityApproval: {},
 			},
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
-		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
-		console.log('identity approval policy: ', attachPolicy.signers[0].publicKey.toString());
 	});
 
 	test('attach transaction amount limit policy', async t => {
-		const attachPolicy = await getAttachPolicyAccountIx({
+		const attachPolicy = await getAttachToPolicyAccountIx({
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
@@ -92,20 +91,18 @@ describe('e2e tests', () => {
 				identityLevels: [1],
 				comparisionType: {or: {}},
 			},
-			policy: {
+			policyType: {
 				transactionAmountLimit: {
 					limit: new BN(100),
 				},
 			},
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
-		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
-		console.log('transaction amount limit policy: ', attachPolicy.signers[0].publicKey.toString());
 	});
 
 	test('attach transaction amount velocity policy', async t => {
-		const attachPolicy = await getAttachPolicyAccountIx({
+		const attachPolicy = await getAttachToPolicyAccountIx({
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
@@ -114,7 +111,7 @@ describe('e2e tests', () => {
 				identityLevels: [1],
 				comparisionType: {or: {}},
 			},
-			policy: {
+			policyType: {
 				transactionAmountVelocity: {
 					limit: new BN(100000),
 					timeframe: new BN(60),
@@ -122,13 +119,11 @@ describe('e2e tests', () => {
 			},
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
-		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
-		console.log('transaction amount velocity policy: ', attachPolicy.signers[0].publicKey.toString());
 	});
 
 	test('attach transaction count velocity policy', async t => {
-		const attachPolicy = await getAttachPolicyAccountIx({
+		const attachPolicy = await getAttachToPolicyAccountIx({
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
@@ -137,7 +132,7 @@ describe('e2e tests', () => {
 				identityLevels: [1],
 				comparisionType: {or: {}},
 			},
-			policy: {
+			policyType: {
 				transactionCountVelocity: {
 					limit: new BN(100),
 					timeframe: new BN(60),
@@ -145,9 +140,7 @@ describe('e2e tests', () => {
 			},
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
-		remainingAccounts.push(attachPolicy.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
-		console.log('transaction count velocity policy: ', attachPolicy.signers[0].publicKey.toString());
 	});
 
 	test('setup user', async t => {
@@ -167,29 +160,34 @@ describe('e2e tests', () => {
 	});
 
 	test('issue tokens', async t => {
-		const issueTokens = await getSetupIssueTokensIxs({
+		const issueTokens = await getIssueTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			amount: 1000000,
 		});
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens.ixs), [setup.payerKp, ...issueTokens.signers]);
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 	});
 
 	test('transfer tokens', async t => {
+		const setupTa = createAssociatedTokenAccountInstruction(setup.payer, getAssociatedTokenAddressSync(new PublicKey(mint), setup.user2, undefined, TOKEN_2022_PROGRAM_ID), setup.user2, new PublicKey(mint), TOKEN_2022_PROGRAM_ID);
 		const transferTokensIx = await getTransferTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.authority.toString(),
-			to: setup.authority.toString(),
+			to: setup.user2.toString(),
 			assetMint: mint,
-			amount: 100,
+			amount: 1,
 			remainingAccounts,
 			decimals,
 		});
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(transferTokensIx), [setup.payerKp]);
+		const txnId = await sendAndConfirmTransaction(
+			setup.provider.connection,
+			new Transaction().add(setupTa).add(transferTokensIx),
+			[setup.payerKp],
+		);
 		expect(txnId).toBeTruthy();
 	});
 });

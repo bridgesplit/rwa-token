@@ -258,12 +258,22 @@ export type AssetController = {
           "isSigner": false
         },
         {
+          "name": "identityRegistryAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "identityAccount",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "trackerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "policyAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -422,26 +432,21 @@ export type AssetController = {
     },
     {
       "code": 6004,
-      "name": "PolicyAccountsMissing",
-      "msg": "All policy accounts must be sent in the instruction"
-    },
-    {
-      "code": 6005,
       "name": "InvalidPolicyAccount",
       "msg": "Invalid policy account passed"
     },
     {
-      "code": 6006,
+      "code": 6005,
       "name": "TransferSlotNotApproved",
       "msg": "Invalid slot for approve account"
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "TransferHistoryFull",
       "msg": "Transfer history is full"
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "Unauthorized",
       "msg": "Unauthorized"
     }
@@ -708,12 +713,22 @@ export const IDL: AssetController = {
           "isSigner": false
         },
         {
+          "name": "identityRegistryAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "identityAccount",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "trackerAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "policyAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -872,26 +887,21 @@ export const IDL: AssetController = {
     },
     {
       "code": 6004,
-      "name": "PolicyAccountsMissing",
-      "msg": "All policy accounts must be sent in the instruction"
-    },
-    {
-      "code": 6005,
       "name": "InvalidPolicyAccount",
       "msg": "Invalid policy account passed"
     },
     {
-      "code": 6006,
+      "code": 6005,
       "name": "TransferSlotNotApproved",
       "msg": "Invalid slot for approve account"
     },
     {
-      "code": 6007,
+      "code": 6006,
       "name": "TransferHistoryFull",
       "msg": "Transfer history is full"
     },
     {
-      "code": 6008,
+      "code": 6007,
       "name": "Unauthorized",
       "msg": "Unauthorized"
     }

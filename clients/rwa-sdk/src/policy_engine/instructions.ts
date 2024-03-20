@@ -2,8 +2,8 @@ import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
 import {type CommonArgs, getProvider, type IxReturn} from '../utils';
-import {getPolicyEnginePda, getPolicyEngineProgram} from './utils';
-import {type IdentityFilter, type Policy} from './types';
+import {getPolicyAccountPda, getPolicyEnginePda, getPolicyEngineProgram} from './utils';
+import {type PolicyType, type IdentityFilter, type Policy} from './types';
 
 export type CreatePolicyEngineArgs = {
 	authority: string;
@@ -31,7 +31,7 @@ export type AttachPolicyArgs = {
 	assetMint: string;
 	payer: string;
 	identityFilter: IdentityFilter;
-	policy: Policy;
+	policyType: PolicyType;
 };
 
 export function padIdentityLevels(levels: number[]): number[] {
@@ -39,18 +39,40 @@ export function padIdentityLevels(levels: number[]): number[] {
 	return levels.concat(new Array(maxLevels - levels.length).fill(0));
 }
 
-export async function getAttachPolicyAccountIx(
+export async function getAttachToPolicyAccountIx(
 	args: AttachPolicyArgs,
 ): Promise<IxReturn> {
 	const provider = getProvider();
 	const policyProgram = getPolicyEngineProgram(provider);
-	const policyAccount = new Keypair();
-	const ix = await policyProgram.methods.attachPolicyAccount(
+	const policyAccount = getPolicyAccountPda(args.assetMint);
+	const ix = await policyProgram.methods.attachToPolicyAccount(
 		args.identityFilter,
-		args.policy,
+		args.policyType,
+	).accountsStrict({
+		policyAccount,
+		signer: new PublicKey(args.authority),
+		payer: args.payer,
+		policyEngine: getPolicyEnginePda(args.assetMint),
+		systemProgram: SystemProgram.programId,
+	}).instruction();
+	return {
+		ixs: [ix],
+		signers: [],
+	};
+}
+
+export async function getCreatePolicAccountIx(
+	args: AttachPolicyArgs,
+): Promise<IxReturn> {
+	const provider = getProvider();
+	const policyProgram = getPolicyEngineProgram(provider);
+	const policyAccount = getPolicyAccountPda(args.assetMint);
+	const ix = await policyProgram.methods.createPolicyAccount(
+		args.identityFilter,
+		args.policyType,
 	)
 		.accountsStrict({
-			policyAccount: policyAccount.publicKey,
+			policyAccount,
 			signer: new PublicKey(args.authority),
 			payer: args.payer,
 			policyEngine: getPolicyEnginePda(args.assetMint),
@@ -59,6 +81,6 @@ export async function getAttachPolicyAccountIx(
 		.instruction();
 	return {
 		ixs: [ix],
-		signers: [policyAccount],
+		signers: [],
 	};
 }
