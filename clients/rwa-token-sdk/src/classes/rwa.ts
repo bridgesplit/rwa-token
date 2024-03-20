@@ -22,12 +22,12 @@ export class RwaClient {
    * Configuration for the RWA client.
    */
 	// eslint-disable-next-line @typescript-eslint/parameter-properties
-	config: Config;
-	provider: AnchorProvider;
-	assetController: AssetController;
-	dataRegistry: DataRegistry;
-	identityRegistry: IdentityRegistry;
-	policyEngine: PolicyEngine;
+	public readonly config: Config;
+	public readonly provider: AnchorProvider;
+	public readonly assetController: AssetController;
+	public readonly dataRegistry: DataRegistry;
+	public readonly identityRegistry: IdentityRegistry;
+	public readonly policyEngine: PolicyEngine;
 
 	/**
    * Constructs a new instance of the RwaClient.
