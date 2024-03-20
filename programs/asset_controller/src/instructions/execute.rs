@@ -1,11 +1,11 @@
-use std::ops::Deref;
-
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{Mint, TokenAccount};
-use identity_registry::{program::IdentityRegistry, IdentityAccount, SKIP_POLICY_LEVEL};
-use policy_engine::{deserialize_and_enforce_policy, program::PolicyEngine, PolicyEngineAccount};
+use identity_registry::{
+    program::IdentityRegistry, IdentityAccount, IdentityRegistryAccount, SKIP_POLICY_LEVEL,
+};
+use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
 
-use crate::{state::*, AssetControllerErrors};
+use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
@@ -40,6 +40,11 @@ pub struct ExecuteTransferHook<'info> {
     pub policy_engine_account: Account<'info, PolicyEngineAccount>,
     pub identity_registry: Program<'info, IdentityRegistry>,
     #[account(
+        owner = identity_registry.key(),
+        constraint = identity_registry_account.asset_mint == asset_mint.key(),
+    )]
+    pub identity_registry_account: Account<'info, IdentityRegistryAccount>,
+    #[account(
         mut,
         owner = identity_registry.key(),
         constraint = identity_account.owner == owner_delegate.key(),
@@ -51,6 +56,11 @@ pub struct ExecuteTransferHook<'info> {
         constraint = tracker_account.asset_mint == asset_mint.key(),
     )]
     pub tracker_account: Account<'info, TrackerAccount>,
+    #[account(
+        owner = policy_engine.key(),
+        constraint = policy_account.policy_engine == policy_engine_account.key(),
+    )]
+    pub policy_account: Account<'info, PolicyAccount>,
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
@@ -63,38 +73,17 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     {
         return Ok(());
     }
-    let remaining_accounts = ctx.remaining_accounts.to_vec();
-    let policies = ctx
-        .accounts
-        .policy_engine_account
-        .policies
-        .iter()
-        .filter(|x| x != &&Pubkey::default())
-        .collect::<Vec<_>>();
     let transfer_amounts = ctx.accounts.tracker_account.transfer_amounts;
     let transfer_timestamps = ctx.accounts.tracker_account.transfer_timestamps;
-    if remaining_accounts.len() < policies.len() {
-        return Err(AssetControllerErrors::PolicyAccountsMissing.into());
-    }
-    for (i, policy) in policies[..].iter().enumerate() {
-        // evaluate policy
-        let policy_account = &remaining_accounts[i];
-        if policy_account.key != *policy {
-            return Err(AssetControllerErrors::InvalidPolicyAccount.into());
-        }
-        let policy_account = remaining_accounts[i]
-            .data
-            .try_borrow_mut()
-            .map_err(|_| AssetControllerErrors::InvalidPolicyAccount)?;
-        deserialize_and_enforce_policy(
-            policy_account.deref(),
-            amount,
-            Clock::get()?.unix_timestamp,
-            ctx.accounts.identity_account.levels,
-            transfer_amounts,
-            transfer_timestamps,
-        )?;
-    }
+    // evaluate policy
+    enforce_policy(
+        ctx.accounts.policy_account.policies.clone(),
+        amount,
+        Clock::get()?.unix_timestamp,
+        ctx.accounts.identity_account.levels,
+        transfer_amounts,
+        transfer_timestamps,
+    )?;
 
     let timestamp = Clock::get()?.unix_timestamp;
     let max_timeframe = ctx.accounts.policy_engine_account.max_timeframe;

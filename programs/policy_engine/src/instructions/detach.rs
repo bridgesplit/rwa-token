@@ -4,7 +4,7 @@ use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct AttachToPolicyAccount<'info> {
+pub struct DetachFromPolicyAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account()]
@@ -19,7 +19,7 @@ pub struct AttachToPolicyAccount<'info> {
         mut,
         seeds = [policy_engine.key().as_ref()],
         bump,
-        realloc = policy_account.to_account_info().data_len() + Policy::INIT_SPACE,
+        realloc = policy_account.to_account_info().data_len() - Policy::INIT_SPACE,
         realloc::zero = false,
         realloc::payer = payer,
     )]
@@ -27,13 +27,7 @@ pub struct AttachToPolicyAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(
-    ctx: Context<AttachToPolicyAccount>,
-    identity_filter: IdentityFilter,
-    policy_type: PolicyType,
-) -> Result<()> {
-    ctx.accounts
-        .policy_account
-        .attach(policy_type, identity_filter);
+pub fn handler(ctx: Context<DetachFromPolicyAccount>, policy_type: PolicyType) -> Result<()> {
+    ctx.accounts.policy_account.detach(policy_type);
     Ok(())
 }

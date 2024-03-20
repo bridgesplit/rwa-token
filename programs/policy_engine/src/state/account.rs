@@ -1,14 +1,14 @@
 pub use anchor_lang::prelude::*;
 use num_enum::IntoPrimitive;
 
-#[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace)]
+#[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy)]
 pub struct IdentityFilter {
     pub identity_levels: [u8; 10],
     pub comparision_type: ComparisionType,
 }
 
 #[repr(u8)]
-#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone, InitSpace)]
+#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy)]
 pub enum ComparisionType {
     Or,
     And,
@@ -20,14 +20,19 @@ pub struct PolicyAccount {
     pub version: u8,
     /// Engine account that the policy belongs to
     pub policy_engine: Pubkey,
-    /// Identity filter to apply to the policy
-    pub identity_filter: IdentityFilter,
     /// Different policies that can be applied to the policy account
-    pub policy: Policy,
+    #[max_len(1)] // initial max_len
+    pub policies: Vec<Policy>,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
-pub enum Policy {
+pub struct Policy {
+    pub policy_type: PolicyType,
+    pub identity_filter: IdentityFilter,
+}
+
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq)]
+pub enum PolicyType {
     IdentityApproval,
     TransactionAmountLimit { limit: u64 },
     TransactionAmountVelocity { limit: u64, timeframe: i64 },
@@ -35,10 +40,28 @@ pub enum Policy {
 }
 
 impl PolicyAccount {
-    pub fn new(&mut self, policy_engine: Pubkey, identity_filter: IdentityFilter, policy: Policy) {
+    pub fn new(
+        &mut self,
+        policy_engine: Pubkey,
+        identity_filter: IdentityFilter,
+        policy_type: PolicyType,
+    ) {
         self.version = 1;
         self.policy_engine = policy_engine;
-        self.identity_filter = identity_filter;
-        self.policy = policy;
+        self.policies = vec![Policy {
+            policy_type,
+            identity_filter,
+        }];
+    }
+    pub fn attach(&mut self, policy_type: PolicyType, identity_filter: IdentityFilter) {
+        self.policies.push(Policy {
+            policy_type,
+            identity_filter,
+        });
+    }
+
+    pub fn detach(&mut self, policy_type: PolicyType) {
+        self.policies
+            .retain(|policy| policy.policy_type != policy_type);
     }
 }
