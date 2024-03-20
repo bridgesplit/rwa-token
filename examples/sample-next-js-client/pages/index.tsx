@@ -6,6 +6,7 @@ import { AssetController } from "../components/assetcontroller/assetController";
 import SetupProviderComponent from "../components/setup";
 import { PolicyEngineTyped } from "../components/policyengine/policyEngineTyped";
 import { DataRegistry } from "../components/dataregistry/dataregistry";
+import { SampleHeliusRPCCalls } from "../components/sampleRwa";
 
 
 export default function Home() {
@@ -50,6 +51,7 @@ export default function Home() {
         <PolicyEngineTyped />
         <IdentityRegistry />
         <DataRegistry />
+        <SampleHeliusRPCCalls />
       </div>
     </>
   )
