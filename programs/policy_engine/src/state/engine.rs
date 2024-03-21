@@ -1,6 +1,6 @@
 use anchor_lang::{prelude::*, AnchorSerialize};
 
-use crate::PolicyEngineErrors;
+use crate::{PolicyEngineErrors, PolicyType};
 
 #[account()]
 #[derive(InitSpace)]
@@ -44,9 +44,27 @@ impl PolicyEngineAccount {
         Err(PolicyEngineErrors::UnauthorizedSigner.into())
     }
     /// update max timeframe if new value is greater than current
-    pub fn update_max_timeframe(&mut self, max_timeframe: i64) {
-        if max_timeframe > self.max_timeframe {
-            self.max_timeframe = max_timeframe;
+    pub fn update_max_timeframe(&mut self, policy_type: PolicyType) {
+        let mut max_timeframe = self.max_timeframe;
+        match policy_type {
+            PolicyType::TransactionAmountVelocity {
+                limit: _,
+                timeframe,
+            } => {
+                if timeframe > max_timeframe {
+                    max_timeframe = timeframe;
+                }
+            }
+            PolicyType::TransactionCountVelocity {
+                limit: _,
+                timeframe,
+            } => {
+                if timeframe > max_timeframe {
+                    max_timeframe = timeframe;
+                }
+            }
+            _ => {}
         }
+        self.max_timeframe = max_timeframe;
     }
 }

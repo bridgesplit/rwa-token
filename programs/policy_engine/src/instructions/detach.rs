@@ -29,5 +29,43 @@ pub struct DetachFromPolicyAccount<'info> {
 
 pub fn handler(ctx: Context<DetachFromPolicyAccount>, policy_type: PolicyType) -> Result<()> {
     ctx.accounts.policy_account.detach(policy_type);
+    // update max timeframe if detached policy was the max timeframe
+
+    let mut max_timeframe = match policy_type {
+        PolicyType::TransactionAmountVelocity {
+            limit: _,
+            timeframe,
+        } => timeframe,
+        PolicyType::TransactionCountVelocity {
+            limit: _,
+            timeframe,
+        } => timeframe,
+        _ => 0,
+    };
+
+    if max_timeframe == ctx.accounts.policy_engine.max_timeframe {
+        max_timeframe = 0;
+        for policy in ctx.accounts.policy_account.policies.iter() {
+            if let PolicyType::TransactionAmountVelocity {
+                limit: _,
+                timeframe,
+            } = policy.policy_type
+            {
+                if timeframe > max_timeframe {
+                    max_timeframe = timeframe;
+                }
+            }
+            if let PolicyType::TransactionCountVelocity {
+                limit: _,
+                timeframe,
+            } = policy.policy_type
+            {
+                if timeframe > max_timeframe {
+                    max_timeframe = timeframe;
+                }
+            }
+        }
+    }
+    ctx.accounts.policy_engine.max_timeframe = max_timeframe;
     Ok(())
 }

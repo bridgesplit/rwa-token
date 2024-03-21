@@ -3,7 +3,9 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import {policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda} from '../policy_engine';
+import {
+	policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda, getPolicyAccountPda,
+} from '../policy_engine';
 import {getCreateDataRegistryIx} from '../data_registry';
 import {
 	identityRegistryProgramId, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda,
@@ -16,6 +18,7 @@ import {
 } from '@solana/spl-token';
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
+	assetControllerProgramId,
 } from './utils';
 import {BN} from '@coral-xyz/anchor';
 
@@ -103,36 +106,53 @@ export type TransferTokensArgs = {
 } & CommonArgs;
 
 export async function getTransferTokensIx(args: TransferTokensArgs): Promise<TransactionInstruction> {
-	const remainingAccounts = [{
-		pubkey: getExtraMetasListPda(args.assetMint),
-		isWritable: false,
-		isSigner: false,
-	},
-	{
-		pubkey: policyRegistryProgramId,
-		isWritable: false,
-		isSigner: false,
-	},
-	{
-		pubkey: getPolicyEnginePda(args.assetMint),
-		isWritable: false,
-		isSigner: false,
-	},
-	{
-		pubkey: identityRegistryProgramId,
-		isWritable: false,
-		isSigner: false,
-	},
-	{
-		pubkey: getIdentityAccountPda(args.assetMint, args.from),
-		isWritable: false,
-		isSigner: false,
-	},
-	{
-		pubkey: getTrackerAccountPda(args.assetMint, args.from),
-		isWritable: false,
-		isSigner: false,
-	}];
+	const remainingAccounts = [
+		{
+			pubkey: policyRegistryProgramId,
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getPolicyEnginePda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: identityRegistryProgramId,
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getIdentityRegistryPda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getIdentityAccountPda(args.assetMint, args.from),
+			isWritable: true,
+			isSigner: false,
+		},
+		{
+			pubkey: getTrackerAccountPda(args.assetMint, args.from),
+			isWritable: true,
+			isSigner: false,
+		},
+		{
+			pubkey: getPolicyAccountPda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getExtraMetasListPda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: assetControllerProgramId,
+			isWritable: false,
+			isSigner: false,
+		},
+	];
 	remainingAccounts.push(...parseRemainingAccounts(args.remainingAccounts));
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(new PublicKey(args.assetMint), new PublicKey(args.from), false, TOKEN_2022_PROGRAM_ID),

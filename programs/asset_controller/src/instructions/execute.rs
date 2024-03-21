@@ -73,23 +73,21 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     {
         return Ok(());
     }
-    let transfer_amounts = ctx.accounts.tracker_account.transfer_amounts;
-    let transfer_timestamps = ctx.accounts.tracker_account.transfer_timestamps;
+
     // evaluate policy
     enforce_policy(
         ctx.accounts.policy_account.policies.clone(),
         amount,
         Clock::get()?.unix_timestamp,
-        ctx.accounts.identity_account.levels,
-        transfer_amounts,
-        transfer_timestamps,
+        &ctx.accounts.identity_account.levels,
+        &ctx.accounts.tracker_account.transfers,
     )?;
 
-    let timestamp = Clock::get()?.unix_timestamp;
-    let max_timeframe = ctx.accounts.policy_engine_account.max_timeframe;
-    ctx.accounts
-        .tracker_account
-        .update_transfer_history(amount, timestamp, max_timeframe)?;
+    ctx.accounts.tracker_account.update_transfer_history(
+        amount,
+        Clock::get()?.unix_timestamp,
+        ctx.accounts.policy_engine_account.max_timeframe,
+    )?;
 
     Ok(())
 }

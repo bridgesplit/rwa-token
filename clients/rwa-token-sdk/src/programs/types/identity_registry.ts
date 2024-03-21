@@ -253,14 +253,23 @@ export type IdentityRegistry = {
         "fields": [
           {
             "name": "version",
+            "docs": [
+              "version of the account"
+            ],
             "type": "u8"
           },
           {
-            "name": "registry",
+            "name": "identityRegistry",
+            "docs": [
+              "identity registry to which the account belongs"
+            ],
             "type": "publicKey"
           },
           {
             "name": "owner",
+            "docs": [
+              "owner of the identity account"
+            ],
             "type": "publicKey"
           },
           {
@@ -555,14 +564,23 @@ export const IDL: IdentityRegistry = {
         "fields": [
           {
             "name": "version",
+            "docs": [
+              "version of the account"
+            ],
             "type": "u8"
           },
           {
-            "name": "registry",
+            "name": "identityRegistry",
+            "docs": [
+              "identity registry to which the account belongs"
+            ],
             "type": "publicKey"
           },
           {
             "name": "owner",
+            "docs": [
+              "owner of the identity account"
+            ],
             "type": "publicKey"
           },
           {
