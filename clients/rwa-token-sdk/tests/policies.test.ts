@@ -23,9 +23,6 @@ describe('test policy setup', () => {
 		await setup.provider.connection.confirmTransaction(
 			await setup.provider.connection.requestAirdrop(setup.authorityKp.publicKey, 1000000000),
 		);
-		// Await setup.provider.connection.confirmTransaction(
-		// 	await setup.provider.connection.requestAirdrop(setup.user2, 1000000000),
-		// );
 	});
 
 	test('setup registries', async () => {
@@ -145,28 +142,28 @@ describe('test policy setup', () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	// Test('attach transaction count velocity policy to identity level 2', async t => {
-	// 	const attachPolicy = await getAttachToPolicyAccountIx({
-	// 		payer: setup.payer.toString(),
-	// 		owner: setup.authority.toString(),
-	// 		assetMint: mint,
-	// 		authority: setup.authority.toString(),
-	// 		identityFilter: {
-	// 			identityLevels: [2], // Going to skip other identity levels
-	// 			comparisionType: {or: {}},
-	// 		},
-	// 		policyType: {
-	// 			transactionCountVelocity: {
-	// 				limit: new BN(3),
-	// 				timeframe: new BN(60),
-	// 			},
-	// 		},
-	// 	});
-	// 	const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
-	// 	expect(txnId).toBeTruthy();
-	// 	const policyAccount = await getPolicyEngineProgram(setup.provider).account.policyAccount.fetch(getPolicyAccountPda(mint));
-	// 	expect(policyAccount.policies.length).toBe(6);
-	// });
+	test('attach transaction count velocity policy to identity level 2', async t => {
+		const attachPolicy = await getAttachToPolicyAccountIx({
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			authority: setup.authority.toString(),
+			identityFilter: {
+				identityLevels: [2], // Going to skip other identity levels
+				comparisionType: {or: {}},
+			},
+			policyType: {
+				transactionCountVelocity: {
+					limit: new BN(3),
+					timeframe: new BN(60),
+				},
+			},
+		});
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
+		expect(txnId).toBeTruthy();
+		const policyAccount = await getPolicyEngineProgram(setup.provider).account.policyAccount.fetch(getPolicyAccountPda(mint));
+		expect(policyAccount.policies.length).toBe(6);
+	});
 
 	test('setup user1', async t => {
 		const setupUser = await getSetupUserIxs({
@@ -190,96 +187,96 @@ describe('test policy setup', () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	// Test('setup user3', async t => {
-	// 	const setupUser = await getSetupUserIxs({
-	// 		payer: setup.payer.toString(),
-	// 		owner: setup.user3.toString(),
-	// 		assetMint: mint,
-	// 		level: 255, // Skips all policies
-	// 	});
-	// 	const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, ...setupUser.signers]);
-	// 	expect(txnId).toBeTruthy();
-	// });
+	test('setup user3', async t => {
+		const setupUser = await getSetupUserIxs({
+			payer: setup.payer.toString(),
+			owner: setup.user3.toString(),
+			assetMint: mint,
+			level: 255, // Skips all policies
+		});
+		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, ...setupUser.signers]);
+		expect(txnId).toBeTruthy();
+	});
 
 	test('issue tokens', async t => {
-		const issueTokens = await getIssueTokensIx({
+		let issueTokens = await getIssueTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			owner: setup.user1.toString(),
 			assetMint: mint,
 			amount: 1000000,
 		});
-		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
+		let txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
-		// IssueTokens = await getIssueTokensIx({
-		// 	authority: setup.authority.toString(),
-		// 	payer: setup.payer.toString(),
-		// 	owner: setup.user2.toString(),
-		// 	assetMint: mint,
-		// 	amount: 1000000,
-		// });
-		// txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
-		// expect(txnId).toBeTruthy();
-		// issueTokens = await getIssueTokensIx({
-		// 	authority: setup.authority.toString(),
-		// 	payer: setup.payer.toString(),
-		// 	owner: setup.user3.toString(),
-		// 	assetMint: mint,
-		// 	amount: 1000000,
-		// });
-		// txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
-		// expect(txnId).toBeTruthy();
+		issueTokens = await getIssueTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.user2.toString(),
+			assetMint: mint,
+			amount: 1000000,
+		});
+		txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
+		expect(txnId).toBeTruthy();
+		issueTokens = await getIssueTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.user3.toString(),
+			assetMint: mint,
+			amount: 1000000,
+		});
+		txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
+		expect(txnId).toBeTruthy();
 	});
 
-	// Test('transfer 1000 tokens from user1, user2 and user3. fail for user1, success for others', async t => {
-	// 	let transferTokensIx = await getTransferTokensIx({
-	// 		authority: setup.authority.toString(),
-	// 		payer: setup.payer.toString(),
-	// 		from: setup.user1.toString(),
-	// 		to: setup.user2.toString(),
-	// 		assetMint: mint,
-	// 		amount: 1000,
-	// 		remainingAccounts,
-	// 		decimals,
-	// 	});
-	// 	void expect(sendAndConfirmTransaction(
-	// 		setup.provider.connection,
-	// 		new Transaction().add(transferTokensIx),
-	// 		[setup.payerKp, setup.user1Kp],
-	// 	)).rejects.toThrowError();
-	// 	transferTokensIx = await getTransferTokensIx({
-	// 		authority: setup.authority.toString(),
-	// 		payer: setup.payer.toString(),
-	// 		from: setup.user2.toString(),
-	// 		to: setup.user3.toString(),
-	// 		assetMint: mint,
-	// 		amount: 1000,
-	// 		remainingAccounts,
-	// 		decimals,
-	// 	});
-	// 	let txnId = await sendAndConfirmTransaction(
-	// 		setup.provider.connection,
-	// 		new Transaction().add(transferTokensIx),
-	// 		[setup.payerKp, setup.user2Kp],
-	// 	);
-	// 	expect(txnId).toBeTruthy();
-	// 	transferTokensIx = await getTransferTokensIx({
-	// 		authority: setup.authority.toString(),
-	// 		payer: setup.payer.toString(),
-	// 		from: setup.user3.toString(),
-	// 		to: setup.user1.toString(),
-	// 		assetMint: mint,
-	// 		amount: 1000,
-	// 		remainingAccounts,
-	// 		decimals,
-	// 	});
-	// 	txnId = await sendAndConfirmTransaction(
-	// 		setup.provider.connection,
-	// 		new Transaction().add(transferTokensIx),
-	// 		[setup.payerKp, setup.user3Kp],
-	// 	);
-	// 	expect(txnId).toBeTruthy();
-	// });
+	test('transfer 1000 tokens from user1, user2 and user3. fail for user1, success for others', async t => {
+		let transferTokensIx = await getTransferTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			from: setup.user1.toString(),
+			to: setup.user2.toString(),
+			assetMint: mint,
+			amount: 1000,
+			remainingAccounts,
+			decimals,
+		});
+		void expect(sendAndConfirmTransaction(
+			setup.provider.connection,
+			new Transaction().add(transferTokensIx),
+			[setup.payerKp, setup.user1Kp],
+		)).rejects.toThrowError();
+		transferTokensIx = await getTransferTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			from: setup.user2.toString(),
+			to: setup.user3.toString(),
+			assetMint: mint,
+			amount: 1000,
+			remainingAccounts,
+			decimals,
+		});
+		let txnId = await sendAndConfirmTransaction(
+			setup.provider.connection,
+			new Transaction().add(transferTokensIx),
+			[setup.payerKp, setup.user2Kp],
+		);
+		expect(txnId).toBeTruthy();
+		transferTokensIx = await getTransferTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			from: setup.user3.toString(),
+			to: setup.user1.toString(),
+			assetMint: mint,
+			amount: 1000,
+			remainingAccounts,
+			decimals,
+		});
+		txnId = await sendAndConfirmTransaction(
+			setup.provider.connection,
+			new Transaction().add(transferTokensIx),
+			[setup.payerKp, setup.user3Kp],
+		);
+		expect(txnId).toBeTruthy();
+	});
 
 	test('transfer 10 tokens 3 times from user1, fail 3rd time', async t => {
 		let transferTokensIx = await getTransferTokensIx({
