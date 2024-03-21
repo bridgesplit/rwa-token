@@ -7,6 +7,9 @@ export function setupTests() {
 	const authorityKp = payerKp;
 	const delegateKp = authorityKp;
 	const provider = getProvider();
+	const user1Kp = new Keypair();
+	const user2Kp = new Keypair();
+	const user3Kp = new Keypair();
 	return {
 		payerKp,
 		payer: payerKp.publicKey,
@@ -15,5 +18,11 @@ export function setupTests() {
 		delegateKp,
 		delegate: delegateKp.publicKey,
 		provider,
+		user1Kp,
+		user1: user1Kp.publicKey,
+		user2Kp,
+		user2: user2Kp.publicKey,
+		user3Kp,
+		user3: user3Kp.publicKey,
 	};
 }

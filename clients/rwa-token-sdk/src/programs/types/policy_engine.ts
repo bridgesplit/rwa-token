@@ -43,10 +43,10 @@ export type PolicyEngine = {
       ]
     },
     {
-      "name": "attachPolicyAccount",
+      "name": "createPolicyAccount",
       "docs": [
-        "attach policies",
-        "attach a transaction count limit policy"
+        "policies",
+        "create policy account"
       ],
       "accounts": [
         {
@@ -67,7 +67,7 @@ export type PolicyEngine = {
         {
           "name": "policyAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -83,28 +83,28 @@ export type PolicyEngine = {
           }
         },
         {
-          "name": "policy",
+          "name": "policyType",
           "type": {
-            "defined": "Policy"
+            "defined": "PolicyType"
           }
         }
       ]
     },
     {
-      "name": "removePolicy",
+      "name": "attachToPolicyAccount",
       "docs": [
-        "remove policy"
+        "attach a policy"
       ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true
         },
         {
-          "name": "authority",
+          "name": "signer",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "policyEngine",
@@ -115,9 +115,68 @@ export type PolicyEngine = {
           "name": "policyAccount",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "identityFilter",
+          "type": {
+            "defined": "IdentityFilter"
+          }
+        },
+        {
+          "name": "policyType",
+          "type": {
+            "defined": "PolicyType"
+          }
+        }
+      ]
+    },
+    {
+      "name": "detachFromPolicyAccount",
+      "docs": [
+        "remove policy"
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "signer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "policyEngine",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "policyAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "policyType",
+          "type": {
+            "defined": "PolicyType"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -132,18 +191,20 @@ export type PolicyEngine = {
           },
           {
             "name": "policyEngine",
+            "docs": [
+              "Engine account that the policy belongs to"
+            ],
             "type": "publicKey"
           },
           {
-            "name": "identityFilter",
+            "name": "policies",
+            "docs": [
+              "Different policies that can be applied to the policy account"
+            ],
             "type": {
-              "defined": "IdentityFilter"
-            }
-          },
-          {
-            "name": "policy",
-            "type": {
-              "defined": "Policy"
+              "vec": {
+                "defined": "Policy"
+              }
             }
           }
         ]
@@ -188,18 +249,6 @@ export type PolicyEngine = {
               "max timeframe of all the policies"
             ],
             "type": "i64"
-          },
-          {
-            "name": "policies",
-            "docs": [
-              "list of all policies"
-            ],
-            "type": {
-              "array": [
-                "publicKey",
-                10
-              ]
-            }
           }
         ]
       }
@@ -230,6 +279,26 @@ export type PolicyEngine = {
       }
     },
     {
+      "name": "Policy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "policyType",
+            "type": {
+              "defined": "PolicyType"
+            }
+          },
+          {
+            "name": "identityFilter",
+            "type": {
+              "defined": "IdentityFilter"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "ComparisionType",
       "type": {
         "kind": "enum",
@@ -244,7 +313,7 @@ export type PolicyEngine = {
       }
     },
     {
-      "name": "Policy",
+      "name": "PolicyType",
       "type": {
         "kind": "enum",
         "variants": [
@@ -379,10 +448,10 @@ export const IDL: PolicyEngine = {
       ]
     },
     {
-      "name": "attachPolicyAccount",
+      "name": "createPolicyAccount",
       "docs": [
-        "attach policies",
-        "attach a transaction count limit policy"
+        "policies",
+        "create policy account"
       ],
       "accounts": [
         {
@@ -403,7 +472,7 @@ export const IDL: PolicyEngine = {
         {
           "name": "policyAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "systemProgram",
@@ -419,28 +488,28 @@ export const IDL: PolicyEngine = {
           }
         },
         {
-          "name": "policy",
+          "name": "policyType",
           "type": {
-            "defined": "Policy"
+            "defined": "PolicyType"
           }
         }
       ]
     },
     {
-      "name": "removePolicy",
+      "name": "attachToPolicyAccount",
       "docs": [
-        "remove policy"
+        "attach a policy"
       ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": false,
+          "isMut": true,
           "isSigner": true
         },
         {
-          "name": "authority",
+          "name": "signer",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "policyEngine",
@@ -451,9 +520,68 @@ export const IDL: PolicyEngine = {
           "name": "policyAccount",
           "isMut": true,
           "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
         }
       ],
-      "args": []
+      "args": [
+        {
+          "name": "identityFilter",
+          "type": {
+            "defined": "IdentityFilter"
+          }
+        },
+        {
+          "name": "policyType",
+          "type": {
+            "defined": "PolicyType"
+          }
+        }
+      ]
+    },
+    {
+      "name": "detachFromPolicyAccount",
+      "docs": [
+        "remove policy"
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "signer",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "policyEngine",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "policyAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "policyType",
+          "type": {
+            "defined": "PolicyType"
+          }
+        }
+      ]
     }
   ],
   "accounts": [
@@ -468,18 +596,20 @@ export const IDL: PolicyEngine = {
           },
           {
             "name": "policyEngine",
+            "docs": [
+              "Engine account that the policy belongs to"
+            ],
             "type": "publicKey"
           },
           {
-            "name": "identityFilter",
+            "name": "policies",
+            "docs": [
+              "Different policies that can be applied to the policy account"
+            ],
             "type": {
-              "defined": "IdentityFilter"
-            }
-          },
-          {
-            "name": "policy",
-            "type": {
-              "defined": "Policy"
+              "vec": {
+                "defined": "Policy"
+              }
             }
           }
         ]
@@ -524,18 +654,6 @@ export const IDL: PolicyEngine = {
               "max timeframe of all the policies"
             ],
             "type": "i64"
-          },
-          {
-            "name": "policies",
-            "docs": [
-              "list of all policies"
-            ],
-            "type": {
-              "array": [
-                "publicKey",
-                10
-              ]
-            }
           }
         ]
       }
@@ -566,6 +684,26 @@ export const IDL: PolicyEngine = {
       }
     },
     {
+      "name": "Policy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "policyType",
+            "type": {
+              "defined": "PolicyType"
+            }
+          },
+          {
+            "name": "identityFilter",
+            "type": {
+              "defined": "IdentityFilter"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "ComparisionType",
       "type": {
         "kind": "enum",
@@ -580,7 +718,7 @@ export const IDL: PolicyEngine = {
       }
     },
     {
-      "name": "Policy",
+      "name": "PolicyType",
       "type": {
         "kind": "enum",
         "variants": [

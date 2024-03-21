@@ -186,7 +186,7 @@
           {
             "name": "dataRegistry",
             "docs": [
-              "registry to which data account belongs to"
+              "data registry to which the account belongs"
             ],
             "type": "publicKey"
           },

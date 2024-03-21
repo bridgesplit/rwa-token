@@ -186,7 +186,7 @@ export type DataRegistry = {
           {
             "name": "dataRegistry",
             "docs": [
-              "registry to which data account belongs to"
+              "data registry to which the account belongs"
             ],
             "type": "publicKey"
           },
@@ -480,7 +480,7 @@ export const IDL: DataRegistry = {
           {
             "name": "dataRegistry",
             "docs": [
-              "registry to which data account belongs to"
+              "data registry to which the account belongs"
             ],
             "type": "publicKey"
           },

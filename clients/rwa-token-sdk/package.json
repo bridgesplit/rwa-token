@@ -1,7 +1,7 @@
 {
-    "name": "rwa-sdk",
+    "name": "rwa-token-sdk",
     "version": "1.0.0",
-    "description": "RWA sdk",
+    "description": "RWA token sdk",
     "homepage": "https://github.com/bridgesplit/rwa#readme",
     "scripts": {
         "test": "vitest run --testTimeout=120000"

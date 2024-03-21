@@ -5,4 +5,5 @@ export type PolicyEngineAccount = IdlAccounts<PolicyEngine>['policyEngineAccount
 export type PolicyAccount = IdlAccounts<PolicyEngine>['policyAccount'];
 
 export type IdentityFilter = IdlTypes<PolicyEngine>['IdentityFilter'];
+export type PolicyType = IdlTypes<PolicyEngine>['PolicyType'];
 export type Policy = IdlTypes<PolicyEngine>['Policy'];
