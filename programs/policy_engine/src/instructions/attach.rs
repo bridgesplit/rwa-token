@@ -35,5 +35,6 @@ pub fn handler(
     ctx.accounts
         .policy_account
         .attach(policy_type, identity_filter);
+    ctx.accounts.policy_engine.update_max_timeframe(policy_type);
     Ok(())
 }

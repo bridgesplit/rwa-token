@@ -2,8 +2,10 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(owner: Pubkey)]
+#[instruction()]
 pub struct RemoveLevelFromIdentityAccount<'info> {
+    #[account(mut)]
+    pub payer: Signer<'info>,
     #[account()]
     /// CHECK: signer check
     pub signer: UncheckedAccount<'info>,
@@ -13,18 +15,17 @@ pub struct RemoveLevelFromIdentityAccount<'info> {
     pub identity_registry: Box<Account<'info, IdentityRegistryAccount>>,
     #[account(
         mut,
-        seeds = [identity_registry.key().as_ref(), owner.as_ref()],
+        seeds = [identity_registry.key().as_ref(), identity_account.owner.as_ref()],
         bump,
-        constraint = identity_account.owner == owner,
+        realloc = identity_account.to_account_info().data_len() - 1, // u8
+        realloc::zero = false,
+        realloc::payer = payer,
     )]
     pub identity_account: Box<Account<'info, IdentityAccount>>,
+    pub system_program: Program<'info, System>,
 }
 
-pub fn handler(
-    ctx: Context<RemoveLevelFromIdentityAccount>,
-    _owner: Pubkey,
-    level: u8,
-) -> Result<()> {
+pub fn handler(ctx: Context<RemoveLevelFromIdentityAccount>, level: u8) -> Result<()> {
     ctx.accounts.identity_account.remove_level(level)?;
     Ok(())
 }

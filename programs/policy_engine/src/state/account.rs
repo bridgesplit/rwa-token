@@ -31,7 +31,7 @@ pub struct Policy {
     pub identity_filter: IdentityFilter,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq, Copy)]
 pub enum PolicyType {
     IdentityApproval,
     TransactionAmountLimit { limit: u64 },

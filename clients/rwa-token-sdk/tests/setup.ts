@@ -9,6 +9,7 @@ export function setupTests() {
 	const provider = getProvider();
 	const user1Kp = new Keypair();
 	const user2Kp = new Keypair();
+	const user3Kp = new Keypair();
 	return {
 		payerKp,
 		payer: payerKp.publicKey,
@@ -21,5 +22,7 @@ export function setupTests() {
 		user1: user1Kp.publicKey,
 		user2Kp,
 		user2: user2Kp.publicKey,
+		user3Kp,
+		user3: user3Kp.publicKey,
 	};
 }

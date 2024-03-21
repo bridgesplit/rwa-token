@@ -49,19 +49,17 @@ pub mod identity_registry {
     /// add level to identity account
     pub fn add_level_to_identity_account(
         ctx: Context<AddLevelToIdentityAccount>,
-        owner: Pubkey,
         level: u8,
     ) -> Result<()> {
-        instructions::account::add::handler(ctx, owner, level)
+        instructions::account::add::handler(ctx, level)
     }
 
     /// remove level from identity account
     pub fn remove_level_from_identity_account(
         ctx: Context<RemoveLevelFromIdentityAccount>,
-        owner: Pubkey,
         level: u8,
     ) -> Result<()> {
-        instructions::account::remove::handler(ctx, owner, level)
+        instructions::account::remove::handler(ctx, level)
     }
 
     /// revoke user identity account by closing account
