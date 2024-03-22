@@ -2,7 +2,7 @@ use anchor_lang::prelude::Result;
 
 use crate::{state::*, PolicyEngineErrors};
 
-pub fn enforce_identity_filter(identity: &Vec<u8>, identity_filter: IdentityFilter) -> Result<()> {
+pub fn enforce_identity_filter(identity: &[u8], identity_filter: IdentityFilter) -> Result<()> {
     match identity_filter.comparision_type {
         ComparisionType::Or => {
             // if any level is in the identities array, return Ok
@@ -66,7 +66,7 @@ pub fn enforce_policy(
     policies: Vec<Policy>,
     amount: u64,
     timestamp: i64,
-    identity: &Vec<u8>,
+    identity: &[u8],
     transfers: &Vec<Transfer>,
 ) -> Result<()> {
     for policy in policies.iter() {

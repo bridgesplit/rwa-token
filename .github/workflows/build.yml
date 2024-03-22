@@ -4,7 +4,7 @@ env:
 on:
   pull_request:
     branches:
-      - 'main'
+      - 'fix_actions'
 jobs:
   build-cli-deps:
     runs-on: ubicloud-standard-8
@@ -23,7 +23,17 @@ jobs:
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
         run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.0/install)"
 
+      - id: install-anchor
+        if: steps.cache-cli-deps.outputs.cache-hit != 'true'
+        uses: actions/checkout@v2
+        with:
+          repository: bridgesplit/anchor
+          run:
+            cargo build
+
       - run: echo "PATH=$HOME/.local/share/solana/install/active_release/bin:$PATH" >> $GITHUB_ENV
+      - run: mv ./target/debug/anchor ./programs/anchor
+      - run: chmod u+x ./anchor
 
   tests:
     runs-on: ubicloud-standard-8
