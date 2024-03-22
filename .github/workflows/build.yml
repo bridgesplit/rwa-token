@@ -44,7 +44,7 @@ jobs:
 
       - id: run-tests
         run:
-            cd ./clients/rwa-token-sdk && yarn install
+            cd ./clients/rwa-token-sdk && yarn
             cd ./programs && cargo fmt -- --check
             cd ./programs && cargo clippy -- -D warnings
             cd ./programs && ./anchor build
