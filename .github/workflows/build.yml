@@ -32,7 +32,7 @@ jobs:
             cargo build
 
       - run: echo "PATH=$HOME/.local/share/solana/install/active_release/bin:$PATH" >> $GITHUB_ENV
-      - run: mv ./target/debug/anchor ./programs/anchor
+      - run: mv anchor/target/debug/anchor ./programs/anchor
       - run: chmod u+x ./anchor
 
   tests:
