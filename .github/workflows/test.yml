@@ -57,5 +57,5 @@ jobs:
       - run: solana-keygen new --no-bip39-passphrase
       - run: cd programs && cargo fmt -- --check
       - run: cd programs && cargo clippy -- -D warnings
-      - run: cd programs && anchor build
+      - run: cd programs && anchor build --no-idl
       - run: cd programs && anchor test
