@@ -2,7 +2,7 @@ name: build
 env:
   cli-id: anchor-v0.29.2-solana-1.17.0
 on:
-  pull_request:
+  push:
     branches:
       - 'fix_actions'
 jobs:
