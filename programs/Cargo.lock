@@ -182,6 +182,7 @@ dependencies = [
  "anchor-derive-accounts",
  "anchor-derive-serde",
  "anchor-derive-space",
+ "anchor-syn",
  "arrayref",
  "base64 0.21.7",
  "bincode",
