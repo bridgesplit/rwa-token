@@ -33,8 +33,8 @@ jobs:
         with:
           repository: bridgesplit/anchor
           run:
-            cargo build /
-            mv anchor/target/debug/anchor ./programs/anchor /
+            cargo build \
+            mv anchor/target/debug/anchor ./programs/anchor \
             chmod u+x ./programs/anchor 
 
       - run: echo "PATH=$HOME/.local/share/solana/install/active_release/bin:$PATH" >> $GITHUB_ENV
@@ -44,8 +44,8 @@ jobs:
 
       - id: run-tests
         run:
-            cd ./clients/rwa-token-sdk && yarn /
-            cd ./programs && cargo fmt -- --check /
-            cd ./programs && cargo clippy -- -D warnings /
-            cd ./programs && ./anchor build /
+            cd ./clients/rwa-token-sdk && yarn \
+            cd ./programs && cargo fmt -- --check \
+            cd ./programs && cargo clippy -- -D warnings v
+            cd ./programs && ./anchor build \
             cd ./programs && ./anchor test 
