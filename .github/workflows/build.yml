@@ -23,6 +23,10 @@ jobs:
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
         run: sh -c "$(curl -sSfL https://release.solana.com/v1.17.0/install)"
 
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
       - id: install-anchor
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
