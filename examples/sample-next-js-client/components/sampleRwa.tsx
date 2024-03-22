@@ -34,19 +34,23 @@ export const SampleHeliusRPCCalls = () => {
     }
 
     return (
-        <div className="container mx-auto mt-10 text-center text-black border border-black">
-            <h1>Sample Helius Calls</h1>
-            <div className="flex justify-center items-center">
-                <input
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    placeholder="Enter mint ID..."
-                    className='p-2 mr-2'
-                />
-                <button className='p-4 bg-red-200' onClick={getRwaAccountByMint}>Test</button>
+        <div>
+            <div className="container mx-auto mt-10 text-center text-black">
+                <h1>Generate Helius JSON</h1>
+                <div className="flex justify-center items-center mt-4">
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        placeholder="Enter mint ID..."
+                        className='p-2 mr-2'
+                    />
+                    <button className='px-5 border border-2 border-black bg-red-200' onClick={getRwaAccountByMint}>Test</button>
+                </div>
             </div>
-            {responseData && <FullRwaAccountComponent fullRwaAccount={responseData.result} />}
+            <div className='mt-4 text-left text-black'>
+                {responseData && <FullRwaAccountComponent fullRwaAccount={responseData.result} />}
+            </div>
         </div>
     );
 };

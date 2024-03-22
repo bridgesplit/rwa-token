@@ -8,7 +8,6 @@ export const SetupProviderComponent = () => {
     return (
         <div className='mt-2'>
             <p className='text-black'>Status: {status}</p>
-            <button onClick={() => console.log(rwaClient)} className='bg-black text-xs rounded-full p-2'>Console Log RWA Client</button>
         </div>
     );
 };
