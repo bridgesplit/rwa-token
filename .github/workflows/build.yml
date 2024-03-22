@@ -38,8 +38,10 @@ jobs:
         with:
           node-version: '18'
 
-      # - run: cd ./clients/rwa-token-sdk && yarn install
-      - run: cd ./programs && cargo fmt -- --check
-      - run: cd ./programs && cargo clippy -- -D warnings
-      - run: cd ./programs && ./anchor build
-      - run: cd ./programs && ./anchor test
+      - id: run-tests
+        run:
+            cd ./clients/rwa-token-sdk && yarn install
+            cd ./programs && cargo fmt -- --check
+            cd ./programs && cargo clippy -- -D warnings
+            cd ./programs && ./anchor build
+            cd ./programs && ./anchor test
