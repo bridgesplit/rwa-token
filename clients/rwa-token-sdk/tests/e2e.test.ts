@@ -1,5 +1,4 @@
-
-Import {BN} from '@coral-xyz/anchor';
+import {BN} from '@coral-xyz/anchor';
 import {
 	getAssetControllerPda,
 	getAttachToPolicyAccountIx,
