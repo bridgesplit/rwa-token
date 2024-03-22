@@ -28,7 +28,7 @@ jobs:
           fetch-depth: 0
 
       - id: install-anchor
-        if: steps.cache-cli-deps.outputs.cache-hit != 'true'
+        # if: steps.cache-cli-deps.outputs.cache-hit != 'true'
         uses: actions/checkout@v2
         with:
           repository: bridgesplit/anchor
