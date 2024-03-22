@@ -30,10 +30,10 @@ jobs:
           repository: bridgesplit/anchor
           run:
             cargo build
+            mv anchor/target/debug/anchor ./programs/anchor
+            chmod u+x ./programs/anchor
 
       - run: echo "PATH=$HOME/.local/share/solana/install/active_release/bin:$PATH" >> $GITHUB_ENV
-      - run: mv anchor/target/debug/anchor ./programs/anchor
-      - run: chmod u+x ./anchor
 
   tests:
     runs-on: ubicloud-standard-8
