@@ -1,61 +1,25 @@
-import React, { use, useState } from 'react';
-import { Modal } from '../modal';
+import React, { useState } from 'react';
 
 /* SDK Imports */
-import { useAnchorWallet } from '@solana/wallet-adapter-react';
-import { handleMessage } from './policySdkFunctions';
 import { useRwaClient } from '../../hooks/useRwaClient';
 import { AttachPolicyArgs, RwaClient } from '../../src';
-import { ModalTyped } from '../modalType';
 import { FormInputValues } from '../types';
 import { BN } from '@coral-xyz/anchor';
+import DynamicComponent, { ComponentTypes } from './policyEnum';
 
-interface ModalContent<T> {
-    message: string;
-    args: T;
+interface Action {
+    message: string,
+    args: AttachPolicyArgs
 }
 
-export interface ModalPropsTyped<T extends FormInputValues> {
-    closeModal: () => void;
-    handleSubmit: (payload: { message: string; inputValues: T }) => void;
-    modalContent: ModalContent<T> | null;
-}
+export const PolicyEngine = () => {
+    // Define state to hold the selected action
+    const [selectedAction, setSelectedAction] = useState<Action | null>(null); // Default to the first action
 
-export const PolicyEngineTyped = () => {
-    const wallet = useAnchorWallet();
-    const { rwaClient, status } = useRwaClient();
-    const [showModal, setShowModal] = useState(false);
-    const [modalContent, setModalContent] = useState<any>(null);
-    const [currType, setCurrType] = useState<FormInputValues>()
-
-    // Function to handle opening modal
-    const handleOpenModal = (content: { message: string, args: AttachPolicyArgs }) => {
-        setModalContent(content);
-        setShowModal(true);
-    };
-
-    // Function to handle closing modal
-    const closeModal = () => {
-        setShowModal(false);
-        setModalContent(null);
-    };
-
-    // Function to handle form submission
-    const handleSubmit = <T,>(ix: { message: string; inputValues: T }) => {
-        handleMessage<T>(ix, rwaClient as RwaClient);
-        closeModal();
-    };
-
-    // Function to create arguments
-    const createArgs = <T extends Record<string, any>>(obj: T) => {
-        return obj
-    };
-
-    // Define actions with appropriate args
-    const actions = [
+    const actions: Action[] = [
         {
-            message: 'IdentityApprovalPolicy',
-            args: createArgs<AttachPolicyArgs>({
+            message: 'IDENTITY_APPROVAL',
+            args: {
                 authority: '',
                 owner: '',
                 assetMint: '',
@@ -67,11 +31,11 @@ export const PolicyEngineTyped = () => {
                 policy: {
                     identityApproval: {},
                 },
-            })
+            }
         },
         {
-            message: 'TransactionCountVelocity',
-            args: createArgs<AttachPolicyArgs>({
+            message: 'TRANSACTION_COUNT_VELOCITY',
+            args: {
                 authority: '',
                 owner: '',
                 assetMint: '',
@@ -86,11 +50,11 @@ export const PolicyEngineTyped = () => {
                         timeframe: new BN(60),
                     },
                 },
-            })
+            }
         },
         {
-            message: 'TransactionAmountVelocity',
-            args: createArgs<AttachPolicyArgs>({
+            message: 'TRANSACTION_AMOUNT_VELOCITY',
+            args: {
                 authority: '',
                 owner: '',
                 assetMint: '',
@@ -105,11 +69,11 @@ export const PolicyEngineTyped = () => {
                         timeframe: new BN(60),
                     },
                 },
-            })
+            }
         },
         {
-            message: 'TransactionAmountLimitPolicy',
-            args: createArgs<AttachPolicyArgs>({
+            message: 'TRANSACTION_AMOUNT_LIMIT',
+            args: {
                 authority: '',
                 owner: '',
                 assetMint: '',
@@ -123,34 +87,30 @@ export const PolicyEngineTyped = () => {
                         limit: new BN(100),
                     },
                 },
-            })
+            }
         },
     ];
 
+    const handleActionSelect = (index: number) => {
+        console.log('clicked, ', actions[index].message)
+        setSelectedAction(actions[index]);
+    };
+
     return (
-        <div className="container mx-auto mt-10 text-center text-black border border-black">
+        <div className="container mx-auto mt-10 text-center text-black border border-black overflow-x-scroll">
             <h1>Policy Engine</h1>
             <p>Please note, these actions use the default policy args.</p>
-            <div className="flex justify-center items-center">
-                <div className="w-[80%] h-[200px] flex items-center justify-between">
+            <div className='w-[80%] mx-auto'>
+                <div className='flex justify-between w-full '>
                     {actions.map((action, index) => (
-                        <button
-                            key={index}
-                            className="btn"
-                            onClick={() => handleOpenModal(action as { message: string, args: AttachPolicyArgs })}
-                        >
+                        <button key={index} className='bg-blue-200 p-2 rounded-full' onClick={() => handleActionSelect(index)}>
                             {action.message}
                         </button>
                     ))}
                 </div>
             </div>
-            {showModal && (
-                <ModalTyped<AttachPolicyArgs>
-                    closeModal={closeModal}
-                    handleSubmit={handleSubmit}
-                    modalContent={modalContent}
-                />
-            )}
+            {/* Render the selected action */}
+            {selectedAction && <DynamicComponent type={selectedAction.message} />}
         </div>
     );
 };

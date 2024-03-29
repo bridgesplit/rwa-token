@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Modal } from '../modal';
 
 /* SDK Imports */
 import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from '../../src/asset_controller'
@@ -93,13 +92,13 @@ export const AssetController = () => {
                     ))}
                 </div>
             </div>
-            {showModal && (
+            {/* {showModal && (
                 <Modal
                     closeModal={closeModal}
                     handleSubmit={handleSubmit}
                     modalContent={modalContent}
                 />
-            )}
+            )} */}
         </div>
     );
 };

@@ -4,7 +4,7 @@ import Head from "next/head";
 import { IdentityRegistry } from "../components/identityregistry/identityRegistry";
 import { AssetController } from "../components/assetcontroller/assetController";
 import SetupProviderComponent from "../components/setup";
-import { PolicyEngineTyped } from "../components/policyengine/policyEngineTyped";
+import { PolicyEngine } from "../components/policyengine/policyEngineTyped";
 import { DataRegistry } from "../components/dataregistry/dataregistry";
 import { SampleHeliusRPCCalls } from "../components/sampleRwa";
 
@@ -48,10 +48,10 @@ export default function Home() {
         <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
         <SetupProviderComponent />
         <SampleHeliusRPCCalls />
-        <AssetController />
-        <PolicyEngineTyped />
-        <IdentityRegistry />
-        <DataRegistry />
+        {/* <AssetController /> */}
+        <PolicyEngine />
+        {/* <IdentityRegistry /> */}
+        {/* <DataRegistry /> */}
       </div>
     </>
   )

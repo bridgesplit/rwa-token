@@ -1,3 +1,4 @@
+import { BN } from "@coral-xyz/anchor";
 import { AddLevelToIdentityAccountArgs, AttachPolicyArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
 
 
@@ -26,15 +27,22 @@ export interface ModalProps {
 }
 
 
-interface ModalContent<T> {
+interface ModalContent {
     message: string;
-    args: T;
+    args: Record<string, BN | string | number>
 }
 
 export interface ModalPropsTyped<T extends FormInputValues> {
     closeModal: () => void;
-    handleSubmit: (payload: { message: string; inputValues: T }) => void;
-    modalContent: ModalContent<T> | null;
+    handleSubmit: (payload: ModalContent) => void;
+    modalContent: ModalContent | null;
+}
+
+
+export interface ModalGenericProps {
+    closeModal: () => void;
+    handleSubmit: () => void;
+    modalContent: ModalContent
 }
 /*
 
