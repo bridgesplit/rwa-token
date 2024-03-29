@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 
 /* SDK Imports */
 import { useRwaClient } from '../../hooks/useRwaClient';
-import { AttachPolicyArgs, RwaClient } from '../../src';
+import { AttachPolicyArgs, Policy, RwaClient } from '../../src';
 import { FormInputValues } from '../types';
 import { BN } from '@coral-xyz/anchor';
 import DynamicComponent, { ComponentTypes } from './policyEnum';
+import { handleMessage } from './policySdkFunctions';
 
 interface Action {
     message: string,
@@ -15,6 +16,7 @@ interface Action {
 export const PolicyEngine = () => {
     // Define state to hold the selected action
     const [selectedAction, setSelectedAction] = useState<Action | null>(null); // Default to the first action
+    const [policyInput, setPolicyInput] = useState<Policy | null>(null); // Default to the first action
 
     const actions: Action[] = [
         {
@@ -96,6 +98,14 @@ export const PolicyEngine = () => {
         setSelectedAction(actions[index]);
     };
 
+    const handleSetPolicyInput = (policy: Policy) => {
+        setPolicyInput((prev) => policy)
+    }
+
+    // const handleSubmit = async (args: AttachPolicyArgs) => {
+    //     handleMessage(args, rwaClient as RwaClient)
+    // };
+
     return (
         <div className="container mx-auto mt-10 text-center text-black border border-black overflow-x-scroll">
             <h1>Policy Engine</h1>
@@ -110,7 +120,7 @@ export const PolicyEngine = () => {
                 </div>
             </div>
             {/* Render the selected action */}
-            {selectedAction && <DynamicComponent type={selectedAction.message} />}
+            {selectedAction && <DynamicComponent type={selectedAction.message} handleSubmit={handleSetPolicyInput} />}
         </div>
     );
 };

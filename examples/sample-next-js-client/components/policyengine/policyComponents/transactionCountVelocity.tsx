@@ -1,13 +1,24 @@
 import { useState } from "react";
+import { PolicyOnChainTypes, SendToParent } from "../policyEnum";
+import { Policy } from "../../../src/policy_engine/types";
+import { BN } from "@coral-xyz/anchor";
 
-interface TransactionCountVelocity {
+interface PolicyDetails {
     limit: number;
-    timeframe: number;
+    timeframe?: number; // Only TRANSACTION_COUNT_VELOCITY and TRANSACTION_AMOUNT_VELOCITY have timeframe
 }
 
-export const TransactionCountVelocity = () => {
-    const [limit, setLimit] = useState<number>(100);
-    const [timeframe, setTimeframe] = useState<number>(60);
+interface PolicyFormProps {
+    message: string;
+    policy: PolicyDetails;
+    onSubmit: SendToParent;
+}
+
+
+
+export const PolicyForm: React.FC<PolicyFormProps> = ({ message, policy, onSubmit }) => {
+    const [limit, setLimit] = useState<number>(policy.limit);
+    const [timeframe, setTimeframe] = useState<number | undefined>(policy.timeframe);
     const [errors, setErrors] = useState<string[]>([]);
 
     const handleSubmit = (event: React.FormEvent) => {
@@ -19,23 +30,39 @@ export const TransactionCountVelocity = () => {
             errors.push("Limit must be a positive number.");
         }
 
-        if (isNaN(timeframe) || timeframe <= 0) {
+        if (timeframe !== undefined && (isNaN(timeframe) || timeframe <= 0)) {
             errors.push("Timeframe must be a positive number.");
         }
 
         if (errors.length === 0) {
-            const transactionCountVelocity: TransactionCountVelocity = {
-                limit: limit,
-                timeframe: timeframe
-            };
-
-            console.log('Transaction Count Velocity:', transactionCountVelocity);
-
-            // You can send this data to the server or use it as needed
-
-            // Reset form after submission (optional)
-            // setLimit(100);
-            // setTimeframe(60);
+            const updatedPolicy: Policy = (() => {
+                switch (message) {
+                    case 'TRANSACTION_AMOUNT_LIMIT':
+                        return {
+                            transactionAmountLimit: {
+                                limit: new BN(limit),
+                            }
+                        };
+                    case 'TRANSACTION_AMOUNT_VELOCITY':
+                        return {
+                            transactionAmountVelocity: {
+                                limit: new BN(limit),
+                                ...(timeframe !== undefined ? { timeframe: new BN(timeframe) } : { timeframe: new BN(0) })
+                            }
+                        };
+                    case 'TRANSACTION_COUNT_VELOCITY':
+                        return {
+                            transactionCountVelocity: {
+                                limit: new BN(limit),
+                                ...(timeframe !== undefined ? { timeframe: new BN(timeframe) } : { timeframe: new BN(0) })
+                            }
+                        };
+                    default:
+                        throw new Error('Unhandled policy type');
+                }
+            })();
+            console.log('Submitting ', updatedPolicy)
+            onSubmit(updatedPolicy);
         } else {
             setErrors(errors);
         }
@@ -43,7 +70,7 @@ export const TransactionCountVelocity = () => {
 
     return (
         <div className="max-w-md mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-4">Transaction Count Velocity Form</h2>
+            <h2 className="text-2xl font-bold mb-4">{message}</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
                     <label htmlFor="limit" className="block text-gray-700">Limit:</label>
@@ -56,17 +83,19 @@ export const TransactionCountVelocity = () => {
                         className="w-full px-3 py-2 mt-1 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
                     />
                 </div>
-                <div className="mb-4">
-                    <label htmlFor="timeframe" className="block text-gray-700">Timeframe:</label>
-                    <input
-                        type="number"
-                        id="timeframe"
-                        value={timeframe}
-                        min={0}
-                        onChange={(e) => setTimeframe(parseInt(e.target.value))}
-                        className="w-full px-3 py-2 mt-1 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                </div>
+                {policy.timeframe !== undefined && (
+                    <div className="mb-4">
+                        <label htmlFor="timeframe" className="block text-gray-700">Timeframe:</label>
+                        <input
+                            type="number"
+                            id="timeframe"
+                            value={timeframe || ''}
+                            min={0}
+                            onChange={(e) => setTimeframe(parseInt(e.target.value))}
+                            className="w-full px-3 py-2 mt-1 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+                        />
+                    </div>
+                )}
                 {errors.length > 0 && (
                     <div className="mb-4">
                         {errors.map((error, index) => (
