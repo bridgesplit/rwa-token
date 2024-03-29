@@ -1,8 +1,7 @@
 
 import { Policy } from '../../src/policy_engine/types';
 import { IdentityApproval } from './policyComponents/identityApproval';
-import { TransactionAmountLimit } from './policyComponents/transactionAmountLimit';
-import { TransactionAmountVelocity } from './policyComponents/transactionAmountVelocity';
+import { IdentityFilterForm } from './policyComponents/identityFilter';
 import { PolicyForm } from './policyComponents/transactionCountVelocity';
 // Enum defining different component types
 export const ComponentTypes = {
@@ -46,9 +45,26 @@ function DynamicComponent({ type, handleSubmit }: { type: string, handleSubmit: 
         handleSubmit(policy)
     }
 
+    // identityFilter: {
+    //     identityLevels: [1],
+    //     comparisionType: { or: {} },
+    // },
+
     switch (type) {
         case ComponentTypes.IDENTITY_APPROVAL:
-            componentToRender = <IdentityApproval onSubmit={sendPolicyToParent} />;
+            componentToRender =
+                <>
+                    <IdentityFilterForm message={''} identityFilter={{
+                        identityLevels: [],
+                        comparisionType: {
+                            name: 'Or'
+                        }
+                    }} onSubmit={function (policy: ({ transactionAmountVelocity?: undefined; transactionCountVelocity?: undefined; identityApproval?: undefined; } & { transactionAmountLimit: { limit: import("bn.js"); }; }) | ({ transactionAmountLimit?: undefined; transactionCountVelocity?: undefined; identityApproval?: undefined; } & { transactionAmountVelocity: { limit: import("bn.js"); timeframe: import("bn.js"); }; }) | ({ transactionAmountLimit?: undefined; transactionAmountVelocity?: undefined; identityApproval?: undefined; } & { transactionCountVelocity: { limit: import("bn.js"); timeframe: import("bn.js"); }; }) | ({ transactionAmountLimit?: undefined; transactionAmountVelocity?: undefined; transactionCountVelocity?: undefined; } & { identityApproval: Record<string, never>; })): void {
+                        throw new Error('Function not implemented.');
+                    }} />
+                    <IdentityApproval onSubmit={sendPolicyToParent} />;
+
+                </>
             break;
         case ComponentTypes.TRANSACTION_AMOUNT_LIMIT:
             componentToRender = <PolicyForm message={ComponentTypes.TRANSACTION_AMOUNT_LIMIT} policy={PolicyTypes.TRANSACTION_AMOUNT_LIMIT} onSubmit={sendPolicyToParent} />;

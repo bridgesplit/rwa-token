@@ -17,7 +17,7 @@ export const PolicyEngine = () => {
     // Define state to hold the selected action
     const [selectedAction, setSelectedAction] = useState<Action | null>(null); // Default to the first action
     const [policyInput, setPolicyInput] = useState<Policy | null>(null); // Default to the first action
-
+    const [policyArgs, setPolicyArgs] = useState<AttachPolicyArgs | null>(null); // Default to the first action
     const actions: Action[] = [
         {
             message: 'IDENTITY_APPROVAL',
@@ -102,14 +102,18 @@ export const PolicyEngine = () => {
         setPolicyInput((prev) => policy)
     }
 
-    // const handleSubmit = async (args: AttachPolicyArgs) => {
-    //     handleMessage(args, rwaClient as RwaClient)
-    // };
+    const handleSubmit = async (args: AttachPolicyArgs | null) => {
+        if (!args) {
+            return
+        } else {
+            // handleMessage(args, rwaClient as RwaClient)
+        }
+    };
 
     return (
         <div className="container mx-auto mt-10 text-center text-black border border-black overflow-x-scroll">
-            <h1>Policy Engine</h1>
-            <p>Please note, these actions use the default policy args.</p>
+            <h1>Policy Engine Builder</h1>
+            <p>Current Policy: {JSON.stringify(policyInput)}</p>
             <div className='w-[80%] mx-auto'>
                 <div className='flex justify-between w-full '>
                     {actions.map((action, index) => (
@@ -121,6 +125,8 @@ export const PolicyEngine = () => {
             </div>
             {/* Render the selected action */}
             {selectedAction && <DynamicComponent type={selectedAction.message} handleSubmit={handleSetPolicyInput} />}
+            <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Policy for Tx</button>
+
         </div>
     );
 };
