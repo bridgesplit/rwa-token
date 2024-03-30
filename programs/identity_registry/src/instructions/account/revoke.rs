@@ -6,13 +6,13 @@ use anchor_lang::prelude::*;
 pub struct RevokeIdentityAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: checks inside ix
-    pub signer: UncheckedAccount<'info>,
+    #[account(
+        constraint = identity_registry.authority == signer.key() || identity_registry.delegate == signer.key()
+    )]
+    pub signer: Signer<'info>,
     #[account(
         seeds = [identity_registry.asset_mint.key().as_ref()],
         bump,
-        constraint = identity_registry.verify_signer(identity_registry.key(), signer.key(), signer.is_signer).is_ok()
     )]
     pub identity_registry: Box<Account<'info, IdentityRegistryAccount>>,
     #[account(

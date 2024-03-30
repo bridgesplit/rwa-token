@@ -34,15 +34,6 @@ impl IdentityRegistryAccount {
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
     }
-    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
-        if signer == registry && self.delegate == registry {
-            return Ok(());
-        }
-        if (signer == self.authority || signer == self.delegate) && is_signer {
-            return Ok(());
-        }
-        Err(IdentityRegistryErrors::UnauthorizedSigner.into())
-    }
 }
 
 #[account()]

@@ -6,12 +6,11 @@ use anchor_lang::prelude::*;
 pub struct AddLevelToIdentityAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: signer check
-    pub signer: UncheckedAccount<'info>,
     #[account(
-        constraint = identity_registry.verify_signer(identity_registry.key(), signer.key(), signer.is_signer).is_ok()
+        constraint = identity_registry.authority == signer.key() || identity_registry.delegate == signer.key()
     )]
+    pub signer: Signer<'info>,
+    #[account()]
     pub identity_registry: Box<Account<'info, IdentityRegistryAccount>>,
     #[account(
         mut,

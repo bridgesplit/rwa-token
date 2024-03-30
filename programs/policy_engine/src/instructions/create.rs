@@ -7,13 +7,11 @@ use crate::state::*;
 pub struct CreatePolicyAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: internal ix checks
-    pub signer: UncheckedAccount<'info>,
     #[account(
-        mut,
-        constraint = policy_engine.verify_signer(policy_engine.key(), signer.key(), signer.is_signer).is_ok()
+        constraint = policy_engine.authority == signer.key() || policy_engine.delegate == signer.key()
     )]
+    pub signer: Signer<'info>,
+    #[account(mut)]
     pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
     #[account(
         init,
