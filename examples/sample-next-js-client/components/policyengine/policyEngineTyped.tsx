@@ -149,9 +149,9 @@ export const PolicyEngine = () => {
                     <p className='py-6 text-[10px] font-bold'>Current Policy Arguments:</p>
                     <JSONPretty id="json-pretty" data={policyArgs}
                         style={{ fontSize: "0.5em" }} // Set font size and color to white
-                        key='color: "#f92672"'
-                        mainStyle='lineHeight: 1.3, color: "#ffffff", background: "#ffff88", overflow: "x-scroll"'
-                        valueStyle='color: "#ba1bbf"'
+                        key='color:#f92672'
+                        mainStyle='line-height:1.3;color:#000000;overflow:auto;'
+                        valueStyle='color:#f0a267'
                     ></JSONPretty>
                 </div>
                 {/* <p>Current Policy: {JSON.stringify(policyArgs)}</p> */}

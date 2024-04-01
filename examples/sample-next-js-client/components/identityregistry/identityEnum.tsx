@@ -33,11 +33,6 @@ export const IdentityTypes = {
     REMOVE_LEVEL_FROM_USER: REMOVE_LEVEL_FROM_USER_ACCOUNT_ARGS,
 };
 
-export const IdentityOnChainTypes = {
-    SETUP_USER: 'transactionAmountLimit',
-    ADD_IDENTITY_LEVEL_TO_USER: 'transactionAmountVelocity',
-    REMOVE_LEVEL_FROM_USER: 'transactionCountVelocity',
-};
 
 
 function DynamicComponent({ type, handleParentState }: { type: string, handleParentState: (key: string, value: string | number) => void }) {

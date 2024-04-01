@@ -4,22 +4,16 @@ import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, RwaClien
 import JSONPretty from 'react-json-pretty';
 import DynamicComponent from './identityEnum';
 import { useRwaClient } from '../../hooks/useRwaClient';
-import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { handleMessage } from './sdkfunctions';
-
-
 
 interface Action<T> {
     message: string,
     args: T
 }
-
-
 export type IdentityRegistryArgs = SetupUserArgs | AddLevelToIdentityAccountArgs | RemoveLevelFromIdentityAccount
 
 export const IdentityRegistry = () => {
-    const { rwaClient, status } = useRwaClient();
-    const wallet = useAnchorWallet()
+    const { rwaClient } = useRwaClient();
     const actions: Action<IdentityRegistryArgs>[] = [
         {
             message: 'SetupUser',
@@ -80,13 +74,11 @@ export const IdentityRegistry = () => {
                     <JSONPretty id="json-pretty" data={identityArgs}
                         style={{ fontSize: "0.5em" }} // Set font size and color to white
                         key='color: "#f92672"'
-                        mainStyle='lineHeight: 1.3, color: "#ffffff", background: "#ffff88", overflow: "x-scroll"'
-                        valueStyle='color: "#ba1bbf"'
+                        mainStyle='line-height:1.3;color:#000000;overflow:auto;'
+                        valueStyle='color:#f0a267'
                     ></JSONPretty>
-
                 </div>
                 <div className=' border border-black overflow-y-scroll h-[400px]'>
-
                     <div className='block justify-between w-full'>
                         {actions.map((action, index) => (
                             <button key={index} className='bg-blue-200 p-2 rounded-full' onClick={() => handleActionSelect(index)}>
@@ -96,10 +88,9 @@ export const IdentityRegistry = () => {
                     </div>
                     {selectedAction && <DynamicComponent type={selectedAction.message} handleParentState={handleState} />}
                 </div>
-
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(identityArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Policy for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(identityArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Identity for Tx</button>
             </div>
         </div >
     );

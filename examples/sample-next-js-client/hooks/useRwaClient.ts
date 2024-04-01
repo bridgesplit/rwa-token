@@ -15,7 +15,7 @@ export const useRwaClient = () => {
                 const { connection, url } = randomConnection();
 
                 const options = {
-                    skipPreflight: false,
+                    skipPreflight: true,
                     maxRetries: 3
                 };
 

@@ -1,16 +1,13 @@
 
-import { FormInputValues } from "../types";
 import { sendV0SolanaTransaction } from "../../scripts/helpers";
 import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, RwaClient, SetupUserArgs } from "../../src";
+import { IdentityRegistryArgs } from "./identityRegistry";
 
+export const handleMessage = (ix: { message: string; inputValues: IdentityRegistryArgs }, rwaClient: RwaClient): void => {
 
-
-export const handleMessage = (ix: { message: string; inputValues: FormInputValues }, rwaClient: RwaClient): void => {
-
-    //TODO: Fix any typing
-    const instructionHandlers: Record<string, (inputValues: any) => void> = {
+    const instructionHandlers: Record<string, (inputValues: IdentityRegistryArgs) => void> = {
         'SetupUser': handleSetupUser,
-        'AddIdentityLevelTouser': handleAddIdentityLevelToUserAccount,
+        'AddIdentityLevelToUser': handleAddIdentityLevelToUserAccount,
         'RemoveLevelFromUser': handleRemoveLevelFromUserAccount,
     };
 
