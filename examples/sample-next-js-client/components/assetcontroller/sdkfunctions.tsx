@@ -2,17 +2,17 @@
 import { sendV0SolanaTransaction } from "../../scripts/helpers";
 import { IssueTokenArgs, RwaClient, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from "../../src";
 import { FormInputValues } from "../types";
+import { AssetControllerArgs } from "./assetController";
 
 
-export const handleMessage = (ix: { message: string; inputValues: FormInputValues }, rwaClient: RwaClient): void => {
+export const handleMessage = (ix: { message: string; inputValues: AssetControllerArgs }, rwaClient: RwaClient): void => {
 
-    //TODO: Fix any typing
-    const instructionHandlers: Record<string, (inputValues: any) => void> = {
-        'SetupAssetController': handleSetupAssetController,
-        'IssueTokens': handleIssueTokens,
-        'VoidTokens': handleVoidTokens,
-        'TransferToken': handleTransferToken,
-    };
+    // const instructionHandlers: Record<string, (inputValues: AssetControllerArgs) => Promise<void>> = {
+    //     'SetupAssetController': handleSetupAssetController,
+    //     'IssueTokens': handleIssueTokens,
+    //     'VoidTokens': handleVoidTokens,
+    //     'TransferToken': handleTransferToken,
+    // };
 
     // Function to handle SetupAssetController instruction
     async function handleSetupAssetController(inputValues: SetupAssetControllerArgs): Promise<void> {
@@ -83,11 +83,11 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
         // TODO: Complete last
     }
 
-    const handler = instructionHandlers[ix.message];
-    if (handler) {
-        handler(ix.inputValues);
+    // const handler = instructionHandlers[ix.message];
+    // if (handler) {
+    //     handler(ix.inputValues);
 
-    } else {
-        console.log('Instruction not found in handler')
-    }
+    // } else {
+    //     console.log('Instruction not found in handler')
+    // }
 };

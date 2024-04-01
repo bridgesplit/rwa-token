@@ -2,7 +2,6 @@ import Image from "next/image";
 import { previewBannerURL, projectDescription, projectName } from "../scripts/config";
 import Head from "next/head";
 import { IdentityRegistry } from "../components/identityregistry/identityRegistry";
-import { AssetController } from "../components/assetcontroller/assetController";
 import SetupProviderComponent from "../components/setup";
 import { PolicyEngine } from "../components/policyengine/policyEngineTyped";
 import { DataRegistry } from "../components/dataregistry/dataregistry";
