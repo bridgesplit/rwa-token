@@ -11,7 +11,7 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
     const instructionHandlers: Record<string, (inputValues: any) => void> = {
         'SetupUser': handleSetupUser,
         'AddIdentityLevelTouser': handleAddIdentityLevelToUserAccount,
-        'RemoveLevelFromUserAccount': handleRemoveLevelFromUserAccount,
+        'RemoveLevelFromUser': handleRemoveLevelFromUserAccount,
     };
 
     async function handleSetupUser(inputValues: SetupUserArgs): Promise<void> {
@@ -55,6 +55,7 @@ export const handleMessage = (ix: { message: string; inputValues: FormInputValue
 
     const handler = instructionHandlers[ix.message];
     if (handler) {
+        console.log('attempting, ', ix.message, ' on ', ix.inputValues)
         handler(ix.inputValues);
 
     } else {

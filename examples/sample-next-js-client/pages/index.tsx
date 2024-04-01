@@ -50,7 +50,7 @@ export default function Home() {
         <SampleHeliusRPCCalls />
         {/* <AssetController /> */}
         <PolicyEngine />
-        {/* <IdentityRegistry /> */}
+        <IdentityRegistry />
         {/* <DataRegistry /> */}
       </div>
     </>

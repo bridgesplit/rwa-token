@@ -36,7 +36,7 @@ export const SampleHeliusRPCCalls = () => {
     return (
         <div>
             <div className="container mx-auto mt-10 text-center text-black">
-                <h1>Generate Helius JSON</h1>
+                <h1>Get RWA Asset Accounts by Mint</h1>
                 <div className="flex justify-center items-center mt-4">
                     <input
                         type="text"

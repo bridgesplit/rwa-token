@@ -104,7 +104,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({ message, policy, onSubmi
                     </div>
                 )}
                 <div>
-                    <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit</button>
+                    <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Confirm</button>
                 </div>
             </form>
         </div>

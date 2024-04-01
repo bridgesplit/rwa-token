@@ -1,27 +1,25 @@
 import React, { useState } from 'react';
 /* SDK Imports */
-import { AddLevelToIdentityAccountArgs, SetupUserArgs } from '../../src';
+import { AddLevelToIdentityAccountArgs, RemoveLevelFromIdentityAccount, RwaClient, SetupUserArgs } from '../../src';
+import JSONPretty from 'react-json-pretty';
+import DynamicComponent from './identityEnum';
+import { useRwaClient } from '../../hooks/useRwaClient';
+import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { handleMessage } from './sdkfunctions';
 
 
 
 interface Action<T> {
-    message: string;
+    message: string,
     args: T
 }
 
-type IdentityRegistryArgs = SetupUserArgs | AddLevelToIdentityAccountArgs | any
+
+export type IdentityRegistryArgs = SetupUserArgs | AddLevelToIdentityAccountArgs | RemoveLevelFromIdentityAccount
 
 export const IdentityRegistry = () => {
-    const [currentModal, setCurrentModal] = useState<string | null>(null);
-
-    const handleOpenModal = (message: string) => {
-        setCurrentModal(message);
-    };
-
-    const handleCloseModal = () => {
-        setCurrentModal(null);
-    };
-
+    const { rwaClient, status } = useRwaClient();
+    const wallet = useAnchorWallet()
     const actions: Action<IdentityRegistryArgs>[] = [
         {
             message: 'SetupUser',
@@ -42,7 +40,7 @@ export const IdentityRegistry = () => {
             }
         },
         {
-            message: 'RemoveLevelFromUserAccount',
+            message: 'RemoveLevelFromUser',
             args: {
                 owner: '',
                 level: 0,
@@ -52,31 +50,57 @@ export const IdentityRegistry = () => {
         }
     ];
 
+    const [identityArgs, setIdentityArgs] = useState<IdentityRegistryArgs>(actions[0].args)
+    const [selectedAction, setSelectedAction] = useState<Action<IdentityRegistryArgs>>(actions[0]); // Default to the first action
+
+    const handleActionSelect = (index: number) => {
+        setSelectedAction(actions[index]);
+        setIdentityArgs(actions[index].args)
+    };
+
+    const handleState = (key: string, value: string | number) => {
+        setIdentityArgs(prev => {
+            return { ...prev, [key]: value }
+        })
+    };
+
+    const handleSubmit = (args: IdentityRegistryArgs) => {
+        console.log(selectedAction.message, args)
+        handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
+
+    };
+
     return (
-        <div className="container mx-auto mt-10 text-center text-black border border-black">
-            <h1>Identity Registry</h1>
-            <div className="flex justify-center items-center">
-                <div className="w-[80%] h-[200px] flex items-center justify-between">
-                    {actions.map((action, index) => (
-                        <button
-                            key={index}
-                            className="btn"
-                            onClick={() => handleOpenModal(action.message)}
-                        >
-                            {action.message}
-                        </button>
-                    ))}
+        <div>
+            <h1 className='text-black font-bold text-[24px]'>Identity Registry</h1>
+            <div className="container mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
+                <div className='text-left bg-blue-100 p-5 w-[30%] mx-auto '>
+                    <p className='py-6 text-[10px] font-bold'>Current Identity Registry:</p>
+                    <p className='py-2 text-[8px] font-bold'>{selectedAction.message}</p>
+                    <JSONPretty id="json-pretty" data={identityArgs}
+                        style={{ fontSize: "0.5em" }} // Set font size and color to white
+                        key='color: "#f92672"'
+                        mainStyle='lineHeight: 1.3, color: "#ffffff", background: "#ffff88", overflow: "x-scroll"'
+                        valueStyle='color: "#ba1bbf"'
+                    ></JSONPretty>
+
                 </div>
+                <div className=' border border-black overflow-y-scroll h-[400px]'>
+
+                    <div className='block justify-between w-full'>
+                        {actions.map((action, index) => (
+                            <button key={index} className='bg-blue-200 p-2 rounded-full' onClick={() => handleActionSelect(index)}>
+                                {action.message}
+                            </button>
+                        ))}
+                    </div>
+                    {selectedAction && <DynamicComponent type={selectedAction.message} handleParentState={handleState} />}
+                </div>
+
+            </div >
+            <div className='py-4'>
+                <button type="submit" onClick={() => handleSubmit(identityArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Policy for Tx</button>
             </div>
-            {/* {currentModal === 'SetupUser' && (
-                <ModalGeneric closeModal={handleCloseModal} handleSubmit={() => console.log('submit')} modalContent={actions[0]} />
-            )}
-            {currentModal === 'AddIdentityLevelToUser' && (
-                <ModalGeneric closeModal={handleCloseModal} handleSubmit={() => console.log('submit')} modalContent={actions[1]} />
-            )}
-            {currentModal === 'RemoveLevelFromUserAccount' && (
-                <ModalGeneric closeModal={handleCloseModal} handleSubmit={() => console.log('submit')} modalContent={actions[2]} />
-            )} */}
-        </div>
+        </div >
     );
 };
