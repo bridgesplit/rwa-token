@@ -6,18 +6,19 @@ import { AttachPolicyArgs, RwaClient } from "../../src";
 
 
 
-export const handleMessage = <T,>(ix: { message: string; inputValues: AttachPolicyArgs }, rwaClient: RwaClient): void => {
+export const handleMessage = (inputValues: AttachPolicyArgs, rwaClient: RwaClient): void => {
 
     //TODO: Fix any typing
-    const instructionHandlers: Record<string, (inputValues: AttachPolicyArgs) => void> = {
-        'IdentityApprovalPolicy': handleAttachPolicy,
-        'TransactionCountVelocity': handleAttachPolicy,
-        'TransactionAmountVelocity': handleAttachPolicy,
-        'TransactionAmountLimitPolicy': handleAttachPolicy,
+    // const instructionHandlers: Record<string, (inputValues: AttachPolicyArgs) => void> = {
+    //     'IdentityApprovalPolicy': handleAttachPolicy,
+    //     'TransactionCountVelocity': handleAttachPolicy,
+    //     'TransactionAmountVelocity': handleAttachPolicy,
+    //     'TransactionAmountLimitPolicy': handleAttachPolicy,
 
-    };
+    // };
 
     async function handleAttachPolicy(inputValues: AttachPolicyArgs): Promise<void> {
+        console.log(inputValues, 'submitting torwa client')
         const setupPolicyIx = await rwaClient?.policyEngine.attachPolicy(inputValues)
         try {
             const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, setupPolicyIx.ixs, 0);
@@ -30,11 +31,11 @@ export const handleMessage = <T,>(ix: { message: string; inputValues: AttachPoli
         }
     }
 
-    const handler = instructionHandlers[ix.message];
-    if (handler) {
-        handler(ix.inputValues);
+    // const handler = instructionHandlers[ix.message];
+    // if (handler) {
+    handleAttachPolicy(inputValues);
 
-    } else {
-        console.log('Instruction not found in handler')
-    }
+    // } else {
+    //     console.log('Instruction not found in handler')
+    // }
 };

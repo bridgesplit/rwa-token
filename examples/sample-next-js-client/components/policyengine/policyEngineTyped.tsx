@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 
 /* SDK Imports */
 import { useRwaClient } from '../../hooks/useRwaClient';
-import { AttachPolicyArgs, Policy, RwaClient } from '../../src';
+import { AttachPolicyArgs, IdentityFilter, Policy, RwaClient } from '../../src';
 import { FormInputValues } from '../types';
+import DynamicComponent from './policyEnum';
 import { BN } from '@coral-xyz/anchor';
-import DynamicComponent, { ComponentTypes } from './policyEnum';
+import JSONPretty from 'react-json-pretty';
 import { handleMessage } from './policySdkFunctions';
+import { useAnchorWallet } from '@solana/wallet-adapter-react';
+import { IdentityFilterForm } from './policyComponents/identityFilter';
 
 interface Action {
     message: string,
@@ -15,9 +18,26 @@ interface Action {
 
 export const PolicyEngine = () => {
     // Define state to hold the selected action
+    const { rwaClient, status } = useRwaClient();
+
+    const DEFAULT_ATTACH_POLICY_ARGS: AttachPolicyArgs = {
+        authority: '',
+        owner: '',
+        assetMint: '',
+        payer: String(rwaClient?.provider.wallet!),
+        identityFilter: {
+            identityLevels: [1],
+            comparisionType: { or: {} },
+        },
+        policy: {
+            identityApproval: {}
+        }
+    }
+    const wallet = useAnchorWallet()
+
     const [selectedAction, setSelectedAction] = useState<Action | null>(null); // Default to the first action
-    const [policyInput, setPolicyInput] = useState<Policy | null>(null); // Default to the first action
-    const [policyArgs, setPolicyArgs] = useState<AttachPolicyArgs | null>(null); // Default to the first action
+    const [policyArgs, setPolicyArgs] = useState<AttachPolicyArgs>(DEFAULT_ATTACH_POLICY_ARGS); // Default to the first action
+
     const actions: Action[] = [
         {
             message: 'IDENTITY_APPROVAL',
@@ -98,24 +118,88 @@ export const PolicyEngine = () => {
         setSelectedAction(actions[index]);
     };
 
+
     const handleSetPolicyInput = (policy: Policy) => {
-        setPolicyInput((prev) => policy)
+        setPolicyArgs(prev => {
+            return { ...prev, policy: policy }; // Update policy property while keeping other properties
+        });
     }
 
-    const handleSubmit = async (args: AttachPolicyArgs | null) => {
-        if (!args) {
-            return
+    const handleIdentitySubmit = (identityFilter: IdentityFilter) => {
+        setPolicyArgs(prev => {
+            return { ...prev, identityFilter: identityFilter }; // Update policy property while keeping other properties
+        });
+    }
+
+    const handleSubmit = async (argsWithoutPayer: AttachPolicyArgs | null) => {
+        const payer = wallet?.publicKey.toString();
+        if (!argsWithoutPayer || !payer) { // Check if args is null or payer is undefined
+            return;
         } else {
-            // handleMessage(args, rwaClient as RwaClient)
+            setPolicyArgs(prev => {
+                return { ...prev, payer: payer }; // Update payer property
+            });
+            handleMessage(policyArgs, rwaClient as RwaClient);
         }
     };
 
     return (
         <div className="container mx-auto mt-10 text-center text-black border border-black overflow-x-scroll">
             <h1>Policy Engine Builder</h1>
-            <p>Current Policy: {JSON.stringify(policyInput)}</p>
+            <div className='text-left bg-blue-100 p-5 w-[30%] mx-auto '>
+                <p className='py-6 text-[10px] font-bold'>Current Policy:</p>
+                <JSONPretty id="json-pretty" data={policyArgs}
+                    style={{ fontSize: "0.5em" }} // Set font size and color to white
+                    key='color: "#f92672"'
+                    mainStyle='lineHeight: 1.3, color: "#ffffff", background: "#ffff88", overflow: "auto"'
+                    valueStyle='color: "#ba1bbf"'
+                ></JSONPretty>
+            </div>
+            {/* <p>Current Policy: {JSON.stringify(policyArgs)}</p> */}
+
+            <label htmlFor="authority" className="block text-gray-700 mb-1">Authority:</label>
+            <input
+                type="text"
+                id="authority"
+                value={policyArgs?.authority || ''} // Use optional chaining to avoid errors when policyArgs is null
+                onChange={(e) =>
+                    setPolicyArgs(prev => {
+                        return { ...prev, authority: e.target.value }; // Update policy property while keeping other properties
+                    })}
+                className="w-full px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+            />
+            <label htmlFor="assetMint" className="block text-gray-700 mb-1">Owner:</label>
+            <input
+                type="text"
+                id="owner"
+                value={policyArgs?.owner || ''} // Use optional chaining to avoid errors when policyArgs is null
+                onChange={(e) =>
+                    setPolicyArgs(prev => {
+                        return { ...prev, owner: e.target.value }; // Update policy property while keeping other properties
+                    })}
+                className="w-full px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+            />
+            <label htmlFor="assetMint" className="block text-gray-700 mb-1">Asset Mint:</label>
+            <input
+                type="text"
+                id="assetMint"
+                value={policyArgs?.assetMint || ''} // Use optional chaining to avoid errors when policyArgs is null
+                onChange={(e) =>
+                    setPolicyArgs(prev => {
+                        return { ...prev, assetMint: e.target.value }; // Update policy property while keeping other properties
+                    })}
+                className="w-full px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+            />
+            <p>Identity Filter:</p>
+            <IdentityFilterForm message={''} identityFilter={{
+                identityLevels: [],
+                comparisionType: {
+                    or: {}
+                }
+            }} onSubmit={handleIdentitySubmit} />
             <div className='w-[80%] mx-auto'>
-                <div className='flex justify-between w-full '>
+
+                <div className='flex justify-between w-full'>
                     {actions.map((action, index) => (
                         <button key={index} className='bg-blue-200 p-2 rounded-full' onClick={() => handleActionSelect(index)}>
                             {action.message}
@@ -123,10 +207,10 @@ export const PolicyEngine = () => {
                     ))}
                 </div>
             </div>
-            {/* Render the selected action */}
-            {selectedAction && <DynamicComponent type={selectedAction.message} handleSubmit={handleSetPolicyInput} />}
+
+            {selectedAction && <DynamicComponent type={selectedAction.message} handlePolicySubmit={handleSetPolicyInput} handleIdentitySubmit={handleIdentitySubmit} />}
             <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Policy for Tx</button>
 
-        </div>
+        </div >
     );
 };

@@ -1,34 +1,18 @@
 import { useState } from "react";
 import { PolicyOnChainTypes, SendToParent } from "../policyEnum";
-import { IdentityFilter, Policy } from "../../../src/policy_engine/types";
-import { BN } from "@coral-xyz/anchor";
-
-type ComparisonType = {
-    name: "Or" | "And";
-};
-
-type IdentityFilterDetails = {
-    identityLevels: number[];
-    comparisionType: ComparisonType;
-};
+import { IdentityFilter, IdentityFilterComparisonType, Policy } from "../../../src/policy_engine/types";
 
 interface IdentityFormProps {
     message: string;
-    identityFilter: IdentityFilterDetails;
-    onSubmit: (policy: Policy) => void;
+    identityFilter: IdentityFilter;
+    onSubmit: (identityFilter: IdentityFilter) => void;
 }
-
-function transformObject(obj: ComparisonType): Record<string, never> {
-    return { [obj.name.toLowerCase()]: {} as never };
-}
-
 
 export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, identityFilter, onSubmit }) => {
     const [newIdentityLevel, setNewIdentityLevel] = useState<number>(-1);
     const [identityLevels, setIdentityLevels] = useState<number[]>(identityFilter.identityLevels);
-    const [comparisonType, setComparisonType] = useState<ComparisonType>(identityFilter.comparisionType);
+    const [comparisonType, setComparisonType] = useState<IdentityFilterComparisonType>(identityFilter.comparisionType);
     const [errors, setErrors] = useState<string[]>([]);
-
     const handleAddIdentityLevel = () => {
         const trimmedNumber = parseInt(newIdentityLevel.toString(), 10); // Convert to string and parse with radix 10
         if (!isNaN(trimmedNumber) && trimmedNumber > 0) {
@@ -54,15 +38,11 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
 
         if (errors.length === 0) {
 
-            console.log(transformObject(comparisonType))
-
-
-            // const updatedIdentityFilter: IdentityFilter = {
-            //     identityLevels: identityLevels,
-            //     comparisionType: transformObject(comparisonType)
-            // };
-
-            // onSubmit(updatedIdentityFilter);
+            const updatedIdentityFilter: IdentityFilter = {
+                identityLevels: identityLevels,
+                comparisionType: comparisonType
+            };
+            onSubmit(updatedIdentityFilter);
         } else {
             setErrors(errors);
         }
@@ -93,17 +73,21 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
                         ))}
                     </ul>
                 </div>
-                {identityFilter.comparisionType.name && (
+                {identityFilter.comparisionType && (
+
                     <div className="mb-4">
                         <label htmlFor="comparisonType" className="block text-gray-700">Comparison Type:</label>
                         <select
                             id="comparisonType"
-                            value={comparisonType.name}
-                            onChange={(e) => setComparisonType({ name: e.target.value as "Or" | "And" })}
+                            value={comparisonType.and ? "and" : "or"}
+                            onChange={(e) => {
+                                const newValue = e.target.value === "and" ? { and: {} } : { or: {} };
+                                setComparisonType(newValue);
+                            }}
                             className="w-full px-3 py-2 mt-1 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
                         >
-                            <option value="Or">Or</option>
-                            <option value="And">And</option>
+                            <option value="or">Or</option>
+                            <option value="and">And</option>
                         </select>
                     </div>
                 )}
@@ -115,7 +99,7 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
                     </div>
                 )}
                 <div>
-                    <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit</button>
+                    <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Confirm</button>
                 </div>
             </form>
         </div>
