@@ -8,6 +8,7 @@ import { RwaClient } from '../../src';
 import JSONPretty from 'react-json-pretty';
 import DynamicComponent from './assetEnum';
 import { PublicKey } from '@solana/web3.js';
+import { toast } from '../../scripts/helpers';
 
 interface Action<T> {
     message: string,
@@ -78,14 +79,13 @@ export const AssetController = () => {
     };
 
     const handleSubmit = (args: AssetControllerArgs) => {
-        const { payer, delegate, authority } = args
-        const payerOnCurve = PublicKey.isOnCurve(new PublicKey(payer))
-        // const delegateOnCurve = PublicKey.isOnCurve(new PublicKey(delegate!))
-        // const authOnCurve = PublicKey.isOnCurve(new PublicKey(authority!))
-
-
-        handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
-
+        const hasEmptyArg = Object.values(args).some(value => value === '');
+        if (!hasEmptyArg) {
+            handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
+        } else {
+            toast.error('Missing args, please try again.')
+            console.error('One or more arguments are empty. handleMessage not executed.');
+        }
     };
 
     return (

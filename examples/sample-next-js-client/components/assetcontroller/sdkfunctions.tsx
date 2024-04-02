@@ -1,4 +1,5 @@
 
+import { toast } from "react-toastify";
 import { sendV0SolanaTransaction } from "../../scripts/helpers";
 import { IssueTokenArgs, RwaClient, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from "../../src";
 import { AssetControllerArgs } from "./assetController";
@@ -52,9 +53,10 @@ async function handleSetupAssetController(inputValues: SetupAssetControllerArgs,
                 rwaClient.identityRegistry.getIdentityRegistryPda(mint).toString(),
             );
         }
-
+        toast.success('Succesfully confirmed transaction.')
     } catch (error) {
         console.error('Error occurred while sending transaction:', error);
+        toast.error('Error sending transaction, please check solscan (preflight is on).')
     }
 
 }

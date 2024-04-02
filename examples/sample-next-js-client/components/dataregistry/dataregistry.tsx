@@ -6,6 +6,7 @@ import { useRwaClient } from '../../hooks/useRwaClient';
 import { CreateDataAccountArgs, DataAccountType, DelegateDataRegistryArgs, RwaClient, UpdateDataAccountArgs } from '../../src';
 import JSONPretty from 'react-json-pretty';
 import DynamicComponent from './dataRegistryEnum';
+import { toast } from '../../scripts/helpers';
 
 interface Action<T> {
     message: string,
@@ -73,9 +74,13 @@ export const DataRegistry = () => {
     };
 
     const handleSubmit = (args: DataRegistryArgs) => {
-        console.log(selectedAction.message, args)
-        handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
-
+        const hasEmptyArg = Object.values(args).some(value => value === '');
+        if (!hasEmptyArg) {
+            handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
+        } else {
+            toast.error('Missing args, please try again.')
+            console.error('One or more arguments are empty. handleMessage not executed.');
+        }
     };
 
     return (
