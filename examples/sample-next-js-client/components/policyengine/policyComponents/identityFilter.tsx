@@ -13,6 +13,7 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
     const [identityLevels, setIdentityLevels] = useState<number[]>(identityFilter.identityLevels);
     const [comparisonType, setComparisonType] = useState<IdentityFilterComparisonType>(identityFilter.comparisionType);
     const [errors, setErrors] = useState<string[]>([]);
+
     const handleAddIdentityLevel = () => {
         const trimmedNumber = parseInt(newIdentityLevel.toString(), 10); // Convert to string and parse with radix 10
         if (!isNaN(trimmedNumber) && trimmedNumber > 0) {
@@ -53,22 +54,22 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
             <h2 className="text-2xl font-bold mb-4">{message}</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                    <label htmlFor="identityLevels" className="block text-gray-700">Identity Levels:</label>
-                    <div className="flex">
+                    <div className="flex gap-2 justify-center">
+                        <label htmlFor="identityLevels" className="text-gray-700 text-xs font-bold">Identity Levels:</label>
                         <input
                             type="number"
                             id="identityLevels"
                             value={newIdentityLevel}
                             onChange={(e) => setNewIdentityLevel(parseInt(e.target.value))}
-                            className="w-full px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+                            className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
                         />
-                        <button type="button" onClick={handleAddIdentityLevel} className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Add</button>
+                        <button type="button" onClick={handleAddIdentityLevel} className="w-1/3 py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Add</button>
                     </div>
-                    <ul className="mt-2">
+                    <ul className="mt-2 block justify-center w-full">
                         {identityLevels.map((level, index) => (
-                            <li key={index} className="flex items-center">
+                            <li key={index} className="flex justify-center items-center gap-2">
                                 <span>{level}</span>
-                                <button type="button" onClick={() => handleRemoveIdentityLevel(index)} className="ml-2 px-2 py-1 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:bg-red-600">Remove</button>
+                                <button type="button" onClick={() => handleRemoveIdentityLevel(index)} className="w-[100px] py-2 px-4 bg-[#e24330] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Remove</button>
                             </li>
                         ))}
                     </ul>
@@ -76,7 +77,7 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
                 {identityFilter.comparisionType && (
 
                     <div className="mb-4">
-                        <label htmlFor="comparisonType" className="block text-gray-700">Comparison Type:</label>
+                        <label htmlFor="comparisonType" className="w-1/4 text-gray-700 text-xs font-bold">Comparison Type:</label>
                         <select
                             id="comparisonType"
                             value={comparisonType.and ? "and" : "or"}
@@ -84,24 +85,27 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
                                 const newValue = e.target.value === "and" ? { and: {} } : { or: {} };
                                 setComparisonType(newValue);
                             }}
-                            className="w-full px-3 py-2 mt-1 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+                            className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
                         >
                             <option value="or">Or</option>
                             <option value="and">And</option>
                         </select>
                     </div>
-                )}
-                {errors.length > 0 && (
-                    <div className="mb-4">
-                        {errors.map((error, index) => (
-                            <p key={index} className="text-red-500">{error}</p>
-                        ))}
-                    </div>
-                )}
+                )
+                }
+                {
+                    errors.length > 0 && (
+                        <div className="mb-4">
+                            {errors.map((error, index) => (
+                                <p key={index} className="text-red-500">{error}</p>
+                            ))}
+                        </div>
+                    )
+                }
                 <div>
-                    <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Confirm</button>
+                    <button type="submit" className="py-2 px-4 bg-[#e24330] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Confirm</button>
                 </div>
-            </form>
-        </div>
+            </form >
+        </div >
     );
 };

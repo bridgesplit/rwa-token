@@ -27,7 +27,7 @@ export const Navbar = () => {
     ]
 
     return (
-        <div className="w-full h-[70px] border-b border-[#1D1E20] py-4 px-7 flex justify-between items-center">
+        <div className="w-full h-[70px] border-b-4 border-[#1D1E20] py-4 px-7 flex justify-between items-center">
             <div className="flex gap-2 items-center">
                 <h1 className="text-black font-semibold text-xl">Bridgesplit RWA Testing Dashboard</h1>
             </div>

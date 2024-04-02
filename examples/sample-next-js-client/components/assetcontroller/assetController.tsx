@@ -85,19 +85,19 @@ export const AssetController = () => {
     return (
         <div className='w-[700px]'>
             <h1 className='text-black font-bold text-[24px]'>Asset Controller</h1>
-            <div className="container mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
-                <div className='text-left bg-[#22a094] border-4 border-black p-5 w-[30%] mx-auto '>
-                    <p className='py-6 text-[10px] font-bold'>Current Asset Controller Args:</p>
+            <div className="mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
+                <div className='text-left bg-[#22a094] border-4 border-black p-5 w-[250px] mx-auto '>
+                    <p className='py-6 text-[10px] font-bold underline'>Asset Controller Args</p>
                     <p className='py-2 text-[8px] font-bold'>{selectedAction.message}</p>
                     <JSONPretty id="json-pretty" data={assetControllerArgs}
                         style={{ fontSize: "0.5em" }} // Set font size and color to white
                         key='color: "#f92672"'
-                        mainStyle='line-height:1.3;color:#000000;overflow:auto;'
+                        mainStyle='line-height:1.3;color:#000000;overflow-x:scroll;'
                         valueStyle='color:#f0a267'
                     ></JSONPretty>
                 </div>
-                <div className=' border-4 border-black overflow-y-scroll h-[400px]'>
-                    <div className="flex flex-row overflow-x-auto bg-black text-white p-4">
+                <div className='border-4 border-black overflow-y-scroll h-[400px]'>
+                    <div className="flex flex-row overflow-x-auto bg-black text-white p-4 sticky top-0 z-10">
                         {actions.map((action, index) => (
                             <button
                                 key={index}
@@ -112,7 +112,7 @@ export const AssetController = () => {
                 </div>
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none">SUBMIT INSTRUCTIONS</button>
+                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">SUBMIT INSTRUCTIONS</button>
             </div>
         </div >
     );

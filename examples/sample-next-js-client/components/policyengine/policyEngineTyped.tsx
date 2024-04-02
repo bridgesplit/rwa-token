@@ -142,11 +142,12 @@ export const PolicyEngine = () => {
     };
 
     return (
-        <div>
+        <div className='w-[700px]'>
             <h1 className='text-black font-bold text-[24px]'>Policy Maker</h1>
-            <div className="container mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
-                <div className='text-left bg-blue-100 p-5 w-[30%] mx-auto '>
-                    <p className='py-6 text-[10px] font-bold'>Current Policy Arguments:</p>
+            <div className="mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
+                <div className='text-left bg-[#e24330] border-4 border-black p-5 w-[250px] mx-auto '>
+                    <p className='py-6 text-[10px] font-bold underline'>Policy Engine Args</p>
+                    <p className='py-2 text-[8px] font-bold'>{selectedAction?.message}</p>
                     <JSONPretty id="json-pretty" data={policyArgs}
                         style={{ fontSize: "0.5em" }} // Set font size and color to white
                         key='color:#f92672'
@@ -154,65 +155,74 @@ export const PolicyEngine = () => {
                         valueStyle='color:#f0a267'
                     ></JSONPretty>
                 </div>
-                {/* <p>Current Policy: {JSON.stringify(policyArgs)}</p> */}
-                <div className=' border border-black overflow-y-scroll h-[400px]'>
-                    <label htmlFor="authority" className="block text-gray-700 mb-1">Authority:</label>
-                    <input
-                        type="text"
-                        id="authority"
-                        value={policyArgs?.authority || ''} // Use optional chaining to avoid errors when policyArgs is null
-                        onChange={(e) =>
-                            setPolicyArgs(prev => {
-                                return { ...prev, authority: e.target.value }; // Update policy property while keeping other properties
-                            })}
-                        className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                    <label htmlFor="assetMint" className="block text-gray-700 mb-1">Owner:</label>
-                    <input
-                        type="text"
-                        id="owner"
-                        value={policyArgs?.owner || ''} // Use optional chaining to avoid errors when policyArgs is null
-                        onChange={(e) =>
-                            setPolicyArgs(prev => {
-                                return { ...prev, owner: e.target.value }; // Update policy property while keeping other properties
-                            })}
-                        className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                    <label htmlFor="assetMint" className="block text-gray-700 mb-1">Asset Mint:</label>
-                    <input
-                        type="text"
-                        id="assetMint"
-                        value={policyArgs?.assetMint || ''} // Use optional chaining to avoid errors when policyArgs is null
-                        onChange={(e) =>
-                            setPolicyArgs(prev => {
-                                return { ...prev, assetMint: e.target.value }; // Update policy property while keeping other properties
-                            })}
-                        className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-                    />
-                    <p>Identity Filter:</p>
-                    <IdentityFilterForm message={''} identityFilter={{
-                        identityLevels: [],
-                        comparisionType: {
-                            or: {}
-                        }
-                    }} onSubmit={handleIdentitySubmit} />
-                    <div className='w-[80%] mx-auto'>
 
-                        <div className='block justify-between w-full'>
-                            {actions.map((action, index) => (
-                                <button key={index} className='bg-blue-200 p-2 rounded-full' onClick={() => handleActionSelect(index)}>
-                                    {action.message}
-                                </button>
-                            ))}
-                        </div>
+                {/* TODO: Extract these into its own component */}
+                <div className='border-4 border-black overflow-y-scroll h-[400px]'>
+                    <div className="flex flex-row overflow-x-auto bg-black text-white p-4 sticky top-0 z-10">
+                        {actions.map((action, index) => (
+                            <button key={index}
+                                className="p-2 text-xs rounded-full mx-2 bg-gradient-to-br from-black to-neutral-950 text-white hover:bg-gradient-to-br hover:from-gray-800 hover:to-gray-900"
+                                onClick={() => handleActionSelect(index)}>
+                                {action.message}
+                            </button>
+                        ))}
                     </div>
-                    {selectedAction && <DynamicComponent type={selectedAction.message} handlePolicySubmit={handleSetPolicyInput} handleIdentitySubmit={handleIdentitySubmit} />}
+                    <div className='block'>
+                        <div className='flex items-center justify-center my-4'>
+                            <label htmlFor="authority" className="w-1/4 text-gray-700 text-xs font-bold">Authority:</label>
+                            <input
+                                type="text"
+                                id="authority"
+                                value={policyArgs?.authority || ''} // Use optional chaining to avoid errors when policyArgs is null
+                                onChange={(e) =>
+                                    setPolicyArgs(prev => {
+                                        return { ...prev, authority: e.target.value }; // Update policy property while keeping other properties
+                                    })}
+                                className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
+                            />
+                        </div>
+                        <div className='flex items-center justify-center my-4'>
+                            <label htmlFor="owner" className="w-1/4 text-gray-700 text-xs font-bold">Owner:</label>
+                            <input
+                                type="text"
+                                id="owner"
+                                value={policyArgs?.owner || ''} // Use optional chaining to avoid errors when policyArgs is null
+                                onChange={(e) =>
+                                    setPolicyArgs(prev => {
+                                        return { ...prev, owner: e.target.value }; // Update policy property while keeping other properties
+                                    })}
+                                className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
+                            />
+
+                        </div>
+                        <div className='flex items-center justify-center my-4'>
+                            <label htmlFor='assetMint' className="w-1/4 text-gray-700 text-xs font-bold">Asset Mint</label>
+                            <input
+                                type="text"
+                                id="assetMint"
+                                value={policyArgs?.assetMint || ''} // Use optional chaining to avoid errors when policyArgs is null
+                                onChange={(e) =>
+                                    setPolicyArgs(prev => {
+                                        return { ...prev, assetMint: e.target.value }; // Update policy property while keeping other properties
+                                    })}
+                                className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
+                            />
+                        </div>
+                        <IdentityFilterForm message={''} identityFilter={{
+                            identityLevels: [],
+                            comparisionType: {
+                                or: {}
+                            }
+                        }} onSubmit={handleIdentitySubmit} />
+                        {selectedAction && <DynamicComponent type={selectedAction.message} handlePolicySubmit={handleSetPolicyInput} handleIdentitySubmit={handleIdentitySubmit} />}
+                    </div>
                 </div>
 
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Policy for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-[#e24330] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Submit Policy for Tx</button>
             </div>
-        </div>
+        </div >
     );
 };
+
