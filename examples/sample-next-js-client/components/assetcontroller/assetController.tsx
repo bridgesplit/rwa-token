@@ -97,9 +97,13 @@ export const AssetController = () => {
                     ></JSONPretty>
                 </div>
                 <div className=' border border-black overflow-y-scroll h-[400px]'>
-                    <div className='block justify-between w-full'>
+                    <div className="flex flex-row overflow-x-auto bg-black text-white p-4">
                         {actions.map((action, index) => (
-                            <button key={index} className='bg-blue-200 p-2 rounded-full' onClick={() => handleActionSelect(index)}>
+                            <button
+                                key={index}
+                                className="p-2 text-xs rounded-full mx-2 bg-gradient-to-br from-black to-neutral-950 text-white hover:bg-gradient-to-br hover:from-gray-800 hover:to-gray-900"
+                                onClick={() => handleActionSelect(index)}
+                            >
                                 {action.message}
                             </button>
                         ))}

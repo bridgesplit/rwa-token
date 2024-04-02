@@ -51,7 +51,7 @@ export default function Home() {
         <AssetController />
         <PolicyEngine />
         <IdentityRegistry />
-        {/* <DataRegistry /> */}
+        <DataRegistry />
       </div>
     </>
   )
