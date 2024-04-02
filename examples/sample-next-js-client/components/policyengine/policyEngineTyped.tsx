@@ -145,7 +145,7 @@ export const PolicyEngine = () => {
         <div className='w-[700px]'>
             <h1 className='text-black font-bold text-[24px]'>Policy Maker</h1>
             <div className="mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
-                <div className='text-left bg-[#e24330] border-4 border-black p-5 w-[250px] mx-auto '>
+                <div className='text-left bg-[#ff7051] border-4 border-black p-5 w-[250px] mx-auto '>
                     <p className='py-6 text-[10px] font-bold underline'>Policy Engine Args</p>
                     <p className='py-2 text-[8px] font-bold'>{selectedAction?.message}</p>
                     <JSONPretty id="json-pretty" data={policyArgs}
@@ -220,7 +220,7 @@ export const PolicyEngine = () => {
 
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-[#e24330] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Submit Policy for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-[#ff7051] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Submit Policy for Tx</button>
             </div>
         </div >
     );

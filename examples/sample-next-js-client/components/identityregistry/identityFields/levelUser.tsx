@@ -22,50 +22,18 @@ function LevelUser({ message, args, onSubmit }: LevelUserProps) {
     }
     return (
         <div>
-            <label htmlFor="owner" className="block text-gray-700 mb-1">Owner:</label>
-            <input
-                type="text"
-                id="owner"
-                name="owner"
-                value={levelArgs.owner}
-                onChange={(e) =>
-                    handleInputChange(e)
-                }
-                className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-            />
-            <label htmlFor="level" className="block text-gray-700 mb-1">Level:</label>
-            <input
-                type="number"
-                id="level"
-                name="level"
-                value={levelArgs.level}
-                onChange={(e) =>
-                    handleInputChange(e)
-                }
-                className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-            />
-            <label htmlFor="assetMint" className="block text-gray-700 mb-1">Asset Mint:</label>
-            <input
-                type="text"
-                id="assetMint"
-                name="assetMint"
-                value={levelArgs.assetMint}
-                onChange={(e) =>
-                    handleInputChange(e)
-                }
-                className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500" />
-
-            <label htmlFor="payer" className="block text-gray-700 mb-1">Payer:</label>
-            <input
-                type="text"
-                id="payer"
-                name="payer"
-                value={levelArgs.payer}
-                onChange={(e) =>
-                    handleInputChange(e)
-                }
-                className="w-[50%] px-3 py-2 mt-1 mr-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
-            />
+            {Object.keys(levelArgs).map((key: string) => (
+                <div key={key} className="flex items-center justify-center my-4">
+                    <label htmlFor={key} className="w-1/4 text-gray-700 text-xs font-bold">{key.charAt(0).toUpperCase() + key.slice(1)}:</label>
+                    <input
+                        type={key === 'level' ? 'number' : 'text'}
+                        id={key}
+                        name={key}
+                        onChange={handleInputChange}
+                        className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
+                    />
+                </div>
+            ))}
         </div>
     )
 };

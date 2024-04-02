@@ -50,7 +50,7 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-md">
+        <div className="max-w-md mx-auto mt-10 p-4 rounded-lg">
             <h2 className="text-2xl font-bold mb-4">{message}</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-4">

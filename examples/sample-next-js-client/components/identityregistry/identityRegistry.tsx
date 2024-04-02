@@ -65,10 +65,10 @@ export const IdentityRegistry = () => {
     };
 
     return (
-        <div>
+        <div className='w-[700px]'>
             <h1 className='text-black font-bold text-[24px]'>Identity Registry</h1>
-            <div className="container mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
-                <div className='text-left bg-blue-100 p-5 w-[30%] mx-auto '>
+            <div className="mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
+                <div className='text-left bg-[#ffc900] border-4 border-black p-5 w-[250px] mx-auto '>
                     <p className='py-6 text-[10px] font-bold'>Current Identity Registry:</p>
                     <p className='py-2 text-[8px] font-bold'>{selectedAction.message}</p>
                     <JSONPretty id="json-pretty" data={identityArgs}
@@ -78,8 +78,8 @@ export const IdentityRegistry = () => {
                         valueStyle='color:#f0a267'
                     ></JSONPretty>
                 </div>
-                <div className=' border border-black overflow-y-scroll h-[400px]'>
-                    <div className="flex flex-row overflow-x-auto bg-black text-white p-4">
+                <div className='border-4 border-black overflow-y-scroll h-[400px]'>
+                    <div className="flex flex-row overflow-x-auto bg-black text-white p-4 sticky top-0 z-10">
                         {actions.map((action, index) => (
                             <button
                                 key={index}
@@ -94,7 +94,7 @@ export const IdentityRegistry = () => {
                 </div>
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(identityArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Identity for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(identityArgs)} className="w-full py-2 px-4 bg-[#ffc900] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Submit Identity for Tx</button>
             </div>
         </div >
     );
