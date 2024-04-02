@@ -25,6 +25,9 @@ export function handleMessage(ix: { message: string; inputValues: AssetControlle
 
 async function handleSetupAssetController(inputValues: SetupAssetControllerArgs, rwaClient: RwaClient): Promise<void> {
     const setupIx = await rwaClient?.assetController.setupNewRegistry(inputValues)
+
+    // VALIDATE THE TYPES
+
     try {
         const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, setupIx.ixs, 0, setupIx.signers);
         if (confirmed) {

@@ -48,7 +48,6 @@ export default function Home() {
         {/* <SetupProviderComponent />
         <SampleHeliusRPCCalls /> */}
         <div className="block mx-auto min-[1600px]:grid grid-cols-2 gap-8">
-
           <AssetController />
           <PolicyEngine />
           <IdentityRegistry />

@@ -108,7 +108,7 @@ export const DataRegistry = () => {
                 </div>
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(dataRegistryArgs)} className="w-full py-2 px-4 bg-[#90a8ed] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">SUBMIT INSTRUCTIONS</button>
+                <button type="submit" onClick={() => handleSubmit(dataRegistryArgs)} className="w-full cursor-pointer py-2 px-4 bg-[#90a8ed] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">SUBMIT INSTRUCTIONS</button>
             </div>
         </div >
     );

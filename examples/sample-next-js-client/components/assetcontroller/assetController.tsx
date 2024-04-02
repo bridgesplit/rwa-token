@@ -7,6 +7,7 @@ import { useRwaClient } from '../../hooks/useRwaClient';
 import { RwaClient } from '../../src';
 import JSONPretty from 'react-json-pretty';
 import DynamicComponent from './assetEnum';
+import { PublicKey } from '@solana/web3.js';
 
 interface Action<T> {
     message: string,
@@ -77,6 +78,12 @@ export const AssetController = () => {
     };
 
     const handleSubmit = (args: AssetControllerArgs) => {
+        const { payer, delegate, authority } = args
+        const payerOnCurve = PublicKey.isOnCurve(new PublicKey(payer))
+        // const delegateOnCurve = PublicKey.isOnCurve(new PublicKey(delegate!))
+        // const authOnCurve = PublicKey.isOnCurve(new PublicKey(authority!))
+
+
         handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
 
     };
@@ -111,7 +118,7 @@ export const AssetController = () => {
                 </div>
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">SUBMIT INSTRUCTIONS</button>
+                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full cursor-pointer py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">SUBMIT INSTRUCTIONS</button>
             </div>
         </div >
     );
