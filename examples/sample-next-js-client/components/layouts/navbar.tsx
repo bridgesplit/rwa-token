@@ -9,27 +9,27 @@ export const Navbar = () => {
 
     const links = [
         {
-            name: "Link 1",
-            href: "/"
+            name: "Dashboards",
+            href: "/dashboards"
         },
         {
-            name: "Link 2",
-            href: "/"
+            name: "Indexer",
+            href: "/indexer"
         },
-        {
-            name: "Link 3",
-            href: "/"
-        },
-        {
-            name: "Link 4",
-            href: "/"
-        },
+        // {
+        //     name: "Link 3",
+        //     href: "/"
+        // },
+        // {
+        //     name: "Link 4",
+        //     href: "/"
+        // },
     ]
 
     return (
         <div className="w-full h-[70px] border-b-4 border-[#1D1E20] py-4 px-7 flex justify-between items-center">
             <div className="flex gap-2 items-center">
-                <h1 className="text-black font-semibold text-xl">Bridgesplit RWA Testing Dashboard</h1>
+                <h1 className="text-black cursor-pointer font-semibold text-xl" onClick={() => router.push('/')}>Bridgesplit RWA Testing Dashboard</h1>
             </div>
             <div className="text-black flex gap-3 items-center">
                 {links.map((o) => {

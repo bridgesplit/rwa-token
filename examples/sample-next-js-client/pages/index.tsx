@@ -1,12 +1,6 @@
-import Image from "next/image";
 import { previewBannerURL, projectDescription, projectName } from "../scripts/config";
 import Head from "next/head";
-import { IdentityRegistry } from "../components/identityregistry/identityRegistry";
-import SetupProviderComponent from "../components/setup";
-import { PolicyEngine } from "../components/policyengine/policyEngineTyped";
-import { DataRegistry } from "../components/dataregistry/dataregistry";
-import { SampleHeliusRPCCalls } from "../components/sampleRwa";
-import { AssetController } from "../components/assetcontroller/assetController";
+import Usage from "./usage";
 
 
 export default function Home() {
@@ -44,16 +38,7 @@ export default function Home() {
         <meta property="twitter:description" content={projectDescription} />
         <meta property="twitter:image" content={previewBannerURL} />
       </Head>
-      <div className="flex flex-col justify-center items-center p-8">
-        {/* <SetupProviderComponent />
-        <SampleHeliusRPCCalls /> */}
-        <div className="block mx-auto min-[1600px]:grid grid-cols-2 gap-8">
-          <AssetController />
-          <PolicyEngine />
-          <IdentityRegistry />
-          <DataRegistry />
-        </div>
-      </div>
+      <Usage />
     </>
   )
 }

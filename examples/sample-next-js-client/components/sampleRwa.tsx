@@ -37,6 +37,7 @@ export const SampleHeliusRPCCalls = () => {
         <div>
             <div className="container mx-auto mt-10 text-center text-black">
                 <h1>Get RWA Asset Accounts by Mint</h1>
+                <p className='text-xs font-gray-400'>For example: Ea1yrC1xRXd6tWcHL4yhGRB31j6jTwdeqd3e9LHaYUwj</p>
                 <div className="flex justify-center items-center mt-4">
                     <input
                         type="text"

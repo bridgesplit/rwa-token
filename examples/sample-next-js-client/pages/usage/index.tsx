@@ -20,6 +20,9 @@ function Usage() {
                     <ul className="list-disc pl-4 text-black">
                         <li className="mb-2">There is intentionally NO validation for args.</li>
                         <li className="mb-2">Any args take the shape of the JSON on screen.</li>
+                        <li className="mb-2">Make sure wallet is connected, currently using devnet connection.</li>
+                        <li className="mb-2">The RWA provider is automatically set up when you connect a wallet.</li>
+
                     </ul>
                 </div>
             </div>
