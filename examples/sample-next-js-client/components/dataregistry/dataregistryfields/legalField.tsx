@@ -22,11 +22,10 @@ export const LegalField: React.FC<LegalFieldProps> = ({ onSubmit }) => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-10 p-4 bg-gray-100 rounded-lg shadow-md">
+        <div className="max-w-md mx-auto mt-10 p-4 rounded-lg">
             {
-
-                <div className="mb-4">
-                    <label htmlFor="comparisonType" className="block text-gray-700">Comparison Type:</label>
+                <div className="mb-4 flex items-center justify-center">
+                    <label htmlFor="comparisonType" className="w-1/4 text-gray-700 text-xs font-bold">Type:</label>
                     <select
                         id="type"
                         onChange={(e) => {
@@ -49,7 +48,7 @@ export const LegalField: React.FC<LegalFieldProps> = ({ onSubmit }) => {
                             }
                             setType(newValue);
                         }}
-                        className="w-full px-3 py-2 mt-1 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500"
+                        className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
                     >
                         <option value="legal">Legal</option>
                         <option value="misc">Misc</option>
@@ -59,7 +58,7 @@ export const LegalField: React.FC<LegalFieldProps> = ({ onSubmit }) => {
                 </div>
             }
             <div>
-                <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600" onClick={handleSubmit}>Confirm</button>
+                <button type="submit" className="w-1/2 py-1 px-2 text-xs bg-[#90a8ed] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black" onClick={handleSubmit}>Confirm</button>
             </div>
         </div>
     );

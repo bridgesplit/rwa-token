@@ -63,13 +63,13 @@ export const IdentityFilterForm: React.FC<IdentityFormProps> = ({ message, ident
                             onChange={(e) => setNewIdentityLevel(parseInt(e.target.value))}
                             className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
                         />
-                        <button type="button" onClick={handleAddIdentityLevel} className="w-1/3 py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Add</button>
+                        <button type="button" onClick={handleAddIdentityLevel} className="w-1/2 py-1 px-2 text-xs bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Add</button>
                     </div>
                     <ul className="mt-2 block justify-center w-full">
                         {identityLevels.map((level, index) => (
-                            <li key={index} className="flex justify-center items-center gap-2">
-                                <span>{level}</span>
-                                <button type="button" onClick={() => handleRemoveIdentityLevel(index)} className="w-[100px] py-2 px-4 bg-[#e24330] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Remove</button>
+                            <li key={index} className="flex justify-center items-center gap-4">
+                                <span className="text-xs">{level}</span>
+                                <button type="button" onClick={() => handleRemoveIdentityLevel(index)} className="w-1/3 py-1 px-2 text-xs bg-[#e24330] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Remove</button>
                             </li>
                         ))}
                     </ul>

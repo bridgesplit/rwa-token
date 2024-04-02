@@ -220,7 +220,7 @@ export const PolicyEngine = () => {
 
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-[#ff7051] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">Submit Policy for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(policyArgs)} className="w-full py-2 px-4 bg-[#ff7051] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none border-4 border-black">SUBMIT INSTRUCTIONS</button>
             </div>
         </div >
     );
