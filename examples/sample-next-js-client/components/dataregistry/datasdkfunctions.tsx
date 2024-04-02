@@ -21,6 +21,7 @@ export function handleMessage(ix: { message: string; inputValues: DataRegistryAr
 };
 
 async function handleSetupDataAccount(inputValues: CreateDataAccountArgs, rwaClient: RwaClient): Promise<void> {
+    console.log('running setup')
     const setupIx = await rwaClient?.dataRegistry.setupDataAccount(inputValues)
     try {
         const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, setupIx.ixs, 0);
@@ -34,6 +35,8 @@ async function handleSetupDataAccount(inputValues: CreateDataAccountArgs, rwaCli
 }
 
 async function handleUpdateAssetDataAccountInfo(inputValues: UpdateDataAccountArgs, rwaClient: RwaClient): Promise<void> {
+    console.log('running update')
+
     const setupIx = await rwaClient?.dataRegistry.updateAssetsDataAccountInfoIxns(inputValues)
     try {
         const confirmed = await sendV0SolanaTransaction(rwaClient.provider.wallet, rwaClient.provider.connection, [setupIx], 0);

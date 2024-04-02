@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 
 /* SDK Imports */
-import { useAnchorWallet } from '@solana/wallet-adapter-react';
-import { ModalIx, ModalProps } from '../types';
 import { handleMessage } from './datasdkfunctions';
 import { useRwaClient } from '../../hooks/useRwaClient';
-import { AddLevelToIdentityAccountArgs, CreateDataAccountArgs, DelegateDataRegistryArgs, RemoveLevelFromIdentityAccount, RwaClient, SetupUserArgs, UpdateDataAccountArgs } from '../../src';
+import { CreateDataAccountArgs, DataAccountType, DelegateDataRegistryArgs, RwaClient, UpdateDataAccountArgs } from '../../src';
 import JSONPretty from 'react-json-pretty';
+import DynamicComponent from './dataRegistryEnum';
 
 interface Action<T> {
     message: string,
     args: T
 }
+
 export type DataRegistryArgs = CreateDataAccountArgs | UpdateDataAccountArgs | DelegateDataRegistryArgs
 
 export const DataRegistry = () => {
@@ -58,10 +58,18 @@ export const DataRegistry = () => {
         setDataRegistryArgs(actions[index].args)
     };
 
-    const handleState = (key: string, value: string | number) => {
-        setDataRegistryArgs(prev => {
-            return { ...prev, [key]: value }
-        })
+    const handleState = (key: string, value: string | number | DataAccountType) => {
+        // Edge case to handle data account type
+        if (typeof value === 'object') {
+            setDataRegistryArgs(prev => {
+                return { ...prev, type: value }
+            })
+        } else {
+            setDataRegistryArgs(prev => {
+                return { ...prev, [key]: value }
+            })
+        }
+
     };
 
     const handleSubmit = (args: DataRegistryArgs) => {
@@ -96,7 +104,7 @@ export const DataRegistry = () => {
                             </button>
                         ))}
                     </div>
-                    {/* {selectedAction && <DynamicComponent type={selectedAction.message} handleParentState={handleState} />} */}
+                    {selectedAction && <DynamicComponent type={selectedAction.message} handleParentState={handleState} />}
                 </div>
             </div >
             <div className='py-4'>
