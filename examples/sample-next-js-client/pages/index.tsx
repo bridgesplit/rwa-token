@@ -44,8 +44,7 @@ export default function Home() {
         <meta property="twitter:description" content={projectDescription} />
         <meta property="twitter:image" content={previewBannerURL} />
       </Head>
-      <div className="flex flex-col justify-center items-center">
-        <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
+      <div className="flex flex-col justify-center items-center p-8">
         {/* <SetupProviderComponent />
         <SampleHeliusRPCCalls /> */}
         <div className="block mx-auto min-[1600px]:grid grid-cols-2 gap-8">

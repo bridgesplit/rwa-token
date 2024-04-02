@@ -69,7 +69,7 @@ export const IdentityRegistry = () => {
             <h1 className='text-black font-bold text-[24px]'>Identity Registry</h1>
             <div className="mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
                 <div className='text-left bg-[#ffc900] border-4 border-black p-5 w-[250px] mx-auto '>
-                    <p className='py-6 text-[10px] font-bold'>Current Identity Registry:</p>
+                    <p className='py-6 text-[10px] font-bold underline'>Current Identity Registry:</p>
                     <p className='py-2 text-[8px] font-bold'>{selectedAction.message}</p>
                     <JSONPretty id="json-pretty" data={identityArgs}
                         style={{ fontSize: "0.5em" }} // Set font size and color to white

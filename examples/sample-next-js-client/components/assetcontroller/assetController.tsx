@@ -77,7 +77,6 @@ export const AssetController = () => {
     };
 
     const handleSubmit = (args: AssetControllerArgs) => {
-        console.log(selectedAction.message, args)
         handleMessage({ message: selectedAction.message, inputValues: args }, rwaClient as RwaClient);
 
     };
