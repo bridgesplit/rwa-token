@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 
 /* SDK Imports */
-import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from '../../src/asset_controller'
+import { IssueTokenArgs, SetupAssetControllerArgs, TransferTokensArgs, VoidTokensArgs } from '../../src/'
 import { handleMessage } from './sdkfunctions';
 import { useRwaClient } from '../../hooks/useRwaClient';
 import { RwaClient } from '../../src';
 import JSONPretty from 'react-json-pretty';
+import DynamicComponent from './assetEnum';
 
 interface Action<T> {
     message: string,
     args: T
 }
-export type AssetControllerArgs = SetupAssetControllerArgs | IssueTokenArgs | VoidTokensArgs | TransferTokensArgs
+export type AssetControllerArgs = SetupAssetControllerArgs | IssueTokenArgs | VoidTokensArgs | TransferTokensArgs;
 
-export const IdentityRegistry = () => {
+export const AssetController = () => {
     const { rwaClient } = useRwaClient();
     const actions = [
         {
@@ -48,7 +49,7 @@ export const IdentityRegistry = () => {
             },
         },
         {
-            message: 'TransferToken',
+            message: 'TransferTokens',
             args: {
                 from: '',
                 to: '',
@@ -103,11 +104,11 @@ export const IdentityRegistry = () => {
                             </button>
                         ))}
                     </div>
-                    {/* {selectedAction && <DynamicComponent type={selectedAction.message} handleParentState={handleState} />} */}
+                    {selectedAction && <DynamicComponent type={selectedAction.message} handleParentState={handleState} />}
                 </div>
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Identity for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Asset Controller for Tx</button>
             </div>
         </div >
     );

@@ -6,6 +6,7 @@ import SetupProviderComponent from "../components/setup";
 import { PolicyEngine } from "../components/policyengine/policyEngineTyped";
 import { DataRegistry } from "../components/dataregistry/dataregistry";
 import { SampleHeliusRPCCalls } from "../components/sampleRwa";
+import { AssetController } from "../components/assetcontroller/assetController";
 
 
 export default function Home() {
@@ -47,7 +48,7 @@ export default function Home() {
         <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
         <SetupProviderComponent />
         <SampleHeliusRPCCalls />
-        {/* <AssetController /> */}
+        <AssetController />
         <PolicyEngine />
         <IdentityRegistry />
         {/* <DataRegistry /> */}
