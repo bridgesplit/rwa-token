@@ -46,8 +46,8 @@ export default function Home() {
       </Head>
       <div className="flex flex-col justify-center items-center">
         <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
-        <SetupProviderComponent />
-        <SampleHeliusRPCCalls />
+        {/* <SetupProviderComponent />
+        <SampleHeliusRPCCalls /> */}
         <AssetController />
         <PolicyEngine />
         <IdentityRegistry />

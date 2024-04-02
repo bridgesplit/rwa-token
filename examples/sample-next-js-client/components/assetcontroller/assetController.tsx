@@ -83,10 +83,10 @@ export const AssetController = () => {
     };
 
     return (
-        <div>
+        <div className='w-[700px]'>
             <h1 className='text-black font-bold text-[24px]'>Asset Controller</h1>
             <div className="container mx-auto mt-5 text-center text-black overflow-x-scroll flex gap-4">
-                <div className='text-left bg-blue-100 p-5 w-[30%] mx-auto '>
+                <div className='text-left bg-[#22a094] border-4 border-black p-5 w-[30%] mx-auto '>
                     <p className='py-6 text-[10px] font-bold'>Current Asset Controller Args:</p>
                     <p className='py-2 text-[8px] font-bold'>{selectedAction.message}</p>
                     <JSONPretty id="json-pretty" data={assetControllerArgs}
@@ -96,7 +96,7 @@ export const AssetController = () => {
                         valueStyle='color:#f0a267'
                     ></JSONPretty>
                 </div>
-                <div className=' border border-black overflow-y-scroll h-[400px]'>
+                <div className=' border-4 border-black overflow-y-scroll h-[400px]'>
                     <div className="flex flex-row overflow-x-auto bg-black text-white p-4">
                         {actions.map((action, index) => (
                             <button
@@ -112,7 +112,7 @@ export const AssetController = () => {
                 </div>
             </div >
             <div className='py-4'>
-                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Submit Asset Controller for Tx</button>
+                <button type="submit" onClick={() => handleSubmit(assetControllerArgs)} className="w-full py-2 px-4 bg-[#22a094] text-white font-semibold rounded-md hover:bg-[#c9a272] focus:outline-none">SUBMIT INSTRUCTIONS</button>
             </div>
         </div >
     );
