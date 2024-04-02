@@ -48,10 +48,13 @@ export default function Home() {
         <h1 className="text-black mt-10">RWA Asset Testing Panel</h1>
         {/* <SetupProviderComponent />
         <SampleHeliusRPCCalls /> */}
-        <AssetController />
-        <PolicyEngine />
-        <IdentityRegistry />
-        <DataRegistry />
+        <div className="block mx-auto min-[1600px]:grid grid-cols-2 gap-8">
+
+          <AssetController />
+          <PolicyEngine />
+          <IdentityRegistry />
+          <DataRegistry />
+        </div>
       </div>
     </>
   )
