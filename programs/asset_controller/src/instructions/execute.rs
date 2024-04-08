@@ -11,9 +11,9 @@ use crate::state::*;
 #[instruction(amount: u64)]
 pub struct ExecuteTransferHook<'info> {
     #[account(
-        token::mint = asset_mint,
-        token::authority = owner_delegate,
-        token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
+        associated_token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
+        associated_token::authority = owner_delegate,
+        associated_token::mint = asset_mint,
     )]
     pub source_account: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
@@ -24,8 +24,10 @@ pub struct ExecuteTransferHook<'info> {
         token::mint = asset_mint,
         token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
     )]
+    // can be any token account, user must make sure it is an associated token account with relevant identity permissions
     pub destination_account: Box<InterfaceAccount<'info, TokenAccount>>,
-    pub owner_delegate: SystemAccount<'info>,
+    /// CHECK: can be any account
+    pub owner_delegate: UncheckedAccount<'info>,
     /// CHECK: meta list account
     #[account(
         seeds = [META_LIST_ACCOUNT_SEED, asset_mint.key().as_ref()],

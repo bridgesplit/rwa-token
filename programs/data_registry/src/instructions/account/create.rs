@@ -24,6 +24,8 @@ pub struct CreateDataAccount<'info> {
         signer,
         space = 8 + DataAccount::INIT_SPACE,
         payer = payer,
+        constraint = args.name.len() <= MAX_NAME_LEN,
+        constraint = args.uri.len() <= MAX_URI_LEN,
     )]
     pub data_account: Box<Account<'info, DataAccount>>,
     pub system_program: Program<'info, System>,
