@@ -44,13 +44,18 @@ pub enum PolicyType {
 }
 
 impl PolicyAccount {
-    fn hash_policy(policy_type: PolicyType, identity_filter: IdentityFilter) -> String {
-        let hash = format!("{:?}{:?}", policy_type, identity_filter);
+    fn hash_policy(
+        policy_account: Pubkey,
+        policy_type: PolicyType,
+        identity_filter: IdentityFilter,
+    ) -> String {
+        let hash = format!("{:?}{:?}{:?}", policy_account, policy_type, identity_filter);
         sha256::digest(hash.as_bytes())
     }
     /// hash
     pub fn new(
         &mut self,
+        policy_account: Pubkey,
         policy_engine: Pubkey,
         identity_filter: IdentityFilter,
         policy_type: PolicyType,
@@ -58,22 +63,23 @@ impl PolicyAccount {
         self.version = 1;
         self.policy_engine = policy_engine;
         self.policies = vec![Policy {
-            hash: Self::hash_policy(policy_type, identity_filter),
+            hash: Self::hash_policy(policy_account, policy_type, identity_filter),
             policy_type,
             identity_filter,
         }];
     }
     pub fn attach(
         &mut self,
+        policy_account: Pubkey,
         policy_type: PolicyType,
         identity_filter: IdentityFilter,
     ) -> Result<()> {
-        let hash = Self::hash_policy(policy_type, identity_filter);
+        let hash = Self::hash_policy(policy_account, policy_type, identity_filter);
         if self.policies.iter().any(|policy| policy.hash == hash) {
             return Err(PolicyEngineErrors::PolicyAlreadyExists.into());
         }
         self.policies.push(Policy {
-            hash: Self::hash_policy(policy_type, identity_filter),
+            hash,
             policy_type,
             identity_filter,
         });
