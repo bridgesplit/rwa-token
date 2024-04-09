@@ -1,14 +1,16 @@
 pub use anchor_lang::prelude::*;
 use num_enum::IntoPrimitive;
 
-#[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy)]
+use crate::PolicyEngineErrors;
+
+#[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug)]
 pub struct IdentityFilter {
     pub identity_levels: [u8; 10],
     pub comparision_type: ComparisionType,
 }
 
 #[repr(u8)]
-#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy)]
+#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug)]
 pub enum ComparisionType {
     Or,
     And,
@@ -27,11 +29,13 @@ pub struct PolicyAccount {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct Policy {
+    #[max_len(32)]
+    pub hash: String,
     pub policy_type: PolicyType,
     pub identity_filter: IdentityFilter,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq, Copy)]
+#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq, Copy, Debug)]
 pub enum PolicyType {
     IdentityApproval,
     TransactionAmountLimit { limit: u64 },
@@ -40,6 +44,11 @@ pub enum PolicyType {
 }
 
 impl PolicyAccount {
+    fn hash_policy(policy_type: PolicyType, identity_filter: IdentityFilter) -> String {
+        let hash = format!("{:?}{:?}", policy_type, identity_filter);
+        sha256::digest(hash.as_bytes())
+    }
+    /// hash
     pub fn new(
         &mut self,
         policy_engine: Pubkey,
@@ -49,19 +58,40 @@ impl PolicyAccount {
         self.version = 1;
         self.policy_engine = policy_engine;
         self.policies = vec![Policy {
+            hash: Self::hash_policy(policy_type, identity_filter),
             policy_type,
             identity_filter,
         }];
     }
-    pub fn attach(&mut self, policy_type: PolicyType, identity_filter: IdentityFilter) {
+    pub fn attach(
+        &mut self,
+        policy_type: PolicyType,
+        identity_filter: IdentityFilter,
+    ) -> Result<()> {
+        let hash = Self::hash_policy(policy_type, identity_filter);
+        if self.policies.iter().any(|policy| policy.hash == hash) {
+            return Err(PolicyEngineErrors::PolicyAlreadyExists.into());
+        }
         self.policies.push(Policy {
+            hash: Self::hash_policy(policy_type, identity_filter),
             policy_type,
             identity_filter,
         });
+        Ok(())
     }
 
-    pub fn detach(&mut self, policy_type: PolicyType) {
-        self.policies
-            .retain(|policy| policy.policy_type != policy_type);
+    pub fn detach(&mut self, hash: String) -> Result<PolicyType> {
+        if self.policies.iter().all(|policy| policy.hash != hash) {
+            return Err(PolicyEngineErrors::PolicyNotFound.into());
+        }
+        // remove and return the policy type
+        let policy_type = self
+            .policies
+            .iter()
+            .find(|policy| policy.hash == hash)
+            .unwrap() // safe to unwrap as we checked the policy exists
+            .policy_type;
+        self.policies.retain(|policy| policy.hash != hash);
+        Ok(policy_type)
     }
 }

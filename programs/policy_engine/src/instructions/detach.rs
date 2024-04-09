@@ -25,8 +25,8 @@ pub struct DetachFromPolicyAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<DetachFromPolicyAccount>, policy_type: PolicyType) -> Result<()> {
-    ctx.accounts.policy_account.detach(policy_type);
+pub fn handler(ctx: Context<DetachFromPolicyAccount>, hash: String) -> Result<()> {
+    let policy_type = ctx.accounts.policy_account.detach(hash)?;
     // update max timeframe if detached policy was the max timeframe
 
     let mut max_timeframe = match policy_type {
