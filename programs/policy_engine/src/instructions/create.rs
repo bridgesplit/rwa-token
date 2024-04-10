@@ -29,7 +29,9 @@ pub fn handler(
     identity_filter: IdentityFilter,
     policy_type: PolicyType,
 ) -> Result<()> {
+    let policy_account_address = ctx.accounts.policy_account.key();
     ctx.accounts.policy_account.new(
+        policy_account_address,
         ctx.accounts.policy_engine.key(),
         identity_filter,
         policy_type,

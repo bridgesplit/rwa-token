@@ -30,9 +30,10 @@ pub fn handler(
     identity_filter: IdentityFilter,
     policy_type: PolicyType,
 ) -> Result<()> {
+    let policy_account_address = ctx.accounts.policy_account.key();
     ctx.accounts
         .policy_account
-        .attach(policy_type, identity_filter);
+        .attach(policy_account_address, policy_type, identity_filter)?;
     ctx.accounts.policy_engine.update_max_timeframe(policy_type);
     Ok(())
 }

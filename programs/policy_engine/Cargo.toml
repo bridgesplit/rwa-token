@@ -19,3 +19,4 @@ default = []
 anchor-lang = { git = "https://git@github.com/bridgesplit/anchor" }
 anchor-spl = { git = "https://git@github.com/bridgesplit/anchor" }
 num_enum = "0.7.2"
+sha256 = "1.5.0"

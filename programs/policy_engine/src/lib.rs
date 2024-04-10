@@ -47,8 +47,8 @@ pub mod policy_engine {
     /// remove policy
     pub fn detach_from_policy_account(
         ctx: Context<DetachFromPolicyAccount>,
-        policy_type: PolicyType,
+        hash: String,
     ) -> Result<()> {
-        instructions::detach::handler(ctx, policy_type)
+        instructions::detach::handler(ctx, hash)
     }
 }
