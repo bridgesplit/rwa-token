@@ -22,18 +22,4 @@ impl AssetControllerAccount {
         self.delegate = delegate;
         self.version = Self::VERSION;
     }
-    pub fn verify_signer(
-        &self,
-        asset_controller: Pubkey,
-        signer: Pubkey,
-        is_signer: bool,
-    ) -> Result<()> {
-        if self.delegate == signer && signer == asset_controller {
-            return Ok(());
-        }
-        if (self.authority == signer || self.delegate == signer) && is_signer {
-            return Ok(());
-        }
-        Ok(())
-    }
 }

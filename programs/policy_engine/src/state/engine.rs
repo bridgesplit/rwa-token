@@ -1,6 +1,6 @@
 use anchor_lang::{prelude::*, AnchorSerialize};
 
-use crate::{PolicyEngineErrors, PolicyType};
+use crate::PolicyType;
 
 #[account()]
 #[derive(InitSpace)]
@@ -33,15 +33,6 @@ impl PolicyEngineAccount {
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
-    }
-    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
-        if signer == registry && self.delegate == registry {
-            return Ok(());
-        }
-        if (signer == self.authority || signer == self.delegate) && is_signer {
-            return Ok(());
-        }
-        Err(PolicyEngineErrors::UnauthorizedSigner.into())
     }
     /// update max timeframe if new value is greater than current
     pub fn update_max_timeframe(&mut self, policy_type: PolicyType) {

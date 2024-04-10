@@ -7,13 +7,11 @@ use crate::state::*;
 pub struct DetachFromPolicyAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: internal ix checks
-    pub signer: UncheckedAccount<'info>,
     #[account(
-        mut,
-        constraint = policy_engine.verify_signer(policy_engine.key(), signer.key(), signer.is_signer).is_ok()
+        constraint = policy_engine.authority == signer.key() || policy_engine.delegate == signer.key()
     )]
+    pub signer: Signer<'info>,
+    #[account(mut)]
     pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
     #[account(
         mut,
@@ -27,8 +25,8 @@ pub struct DetachFromPolicyAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<DetachFromPolicyAccount>, policy_type: PolicyType) -> Result<()> {
-    ctx.accounts.policy_account.detach(policy_type);
+pub fn handler(ctx: Context<DetachFromPolicyAccount>, hash: String) -> Result<()> {
+    let policy_type = ctx.accounts.policy_account.detach(hash)?;
     // update max timeframe if detached policy was the max timeframe
 
     let mut max_timeframe = match policy_type {
