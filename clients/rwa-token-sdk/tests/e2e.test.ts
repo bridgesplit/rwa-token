@@ -1,9 +1,9 @@
 
-Import {BN} from '@coral-xyz/anchor';
+import {BN} from '@coral-xyz/anchor';
 import {
 	getAssetControllerPda,
 	getAttachToPolicyAccountIx,
-	getCreateDataAccountIx, getCreatePolicAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getIssueTokensIx, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
+	getCreateDataAccountIx, getCreatePolicyAccountIx, getDataRegistryPda, getIdentityAccountPda, getIdentityRegistryPda, getIssueTokensIx, getPolicyAccountPda, getPolicyEnginePda, getSetupAssetControllerIxs, getSetupUserIxs, getTrackerAccount, getTrackerAccountPda, getTransferTokensIx, Policy,
 } from '../src';
 import {setupTests} from './setup';
 import {PublicKey, Transaction, sendAndConfirmTransaction} from '@solana/web3.js';
@@ -57,6 +57,7 @@ describe('e2e tests', () => {
 			uri: 'https://test.com',
 			payer: setup.payer.toString(),
 			assetMint: mint,
+			signer: setup.authority.toString(),
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...createDataAccountIx.ixs), [setup.payerKp, createDataAccountIx.signers[0]]);
 		expect(txnId).toBeTruthy();
@@ -64,7 +65,7 @@ describe('e2e tests', () => {
 	});
 
 	test('create policy account and attach identity approval policy', async t => {
-		const attachPolicy = await getCreatePolicAccountIx({
+		const attachPolicy = await getCreatePolicyAccountIx({
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
@@ -77,6 +78,7 @@ describe('e2e tests', () => {
 				identityApproval: {},
 			},
 		});
+		console.log('policy account: ', getPolicyAccountPda(mint).toString());
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...attachPolicy.ixs), [setup.payerKp, ...attachPolicy.signers]);
 		expect(txnId).toBeTruthy();
 	});
@@ -149,6 +151,7 @@ describe('e2e tests', () => {
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			level: 1,
+			signer: setup.authority.toString(),
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, ...setupUser.signers]);
 		expect(txnId).toBeTruthy();

@@ -23,7 +23,7 @@ pub struct PolicyAccount {
     /// Engine account that the policy belongs to
     pub policy_engine: Pubkey,
     /// Different policies that can be applied to the policy account
-    #[max_len(1)] // initial max_len
+    #[max_len(3)] // initial max_len
     pub policies: Vec<Policy>,
 }
 

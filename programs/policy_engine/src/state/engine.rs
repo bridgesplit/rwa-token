@@ -19,16 +19,10 @@ pub struct PolicyEngineAccount {
 
 impl PolicyEngineAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(
-        &mut self,
-        engine: Pubkey,
-        authority: Pubkey,
-        delegate: Option<Pubkey>,
-        asset_mint: Pubkey,
-    ) {
+    pub fn new(&mut self, authority: Pubkey, delegate: Option<Pubkey>, asset_mint: Pubkey) {
         self.version = Self::VERSION;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or(engine);
+        self.delegate = delegate.unwrap_or(authority);
         self.asset_mint = asset_mint;
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {

@@ -61,7 +61,7 @@ export async function getAttachToPolicyAccountIx(
 	};
 }
 
-export async function getCreatePolicAccountIx(
+export async function getCreatePolicyAccountIx(
 	args: AttachPolicyArgs,
 ): Promise<IxReturn> {
 	const provider = getProvider();

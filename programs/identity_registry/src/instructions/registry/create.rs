@@ -25,12 +25,8 @@ pub fn handler(
     authority: Pubkey,
     delegate: Option<Pubkey>,
 ) -> Result<()> {
-    let registry_address = ctx.accounts.identity_registry_account.key();
-    ctx.accounts.identity_registry_account.new(
-        registry_address,
-        ctx.accounts.asset_mint.key(),
-        authority,
-        delegate,
-    );
+    ctx.accounts
+        .identity_registry_account
+        .new(ctx.accounts.asset_mint.key(), authority, delegate);
     Ok(())
 }

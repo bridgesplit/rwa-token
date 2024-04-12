@@ -1,5 +1,3 @@
-use anchor_lang::prelude::Result;
-
 use crate::{state::*, PolicyEngineErrors};
 
 pub fn enforce_identity_filter(identity: &Vec<u8>, identity_filter: IdentityFilter) -> Result<()> {

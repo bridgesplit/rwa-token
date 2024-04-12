@@ -29,6 +29,7 @@ export type CreateDataAccountArgs = {
 	type: DataAccountType;
 	name: string;
 	uri: string;
+	signer: string;
 } & CommonArgs;
 
 export async function getCreateDataAccountIx(
@@ -44,7 +45,7 @@ export async function getCreateDataAccountIx(
 	})
 		.accountsStrict({
 			payer: args.payer,
-			signer: args.signer ? args.signer : getDataRegistryPda(args.assetMint),
+			signer: args.signer,
 			dataRegistry: getDataRegistryPda(args.assetMint),
 			dataAccount: dataAccountKp.publicKey,
 			systemProgram: SystemProgram.programId,
@@ -61,6 +62,7 @@ export type UpdateDataAccountArgs = {
 	name: string;
 	uri: string;
 	type: DataAccountType;
+	signer: string;
 } & CommonArgs;
 
 export async function getUpdateDataAccountIx(
@@ -74,7 +76,7 @@ export async function getUpdateDataAccountIx(
 		type: args.type,
 	})
 		.accountsStrict({
-			signer: args.signer ? args.signer : getDataRegistryPda(args.assetMint),
+			signer: args.signer,
 			dataRegistry: getDataRegistryPda(args.assetMint),
 			dataAccount: args.dataAccount,
 		})

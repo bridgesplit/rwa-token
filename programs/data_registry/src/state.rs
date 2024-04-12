@@ -15,17 +15,11 @@ pub struct DataRegistryAccount {
 
 impl DataRegistryAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(
-        &mut self,
-        address: Pubkey,
-        asset_mint: Pubkey,
-        authority: Pubkey,
-        delegate: Option<Pubkey>,
-    ) {
+    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Option<Pubkey>) {
         self.version = Self::VERSION;
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or(address);
+        self.delegate = delegate.unwrap_or(authority);
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;

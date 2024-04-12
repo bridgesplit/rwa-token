@@ -6,10 +6,7 @@ use anchor_spl::token_interface::{
 use spl_tlv_account_resolution::state::ExtraAccountMetaList;
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
 
-use crate::{
-    get_extra_account_metas, get_meta_list_size, state::*,
-    update_account_lamports_to_minimum_balance,
-};
+use crate::{get_extra_account_metas, get_meta_list_size, state::*};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateAssetControllerArgs {
@@ -84,14 +81,10 @@ impl<'info> CreateAssetController<'info> {
 }
 
 pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerArgs) -> Result<()> {
-    let delegate = match args.delegate {
-        Some(delegate) => delegate,
-        None => ctx.accounts.asset_controller.key(),
-    };
     ctx.accounts.asset_controller.new(
         ctx.accounts.asset_mint.key(),
         ctx.accounts.authority.key(),
-        delegate,
+        args.delegate,
     );
 
     // initialize the extra metas account
@@ -100,16 +93,16 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
     let mut data = extra_metas_account.try_borrow_mut_data()?;
     ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
 
-    // initialize token metadata
-    ctx.accounts
-        .initialize_token_metadata(args.name, args.symbol, args.uri)?;
+    // // initialize token metadata
+    // ctx.accounts
+    //     .initialize_token_metadata(args.name, args.symbol, args.uri)?;
 
-    // transfer minimum rent to mint account
-    update_account_lamports_to_minimum_balance(
-        ctx.accounts.asset_mint.to_account_info(),
-        ctx.accounts.payer.to_account_info(),
-        ctx.accounts.system_program.to_account_info(),
-    )?;
+    // // transfer minimum rent to mint account
+    // update_account_lamports_to_minimum_balance(
+    //     ctx.accounts.asset_mint.to_account_info(),
+    //     ctx.accounts.payer.to_account_info(),
+    //     ctx.accounts.system_program.to_account_info(),
+    // )?;
 
     Ok(())
 }

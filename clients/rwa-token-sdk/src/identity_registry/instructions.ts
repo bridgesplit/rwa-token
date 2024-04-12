@@ -25,6 +25,7 @@ export async function getCreateIdentityRegistryIx(
 export type CreateIdentityAccountArgs = {
 	level: number;
 	owner: string;
+	signer: string;
 } & CommonArgs;
 
 export async function getCreateIdentityAccountIx(
@@ -38,7 +39,7 @@ export async function getCreateIdentityAccountIx(
 			identityRegistry: getIdentityRegistryPda(args.assetMint),
 			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
 			systemProgram: SystemProgram.programId,
-			signer: args.signer ? args.signer : getIdentityRegistryPda(args.assetMint),
+			signer: args.signer,
 		})
 		.instruction();
 	return ix;

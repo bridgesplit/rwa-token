@@ -16,10 +16,10 @@ pub struct AssetControllerAccount {
 
 impl AssetControllerAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Pubkey) {
+    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Option<Pubkey>) {
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate;
+        self.delegate = delegate.unwrap_or(authority);
         self.version = Self::VERSION;
     }
 }

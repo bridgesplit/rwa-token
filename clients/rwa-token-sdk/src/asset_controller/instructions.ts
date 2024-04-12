@@ -241,16 +241,11 @@ export type SetupUserArgs = {
 	owner: string;
 	assetMint: string;
 	level: number;
+	signer: string;
 };
 
 export async function getSetupUserIxs(args: SetupUserArgs): Promise<IxReturn> {
-	const identityAccountIx = await getCreateIdentityAccountIx({
-		payer: args.payer,
-		signer: getIdentityRegistryPda(args.assetMint).toString(),
-		assetMint: args.assetMint,
-		owner: args.owner,
-		level: args.level,
-	});
+	const identityAccountIx = await getCreateIdentityAccountIx(args);
 	const createTaIx = await getCreateTokenAccountIx(args);
 	return {
 		ixs: [
