@@ -27,3 +27,8 @@ export const getPolicyEnginePda = (assetMint: string) => PublicKey.findProgramAd
 	[new PublicKey(assetMint).toBuffer()],
 	policyRegistryProgramId,
 )[0];
+
+export const getPolicyAccountPda = (assetMint: string) => PublicKey.findProgramAddressSync(
+	[getPolicyEnginePda(assetMint).toBuffer()],
+	policyRegistryProgramId,
+)[0];

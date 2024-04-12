@@ -1,10 +1,10 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import {type CommonArgs, type IxReturn} from '../utils';
-import {getDataRegistryProgram, getDataRegistryPda} from './utils';
-import {type DataAccountType} from './types';
-import {type AnchorProvider} from '@coral-xyz/anchor';
+import { type CommonArgs, type IxReturn } from '../utils';
+import { getDataRegistryProgram, getDataRegistryPda } from './utils';
+import { type DataAccountType } from './types';
+import { type AnchorProvider } from '@coral-xyz/anchor';
 
 export type CreateDataRegistryArgs = {
 	authority: string;

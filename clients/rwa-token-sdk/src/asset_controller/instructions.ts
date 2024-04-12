@@ -7,7 +7,7 @@ import {
 import {
 	policyRegistryProgramId, getCreatePolicyEngineIx, getPolicyEnginePda, getPolicyAccountPda,
 } from '../policy_engine';
-import {getCreateDataRegistryIx} from '../data_registry';
+import { getCreateDataRegistryIx } from '../data_registry';
 import {
 	identityRegistryProgramId, getCreateIdentityAccountIx, getCreateIdentityRegistryIx, getIdentityAccountPda, getIdentityRegistryPda,
 } from '../identity_registry';
@@ -21,7 +21,7 @@ import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 	assetControllerProgramId,
 } from './utils';
-import {type AnchorProvider, BN} from '@coral-xyz/anchor';
+import { type AnchorProvider, BN } from '@coral-xyz/anchor';
 
 /** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {
@@ -231,7 +231,7 @@ export async function getSetupAssetControllerIxs(
 ): Promise<IxReturn> {
 	const mintKp = new Keypair();
 	const mint = mintKp.publicKey;
-	const updatedArgs = {...args, assetMint: mint.toString()};
+	const updatedArgs = { ...args, assetMint: mint.toString() };
 	// Get asset registry create ix
 	const assetControllerCreateIx = await getCreateAssetControllerIx(
 		updatedArgs,

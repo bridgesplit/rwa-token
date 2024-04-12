@@ -145,7 +145,7 @@ describe('e2e class tests', () => {
 				identityLevels: [1],
 				comparisionType: { or: {} },
 			},
-			policy: {
+			policyType: {
 				identityApproval: {},
 			},
 		};
@@ -174,7 +174,7 @@ describe('e2e class tests', () => {
 				identityLevels: [1],
 				comparisionType: { or: {} },
 			},
-			policy: {
+			policyType: {
 				transactionAmountLimit: {
 					limit: new BN(100),
 				},
@@ -204,7 +204,7 @@ describe('e2e class tests', () => {
 				identityLevels: [1],
 				comparisionType: { or: {} },
 			},
-			policy: {
+			policyType: {
 				transactionAmountVelocity: {
 					limit: new BN(100000),
 					timeframe: new BN(60),
@@ -235,7 +235,7 @@ describe('e2e class tests', () => {
 				identityLevels: [1],
 				comparisionType: { or: {} },
 			},
-			policy: {
+			policyType: {
 				transactionCountVelocity: {
 					limit: new BN(100),
 					timeframe: new BN(60),
