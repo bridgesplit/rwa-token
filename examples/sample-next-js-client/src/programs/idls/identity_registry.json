@@ -16,11 +16,11 @@
         },
         {
           "name": "assetMint",
-          "isMut": true,
+          "isMut": false,
           "isSigner": false
         },
         {
-          "name": "identityRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         },
@@ -37,7 +37,9 @@
         },
         {
           "name": "delegate",
-          "type": "publicKey"
+          "type": {
+            "option": "publicKey"
+          }
         }
       ]
     },
@@ -48,17 +50,12 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
           "isMut": false,
           "isSigner": true
         },
         {
-          "name": "legalRegistry",
+          "name": "identityRegistryAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -115,16 +112,11 @@
       ]
     },
     {
-      "name": "addLevelIdentityAccount",
+      "name": "addLevelToIdentityAccount",
       "docs": [
         "add level to identity account"
       ],
       "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
         {
           "name": "signer",
           "isMut": false,
@@ -138,11 +130,6 @@
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -158,16 +145,11 @@
       ]
     },
     {
-      "name": "removeLevelIdentityAccount",
+      "name": "removeLevelFromIdentityAccount",
       "docs": [
         "remove level from identity account"
       ],
       "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
         {
           "name": "signer",
           "isMut": false,
@@ -181,11 +163,6 @@
         {
           "name": "identityAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -203,7 +180,7 @@
     {
       "name": "revokeIdentityAccount",
       "docs": [
-        "revoke level from identity account"
+        "revoke user identity account by closing account"
       ],
       "accounts": [
         {
@@ -237,7 +214,7 @@
   ],
   "accounts": [
     {
-      "name": "IdentityRegistry",
+      "name": "IdentityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -247,14 +224,23 @@
           },
           {
             "name": "assetMint",
+            "docs": [
+              "corresponding asset mint"
+            ],
             "type": "publicKey"
           },
           {
             "name": "authority",
+            "docs": [
+              "authority to manage the registry"
+            ],
             "type": "publicKey"
           },
           {
             "name": "delegate",
+            "docs": [
+              "registry delegate"
+            ],
             "type": "publicKey"
           }
         ]

@@ -23,6 +23,11 @@ pub struct CreateIdentityAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
+/// Creates a new identity account with a specific owner and level.
+/// Owner is the creator.
+/// Level is privilege level. Enables permissioned tokens.
+/// Required for trading of permission tokens.
+/// Returns a `Result` indicating success or failure.
 pub fn handler(ctx: Context<CreateIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
     ctx.accounts
         .identity_account

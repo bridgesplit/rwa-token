@@ -18,7 +18,7 @@ declare_id!("acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan");
 pub mod asset_controller {
     use super::*;
 
-    /// create an rwa asset
+    /// creates an rwa asset
     pub fn create_asset_controller(
         ctx: Context<CreateAssetController>,
         args: CreateAssetControllerArgs,
@@ -26,7 +26,7 @@ pub mod asset_controller {
         instructions::create::handler(ctx, args)
     }
 
-    /// issue shares of the rwa asset
+    /// issues shares of the rwa asset
     pub fn issue_tokens(ctx: Context<IssueTokens>, args: IssueTokensArgs) -> Result<()> {
         instructions::issue::handler(ctx, args)
     }

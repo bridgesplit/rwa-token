@@ -21,6 +21,7 @@ pub struct UpdateDataAccount<'info> {
     pub data_account: Box<Account<'info, DataAccount>>,
 }
 
+/// Writes args to data registry. Updates type, name, uri.
 pub fn handler(ctx: Context<UpdateDataAccount>, args: UpdateDataAccountArgs) -> Result<()> {
     ctx.accounts
         .data_account

@@ -37,7 +37,9 @@
         },
         {
           "name": "delegate",
-          "type": "publicKey"
+          "type": {
+            "option": "publicKey"
+          }
         }
       ]
     },
@@ -47,11 +49,6 @@
         "delegate data registry"
       ],
       "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
         {
           "name": "authority",
           "isMut": false,
@@ -119,11 +116,6 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "signer",
           "isMut": false,
           "isSigner": false
@@ -136,11 +128,6 @@
         {
           "name": "dataAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -156,7 +143,7 @@
   ],
   "accounts": [
     {
-      "name": "DataRegistry",
+      "name": "DataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [

@@ -5,13 +5,18 @@
     {
       "name": "createAssetController",
       "docs": [
-        "create an rwa asset"
+        "creates an rwa asset"
       ],
       "accounts": [
         {
           "name": "payer",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": false
         },
         {
           "name": "assetMint",
@@ -51,26 +56,13 @@
     {
       "name": "issueTokens",
       "docs": [
-        "issue shares of the rwa asset"
+        "issues shares of the rwa asset"
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "authority",
-          "isMut": true,
-          "isSigner": true,
-          "docs": [
-            "only authority can issue tokens"
-          ]
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
+          "isMut": false,
+          "isSigner": true
         },
         {
           "name": "assetMint",
@@ -104,38 +96,18 @@
       ],
       "accounts": [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
           "name": "owner",
           "isMut": false,
           "isSigner": true
         },
         {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "assetMint",
-          "isMut": false,
+          "isMut": true,
           "isSigner": false
         },
         {
           "name": "tokenAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         },
         {
@@ -165,11 +137,6 @@
         {
           "name": "owner",
           "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
           "isSigner": false
         },
         {
@@ -222,11 +189,6 @@
           "isSigner": true
         },
         {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "assetMint",
           "isMut": false,
           "isSigner": false
@@ -248,125 +210,6 @@
         }
       ],
       "args": []
-    },
-    {
-      "name": "transferTokens",
-      "docs": [
-        "transfer tokens"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "from",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "trackerAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "fromTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "toTokenAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "policyEngine",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        },
-        {
-          "name": "to",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "approveTransaction",
-      "docs": [
-        "generate an approve account for a transaction"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "transactionApprovalAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": "ApproveTransactionArgs"
-          }
-        }
-      ]
     },
     {
       "name": "executeTransaction",
@@ -400,7 +243,27 @@
           "isSigner": false
         },
         {
-          "name": "transactionApprovalAccount",
+          "name": "policyEngine",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "policyEngineAccount",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "identityRegistry",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "identityAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "trackerAccount",
           "isMut": true,
           "isSigner": false
         }
@@ -414,55 +277,6 @@
     }
   ],
   "accounts": [
-    {
-      "name": "TransactionApprovalAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "assetMint",
-            "docs": [
-              "asset mint"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "fromTokenAccount",
-            "docs": [
-              "from token account"
-            ],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "toTokenAccount",
-            "docs": [
-              "to token account"
-            ],
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "amount",
-            "docs": [
-              "amount to be transferred"
-            ],
-            "type": {
-              "option": "u64"
-            }
-          },
-          {
-            "name": "slot",
-            "docs": [
-              "slot in which approve account has been generated"
-            ],
-            "type": "u64"
-          }
-        ]
-      }
-    },
     {
       "name": "AssetControllerAccount",
       "type": {
@@ -520,7 +334,7 @@
             "type": {
               "array": [
                 "u64",
-                10
+                25
               ]
             }
           },
@@ -529,7 +343,7 @@
             "type": {
               "array": [
                 "i64",
-                10
+                25
               ]
             }
           }
@@ -548,39 +362,21 @@
             "type": "u8"
           },
           {
-            "name": "authority",
-            "type": "publicKey"
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
           },
           {
             "name": "delegate",
             "type": {
               "option": "publicKey"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "ApproveTransactionArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "fromTokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "toTokenAccount",
-            "type": {
-              "option": "publicKey"
-            }
-          },
-          {
-            "name": "amount",
-            "type": {
-              "option": "u64"
             }
           }
         ]
@@ -626,12 +422,12 @@
     },
     {
       "code": 6004,
-      "name": "PolicyEnginesMissing",
+      "name": "PolicyAccountsMissing",
       "msg": "All policy accounts must be sent in the instruction"
     },
     {
       "code": 6005,
-      "name": "PolicyEngineMismatch",
+      "name": "InvalidPolicyAccount",
       "msg": "Invalid policy account passed"
     },
     {
@@ -643,6 +439,11 @@
       "code": 6007,
       "name": "TransferHistoryFull",
       "msg": "Transfer history is full"
+    },
+    {
+      "code": 6008,
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
     }
   ]
 }

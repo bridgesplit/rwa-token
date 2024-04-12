@@ -1,4 +1,4 @@
-export type IdentityRegistry = {
+export type IdentityRegistryIdlType = {
   "version": "0.0.1",
   "name": "identity_registry",
   "instructions": [
@@ -309,7 +309,7 @@ export type IdentityRegistry = {
   ]
 };
 
-export const IDL: IdentityRegistry = {
+export const IDL: IdentityRegistryIdlType = {
   "version": "0.0.1",
   "name": "identity_registry",
   "instructions": [

@@ -1,909 +1,899 @@
-export type AssetController = {
-  "version": "0.0.1",
-  "name": "asset_controller",
-  "instructions": [
+export type AssetControllerIdlType = {
+  'version': '0.0.1';
+  'name': 'asset_controller';
+  'instructions': [
     {
-      "name": "createAssetController",
-      "docs": [
-        "create an rwa asset"
-      ],
-      "accounts": [
+      'name': 'createAssetController';
+      'docs': [
+        'creates an rwa asset',
+      ];
+      'accounts': [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          'name': 'payer';
+          'isMut': true;
+          'isSigner': true;
         },
         {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": false
+          'name': 'authority';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "assetMint",
-          "isMut": true,
-          "isSigner": true
+          'name': 'assetMint';
+          'isMut': true;
+          'isSigner': true;
         },
         {
-          "name": "assetController",
-          "isMut": true,
-          "isSigner": false
+          'name': 'assetController';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "extraMetasAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'extraMetasAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          'name': 'systemProgram';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
+          'name': 'tokenProgram';
+          'isMut': false;
+          'isSigner': false;
+        },
+      ];
+      'args': [
         {
-          "name": "args",
-          "type": {
-            "defined": "CreateAssetControllerArgs"
-          }
-        }
-      ]
+          'name': 'args';
+          'type': {
+            'defined': 'CreateAssetControllerArgs';
+          };
+        },
+      ];
     },
     {
-      "name": "issueTokens",
-      "docs": [
-        "issue shares of the rwa asset"
-      ],
-      "accounts": [
+      'name': 'issueTokens';
+      'docs': [
+        'issues shares of the rwa asset',
+      ];
+      'accounts': [
         {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          'name': 'authority';
+          'isMut': false;
+          'isSigner': true;
         },
         {
-          "name": "assetMint",
-          "isMut": true,
-          "isSigner": false
+          'name': 'assetMint';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'tokenAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
+          'name': 'tokenProgram';
+          'isMut': false;
+          'isSigner': false;
+        },
+      ];
+      'args': [
         {
-          "name": "args",
-          "type": {
-            "defined": "IssueTokensArgs"
-          }
-        }
-      ]
+          'name': 'args';
+          'type': {
+            'defined': 'IssueTokensArgs';
+          };
+        },
+      ];
     },
     {
-      "name": "voidTokens",
-      "docs": [
-        "void shares of the rwa asset"
-      ],
-      "accounts": [
+      'name': 'voidTokens';
+      'docs': [
+        'void shares of the rwa asset',
+      ];
+      'accounts': [
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          'name': 'owner';
+          'isMut': false;
+          'isSigner': true;
         },
         {
-          "name": "assetMint",
-          "isMut": true,
-          "isSigner": false
+          'name': 'assetMint';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'tokenAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
+          'name': 'tokenProgram';
+          'isMut': false;
+          'isSigner': false;
+        },
+      ];
+      'args': [
         {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
+          'name': 'amount';
+          'type': 'u64';
+        },
+      ];
     },
     {
-      "name": "createTokenAccount",
-      "docs": [
-        "create a token account"
-      ],
-      "accounts": [
+      'name': 'createTokenAccount';
+      'docs': [
+        'create a token account',
+      ];
+      'accounts': [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          'name': 'payer';
+          'isMut': true;
+          'isSigner': true;
         },
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": false
+          'name': 'owner';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          'name': 'assetMint';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'tokenAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "trackerAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'trackerAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          'name': 'systemProgram';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
+          'name': 'tokenProgram';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
+          'name': 'associatedTokenProgram';
+          'isMut': false;
+          'isSigner': false;
+        },
+      ];
+      'args': [];
     },
     {
-      "name": "closeTokenAccount",
-      "docs": [
-        "close a token account"
-      ],
-      "accounts": [
+      'name': 'closeTokenAccount';
+      'docs': [
+        'close a token account',
+      ];
+      'accounts': [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          'name': 'payer';
+          'isMut': true;
+          'isSigner': true;
         },
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          'name': 'owner';
+          'isMut': false;
+          'isSigner': true;
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          'name': 'assetMint';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'tokenAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
+          'name': 'tokenProgram';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": []
+          'name': 'associatedTokenProgram';
+          'isMut': false;
+          'isSigner': false;
+        },
+      ];
+      'args': [];
     },
     {
-      "name": "executeTransaction",
-      "docs": [
-        "execute transfer hook"
-      ],
-      "accounts": [
+      'name': 'executeTransaction';
+      'docs': [
+        'execute transfer hook',
+      ];
+      'accounts': [
         {
-          "name": "sourceAccount",
-          "isMut": false,
-          "isSigner": false
+          'name': 'sourceAccount';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          'name': 'assetMint';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "destinationAccount",
-          "isMut": false,
-          "isSigner": false
+          'name': 'destinationAccount';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "ownerDelegate",
-          "isMut": false,
-          "isSigner": false
+          'name': 'ownerDelegate';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "extraMetasAccount",
-          "isMut": false,
-          "isSigner": false
+          'name': 'extraMetasAccount';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "policyEngine",
-          "isMut": false,
-          "isSigner": false
+          'name': 'policyEngine';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "policyEngineAccount",
-          "isMut": false,
-          "isSigner": false
+          'name': 'policyEngineAccount';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          'name': 'identityRegistry';
+          'isMut': false;
+          'isSigner': false;
         },
         {
-          "name": "identityRegistryAccount",
-          "isMut": false,
-          "isSigner": false
+          'name': 'identityAccount';
+          'isMut': true;
+          'isSigner': false;
         },
         {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'trackerAccount';
+          'isMut': true;
+          'isSigner': false;
         },
+      ];
+      'args': [
         {
-          "name": "trackerAccount",
-          "isMut": true,
-          "isSigner": false
+          'name': 'amount';
+          'type': 'u64';
         },
-        {
-          "name": "policyAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    }
-  ],
-  "accounts": [
+      ];
+    },
+  ];
+  'accounts': [
     {
-      "name": "assetControllerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      'name': 'assetControllerAccount';
+      'type': {
+        'kind': 'struct';
+        'fields': [
           {
-            "name": "version",
-            "type": "u8"
+            'name': 'version';
+            'type': 'u8';
           },
           {
-            "name": "assetMint",
-            "docs": [
-              "mint pubkey"
-            ],
-            "type": "publicKey"
+            'name': 'assetMint';
+            'docs': [
+              'mint pubkey',
+            ];
+            'type': 'publicKey';
           },
           {
-            "name": "authority",
-            "docs": [
-              "authority has the ability to change delegate, freeze token accounts, etc."
-            ],
-            "type": "publicKey"
+            'name': 'authority';
+            'docs': [
+              'authority has the ability to change delegate, freeze token accounts, etc.',
+            ];
+            'type': 'publicKey';
           },
           {
-            "name": "delegate",
-            "docs": [
-              "delegate has the ability to generate tranasction approval accounts,",
-              "by default points to self, which allows any programs to generate an approval account",
-              "update to any other account to control cpis"
-            ],
-            "type": "publicKey"
-          }
-        ]
-      }
+            'name': 'delegate';
+            'docs': [
+              'delegate has the ability to generate tranasction approval accounts,',
+              'by default points to self, which allows any programs to generate an approval account',
+              'update to any other account to control cpis',
+            ];
+            'type': 'publicKey';
+          },
+        ];
+      };
     },
     {
-      "name": "trackerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      'name': 'trackerAccount';
+      'type': {
+        'kind': 'struct';
+        'fields': [
           {
-            "name": "version",
-            "type": "u8"
+            'name': 'version';
+            'type': 'u8';
           },
           {
-            "name": "assetMint",
-            "type": "publicKey"
+            'name': 'assetMint';
+            'type': 'publicKey';
           },
           {
-            "name": "owner",
-            "type": "publicKey"
+            'name': 'owner';
+            'type': 'publicKey';
           },
           {
-            "name": "transferAmounts",
-            "type": {
-              "array": [
-                "u64",
-                25
-              ]
-            }
+            'name': 'transferAmounts';
+            'type': {
+              'array': [
+                'u64',
+                25,
+              ];
+            };
           },
           {
-            "name": "transferTimestamps",
-            "type": {
-              "array": [
-                "i64",
-                25
-              ]
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
+            'name': 'transferTimestamps';
+            'type': {
+              'array': [
+                'i64',
+                25,
+              ];
+            };
+          },
+        ];
+      };
+    },
+  ];
+  'types': [
     {
-      "name": "CreateAssetControllerArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      'name': 'CreateAssetControllerArgs';
+      'type': {
+        'kind': 'struct';
+        'fields': [
           {
-            "name": "decimals",
-            "type": "u8"
+            'name': 'decimals';
+            'type': 'u8';
           },
           {
-            "name": "name",
-            "type": "string"
+            'name': 'name';
+            'type': 'string';
           },
           {
-            "name": "symbol",
-            "type": "string"
+            'name': 'symbol';
+            'type': 'string';
           },
           {
-            "name": "uri",
-            "type": "string"
+            'name': 'uri';
+            'type': 'string';
           },
           {
-            "name": "delegate",
-            "type": {
-              "option": "publicKey"
-            }
-          }
-        ]
-      }
+            'name': 'delegate';
+            'type': {
+              'option': 'publicKey';
+            };
+          },
+        ];
+      };
     },
     {
-      "name": "IssueTokensArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      'name': 'IssueTokensArgs';
+      'type': {
+        'kind': 'struct';
+        'fields': [
           {
-            "name": "amount",
-            "type": "u64"
+            'name': 'amount';
+            'type': 'u64';
           },
           {
-            "name": "to",
-            "type": "publicKey"
-          }
-        ]
-      }
-    }
-  ],
-  "errors": [
+            'name': 'to';
+            'type': 'publicKey';
+          },
+        ];
+      };
+    },
+  ];
+  'errors': [
     {
-      "code": 6000,
-      "name": "TransferMintNotApproved",
-      "msg": "Transfer hasnt been approved for the asset mint"
+      'code': 6000;
+      'name': 'TransferMintNotApproved';
+      'msg': 'Transfer hasnt been approved for the asset mint';
     },
     {
-      "code": 6001,
-      "name": "TransferFromNotApproved",
-      "msg": "Transfer hasnt been approved for from account"
+      'code': 6001;
+      'name': 'TransferFromNotApproved';
+      'msg': 'Transfer hasnt been approved for from account';
     },
     {
-      "code": 6002,
-      "name": "TransferToNotApproved",
-      "msg": "Transfer hasnt been approved for to account"
+      'code': 6002;
+      'name': 'TransferToNotApproved';
+      'msg': 'Transfer hasnt been approved for to account';
     },
     {
-      "code": 6003,
-      "name": "TransferAmountNotApproved",
-      "msg": "Transfer hasnt been approved for the specified amount"
+      'code': 6003;
+      'name': 'TransferAmountNotApproved';
+      'msg': 'Transfer hasnt been approved for the specified amount';
     },
     {
-      "code": 6004,
-      "name": "InvalidPolicyAccount",
-      "msg": "Invalid policy account passed"
+      'code': 6004;
+      'name': 'PolicyAccountsMissing';
+      'msg': 'All policy accounts must be sent in the instruction';
     },
     {
-      "code": 6005,
-      "name": "TransferSlotNotApproved",
-      "msg": "Invalid slot for approve account"
+      'code': 6005;
+      'name': 'InvalidPolicyAccount';
+      'msg': 'Invalid policy account passed';
     },
     {
-      "code": 6006,
-      "name": "TransferHistoryFull",
-      "msg": "Transfer history is full"
+      'code': 6006;
+      'name': 'TransferSlotNotApproved';
+      'msg': 'Invalid slot for approve account';
     },
     {
-      "code": 6007,
-      "name": "Unauthorized",
-      "msg": "Unauthorized"
-    }
-  ]
+      'code': 6007;
+      'name': 'TransferHistoryFull';
+      'msg': 'Transfer history is full';
+    },
+    {
+      'code': 6008;
+      'name': 'Unauthorized';
+      'msg': 'Unauthorized';
+    },
+  ];
 };
 
-export const IDL: AssetController = {
-  "version": "0.0.1",
-  "name": "asset_controller",
-  "instructions": [
+export const IDL: AssetControllerIdlType = {
+  version: '0.0.1',
+  name: 'asset_controller',
+  instructions: [
     {
-      "name": "createAssetController",
-      "docs": [
-        "create an rwa asset"
+      name: 'createAssetController',
+      docs: [
+        'creates an rwa asset',
       ],
-      "accounts": [
+      accounts: [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          name: 'payer',
+          isMut: true,
+          isSigner: true,
         },
         {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": false
+          name: 'authority',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "assetMint",
-          "isMut": true,
-          "isSigner": true
+          name: 'assetMint',
+          isMut: true,
+          isSigner: true,
         },
         {
-          "name": "assetController",
-          "isMut": true,
-          "isSigner": false
+          name: 'assetController',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "extraMetasAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'extraMetasAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      "args": [
+      args: [
         {
-          "name": "args",
-          "type": {
-            "defined": "CreateAssetControllerArgs"
-          }
-        }
-      ]
+          name: 'args',
+          type: {
+            defined: 'CreateAssetControllerArgs',
+          },
+        },
+      ],
     },
     {
-      "name": "issueTokens",
-      "docs": [
-        "issue shares of the rwa asset"
+      name: 'issueTokens',
+      docs: [
+        'issues shares of the rwa asset',
       ],
-      "accounts": [
+      accounts: [
         {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          name: 'authority',
+          isMut: false,
+          isSigner: true,
         },
         {
-          "name": "assetMint",
-          "isMut": true,
-          "isSigner": false
+          name: 'assetMint',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'tokenAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      "args": [
+      args: [
         {
-          "name": "args",
-          "type": {
-            "defined": "IssueTokensArgs"
-          }
-        }
-      ]
+          name: 'args',
+          type: {
+            defined: 'IssueTokensArgs',
+          },
+        },
+      ],
     },
     {
-      "name": "voidTokens",
-      "docs": [
-        "void shares of the rwa asset"
+      name: 'voidTokens',
+      docs: [
+        'void shares of the rwa asset',
       ],
-      "accounts": [
+      accounts: [
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          name: 'owner',
+          isMut: false,
+          isSigner: true,
         },
         {
-          "name": "assetMint",
-          "isMut": true,
-          "isSigner": false
+          name: 'assetMint',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'tokenAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      "args": [
+      args: [
         {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
+          name: 'amount',
+          type: 'u64',
+        },
+      ],
     },
     {
-      "name": "createTokenAccount",
-      "docs": [
-        "create a token account"
+      name: 'createTokenAccount',
+      docs: [
+        'create a token account',
       ],
-      "accounts": [
+      accounts: [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          name: 'payer',
+          isMut: true,
+          isSigner: true,
         },
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": false
+          name: 'owner',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          name: 'assetMint',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'tokenAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "trackerAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'trackerAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          name: 'systemProgram',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      "args": []
+      args: [],
     },
     {
-      "name": "closeTokenAccount",
-      "docs": [
-        "close a token account"
+      name: 'closeTokenAccount',
+      docs: [
+        'close a token account',
       ],
-      "accounts": [
+      accounts: [
         {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          name: 'payer',
+          isMut: true,
+          isSigner: true,
         },
         {
-          "name": "owner",
-          "isMut": false,
-          "isSigner": true
+          name: 'owner',
+          isMut: false,
+          isSigner: true,
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          name: 'assetMint',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "tokenAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'tokenAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "tokenProgram",
-          "isMut": false,
-          "isSigner": false
+          name: 'tokenProgram',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "associatedTokenProgram",
-          "isMut": false,
-          "isSigner": false
-        }
+          name: 'associatedTokenProgram',
+          isMut: false,
+          isSigner: false,
+        },
       ],
-      "args": []
+      args: [],
     },
     {
-      "name": "executeTransaction",
-      "docs": [
-        "execute transfer hook"
+      name: 'executeTransaction',
+      docs: [
+        'execute transfer hook',
       ],
-      "accounts": [
+      accounts: [
         {
-          "name": "sourceAccount",
-          "isMut": false,
-          "isSigner": false
+          name: 'sourceAccount',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          name: 'assetMint',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "destinationAccount",
-          "isMut": false,
-          "isSigner": false
+          name: 'destinationAccount',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "ownerDelegate",
-          "isMut": false,
-          "isSigner": false
+          name: 'ownerDelegate',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "extraMetasAccount",
-          "isMut": false,
-          "isSigner": false
+          name: 'extraMetasAccount',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "policyEngine",
-          "isMut": false,
-          "isSigner": false
+          name: 'policyEngine',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "policyEngineAccount",
-          "isMut": false,
-          "isSigner": false
+          name: 'policyEngineAccount',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          name: 'identityRegistry',
+          isMut: false,
+          isSigner: false,
         },
         {
-          "name": "identityRegistryAccount",
-          "isMut": false,
-          "isSigner": false
+          name: 'identityAccount',
+          isMut: true,
+          isSigner: false,
         },
         {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          name: 'trackerAccount',
+          isMut: true,
+          isSigner: false,
         },
-        {
-          "name": "trackerAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "policyAccount",
-          "isMut": true,
-          "isSigner": false
-        }
       ],
-      "args": [
+      args: [
         {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    }
+          name: 'amount',
+          type: 'u64',
+        },
+      ],
+    },
   ],
-  "accounts": [
+  accounts: [
     {
-      "name": "assetControllerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'assetControllerAccount',
+      type: {
+        kind: 'struct',
+        fields: [
           {
-            "name": "version",
-            "type": "u8"
+            name: 'version',
+            type: 'u8',
           },
           {
-            "name": "assetMint",
-            "docs": [
-              "mint pubkey"
+            name: 'assetMint',
+            docs: [
+              'mint pubkey',
             ],
-            "type": "publicKey"
+            type: 'publicKey',
           },
           {
-            "name": "authority",
-            "docs": [
-              "authority has the ability to change delegate, freeze token accounts, etc."
+            name: 'authority',
+            docs: [
+              'authority has the ability to change delegate, freeze token accounts, etc.',
             ],
-            "type": "publicKey"
+            type: 'publicKey',
           },
           {
-            "name": "delegate",
-            "docs": [
-              "delegate has the ability to generate tranasction approval accounts,",
-              "by default points to self, which allows any programs to generate an approval account",
-              "update to any other account to control cpis"
+            name: 'delegate',
+            docs: [
+              'delegate has the ability to generate tranasction approval accounts,',
+              'by default points to self, which allows any programs to generate an approval account',
+              'update to any other account to control cpis',
             ],
-            "type": "publicKey"
-          }
-        ]
-      }
+            type: 'publicKey',
+          },
+        ],
+      },
     },
     {
-      "name": "trackerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'trackerAccount',
+      type: {
+        kind: 'struct',
+        fields: [
           {
-            "name": "version",
-            "type": "u8"
+            name: 'version',
+            type: 'u8',
           },
           {
-            "name": "assetMint",
-            "type": "publicKey"
+            name: 'assetMint',
+            type: 'publicKey',
           },
           {
-            "name": "owner",
-            "type": "publicKey"
+            name: 'owner',
+            type: 'publicKey',
           },
           {
-            "name": "transferAmounts",
-            "type": {
-              "array": [
-                "u64",
-                25
-              ]
-            }
+            name: 'transferAmounts',
+            type: {
+              array: [
+                'u64',
+                25,
+              ],
+            },
           },
           {
-            "name": "transferTimestamps",
-            "type": {
-              "array": [
-                "i64",
-                25
-              ]
-            }
-          }
-        ]
-      }
-    }
+            name: 'transferTimestamps',
+            type: {
+              array: [
+                'i64',
+                25,
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
-  "types": [
+  types: [
     {
-      "name": "CreateAssetControllerArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'CreateAssetControllerArgs',
+      type: {
+        kind: 'struct',
+        fields: [
           {
-            "name": "decimals",
-            "type": "u8"
+            name: 'decimals',
+            type: 'u8',
           },
           {
-            "name": "name",
-            "type": "string"
+            name: 'name',
+            type: 'string',
           },
           {
-            "name": "symbol",
-            "type": "string"
+            name: 'symbol',
+            type: 'string',
           },
           {
-            "name": "uri",
-            "type": "string"
+            name: 'uri',
+            type: 'string',
           },
           {
-            "name": "delegate",
-            "type": {
-              "option": "publicKey"
-            }
-          }
-        ]
-      }
+            name: 'delegate',
+            type: {
+              option: 'publicKey',
+            },
+          },
+        ],
+      },
     },
     {
-      "name": "IssueTokensArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
+      name: 'IssueTokensArgs',
+      type: {
+        kind: 'struct',
+        fields: [
           {
-            "name": "amount",
-            "type": "u64"
+            name: 'amount',
+            type: 'u64',
           },
           {
-            "name": "to",
-            "type": "publicKey"
-          }
-        ]
-      }
-    }
+            name: 'to',
+            type: 'publicKey',
+          },
+        ],
+      },
+    },
   ],
-  "errors": [
+  errors: [
     {
-      "code": 6000,
-      "name": "TransferMintNotApproved",
-      "msg": "Transfer hasnt been approved for the asset mint"
+      code: 6000,
+      name: 'TransferMintNotApproved',
+      msg: 'Transfer hasnt been approved for the asset mint',
     },
     {
-      "code": 6001,
-      "name": "TransferFromNotApproved",
-      "msg": "Transfer hasnt been approved for from account"
+      code: 6001,
+      name: 'TransferFromNotApproved',
+      msg: 'Transfer hasnt been approved for from account',
     },
     {
-      "code": 6002,
-      "name": "TransferToNotApproved",
-      "msg": "Transfer hasnt been approved for to account"
+      code: 6002,
+      name: 'TransferToNotApproved',
+      msg: 'Transfer hasnt been approved for to account',
     },
     {
-      "code": 6003,
-      "name": "TransferAmountNotApproved",
-      "msg": "Transfer hasnt been approved for the specified amount"
+      code: 6003,
+      name: 'TransferAmountNotApproved',
+      msg: 'Transfer hasnt been approved for the specified amount',
     },
     {
-      "code": 6004,
-      "name": "InvalidPolicyAccount",
-      "msg": "Invalid policy account passed"
+      code: 6004,
+      name: 'PolicyAccountsMissing',
+      msg: 'All policy accounts must be sent in the instruction',
     },
     {
-      "code": 6005,
-      "name": "TransferSlotNotApproved",
-      "msg": "Invalid slot for approve account"
+      code: 6005,
+      name: 'InvalidPolicyAccount',
+      msg: 'Invalid policy account passed',
     },
     {
-      "code": 6006,
-      "name": "TransferHistoryFull",
-      "msg": "Transfer history is full"
+      code: 6006,
+      name: 'TransferSlotNotApproved',
+      msg: 'Invalid slot for approve account',
     },
     {
-      "code": 6007,
-      "name": "Unauthorized",
-      "msg": "Unauthorized"
-    }
-  ]
+      code: 6007,
+      name: 'TransferHistoryFull',
+      msg: 'Transfer history is full',
+    },
+    {
+      code: 6008,
+      name: 'Unauthorized',
+      msg: 'Unauthorized',
+    },
+  ],
 };

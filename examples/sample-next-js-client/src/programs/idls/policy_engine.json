@@ -36,12 +36,14 @@
         },
         {
           "name": "delegate",
-          "type": "publicKey"
+          "type": {
+            "option": "publicKey"
+          }
         }
       ]
     },
     {
-      "name": "attachIdentityApproval",
+      "name": "attachPolicyAccount",
       "docs": [
         "attach policies",
         "attach a transaction count limit policy"
@@ -53,9 +55,9 @@
           "isSigner": true
         },
         {
-          "name": "authority",
+          "name": "signer",
           "isMut": false,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "policyEngine",
@@ -63,7 +65,7 @@
           "isSigner": false
         },
         {
-          "name": "policy",
+          "name": "policyAccount",
           "isMut": true,
           "isSigner": true
         },
@@ -79,148 +81,11 @@
           "type": {
             "defined": "IdentityFilter"
           }
-        }
-      ]
-    },
-    {
-      "name": "attachTransactionAmountLimit",
-      "docs": [
-        "attach a transaction amount limit policy"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "policyEngine",
-          "isMut": true,
-          "isSigner": false
         },
         {
           "name": "policy",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "limit",
-          "type": "u64"
-        },
-        {
-          "name": "identityFilter",
           "type": {
-            "defined": "IdentityFilter"
-          }
-        }
-      ]
-    },
-    {
-      "name": "attachTransactionAmountVelocity",
-      "docs": [
-        "attach a transaction amount velocity policy"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "policyEngine",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "policy",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "limit",
-          "type": "u64"
-        },
-        {
-          "name": "timeframe",
-          "type": "i64"
-        },
-        {
-          "name": "identityFilter",
-          "type": {
-            "defined": "IdentityFilter"
-          }
-        }
-      ]
-    },
-    {
-      "name": "attachTransactionCountVelocity",
-      "docs": [
-        "attach a transaction count velocity policy"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "policyEngine",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "policy",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "limit",
-          "type": "u64"
-        },
-        {
-          "name": "timeframe",
-          "type": "i64"
-        },
-        {
-          "name": "identityFilter",
-          "type": {
-            "defined": "IdentityFilter"
+            "defined": "Policy"
           }
         }
       ]
@@ -233,7 +98,7 @@
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
+          "isMut": false,
           "isSigner": true
         },
         {
@@ -247,13 +112,8 @@
           "isSigner": false
         },
         {
-          "name": "policy",
+          "name": "policyAccount",
           "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
           "isSigner": false
         }
       ],
@@ -262,7 +122,7 @@
   ],
   "accounts": [
     {
-      "name": "IdentityApproval",
+      "name": "PolicyAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -271,93 +131,36 @@
             "type": "u8"
           },
           {
+            "name": "policyEngine",
+            "type": "publicKey"
+          },
+          {
             "name": "identityFilter",
             "type": {
               "defined": "IdentityFilter"
+            }
+          },
+          {
+            "name": "policy",
+            "type": {
+              "defined": "Policy"
             }
           }
         ]
       }
     },
     {
-      "name": "TransactionAmountLimit",
+      "name": "PolicyEngineAccount",
       "type": {
         "kind": "struct",
         "fields": [
           {
             "name": "version",
+            "docs": [
+              "version"
+            ],
             "type": "u8"
           },
-          {
-            "name": "limit",
-            "type": "u64"
-          },
-          {
-            "name": "identityFilter",
-            "type": {
-              "defined": "IdentityFilter"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "TransactionAmountVelocity",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "limit",
-            "type": "u64"
-          },
-          {
-            "name": "timeframe",
-            "type": "i64"
-          },
-          {
-            "name": "identityFilter",
-            "type": {
-              "defined": "IdentityFilter"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "TransactionCountVelocity",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "limit",
-            "type": "u64"
-          },
-          {
-            "name": "timeframe",
-            "type": "i64"
-          },
-          {
-            "name": "identityFilter",
-            "type": {
-              "defined": "IdentityFilter"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "PolicyEngine",
-      "type": {
-        "kind": "struct",
-        "fields": [
           {
             "name": "assetMint",
             "docs": [
@@ -410,11 +213,18 @@
         "fields": [
           {
             "name": "identityLevels",
-            "type": "bytes"
+            "type": {
+              "array": [
+                "u8",
+                10
+              ]
+            }
           },
           {
             "name": "comparisionType",
-            "type": "u8"
+            "type": {
+              "defined": "ComparisionType"
+            }
           }
         ]
       }
@@ -425,16 +235,16 @@
         "kind": "enum",
         "variants": [
           {
-            "name": "And"
+            "name": "Or"
           },
           {
-            "name": "Or"
+            "name": "And"
           }
         ]
       }
     },
     {
-      "name": "PolicyType",
+      "name": "Policy",
       "type": {
         "kind": "enum",
         "variants": [
@@ -442,13 +252,39 @@
             "name": "IdentityApproval"
           },
           {
-            "name": "TransactionCountVelocity"
+            "name": "TransactionAmountLimit",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              }
+            ]
           },
           {
-            "name": "TransactionAmountVelocity"
+            "name": "TransactionAmountVelocity",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              },
+              {
+                "name": "timeframe",
+                "type": "i64"
+              }
+            ]
           },
           {
-            "name": "TransactionAmountLimit"
+            "name": "TransactionCountVelocity",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              },
+              {
+                "name": "timeframe",
+                "type": "i64"
+              }
+            ]
           }
         ]
       }
@@ -458,7 +294,7 @@
     {
       "code": 6000,
       "name": "InvalidPolicy",
-      "msg": "Invalid policy account passed"
+      "msg": "Invalid policy passed"
     },
     {
       "code": 6001,
@@ -489,6 +325,11 @@
       "code": 6006,
       "name": "IdentityFilterFailed",
       "msg": "Identity filter failed"
+    },
+    {
+      "code": 6007,
+      "name": "UnauthorizedSigner",
+      "msg": "Unauthorized signer"
     }
   ]
 }

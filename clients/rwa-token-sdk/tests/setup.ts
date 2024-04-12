@@ -1,5 +1,5 @@
-import {Keypair} from '@solana/web3.js';
-import {getProvider} from '../src/utils';
+import { Keypair } from '@solana/web3.js';
+import { getProvider } from '../src/utils';
 import 'dotenv/config';
 
 export function setupTests() {
