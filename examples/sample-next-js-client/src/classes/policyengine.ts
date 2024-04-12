@@ -1,11 +1,11 @@
-import {type IxReturn} from '../utils';
+import { type IxReturn } from '../utils';
 import {
 	type AttachPolicyArgs,
 	getAttachPolicyAccountIx,
 	getPolicyEnginePda,
 } from '../policy_engine';
-import {type RwaClient} from './rwa';
-import {type PublicKey} from '@solana/web3.js';
+import { type RwaClient } from './rwa';
+import { type PublicKey } from '@solana/web3.js';
 
 /**
  * Represents the client Policy Engine for an RWA.

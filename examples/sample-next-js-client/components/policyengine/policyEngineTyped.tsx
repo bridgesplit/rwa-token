@@ -9,6 +9,7 @@ import JSONPretty from 'react-json-pretty';
 import { handleMessage } from './policySdkFunctions';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';
 import { IdentityFilterForm } from './policyComponents/identityFilter';
+import { toast } from 'react-toastify';
 
 interface Action {
     message: string,
@@ -24,7 +25,7 @@ export const PolicyEngine = () => {
         authority: '',
         owner: '',
         assetMint: '',
-        payer: String(rwaClient?.provider.wallet.publicKey!),
+        payer: '',
         identityFilter: {
             identityLevels: [1],
             comparisionType: { or: {} },
@@ -129,15 +130,13 @@ export const PolicyEngine = () => {
         });
     }
 
-    const handleSubmit = async (argsWithoutPayer: AttachPolicyArgs | null) => {
-        const payer = wallet?.publicKey.toString();
-        if (!argsWithoutPayer || !payer) { // Check if args is null or payer is undefined
-            return;
+    const handleSubmit = async (args: AttachPolicyArgs | null) => {
+        const hasEmptyArg = Object.values(args!).some(value => value === '');
+        if (!hasEmptyArg && args) {
+            handleMessage(args, rwaClient as RwaClient);
         } else {
-            setPolicyArgs(prev => {
-                return { ...prev, payer: payer }; // Update payer property
-            });
-            handleMessage(policyArgs, rwaClient as RwaClient);
+            toast.error('Missing args, please try again.')
+            console.error('One or more arguments are empty. handleMessage not executed.');
         }
     };
 
@@ -204,6 +203,19 @@ export const PolicyEngine = () => {
                                 onChange={(e) =>
                                     setPolicyArgs(prev => {
                                         return { ...prev, assetMint: e.target.value }; // Update policy property while keeping other properties
+                                    })}
+                                className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
+                            />
+                        </div>
+                        <div className='flex items-center justify-center my-4'>
+                            <label htmlFor='assetMint' className="w-1/4 text-gray-700 text-xs font-bold">Payer</label>
+                            <input
+                                type="text"
+                                id="payer"
+                                value={policyArgs?.payer || ''} // Use optional chaining to avoid errors when policyArgs is null
+                                onChange={(e) =>
+                                    setPolicyArgs(prev => {
+                                        return { ...prev, payer: e.target.value }; // Update policy property while keeping other properties
                                     })}
                                 className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
                             />

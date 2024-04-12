@@ -89,8 +89,7 @@ export const connections = [
 ]
 
 export const devnetconnections = [
-    "https://devnet.helius-rpc.com/?api-key=e54baa62-eb3c-4b96-9d5f-c52ccb42c685",
-    "https://devnet.helius-rpc.com/?api-key=cb256a6b-58b5-40eb-81c9-c962f30738dc"
+    "https://devnet.helius-rpc.com/?api-key=a5b537c9-82f1-4224-8a8c-4e9185084352",
 ]
 
 export const randomConnection = () => {
@@ -167,6 +166,7 @@ export const toast = {
 
 export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: Connection, instructions: TransactionInstruction[], lastAttempt?: number, signers?: Keypair[]): Promise<boolean> => {
     // starts at 0 to keep track and make sure it doesn't keep trying forever
+    console.log(instructions, connection, wallet.publicKey.toString())
     let attempt = (lastAttempt ?? 0) + 1
     const blockhashResponse = await connection.getLatestBlockhashAndContext('finalized');
     const lastValidHeight = blockhashResponse.value.lastValidBlockHeight;
@@ -186,7 +186,7 @@ export const sendV0SolanaTransaction = async (wallet: AnchorWallet, connection: 
 
     console.log(signedTx)
     const signature = await connection.sendRawTransaction(signedTx?.serialize()!, { skipPreflight: true });
-
+    console.log(signature)
     // waits for transaction to confirm
     let confirmed = false
     confirmed = await confirmSignatureStatus(signature, connection, lastValidHeight)

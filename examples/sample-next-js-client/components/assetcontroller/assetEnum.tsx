@@ -16,7 +16,6 @@ const SETUP_ASSET_CONTROLLER_ARGS = {
     authority: '',
     decimals: 2,
     payer: '',
-    delegate: '',
     name: '',
     uri: '',
     symbol: ''

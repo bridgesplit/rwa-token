@@ -1,10 +1,10 @@
 import {
 	Keypair, PublicKey, SystemProgram, type TransactionInstruction,
 } from '@solana/web3.js';
-import {type CommonArgs, type IxReturn} from '../utils';
-import {getPolicyEnginePda, getPolicyEngineProgram} from './utils';
-import {type IdentityFilter, type Policy} from './types';
-import {type AnchorProvider} from '@coral-xyz/anchor';
+import { type CommonArgs, type IxReturn } from '../utils';
+import { getPolicyEnginePda, getPolicyEngineProgram } from './utils';
+import { type IdentityFilter, type Policy } from './types';
+import { type AnchorProvider } from '@coral-xyz/anchor';
 
 /** Represents the arguments required to create a policy. */
 export type CreatePolicyEngineArgs = {
@@ -65,6 +65,8 @@ export async function getAttachPolicyAccountIx(
 ): Promise<IxReturn> {
 	const policyProgram = getPolicyEngineProgram(provider);
 	const policyAccount = new Keypair();
+	console.log(policyAccount.publicKey, new PublicKey(args.authority), args.payer, getPolicyEnginePda(args.assetMint))
+
 	const ix = await policyProgram.methods.attachPolicyAccount(
 		args.identityFilter,
 		args.policy,
@@ -77,6 +79,8 @@ export async function getAttachPolicyAccountIx(
 			systemProgram: SystemProgram.programId,
 		})
 		.instruction();
+
+
 	return {
 		ixs: [ix],
 		signers: [policyAccount],

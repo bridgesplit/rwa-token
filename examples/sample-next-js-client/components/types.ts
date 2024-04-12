@@ -66,6 +66,17 @@ identity registry:  GZfxE9phybhF2jDA3BYDMDZAsFayhgcZFWyNaT8tY5be
 
 */
 
+/**
+ *
+ * TEST ASSET NO DELEGATE
+ *
+ * WALLET: GWPTxoTN55nMBJLpgQuC9CWPiwc6darSEhCcrhjosTBf
+ * mint: 5Ffp7ej8HkcKfKYQqjj49SWqMrEbb97T9TN2yMeb3xdJ
+ * data registry:  AnpbhS1buMjeLrvCeUPNGwdKPpqt8u6svEch58Rqav6E
+ * asset controller:  GpDfQjEoEAPCq4baa5ha6oWsqNSG8XmpHjcWTbXP9YWL
+ * policy engine:  J1jMLiDWvw2KHebQQFTm5KpWdGc8kjgd6LRFUYdf6cb7
+ * identity registry:  ALonpXmFvkoEuNyQ4CF9wyv1aBJjg1u26yaFqphunz3s
+ */
 
 interface AssetControllerAccount {
     address: string;

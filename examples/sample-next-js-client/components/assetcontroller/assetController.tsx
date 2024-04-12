@@ -25,7 +25,6 @@ export const AssetController = () => {
                 authority: '',
                 decimals: 2,
                 payer: '',
-                delegate: '',
                 name: '',
                 uri: '',
                 symbol: ''
