@@ -4,17 +4,17 @@
  * Note that this is only a type helper and is not the actual IDL. The original
  * IDL can be found at `target/idl/asset_controller.json`.
  */
-export type AssetController = {
+export type AssetControllerIdlType = {
   "address": "acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan",
   "metadata": {
-    "name": "assetController",
+    "name": "asset_controller",
     "version": "0.0.1",
     "spec": "0.1.0",
     "description": "The Asset Controller Program (ACP) enables core asset management functionality for newly issued assets, including transfer controls and transaction privacy."
   },
   "instructions": [
     {
-      "name": "closeTokenAccount",
+      "name": "close_token_account",
       "docs": [
         "close a token account"
       ],
@@ -39,25 +39,25 @@ export type AssetController = {
           "signer": true
         },
         {
-          "name": "assetMint"
+          "name": "asset_mint"
         },
         {
-          "name": "tokenAccount",
+          "name": "token_account",
           "writable": true
         },
         {
-          "name": "tokenProgram",
+          "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         },
         {
-          "name": "associatedTokenProgram",
+          "name": "associated_token_program",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         }
       ],
       "args": []
     },
     {
-      "name": "createAssetController",
+      "name": "create_asset_controller",
       "docs": [
         "create an rwa asset"
       ],
@@ -81,24 +81,24 @@ export type AssetController = {
           "name": "authority"
         },
         {
-          "name": "assetMint",
+          "name": "asset_mint",
           "writable": true,
           "signer": true
         },
         {
-          "name": "assetController",
+          "name": "asset_controller",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               }
             ]
           }
         },
         {
-          "name": "extraMetasAccount",
+          "name": "extra_metas_account",
           "writable": true,
           "pda": {
             "seeds": [
@@ -128,17 +128,17 @@ export type AssetController = {
               },
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "tokenProgram",
+          "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         }
       ],
@@ -147,14 +147,14 @@ export type AssetController = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "createAssetControllerArgs"
+              "name": "CreateAssetControllerArgs"
             }
           }
         }
       ]
     },
     {
-      "name": "createTokenAccount",
+      "name": "create_token_account",
       "docs": [
         "create a token account"
       ],
@@ -178,20 +178,20 @@ export type AssetController = {
           "name": "owner"
         },
         {
-          "name": "assetMint"
+          "name": "asset_mint"
         },
         {
-          "name": "tokenAccount",
+          "name": "token_account",
           "writable": true
         },
         {
-          "name": "trackerAccount",
+          "name": "tracker_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               },
               {
                 "kind": "account",
@@ -201,22 +201,22 @@ export type AssetController = {
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         },
         {
-          "name": "tokenProgram",
+          "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         },
         {
-          "name": "associatedTokenProgram",
+          "name": "associated_token_program",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         }
       ],
       "args": []
     },
     {
-      "name": "executeTransaction",
+      "name": "execute_transaction",
       "docs": [
         "execute transfer hook"
       ],
@@ -232,19 +232,19 @@ export type AssetController = {
       ],
       "accounts": [
         {
-          "name": "sourceAccount"
+          "name": "source_account"
         },
         {
-          "name": "assetMint"
+          "name": "asset_mint"
         },
         {
-          "name": "destinationAccount"
+          "name": "destination_account"
         },
         {
-          "name": "ownerDelegate"
+          "name": "owner_delegate"
         },
         {
-          "name": "extraMetasAccount",
+          "name": "extra_metas_account",
           "pda": {
             "seeds": [
               {
@@ -273,35 +273,35 @@ export type AssetController = {
               },
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               }
             ]
           }
         },
         {
-          "name": "policyEngine",
+          "name": "policy_engine",
           "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
         },
         {
-          "name": "policyEngineAccount"
+          "name": "policy_engine_account"
         },
         {
-          "name": "identityRegistry",
+          "name": "identity_registry",
           "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
         },
         {
-          "name": "identityRegistryAccount"
+          "name": "identity_registry_account"
         },
         {
-          "name": "identityAccount",
+          "name": "identity_account",
           "writable": true
         },
         {
-          "name": "trackerAccount",
+          "name": "tracker_account",
           "writable": true
         },
         {
-          "name": "policyAccount"
+          "name": "policy_account"
         }
       ],
       "args": [
@@ -312,7 +312,7 @@ export type AssetController = {
       ]
     },
     {
-      "name": "issueTokens",
+      "name": "issue_tokens",
       "docs": [
         "issue shares of the rwa asset"
       ],
@@ -332,15 +332,15 @@ export type AssetController = {
           "signer": true
         },
         {
-          "name": "assetMint",
+          "name": "asset_mint",
           "writable": true
         },
         {
-          "name": "tokenAccount",
+          "name": "token_account",
           "writable": true
         },
         {
-          "name": "tokenProgram",
+          "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         }
       ],
@@ -349,14 +349,14 @@ export type AssetController = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "issueTokensArgs"
+              "name": "IssueTokensArgs"
             }
           }
         }
       ]
     },
     {
-      "name": "voidTokens",
+      "name": "void_tokens",
       "docs": [
         "void shares of the rwa asset"
       ],
@@ -376,15 +376,15 @@ export type AssetController = {
           "signer": true
         },
         {
-          "name": "assetMint",
+          "name": "asset_mint",
           "writable": true
         },
         {
-          "name": "tokenAccount",
+          "name": "token_account",
           "writable": true
         },
         {
-          "name": "tokenProgram",
+          "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         }
       ],
@@ -398,7 +398,7 @@ export type AssetController = {
   ],
   "accounts": [
     {
-      "name": "assetControllerAccount",
+      "name": "AssetControllerAccount",
       "discriminator": [
         70,
         136,
@@ -411,7 +411,7 @@ export type AssetController = {
       ]
     },
     {
-      "name": "identityAccount",
+      "name": "IdentityAccount",
       "discriminator": [
         194,
         90,
@@ -424,7 +424,7 @@ export type AssetController = {
       ]
     },
     {
-      "name": "identityRegistryAccount",
+      "name": "IdentityRegistryAccount",
       "discriminator": [
         154,
         254,
@@ -437,7 +437,7 @@ export type AssetController = {
       ]
     },
     {
-      "name": "policyAccount",
+      "name": "PolicyAccount",
       "discriminator": [
         218,
         201,
@@ -450,7 +450,7 @@ export type AssetController = {
       ]
     },
     {
-      "name": "policyEngineAccount",
+      "name": "PolicyEngineAccount",
       "discriminator": [
         124,
         85,
@@ -463,7 +463,7 @@ export type AssetController = {
       ]
     },
     {
-      "name": "trackerAccount",
+      "name": "TrackerAccount",
       "discriminator": [
         83,
         95,
@@ -479,48 +479,48 @@ export type AssetController = {
   "errors": [
     {
       "code": 6000,
-      "name": "transferMintNotApproved",
+      "name": "TransferMintNotApproved",
       "msg": "Transfer hasnt been approved for the asset mint"
     },
     {
       "code": 6001,
-      "name": "transferFromNotApproved",
+      "name": "TransferFromNotApproved",
       "msg": "Transfer hasnt been approved for from account"
     },
     {
       "code": 6002,
-      "name": "transferToNotApproved",
+      "name": "TransferToNotApproved",
       "msg": "Transfer hasnt been approved for to account"
     },
     {
       "code": 6003,
-      "name": "transferAmountNotApproved",
+      "name": "TransferAmountNotApproved",
       "msg": "Transfer hasnt been approved for the specified amount"
     },
     {
       "code": 6004,
-      "name": "invalidPolicyAccount",
+      "name": "InvalidPolicyAccount",
       "msg": "Invalid policy account passed"
     },
     {
       "code": 6005,
-      "name": "transferSlotNotApproved",
+      "name": "TransferSlotNotApproved",
       "msg": "Invalid slot for approve account"
     },
     {
       "code": 6006,
-      "name": "transferHistoryFull",
+      "name": "TransferHistoryFull",
       "msg": "Transfer history is full"
     },
     {
       "code": 6007,
-      "name": "unauthorized",
-      "msg": "unauthorized"
+      "name": "Unauthorized",
+      "msg": "Unauthorized"
     }
   ],
   "types": [
     {
-      "name": "assetControllerAccount",
+      "name": "AssetControllerAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -529,7 +529,7 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "docs": [
               "mint pubkey"
             ],
@@ -555,7 +555,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "comparisionType",
+      "name": "ComparisionType",
       "repr": {
         "kind": "rust"
       },
@@ -563,16 +563,16 @@ export type AssetController = {
         "kind": "enum",
         "variants": [
           {
-            "name": "or"
+            "name": "Or"
           },
           {
-            "name": "and"
+            "name": "And"
           }
         ]
       }
     },
     {
-      "name": "createAssetControllerArgs",
+      "name": "CreateAssetControllerArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -602,7 +602,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "identityAccount",
+      "name": "IdentityAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -614,7 +614,7 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "identityRegistry",
+            "name": "identity_registry",
             "docs": [
               "identity registry to which the account belongs"
             ],
@@ -635,12 +635,12 @@ export type AssetController = {
       }
     },
     {
-      "name": "identityFilter",
+      "name": "IdentityFilter",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "identityLevels",
+            "name": "identity_levels",
             "type": {
               "array": [
                 "u8",
@@ -649,10 +649,10 @@ export type AssetController = {
             }
           },
           {
-            "name": "comparisionType",
+            "name": "comparision_type",
             "type": {
               "defined": {
-                "name": "comparisionType"
+                "name": "ComparisionType"
               }
             }
           }
@@ -660,7 +660,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "identityRegistryAccount",
+      "name": "IdentityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -669,7 +669,7 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "docs": [
               "corresponding asset mint"
             ],
@@ -693,7 +693,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "issueTokensArgs",
+      "name": "IssueTokensArgs",
       "type": {
         "kind": "struct",
         "fields": [
@@ -709,7 +709,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "policy",
+      "name": "Policy",
       "type": {
         "kind": "struct",
         "fields": [
@@ -718,18 +718,18 @@ export type AssetController = {
             "type": "string"
           },
           {
-            "name": "policyType",
+            "name": "policy_type",
             "type": {
               "defined": {
-                "name": "policyType"
+                "name": "PolicyType"
               }
             }
           },
           {
-            "name": "identityFilter",
+            "name": "identity_filter",
             "type": {
               "defined": {
-                "name": "identityFilter"
+                "name": "IdentityFilter"
               }
             }
           }
@@ -737,7 +737,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "policyAccount",
+      "name": "PolicyAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -746,7 +746,7 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "policyEngine",
+            "name": "policy_engine",
             "docs": [
               "Engine account that the policy belongs to"
             ],
@@ -760,7 +760,7 @@ export type AssetController = {
             "type": {
               "vec": {
                 "defined": {
-                  "name": "policy"
+                  "name": "Policy"
                 }
               }
             }
@@ -769,7 +769,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "policyEngineAccount",
+      "name": "PolicyEngineAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -781,7 +781,7 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "docs": [
               "asset mint"
             ],
@@ -802,7 +802,7 @@ export type AssetController = {
             "type": "pubkey"
           },
           {
-            "name": "maxTimeframe",
+            "name": "max_timeframe",
             "docs": [
               "max timeframe of all the policies"
             ],
@@ -812,15 +812,15 @@ export type AssetController = {
       }
     },
     {
-      "name": "policyType",
+      "name": "PolicyType",
       "type": {
         "kind": "enum",
         "variants": [
           {
-            "name": "identityApproval"
+            "name": "IdentityApproval"
           },
           {
-            "name": "transactionAmountLimit",
+            "name": "TransactionAmountLimit",
             "fields": [
               {
                 "name": "limit",
@@ -829,7 +829,7 @@ export type AssetController = {
             ]
           },
           {
-            "name": "transactionAmountVelocity",
+            "name": "TransactionAmountVelocity",
             "fields": [
               {
                 "name": "limit",
@@ -842,7 +842,7 @@ export type AssetController = {
             ]
           },
           {
-            "name": "transactionCountVelocity",
+            "name": "TransactionCountVelocity",
             "fields": [
               {
                 "name": "limit",
@@ -858,7 +858,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "trackerAccount",
+      "name": "TrackerAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -867,7 +867,7 @@ export type AssetController = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "type": "pubkey"
           },
           {
@@ -879,7 +879,7 @@ export type AssetController = {
             "type": {
               "vec": {
                 "defined": {
-                  "name": "transfer"
+                  "name": "Transfer"
                 }
               }
             }
@@ -888,7 +888,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "transfer",
+      "name": "Transfer",
       "type": {
         "kind": "struct",
         "fields": [
@@ -904,4 +904,4 @@ export type AssetController = {
       }
     }
   ]
-};
+}

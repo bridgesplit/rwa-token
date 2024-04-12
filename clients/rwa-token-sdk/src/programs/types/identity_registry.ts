@@ -4,10 +4,10 @@
  * Note that this is only a type helper and is not the actual IDL. The original
  * IDL can be found at `target/idl/identity_registry.json`.
  */
-export type IdentityRegistry = {
+export type IdentityRegistryIdlType = {
   "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf",
   "metadata": {
-    "name": "identityRegistry",
+    "name": "identity_registry",
     "version": "0.0.1",
     "spec": "0.1.0",
     "description": "The Identity Registry Program (IRP) manages the configurable issuance and tracking of on-chain identities to enable on-chain transaction permissioning.",
@@ -15,7 +15,7 @@ export type IdentityRegistry = {
   },
   "instructions": [
     {
-      "name": "addLevelToIdentityAccount",
+      "name": "add_level_to_identity_account",
       "docs": [
         "add level to identity account"
       ],
@@ -40,27 +40,27 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
-          "name": "identityRegistry"
+          "name": "identity_registry"
         },
         {
-          "name": "identityAccount",
+          "name": "identity_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "identityRegistry"
+                "path": "identity_registry"
               },
               {
                 "kind": "account",
                 "path": "identity_account.owner",
-                "account": "identityAccount"
+                "account": "IdentityAccount"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -72,7 +72,7 @@ export type IdentityRegistry = {
       ]
     },
     {
-      "name": "createIdentityAccount",
+      "name": "create_identity_account",
       "docs": [
         "identity functions",
         "create identity account"
@@ -98,16 +98,16 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
-          "name": "identityRegistry"
+          "name": "identity_registry"
         },
         {
-          "name": "identityAccount",
+          "name": "identity_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "identityRegistry"
+                "path": "identity_registry"
               },
               {
                 "kind": "arg",
@@ -117,7 +117,7 @@ export type IdentityRegistry = {
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -133,7 +133,7 @@ export type IdentityRegistry = {
       ]
     },
     {
-      "name": "createIdentityRegistry",
+      "name": "create_identity_registry",
       "docs": [
         "registry functions",
         "create identity registry"
@@ -155,22 +155,22 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
-          "name": "assetMint"
+          "name": "asset_mint"
         },
         {
-          "name": "identityRegistryAccount",
+          "name": "identity_registry_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -188,7 +188,7 @@ export type IdentityRegistry = {
       ]
     },
     {
-      "name": "delegateIdentityRegsitry",
+      "name": "delegate_identity_regsitry",
       "docs": [
         "delegate identity registry"
       ],
@@ -208,7 +208,7 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
-          "name": "identityRegistryAccount",
+          "name": "identity_registry_account",
           "writable": true
         }
       ],
@@ -220,7 +220,7 @@ export type IdentityRegistry = {
       ]
     },
     {
-      "name": "removeLevelFromIdentityAccount",
+      "name": "remove_level_from_identity_account",
       "docs": [
         "remove level from identity account"
       ],
@@ -245,27 +245,27 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
-          "name": "identityRegistry"
+          "name": "identity_registry"
         },
         {
-          "name": "identityAccount",
+          "name": "identity_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "identityRegistry"
+                "path": "identity_registry"
               },
               {
                 "kind": "account",
                 "path": "identity_account.owner",
-                "account": "identityAccount"
+                "account": "IdentityAccount"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -277,7 +277,7 @@ export type IdentityRegistry = {
       ]
     },
     {
-      "name": "revokeIdentityAccount",
+      "name": "revoke_identity_account",
       "docs": [
         "revoke user identity account by closing account"
       ],
@@ -302,30 +302,30 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
-          "name": "identityRegistry",
+          "name": "identity_registry",
           "pda": {
             "seeds": [
               {
                 "kind": "account",
                 "path": "identity_registry.asset_mint",
-                "account": "identityRegistryAccount"
+                "account": "IdentityRegistryAccount"
               }
             ]
           }
         },
         {
-          "name": "identityAccount",
+          "name": "identity_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "identityRegistry"
+                "path": "identity_registry"
               },
               {
                 "kind": "account",
                 "path": "identity_account.owner",
-                "account": "identityAccount"
+                "account": "IdentityAccount"
               }
             ]
           }
@@ -333,7 +333,7 @@ export type IdentityRegistry = {
       ],
       "args": [
         {
-          "name": "owner",
+          "name": "_owner",
           "type": "pubkey"
         }
       ]
@@ -341,7 +341,7 @@ export type IdentityRegistry = {
   ],
   "accounts": [
     {
-      "name": "identityAccount",
+      "name": "IdentityAccount",
       "discriminator": [
         194,
         90,
@@ -354,7 +354,7 @@ export type IdentityRegistry = {
       ]
     },
     {
-      "name": "identityRegistryAccount",
+      "name": "IdentityRegistryAccount",
       "discriminator": [
         154,
         254,
@@ -370,28 +370,28 @@ export type IdentityRegistry = {
   "errors": [
     {
       "code": 6000,
-      "name": "levelAlreadyPresent",
+      "name": "LevelAlreadyPresent",
       "msg": "Identity level has already been attached to user"
     },
     {
       "code": 6001,
-      "name": "maxLevelsExceeded",
+      "name": "MaxLevelsExceeded",
       "msg": "Number of levels that can be attached to user has been exceeded"
     },
     {
       "code": 6002,
-      "name": "levelNotFound",
+      "name": "LevelNotFound",
       "msg": "Level to be removed not found"
     },
     {
       "code": 6003,
-      "name": "unauthorizedSigner",
+      "name": "UnauthorizedSigner",
       "msg": "Unauthorized signer"
     }
   ],
   "types": [
     {
-      "name": "identityAccount",
+      "name": "IdentityAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -403,7 +403,7 @@ export type IdentityRegistry = {
             "type": "u8"
           },
           {
-            "name": "identityRegistry",
+            "name": "identity_registry",
             "docs": [
               "identity registry to which the account belongs"
             ],
@@ -424,7 +424,7 @@ export type IdentityRegistry = {
       }
     },
     {
-      "name": "identityRegistryAccount",
+      "name": "IdentityRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -433,7 +433,7 @@ export type IdentityRegistry = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "docs": [
               "corresponding asset mint"
             ],
@@ -457,4 +457,4 @@ export type IdentityRegistry = {
       }
     }
   ]
-};
+}

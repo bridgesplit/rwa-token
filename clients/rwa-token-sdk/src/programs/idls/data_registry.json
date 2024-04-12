@@ -10,20 +10,8 @@
   "instructions": [
     {
       "name": "create_data_account",
-      "docs": [
-        "data functions",
-        "create data account"
-      ],
-      "discriminator": [
-        129,
-        132,
-        92,
-        50,
-        136,
-        89,
-        37,
-        100
-      ],
+      "docs": ["data functions", "create data account"],
+      "discriminator": [129, 132, 92, 50, 136, 89, 37, 100],
       "accounts": [
         {
           "name": "payer",
@@ -60,20 +48,8 @@
     },
     {
       "name": "create_data_registry",
-      "docs": [
-        "registry functions",
-        "create data registry"
-      ],
-      "discriminator": [
-        206,
-        245,
-        133,
-        230,
-        73,
-        246,
-        116,
-        101
-      ],
+      "docs": ["registry functions", "create data registry"],
+      "discriminator": [206, 245, 133, 230, 73, 246, 116, 101],
       "accounts": [
         {
           "name": "payer",
@@ -115,19 +91,8 @@
     },
     {
       "name": "delegate_data_regsitry",
-      "docs": [
-        "delegate data registry"
-      ],
-      "discriminator": [
-        173,
-        92,
-        229,
-        22,
-        152,
-        104,
-        168,
-        224
-      ],
+      "docs": ["delegate data registry"],
+      "discriminator": [173, 92, 229, 22, 152, 104, 168, 224],
       "accounts": [
         {
           "name": "authority",
@@ -147,19 +112,8 @@
     },
     {
       "name": "update_data_account",
-      "docs": [
-        "update data account"
-      ],
-      "discriminator": [
-        90,
-        215,
-        94,
-        10,
-        209,
-        249,
-        11,
-        148
-      ],
+      "docs": ["update data account"],
+      "discriminator": [90, 215, 94, 10, 209, 249, 11, 148],
       "accounts": [
         {
           "name": "signer",
@@ -188,29 +142,11 @@
   "accounts": [
     {
       "name": "DataAccount",
-      "discriminator": [
-        85,
-        240,
-        182,
-        158,
-        76,
-        7,
-        18,
-        233
-      ]
+      "discriminator": [85, 240, 182, 158, 76, 7, 18, 233]
     },
     {
       "name": "DataRegistryAccount",
-      "discriminator": [
-        57,
-        174,
-        76,
-        239,
-        133,
-        18,
-        173,
-        209
-      ]
+      "discriminator": [57, 174, 76, 239, 133, 18, 173, 209]
     }
   ],
   "errors": [
@@ -256,16 +192,12 @@
           },
           {
             "name": "data_registry",
-            "docs": [
-              "data registry to which the account belongs"
-            ],
+            "docs": ["data registry to which the account belongs"],
             "type": "pubkey"
           },
           {
             "name": "_type",
-            "docs": [
-              "type of the data account"
-            ],
+            "docs": ["type of the data account"],
             "type": {
               "defined": {
                 "name": "DataAccountType"
@@ -274,16 +206,12 @@
           },
           {
             "name": "name",
-            "docs": [
-              "used by creator to store name of the document"
-            ],
+            "docs": ["used by creator to store name of the document"],
             "type": "string"
           },
           {
             "name": "uri",
-            "docs": [
-              "uri pointing to the data stored in the document"
-            ],
+            "docs": ["uri pointing to the data stored in the document"],
             "type": "string"
           }
         ]

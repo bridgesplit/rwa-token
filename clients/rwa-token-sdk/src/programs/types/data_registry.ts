@@ -4,10 +4,10 @@
  * Note that this is only a type helper and is not the actual IDL. The original
  * IDL can be found at `target/idl/data_registry.json`.
  */
-export type DataRegistry = {
+export type DataRegistryIdlType = {
   "address": "dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw",
   "metadata": {
-    "name": "dataRegistry",
+    "name": "data_registry",
     "version": "0.0.1",
     "spec": "0.1.0",
     "description": "The Data Registry Program (DRP) enables the ledger of generic asset data.",
@@ -15,7 +15,7 @@ export type DataRegistry = {
   },
   "instructions": [
     {
-      "name": "createDataAccount",
+      "name": "create_data_account",
       "docs": [
         "data functions",
         "create data account"
@@ -41,15 +41,15 @@ export type DataRegistry = {
           "signer": true
         },
         {
-          "name": "dataRegistry"
+          "name": "data_registry"
         },
         {
-          "name": "dataAccount",
+          "name": "data_account",
           "writable": true,
           "signer": true
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -58,14 +58,14 @@ export type DataRegistry = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "createDataAccountArgs"
+              "name": "CreateDataAccountArgs"
             }
           }
         }
       ]
     },
     {
-      "name": "createDataRegistry",
+      "name": "create_data_registry",
       "docs": [
         "registry functions",
         "create data registry"
@@ -87,22 +87,22 @@ export type DataRegistry = {
           "signer": true
         },
         {
-          "name": "assetMint"
+          "name": "asset_mint"
         },
         {
-          "name": "dataRegistry",
+          "name": "data_registry",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -120,7 +120,7 @@ export type DataRegistry = {
       ]
     },
     {
-      "name": "delegateDataRegsitry",
+      "name": "delegate_data_regsitry",
       "docs": [
         "delegate data registry"
       ],
@@ -140,7 +140,7 @@ export type DataRegistry = {
           "signer": true
         },
         {
-          "name": "dataRegistry",
+          "name": "data_registry",
           "writable": true
         }
       ],
@@ -152,7 +152,7 @@ export type DataRegistry = {
       ]
     },
     {
-      "name": "updateDataAccount",
+      "name": "update_data_account",
       "docs": [
         "update data account"
       ],
@@ -172,10 +172,10 @@ export type DataRegistry = {
           "signer": true
         },
         {
-          "name": "dataRegistry"
+          "name": "data_registry"
         },
         {
-          "name": "dataAccount",
+          "name": "data_account",
           "writable": true
         }
       ],
@@ -184,7 +184,7 @@ export type DataRegistry = {
           "name": "args",
           "type": {
             "defined": {
-              "name": "updateDataAccountArgs"
+              "name": "UpdateDataAccountArgs"
             }
           }
         }
@@ -193,7 +193,7 @@ export type DataRegistry = {
   ],
   "accounts": [
     {
-      "name": "dataAccount",
+      "name": "DataAccount",
       "discriminator": [
         85,
         240,
@@ -206,7 +206,7 @@ export type DataRegistry = {
       ]
     },
     {
-      "name": "dataRegistryAccount",
+      "name": "DataRegistryAccount",
       "discriminator": [
         57,
         174,
@@ -222,21 +222,21 @@ export type DataRegistry = {
   "errors": [
     {
       "code": 6000,
-      "name": "unauthorizedSigner",
+      "name": "UnauthorizedSigner",
       "msg": "The signer is not authorized to perform this action"
     }
   ],
   "types": [
     {
-      "name": "createDataAccountArgs",
+      "name": "CreateDataAccountArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "type",
+            "name": "type_",
             "type": {
               "defined": {
-                "name": "dataAccountType"
+                "name": "DataAccountType"
               }
             }
           },
@@ -252,7 +252,7 @@ export type DataRegistry = {
       }
     },
     {
-      "name": "dataAccount",
+      "name": "DataAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -261,20 +261,20 @@ export type DataRegistry = {
             "type": "u8"
           },
           {
-            "name": "dataRegistry",
+            "name": "data_registry",
             "docs": [
               "data registry to which the account belongs"
             ],
             "type": "pubkey"
           },
           {
-            "name": "type",
+            "name": "_type",
             "docs": [
               "type of the data account"
             ],
             "type": {
               "defined": {
-                "name": "dataAccountType"
+                "name": "DataAccountType"
               }
             }
           },
@@ -296,27 +296,27 @@ export type DataRegistry = {
       }
     },
     {
-      "name": "dataAccountType",
+      "name": "DataAccountType",
       "type": {
         "kind": "enum",
         "variants": [
           {
-            "name": "title"
+            "name": "Title"
           },
           {
-            "name": "legal"
+            "name": "Legal"
           },
           {
-            "name": "tax"
+            "name": "Tax"
           },
           {
-            "name": "miscellaneous"
+            "name": "Miscellaneous"
           }
         ]
       }
     },
     {
-      "name": "dataRegistryAccount",
+      "name": "DataRegistryAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -325,7 +325,7 @@ export type DataRegistry = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "type": "pubkey"
           },
           {
@@ -348,15 +348,15 @@ export type DataRegistry = {
       }
     },
     {
-      "name": "updateDataAccountArgs",
+      "name": "UpdateDataAccountArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "type",
+            "name": "type_",
             "type": {
               "defined": {
-                "name": "dataAccountType"
+                "name": "DataAccountType"
               }
             }
           },
@@ -372,4 +372,4 @@ export type DataRegistry = {
       }
     }
   ]
-};
+}

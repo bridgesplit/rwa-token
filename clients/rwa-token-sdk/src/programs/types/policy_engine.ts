@@ -4,17 +4,17 @@
  * Note that this is only a type helper and is not the actual IDL. The original
  * IDL can be found at `target/idl/policy_engine.json`.
  */
-export type PolicyEngine = {
+export type PolicyEngineIdlType = {
   "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau",
   "metadata": {
-    "name": "policyEngine",
+    "name": "policy_engine",
     "version": "0.0.1",
     "spec": "0.1.0",
     "description": "The Policy Registry Program (PRP) enables the creation of policies that can be used to control the flow of funds in a programmatic way."
   },
   "instructions": [
     {
-      "name": "attachToPolicyAccount",
+      "name": "attach_to_policy_account",
       "docs": [
         "attach a policy"
       ],
@@ -39,47 +39,47 @@ export type PolicyEngine = {
           "signer": true
         },
         {
-          "name": "policyEngine",
+          "name": "policy_engine",
           "writable": true
         },
         {
-          "name": "policyAccount",
+          "name": "policy_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "policyEngine"
+                "path": "policy_engine"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "identityFilter",
+          "name": "identity_filter",
           "type": {
             "defined": {
-              "name": "identityFilter"
+              "name": "IdentityFilter"
             }
           }
         },
         {
-          "name": "policyType",
+          "name": "policy_type",
           "type": {
             "defined": {
-              "name": "policyType"
+              "name": "PolicyType"
             }
           }
         }
       ]
     },
     {
-      "name": "createPolicyAccount",
+      "name": "create_policy_account",
       "docs": [
         "policies",
         "create policy account"
@@ -105,47 +105,47 @@ export type PolicyEngine = {
           "signer": true
         },
         {
-          "name": "policyEngine",
+          "name": "policy_engine",
           "writable": true
         },
         {
-          "name": "policyAccount",
+          "name": "policy_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "policyEngine"
+                "path": "policy_engine"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "identityFilter",
+          "name": "identity_filter",
           "type": {
             "defined": {
-              "name": "identityFilter"
+              "name": "IdentityFilter"
             }
           }
         },
         {
-          "name": "policyType",
+          "name": "policy_type",
           "type": {
             "defined": {
-              "name": "policyType"
+              "name": "PolicyType"
             }
           }
         }
       ]
     },
     {
-      "name": "createPolicyEngine",
+      "name": "create_policy_engine",
       "docs": [
         "create a policy registry"
       ],
@@ -166,22 +166,22 @@ export type PolicyEngine = {
           "signer": true
         },
         {
-          "name": "assetMint"
+          "name": "asset_mint"
         },
         {
-          "name": "policyEngine",
+          "name": "policy_engine",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "assetMint"
+                "path": "asset_mint"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -199,7 +199,7 @@ export type PolicyEngine = {
       ]
     },
     {
-      "name": "detachFromPolicyAccount",
+      "name": "detach_from_policy_account",
       "docs": [
         "remove policy"
       ],
@@ -224,23 +224,23 @@ export type PolicyEngine = {
           "signer": true
         },
         {
-          "name": "policyEngine",
+          "name": "policy_engine",
           "writable": true
         },
         {
-          "name": "policyAccount",
+          "name": "policy_account",
           "writable": true,
           "pda": {
             "seeds": [
               {
                 "kind": "account",
-                "path": "policyEngine"
+                "path": "policy_engine"
               }
             ]
           }
         },
         {
-          "name": "systemProgram",
+          "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
       ],
@@ -254,7 +254,7 @@ export type PolicyEngine = {
   ],
   "accounts": [
     {
-      "name": "policyAccount",
+      "name": "PolicyAccount",
       "discriminator": [
         218,
         201,
@@ -267,7 +267,7 @@ export type PolicyEngine = {
       ]
     },
     {
-      "name": "policyEngineAccount",
+      "name": "PolicyEngineAccount",
       "discriminator": [
         124,
         85,
@@ -283,53 +283,53 @@ export type PolicyEngine = {
   "errors": [
     {
       "code": 6000,
-      "name": "invalidPolicy",
+      "name": "InvalidPolicy",
       "msg": "Invalid policy passed"
     },
     {
       "code": 6001,
-      "name": "transactionAmountLimitExceeded",
+      "name": "TransactionAmountLimitExceeded",
       "msg": "Transaction amount limit exceeded"
     },
     {
       "code": 6002,
-      "name": "transactionAmountVelocityExceeded",
+      "name": "TransactionAmountVelocityExceeded",
       "msg": "Transaction amount velocity exceeded"
     },
     {
       "code": 6003,
-      "name": "transactionCountVelocityExceeded",
+      "name": "TransactionCountVelocityExceeded",
       "msg": "Transaction count velocity exceeded"
     },
     {
       "code": 6004,
-      "name": "policyEngineFull",
+      "name": "PolicyEngineFull",
       "msg": "Policy registry is full, cannot add more policies"
     },
     {
       "code": 6005,
-      "name": "policyNotFound",
+      "name": "PolicyNotFound",
       "msg": "Policy not found"
     },
     {
       "code": 6006,
-      "name": "identityFilterFailed",
+      "name": "IdentityFilterFailed",
       "msg": "Identity filter failed"
     },
     {
       "code": 6007,
-      "name": "unauthorizedSigner",
+      "name": "UnauthorizedSigner",
       "msg": "Unauthorized signer"
     },
     {
       "code": 6008,
-      "name": "policyAlreadyExists",
+      "name": "PolicyAlreadyExists",
       "msg": "Policy already exists"
     }
   ],
   "types": [
     {
-      "name": "comparisionType",
+      "name": "ComparisionType",
       "repr": {
         "kind": "rust"
       },
@@ -337,21 +337,21 @@ export type PolicyEngine = {
         "kind": "enum",
         "variants": [
           {
-            "name": "or"
+            "name": "Or"
           },
           {
-            "name": "and"
+            "name": "And"
           }
         ]
       }
     },
     {
-      "name": "identityFilter",
+      "name": "IdentityFilter",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "identityLevels",
+            "name": "identity_levels",
             "type": {
               "array": [
                 "u8",
@@ -360,10 +360,10 @@ export type PolicyEngine = {
             }
           },
           {
-            "name": "comparisionType",
+            "name": "comparision_type",
             "type": {
               "defined": {
-                "name": "comparisionType"
+                "name": "ComparisionType"
               }
             }
           }
@@ -371,7 +371,7 @@ export type PolicyEngine = {
       }
     },
     {
-      "name": "policy",
+      "name": "Policy",
       "type": {
         "kind": "struct",
         "fields": [
@@ -380,18 +380,18 @@ export type PolicyEngine = {
             "type": "string"
           },
           {
-            "name": "policyType",
+            "name": "policy_type",
             "type": {
               "defined": {
-                "name": "policyType"
+                "name": "PolicyType"
               }
             }
           },
           {
-            "name": "identityFilter",
+            "name": "identity_filter",
             "type": {
               "defined": {
-                "name": "identityFilter"
+                "name": "IdentityFilter"
               }
             }
           }
@@ -399,7 +399,7 @@ export type PolicyEngine = {
       }
     },
     {
-      "name": "policyAccount",
+      "name": "PolicyAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -408,7 +408,7 @@ export type PolicyEngine = {
             "type": "u8"
           },
           {
-            "name": "policyEngine",
+            "name": "policy_engine",
             "docs": [
               "Engine account that the policy belongs to"
             ],
@@ -422,7 +422,7 @@ export type PolicyEngine = {
             "type": {
               "vec": {
                 "defined": {
-                  "name": "policy"
+                  "name": "Policy"
                 }
               }
             }
@@ -431,7 +431,7 @@ export type PolicyEngine = {
       }
     },
     {
-      "name": "policyEngineAccount",
+      "name": "PolicyEngineAccount",
       "type": {
         "kind": "struct",
         "fields": [
@@ -443,7 +443,7 @@ export type PolicyEngine = {
             "type": "u8"
           },
           {
-            "name": "assetMint",
+            "name": "asset_mint",
             "docs": [
               "asset mint"
             ],
@@ -464,7 +464,7 @@ export type PolicyEngine = {
             "type": "pubkey"
           },
           {
-            "name": "maxTimeframe",
+            "name": "max_timeframe",
             "docs": [
               "max timeframe of all the policies"
             ],
@@ -474,15 +474,15 @@ export type PolicyEngine = {
       }
     },
     {
-      "name": "policyType",
+      "name": "PolicyType",
       "type": {
         "kind": "enum",
         "variants": [
           {
-            "name": "identityApproval"
+            "name": "IdentityApproval"
           },
           {
-            "name": "transactionAmountLimit",
+            "name": "TransactionAmountLimit",
             "fields": [
               {
                 "name": "limit",
@@ -491,7 +491,7 @@ export type PolicyEngine = {
             ]
           },
           {
-            "name": "transactionAmountVelocity",
+            "name": "TransactionAmountVelocity",
             "fields": [
               {
                 "name": "limit",
@@ -504,7 +504,7 @@ export type PolicyEngine = {
             ]
           },
           {
-            "name": "transactionCountVelocity",
+            "name": "TransactionCountVelocity",
             "fields": [
               {
                 "name": "limit",
@@ -520,4 +520,4 @@ export type PolicyEngine = {
       }
     }
   ]
-};
+}
