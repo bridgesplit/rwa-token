@@ -1,141 +1,185 @@
 {
-  "version": "0.0.1",
-  "name": "data_registry",
+  "address": "dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw",
+  "metadata": {
+    "name": "data_registry",
+    "version": "0.0.1",
+    "spec": "0.1.0",
+    "description": "The Data Registry Program (DRP) enables the ledger of generic asset data.",
+    "repository": "https://github.com/bridgesplit/rwa"
+  },
   "instructions": [
     {
-      "name": "createDataRegistry",
-      "docs": [
-        "registry functions",
-        "create data registry"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "dataRegistry",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "authority",
-          "type": "publicKey"
-        },
-        {
-          "name": "delegate",
-          "type": {
-            "option": "publicKey"
-          }
-        }
-      ]
-    },
-    {
-      "name": "delegateDataRegsitry",
-      "docs": [
-        "delegate data registry"
-      ],
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "dataRegistry",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "delegate",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "createDataAccount",
+      "name": "create_data_account",
       "docs": [
         "data functions",
         "create data account"
       ],
+      "discriminator": [
+        129,
+        132,
+        92,
+        50,
+        136,
+        89,
+        37,
+        100
+      ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "signer": true
         },
         {
-          "name": "dataRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "data_registry"
         },
         {
-          "name": "dataAccount",
-          "isMut": true,
-          "isSigner": true
+          "name": "data_account",
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
           "name": "args",
           "type": {
-            "defined": "CreateDataAccountArgs"
+            "defined": {
+              "name": "CreateDataAccountArgs"
+            }
           }
         }
       ]
     },
     {
-      "name": "updateDataAccount",
+      "name": "create_data_registry",
+      "docs": [
+        "registry functions",
+        "create data registry"
+      ],
+      "discriminator": [
+        206,
+        245,
+        133,
+        230,
+        73,
+        246,
+        116,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "data_registry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "authority",
+          "type": "pubkey"
+        },
+        {
+          "name": "delegate",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "delegate_data_regsitry",
+      "docs": [
+        "delegate data registry"
+      ],
+      "discriminator": [
+        173,
+        92,
+        229,
+        22,
+        152,
+        104,
+        168,
+        224
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "data_registry",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "delegate",
+          "type": "pubkey"
+        }
+      ]
+    },
+    {
+      "name": "update_data_account",
       "docs": [
         "update data account"
+      ],
+      "discriminator": [
+        90,
+        215,
+        94,
+        10,
+        209,
+        249,
+        11,
+        148
       ],
       "accounts": [
         {
           "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "signer": true
         },
         {
-          "name": "dataRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "data_registry"
         },
         {
-          "name": "dataAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "data_account",
+          "writable": true
         }
       ],
       "args": [
         {
           "name": "args",
           "type": {
-            "defined": "UpdateDataAccountArgs"
+            "defined": {
+              "name": "UpdateDataAccountArgs"
+            }
           }
         }
       ]
@@ -143,33 +187,60 @@
   ],
   "accounts": [
     {
+      "name": "DataAccount",
+      "discriminator": [
+        85,
+        240,
+        182,
+        158,
+        76,
+        7,
+        18,
+        233
+      ]
+    },
+    {
       "name": "DataRegistryAccount",
+      "discriminator": [
+        57,
+        174,
+        76,
+        239,
+        133,
+        18,
+        173,
+        209
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "UnauthorizedSigner",
+      "msg": "The signer is not authorized to perform this action"
+    }
+  ],
+  "types": [
+    {
+      "name": "CreateDataAccountArgs",
       "type": {
         "kind": "struct",
         "fields": [
           {
-            "name": "version",
-            "type": "u8"
+            "name": "type_",
+            "type": {
+              "defined": {
+                "name": "DataAccountType"
+              }
+            }
           },
           {
-            "name": "assetMint",
-            "type": "publicKey"
+            "name": "name",
+            "type": "string"
           },
           {
-            "name": "authority",
-            "docs": [
-              "can sign creation of new data accounts",
-              "can update delegate",
-              "can update data account authority"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "delegate",
-            "docs": [
-              "can sign creation of new data accounts, can be used if a different org needs to issue data accounts"
-            ],
-            "type": "publicKey"
+            "name": "uri",
+            "type": "string"
           }
         ]
       }
@@ -184,19 +255,21 @@
             "type": "u8"
           },
           {
-            "name": "dataRegistry",
+            "name": "data_registry",
             "docs": [
               "data registry to which the account belongs"
             ],
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
-            "name": "type",
+            "name": "_type",
             "docs": [
               "type of the data account"
             ],
             "type": {
-              "defined": "DataAccountType"
+              "defined": {
+                "name": "DataAccountType"
+              }
             }
           },
           {
@@ -211,52 +284,6 @@
             "docs": [
               "uri pointing to the data stored in the document"
             ],
-            "type": "string"
-          }
-        ]
-      }
-    }
-  ],
-  "types": [
-    {
-      "name": "CreateDataAccountArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "type",
-            "type": {
-              "defined": "DataAccountType"
-            }
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "uri",
-            "type": "string"
-          }
-        ]
-      }
-    },
-    {
-      "name": "UpdateDataAccountArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "type",
-            "type": {
-              "defined": "DataAccountType"
-            }
-          },
-          {
-            "name": "name",
-            "type": "string"
-          },
-          {
-            "name": "uri",
             "type": "string"
           }
         ]
@@ -281,13 +308,62 @@
           }
         ]
       }
-    }
-  ],
-  "errors": [
+    },
     {
-      "code": 6000,
-      "name": "UnauthorizedSigner",
-      "msg": "The signer is not authorized to perform this action"
+      "name": "DataRegistryAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "asset_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "docs": [
+              "can sign creation of new data accounts",
+              "can update delegate",
+              "can update data account authority"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "delegate",
+            "docs": [
+              "can sign creation of new data accounts, can be used if a different org needs to issue data accounts"
+            ],
+            "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateDataAccountArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "type_",
+            "type": {
+              "defined": {
+                "name": "DataAccountType"
+              }
+            }
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "uri",
+            "type": "string"
+          }
+        ]
+      }
     }
   ]
 }

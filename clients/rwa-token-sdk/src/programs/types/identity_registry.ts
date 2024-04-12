@@ -1,69 +1,73 @@
-export type IdentityRegistryIdlType = {
-  "version": "0.0.1",
-  "name": "identity_registry",
+/**
+ * Program IDL in camelCase format in order to be used in JS/TS.
+ *
+ * Note that this is only a type helper and is not the actual IDL. The original
+ * IDL can be found at `target/idl/identity_registry.json`.
+ */
+export type IdentityRegistry = {
+  "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf",
+  "metadata": {
+    "name": "identityRegistry",
+    "version": "0.0.1",
+    "spec": "0.1.0",
+    "description": "The Identity Registry Program (IRP) manages the configurable issuance and tracking of on-chain identities to enable on-chain transaction permissioning.",
+    "repository": "https://github.com/bridgesplit/rwa"
+  },
   "instructions": [
     {
-      "name": "createIdentityRegistry",
+      "name": "addLevelToIdentityAccount",
       "docs": [
-        "registry functions",
-        "create identity registry"
+        "add level to identity account"
+      ],
+      "discriminator": [
+        102,
+        204,
+        64,
+        169,
+        252,
+        177,
+        192,
+        232
       ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          "name": "signer",
+          "signer": true
         },
         {
-          "name": "identityRegistryAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "identityRegistry"
+        },
+        {
+          "name": "identityAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identityRegistry"
+              },
+              {
+                "kind": "account",
+                "path": "identity_account.owner",
+                "account": "identityAccount"
+              }
+            ]
+          }
         },
         {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "authority",
-          "type": "publicKey"
-        },
-        {
-          "name": "delegate",
-          "type": {
-            "option": "publicKey"
-          }
-        }
-      ]
-    },
-    {
-      "name": "delegateIdentityRegsitry",
-      "docs": [
-        "delegate identity registry"
-      ],
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "identityRegistryAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "delegate",
-          "type": "publicKey"
+          "name": "level",
+          "type": "u8"
         }
       ]
     },
@@ -73,37 +77,54 @@ export type IdentityRegistryIdlType = {
         "identity functions",
         "create identity account"
       ],
+      "discriminator": [
+        82,
+        240,
+        35,
+        129,
+        113,
+        134,
+        116,
+        70
+      ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "signer": true
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "identityRegistry"
         },
         {
           "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identityRegistry"
+              },
+              {
+                "kind": "arg",
+                "path": "owner"
+              }
+            ]
+          }
         },
         {
           "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
           "name": "owner",
-          "type": "publicKey"
+          "type": "pubkey"
         },
         {
           "name": "level",
@@ -112,35 +133,89 @@ export type IdentityRegistryIdlType = {
       ]
     },
     {
-      "name": "addLevelToIdentityAccount",
+      "name": "createIdentityRegistry",
       "docs": [
-        "add level to identity account"
+        "registry functions",
+        "create identity registry"
+      ],
+      "discriminator": [
+        180,
+        3,
+        39,
+        22,
+        183,
+        212,
+        39,
+        209
       ],
       "accounts": [
         {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "name": "payer",
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "assetMint"
         },
         {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "identityRegistryAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "owner",
-          "type": "publicKey"
+          "name": "authority",
+          "type": "pubkey"
         },
         {
-          "name": "level",
-          "type": "u8"
+          "name": "delegate",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "delegateIdentityRegsitry",
+      "docs": [
+        "delegate identity registry"
+      ],
+      "discriminator": [
+        29,
+        162,
+        167,
+        70,
+        52,
+        79,
+        50,
+        65
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "identityRegistryAccount",
+          "writable": true
+        }
+      ],
+      "args": [
+        {
+          "name": "delegate",
+          "type": "pubkey"
         }
       ]
     },
@@ -149,28 +224,52 @@ export type IdentityRegistryIdlType = {
       "docs": [
         "remove level from identity account"
       ],
+      "discriminator": [
+        194,
+        231,
+        187,
+        54,
+        197,
+        136,
+        170,
+        55
+      ],
       "accounts": [
         {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "name": "payer",
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "identityRegistry"
         },
         {
           "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identityRegistry"
+              },
+              {
+                "kind": "account",
+                "path": "identity_account.owner",
+                "account": "identityAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
         {
           "name": "level",
           "type": "u8"
@@ -182,70 +281,115 @@ export type IdentityRegistryIdlType = {
       "docs": [
         "revoke user identity account by closing account"
       ],
+      "discriminator": [
+        77,
+        88,
+        182,
+        61,
+        235,
+        49,
+        2,
+        137
+      ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "signer": true
         },
         {
           "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identity_registry.asset_mint",
+                "account": "identityRegistryAccount"
+              }
+            ]
+          }
         },
         {
           "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identityRegistry"
+              },
+              {
+                "kind": "account",
+                "path": "identity_account.owner",
+                "account": "identityAccount"
+              }
+            ]
+          }
         }
       ],
       "args": [
         {
           "name": "owner",
-          "type": "publicKey"
+          "type": "pubkey"
         }
       ]
     }
   ],
   "accounts": [
     {
-      "name": "identityRegistryAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "assetMint",
-            "docs": [
-              "corresponding asset mint"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "authority",
-            "docs": [
-              "authority to manage the registry"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "delegate",
-            "docs": [
-              "registry delegate"
-            ],
-            "type": "publicKey"
-          }
-        ]
-      }
+      "name": "identityAccount",
+      "discriminator": [
+        194,
+        90,
+        181,
+        160,
+        182,
+        206,
+        116,
+        158
+      ]
     },
+    {
+      "name": "identityRegistryAccount",
+      "discriminator": [
+        154,
+        254,
+        118,
+        4,
+        115,
+        36,
+        125,
+        78
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "levelAlreadyPresent",
+      "msg": "Identity level has already been attached to user"
+    },
+    {
+      "code": 6001,
+      "name": "maxLevelsExceeded",
+      "msg": "Number of levels that can be attached to user has been exceeded"
+    },
+    {
+      "code": 6002,
+      "name": "levelNotFound",
+      "msg": "Level to be removed not found"
+    },
+    {
+      "code": 6003,
+      "name": "unauthorizedSigner",
+      "msg": "Unauthorized signer"
+    }
+  ],
+  "types": [
     {
       "name": "identityAccount",
       "type": {
@@ -263,267 +407,22 @@ export type IdentityRegistryIdlType = {
             "docs": [
               "identity registry to which the account belongs"
             ],
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "owner",
             "docs": [
               "owner of the identity account"
             ],
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "levels",
-            "type": {
-              "array": [
-                "u8",
-                10
-              ]
-            }
+            "type": "bytes"
           }
         ]
       }
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "LevelAlreadyPresent",
-      "msg": "Identity level has already been attached to user"
     },
-    {
-      "code": 6001,
-      "name": "MaxLevelsExceeded",
-      "msg": "Number of levels that can be attached to user has been exceeded"
-    },
-    {
-      "code": 6002,
-      "name": "LevelNotFound",
-      "msg": "Level to be removed not found"
-    },
-    {
-      "code": 6003,
-      "name": "UnauthorizedSigner",
-      "msg": "Unauthorized signer"
-    }
-  ]
-};
-
-export const IDL: IdentityRegistryIdlType = {
-  "version": "0.0.1",
-  "name": "identity_registry",
-  "instructions": [
-    {
-      "name": "createIdentityRegistry",
-      "docs": [
-        "registry functions",
-        "create identity registry"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistryAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "authority",
-          "type": "publicKey"
-        },
-        {
-          "name": "delegate",
-          "type": {
-            "option": "publicKey"
-          }
-        }
-      ]
-    },
-    {
-      "name": "delegateIdentityRegsitry",
-      "docs": [
-        "delegate identity registry"
-      ],
-      "accounts": [
-        {
-          "name": "authority",
-          "isMut": false,
-          "isSigner": true
-        },
-        {
-          "name": "identityRegistryAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "delegate",
-          "type": "publicKey"
-        }
-      ]
-    },
-    {
-      "name": "createIdentityAccount",
-      "docs": [
-        "identity functions",
-        "create identity account"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
-        {
-          "name": "level",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "addLevelToIdentityAccount",
-      "docs": [
-        "add level to identity account"
-      ],
-      "accounts": [
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
-        {
-          "name": "level",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "removeLevelFromIdentityAccount",
-      "docs": [
-        "remove level from identity account"
-      ],
-      "accounts": [
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
-        {
-          "name": "level",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "revokeIdentityAccount",
-      "docs": [
-        "revoke user identity account by closing account"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        }
-      ]
-    }
-  ],
-  "accounts": [
     {
       "name": "identityRegistryAccount",
       "type": {
@@ -538,84 +437,24 @@ export const IDL: IdentityRegistryIdlType = {
             "docs": [
               "corresponding asset mint"
             ],
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "authority",
             "docs": [
               "authority to manage the registry"
             ],
-            "type": "publicKey"
+            "type": "pubkey"
           },
           {
             "name": "delegate",
             "docs": [
               "registry delegate"
             ],
-            "type": "publicKey"
+            "type": "pubkey"
           }
         ]
       }
-    },
-    {
-      "name": "identityAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "docs": [
-              "version of the account"
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "identityRegistry",
-            "docs": [
-              "identity registry to which the account belongs"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "owner",
-            "docs": [
-              "owner of the identity account"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "levels",
-            "type": {
-              "array": [
-                "u8",
-                10
-              ]
-            }
-          }
-        ]
-      }
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "LevelAlreadyPresent",
-      "msg": "Identity level has already been attached to user"
-    },
-    {
-      "code": 6001,
-      "name": "MaxLevelsExceeded",
-      "msg": "Number of levels that can be attached to user has been exceeded"
-    },
-    {
-      "code": 6002,
-      "name": "LevelNotFound",
-      "msg": "Level to be removed not found"
-    },
-    {
-      "code": 6003,
-      "name": "UnauthorizedSigner",
-      "msg": "Unauthorized signer"
     }
   ]
 };

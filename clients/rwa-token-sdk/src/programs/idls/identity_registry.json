@@ -1,176 +1,269 @@
 {
-  "version": "0.0.1",
-  "name": "identity_registry",
+  "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf",
+  "metadata": {
+    "name": "identity_registry",
+    "version": "0.0.1",
+    "spec": "0.1.0",
+    "description": "The Identity Registry Program (IRP) manages the configurable issuance and tracking of on-chain identities to enable on-chain transaction permissioning.",
+    "repository": "https://github.com/bridgesplit/rwa"
+  },
   "instructions": [
     {
-      "name": "createIdentityRegistry",
+      "name": "add_level_to_identity_account",
       "docs": [
-        "registry functions",
-        "create identity registry"
+        "add level to identity account"
+      ],
+      "discriminator": [
+        102,
+        204,
+        64,
+        169,
+        252,
+        177,
+        192,
+        232
       ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
-          "name": "assetMint",
-          "isMut": false,
-          "isSigner": false
+          "name": "signer",
+          "signer": true
         },
         {
-          "name": "identityRegistryAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "identity_registry"
         },
         {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
+          "name": "identity_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identity_registry"
+              },
+              {
+                "kind": "account",
+                "path": "identity_account.owner",
+                "account": "IdentityAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "level",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "create_identity_account",
+      "docs": [
+        "identity functions",
+        "create identity account"
+      ],
+      "discriminator": [
+        82,
+        240,
+        35,
+        129,
+        113,
+        134,
+        116,
+        70
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "identity_registry"
+        },
+        {
+          "name": "identity_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identity_registry"
+              },
+              {
+                "kind": "arg",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "owner",
+          "type": "pubkey"
+        },
+        {
+          "name": "level",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "create_identity_registry",
+      "docs": [
+        "registry functions",
+        "create identity registry"
+      ],
+      "discriminator": [
+        180,
+        3,
+        39,
+        22,
+        183,
+        212,
+        39,
+        209
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "identity_registry_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
           "name": "authority",
-          "type": "publicKey"
+          "type": "pubkey"
         },
         {
           "name": "delegate",
           "type": {
-            "option": "publicKey"
+            "option": "pubkey"
           }
         }
       ]
     },
     {
-      "name": "delegateIdentityRegsitry",
+      "name": "delegate_identity_regsitry",
       "docs": [
         "delegate identity registry"
+      ],
+      "discriminator": [
+        29,
+        162,
+        167,
+        70,
+        52,
+        79,
+        50,
+        65
       ],
       "accounts": [
         {
           "name": "authority",
-          "isMut": false,
-          "isSigner": true
+          "signer": true
         },
         {
-          "name": "identityRegistryAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "identity_registry_account",
+          "writable": true
         }
       ],
       "args": [
         {
           "name": "delegate",
-          "type": "publicKey"
+          "type": "pubkey"
         }
       ]
     },
     {
-      "name": "createIdentityAccount",
-      "docs": [
-        "identity functions",
-        "create identity account"
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "isMut": true,
-          "isSigner": true
-        },
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "systemProgram",
-          "isMut": false,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
-        {
-          "name": "level",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "addLevelToIdentityAccount",
-      "docs": [
-        "add level to identity account"
-      ],
-      "accounts": [
-        {
-          "name": "signer",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
-        },
-        {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
-        }
-      ],
-      "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
-        {
-          "name": "level",
-          "type": "u8"
-        }
-      ]
-    },
-    {
-      "name": "removeLevelFromIdentityAccount",
+      "name": "remove_level_from_identity_account",
       "docs": [
         "remove level from identity account"
       ],
+      "discriminator": [
+        194,
+        231,
+        187,
+        54,
+        197,
+        136,
+        170,
+        55
+      ],
       "accounts": [
         {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
           "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "signer": true
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "identity_registry"
         },
         {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "identity_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identity_registry"
+              },
+              {
+                "kind": "account",
+                "path": "identity_account.owner",
+                "account": "IdentityAccount"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
-        {
-          "name": "owner",
-          "type": "publicKey"
-        },
         {
           "name": "level",
           "type": "u8"
@@ -178,111 +271,94 @@
       ]
     },
     {
-      "name": "revokeIdentityAccount",
+      "name": "revoke_identity_account",
       "docs": [
         "revoke user identity account by closing account"
+      ],
+      "discriminator": [
+        77,
+        88,
+        182,
+        61,
+        235,
+        49,
+        2,
+        137
       ],
       "accounts": [
         {
           "name": "payer",
-          "isMut": true,
-          "isSigner": true
+          "writable": true,
+          "signer": true
         },
         {
           "name": "signer",
-          "isMut": false,
-          "isSigner": false
+          "signer": true
         },
         {
-          "name": "identityRegistry",
-          "isMut": false,
-          "isSigner": false
+          "name": "identity_registry",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identity_registry.asset_mint",
+                "account": "IdentityRegistryAccount"
+              }
+            ]
+          }
         },
         {
-          "name": "identityAccount",
-          "isMut": true,
-          "isSigner": false
+          "name": "identity_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "identity_registry"
+              },
+              {
+                "kind": "account",
+                "path": "identity_account.owner",
+                "account": "IdentityAccount"
+              }
+            ]
+          }
         }
       ],
       "args": [
         {
-          "name": "owner",
-          "type": "publicKey"
+          "name": "_owner",
+          "type": "pubkey"
         }
       ]
     }
   ],
   "accounts": [
     {
-      "name": "IdentityRegistryAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "assetMint",
-            "docs": [
-              "corresponding asset mint"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "authority",
-            "docs": [
-              "authority to manage the registry"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "delegate",
-            "docs": [
-              "registry delegate"
-            ],
-            "type": "publicKey"
-          }
-        ]
-      }
+      "name": "IdentityAccount",
+      "discriminator": [
+        194,
+        90,
+        181,
+        160,
+        182,
+        206,
+        116,
+        158
+      ]
     },
     {
-      "name": "IdentityAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "docs": [
-              "version of the account"
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "identityRegistry",
-            "docs": [
-              "identity registry to which the account belongs"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "owner",
-            "docs": [
-              "owner of the identity account"
-            ],
-            "type": "publicKey"
-          },
-          {
-            "name": "levels",
-            "type": {
-              "array": [
-                "u8",
-                10
-              ]
-            }
-          }
-        ]
-      }
+      "name": "IdentityRegistryAccount",
+      "discriminator": [
+        154,
+        254,
+        118,
+        4,
+        115,
+        36,
+        125,
+        78
+      ]
     }
   ],
   "errors": [
@@ -305,6 +381,74 @@
       "code": 6003,
       "name": "UnauthorizedSigner",
       "msg": "Unauthorized signer"
+    }
+  ],
+  "types": [
+    {
+      "name": "IdentityAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "docs": [
+              "version of the account"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "identity_registry",
+            "docs": [
+              "identity registry to which the account belongs"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "docs": [
+              "owner of the identity account"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "levels",
+            "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IdentityRegistryAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "asset_mint",
+            "docs": [
+              "corresponding asset mint"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "docs": [
+              "authority to manage the registry"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "delegate",
+            "docs": [
+              "registry delegate"
+            ],
+            "type": "pubkey"
+          }
+        ]
+      }
     }
   ]
 }
