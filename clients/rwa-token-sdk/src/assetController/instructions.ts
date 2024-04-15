@@ -266,6 +266,7 @@ export async function getSetupAssetControllerIxs(
 export type SetupUserArgs = {
 	payer: string;
 	owner: string;
+	signer: string;
 	assetMint: string;
 	level: number;
 };
@@ -280,7 +281,7 @@ export type SetupUserArgs = {
 export async function getSetupUserIxs(args: SetupUserArgs, provider: AnchorProvider): Promise<IxReturn> {
 	const identityAccountIx = await getCreateIdentityAccountIx({
 		payer: args.payer,
-		signer: getIdentityRegistryPda(args.assetMint).toString(),
+		signer: args.signer,
 		assetMint: args.assetMint,
 		owner: args.owner,
 		level: args.level,

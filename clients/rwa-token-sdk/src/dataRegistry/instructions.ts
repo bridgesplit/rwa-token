@@ -67,6 +67,7 @@ export type UpdateDataAccountArgs = {
 	dataAccount: string;
 	name: string;
 	uri: string;
+	signer: string;
 	type: DataAccountType;
 } & CommonArgs;
 
@@ -81,7 +82,7 @@ export async function getUpdateDataAccountIx(
 		type: args.type,
 	})
 		.accountsStrict({
-			signer: args.signer ? args.signer : getDataRegistryPda(args.assetMint),
+			signer: args.signer,
 			dataRegistry: getDataRegistryPda(args.assetMint),
 			dataAccount: args.dataAccount,
 		})

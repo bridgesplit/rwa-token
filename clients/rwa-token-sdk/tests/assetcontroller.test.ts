@@ -244,6 +244,7 @@ describe("e2e class tests", () => {
 		const setupUserArgs: SetupUserArgs = {
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
+			signer: setup.authority.toString(),
 			assetMint: mint,
 			level: 1,
 		};
@@ -320,6 +321,7 @@ describe("e2e class tests", () => {
 			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
+			signer: setup.authority.toString(),
 		};
 		const updateDataIx
 			= await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
