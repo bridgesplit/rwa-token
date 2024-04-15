@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PolicyOnChainTypes, SendToParent } from "../policyEnum";
 import { Policy } from "../../../src/policy_engine/types";
-import { BN } from "@coral-xyz/anchor";
+import { BN } from "@bridgesplit/anchor";
 
 interface PolicyDetails {
     limit: number;

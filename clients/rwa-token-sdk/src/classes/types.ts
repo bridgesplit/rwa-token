@@ -1,4 +1,4 @@
-import {type ConfirmOptions, type Connection} from '@solana/web3.js';
+import {type ConfirmOptions, type Connection} from "@solana/web3.js";
 
 /* Config type for the RWA Client */
 export type Config = {

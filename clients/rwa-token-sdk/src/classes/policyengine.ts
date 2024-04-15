@@ -1,11 +1,12 @@
-import {type IxReturn} from '../utils';
+import {type IxReturn} from "../utils";
 import {
 	type AttachPolicyArgs,
-	getAttachPolicyAccountIx,
+	getAttachToPolicyAccountIx,
+	getCreatePolicyAccountIx,
 	getPolicyEnginePda,
-} from '../policy_engine';
-import {type RwaClient} from './rwa';
-import {type PublicKey} from '@solana/web3.js';
+} from "../policyEngine";
+import {type RwaClient} from "./client";
+import {type PublicKey} from "@solana/web3.js";
 
 /**
  * Represents the client Policy Engine for an RWA.
@@ -21,12 +22,26 @@ export class PolicyEngine {
 	}
 
 	/**
-   * Asynchronously attaches a policy to assets.
+   * Asynchronously create a policy account to assets.
+   * @param - {@link AttachPolicyArgs}
+   * @returns A Promise that resolves to the instructions to attach a policy.
+   * */
+	async createPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
+		const createPolicyIx = await getCreatePolicyAccountIx(
+			policyArgs,
+			this.rwaClient.provider,
+		);
+		return createPolicyIx;
+	}
+	
+
+	/**
+   * Asynchronously attaches a policy to the policy account.
    * @param - {@link AttachPolicyArgs}
    * @returns A Promise that resolves to the instructions to attach a policy.
    * */
 	async attachPolicy(policyArgs: AttachPolicyArgs): Promise<IxReturn> {
-		const attachPolicyIx = await getAttachPolicyAccountIx(
+		const attachPolicyIx = await getAttachToPolicyAccountIx(
 			policyArgs,
 			this.rwaClient.provider,
 		);

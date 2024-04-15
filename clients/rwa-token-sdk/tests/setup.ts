@@ -1,6 +1,6 @@
-import { Keypair } from '@solana/web3.js';
-import { getProvider } from '../src/utils';
-import 'dotenv/config';
+import { Keypair } from "@solana/web3.js";
+import { getProvider } from "../src/utils";
+import "dotenv/config";
 
 export function setupTests() {
 	const payerKp = new Keypair();

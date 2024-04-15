@@ -4,7 +4,7 @@ import {
 import {type CommonArgs, type IxReturn} from '../utils';
 import {getDataRegistryProgram, getDataRegistryPda} from './utils';
 import {type DataAccountType} from './types';
-import {type AnchorProvider} from '@coral-xyz/anchor';
+import {type AnchorProvider} from '@bridgesplit/anchor';
 
 export type CreateDataRegistryArgs = {
 	authority: string;

@@ -1,4 +1,4 @@
-import { type PublicKey, type TransactionInstruction } from '@solana/web3.js';
+import { type PublicKey, type TransactionInstruction } from "@solana/web3.js";
 import {
 	type IssueTokenArgs,
 	type SetupAssetControllerArgs,
@@ -11,9 +11,9 @@ import {
 	getAssetControllerPda,
 	getTrackerAccountPda,
 	getExtraMetasListPda,
-} from '../asset_controller';
-import { type IxReturn } from '../utils';
-import { type RwaClient } from './rwa';
+} from "../assetController";
+import { type IxReturn } from "../utils";
+import { type RwaClient } from "./client";
 
 /**
  * Represents the client for Asset Controller for an RWA.

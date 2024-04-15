@@ -1,5 +1,5 @@
-import {type PublicKey, type TransactionInstruction} from '@solana/web3.js';
-import {type IxReturn} from '../utils';
+import {type PublicKey, type TransactionInstruction} from "@solana/web3.js";
+import {type IxReturn} from "../utils";
 import {
 	type CreateDataAccountArgs,
 	type DelegateDataRegistryArgs,
@@ -8,8 +8,8 @@ import {
 	getDelegateDataRegistryIx,
 	getUpdateDataAccountIx,
 	getDataRegistryPda,
-} from '../data_registry';
-import {type RwaClient} from './rwa';
+} from "../dataRegistry";
+import {type RwaClient} from "./client";
 
 /**
  * Represents the client for Data Registry for an RWA.

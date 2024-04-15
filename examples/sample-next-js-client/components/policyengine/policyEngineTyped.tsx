@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRwaClient } from '../../hooks/useRwaClient';
 import { AttachPolicyArgs, IdentityFilter, Policy, RwaClient } from '../../src';
 import DynamicComponent from './policyEnum';
-import { BN } from '@coral-xyz/anchor';
+import { BN } from '@bridgesplit/anchor';
 import JSONPretty from 'react-json-pretty';
 import { handleMessage } from './policySdkFunctions';
 import { useAnchorWallet } from '@solana/wallet-adapter-react';

@@ -1,4 +1,4 @@
-import {type AnchorProvider} from '@coral-xyz/anchor';
+import {type AnchorProvider} from '@bridgesplit/anchor';
 import {type PolicyEngineAccount, type PolicyAccount} from './types';
 import {getPolicyEnginePda, getPolicyEngineProgram} from './utils';
 

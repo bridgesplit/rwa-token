@@ -1,8 +1,6 @@
 /// creates a mint a new asset
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{
-    token_metadata_initialize, Mint, Token2022, TokenMetadataInitialize,
-};
+use anchor_spl::token_interface::{Mint, Token2022};
 use spl_tlv_account_resolution::state::ExtraAccountMetaList;
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
 
@@ -66,18 +64,18 @@ pub struct CreateAssetController<'info> {
 }
 
 impl<'info> CreateAssetController<'info> {
-    fn initialize_token_metadata(&self, name: String, symbol: String, uri: String) -> Result<()> {
-        let cpi_accounts = TokenMetadataInitialize {
-            token_program_id: self.token_program.to_account_info(),
-            mint: self.asset_mint.to_account_info(),
-            metadata: self.asset_mint.to_account_info(), // metadata account is the mint, since data is stored in mint
-            mint_authority: self.authority.to_account_info(),
-            update_authority: self.asset_controller.to_account_info(),
-        };
-        let cpi_ctx = CpiContext::new(self.token_program.to_account_info(), cpi_accounts);
-        token_metadata_initialize(cpi_ctx, name, symbol, uri)?;
-        Ok(())
-    }
+    // fn initialize_token_metadata(&self, name: String, symbol: String, uri: String) -> Result<()> {
+    //     let cpi_accounts = TokenMetadataInitialize {
+    //         token_program_id: self.token_program.to_account_info(),
+    //         mint: self.asset_mint.to_account_info(),
+    //         metadata: self.asset_mint.to_account_info(), // metadata account is the mint, since data is stored in mint
+    //         mint_authority: self.authority.to_account_info(),
+    //         update_authority: self.asset_controller.to_account_info(),
+    //     };
+    //     let cpi_ctx = CpiContext::new(self.token_program.to_account_info(), cpi_accounts);
+    //     token_metadata_initialize(cpi_ctx, name, symbol, uri)?;
+    //     Ok(())
+    // }
 }
 
 pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerArgs) -> Result<()> {

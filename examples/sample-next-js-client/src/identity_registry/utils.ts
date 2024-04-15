@@ -1,4 +1,4 @@
-import {type Idl, Program, type Provider} from '@coral-xyz/anchor';
+import {type Idl, Program, type Provider} from '@bridgesplit/anchor';
 import {IdentityRegistryIdl} from '../programs/idls';
 import {PublicKey} from '@solana/web3.js';
 import {type IdentityRegistryIdlType} from '../programs/types';

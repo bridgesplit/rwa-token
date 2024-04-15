@@ -4,7 +4,7 @@ import {
 import { type CommonArgs, type IxReturn } from '../utils';
 import { getPolicyEnginePda, getPolicyEngineProgram } from './utils';
 import { type IdentityFilter, type Policy } from './types';
-import { type AnchorProvider } from '@coral-xyz/anchor';
+import { type AnchorProvider } from '@bridgesplit/anchor';
 
 /** Represents the arguments required to create a policy. */
 export type CreatePolicyEngineArgs = {

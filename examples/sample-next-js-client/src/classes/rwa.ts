@@ -3,7 +3,7 @@ import { AssetController } from './assetcontroller';
 import { IdentityRegistry } from './identityregistry';
 import { PolicyEngine } from './policyengine';
 import { DataRegistry } from './dataregistry';
-import { AnchorProvider } from '@coral-xyz/anchor';
+import { AnchorProvider } from '@bridgesplit/anchor';
 import { Transaction, VersionedTransaction, PublicKey } from '@solana/web3.js';
 
 export interface Wallet {

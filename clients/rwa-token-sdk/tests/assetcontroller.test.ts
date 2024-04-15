@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
-import { BN, Wallet } from '@coral-xyz/anchor';
+import {BN, Wallet} from "@bridgesplit/anchor";
 import {
 	type AttachPolicyArgs,
 	type CreateDataAccountArgs,
+	getPolicyAccountPda,
 	getTrackerAccount,
 	getTrackerAccountPda,
 	type IssueTokenArgs,
@@ -12,19 +10,19 @@ import {
 	type TransferTokensArgs,
 	type UpdateDataAccountArgs,
 	type VoidTokensArgs,
-} from '../src';
-import { setupTests } from './setup';
+} from "../src";
+import {setupTests} from "./setup";
 import {
 	type ConfirmOptions,
 	Connection,
 	Transaction,
 	sendAndConfirmTransaction,
-} from '@solana/web3.js';
-import { expect, test, describe } from 'vitest';
-import { type Config } from '../src/classes/types';
-import { RwaClient } from '../src/classes';
+} from "@solana/web3.js";
+import {expect, test, describe} from "vitest";
+import {type Config} from "../src/classes/types";
+import {RwaClient} from "../src/classes";
 
-describe('e2e class tests', () => {
+describe("e2e class tests", () => {
 	let rwaClient: RwaClient;
 	let mint: string;
 	const setup = setupTests();
@@ -33,14 +31,14 @@ describe('e2e class tests', () => {
 	const remainingAccounts: string[] = [];
 	let dataAccount: string;
 
-	test('setup provider', async () => {
-		const connectionUrl = process.env.RPC_URL ?? 'http://localhost:8899';
+	test("setup provider", async () => {
+		const connectionUrl = process.env.RPC_URL ?? "http://localhost:8899";
 		const connection = new Connection(connectionUrl);
 
 		const confirmationOptions: ConfirmOptions = {
 			skipPreflight: false,
 			maxRetries: 3,
-			commitment: 'processed',
+			commitment: "processed",
 		};
 
 		const config: Config = {
@@ -71,14 +69,14 @@ describe('e2e class tests', () => {
 		);
 	});
 
-	test('initalize asset controller through class', async () => {
+	test("initalize asset controller", async () => {
 		const setupAssetControllerArgs = {
 			decimals,
 			payer: setup.payer.toString(),
 			authority: setup.authority.toString(),
-			name: 'Test Class Asset',
-			uri: 'https://test.com',
-			symbol: 'TFT',
+			name: "Test Class Asset",
+			uri: "https://test.com",
+			symbol: "TFT",
 		};
 
 		const setupIx = await rwaClient.assetController.setupNewRegistry(
@@ -92,31 +90,32 @@ describe('e2e class tests', () => {
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
 
-		console.log('mint: ', mint);
+		console.log("mint: ", mint);
 		console.log(
-			'data registry: ',
+			"data registry: ",
 			rwaClient.dataRegistry.getDataRegistryPda(mint).toString(),
 		);
 		console.log(
-			'asset controller: ',
+			"asset controller: ",
 			rwaClient.assetController.getAssetControllerPda(mint).toString(),
 		);
 		console.log(
-			'policy engine: ',
+			"policy engine: ",
 			rwaClient.policyEngine.getPolicyEnginePda(mint).toString(),
 		);
 		console.log(
-			'identity registry: ',
+			"identity registry: ",
 			rwaClient.identityRegistry.getIdentityRegistryPda(mint).toString(),
 		);
 	});
 
-	test('setup data account through class', async t => {
+	test("setup data account", async () => {
 		const createDataAccountArgs: CreateDataAccountArgs = {
-			type: { legal: {} },
-			name: 'Test Data Account',
-			uri: 'https://test.com',
+			type: {legal: {}},
+			name: "Test Data Account",
+			uri: "https://test.com",
 			payer: setup.payer.toString(),
+			signer: setup.authority.toString(),
 			assetMint: mint,
 		};
 		const createDataAccountIx = await rwaClient.dataRegistry.setupDataAccount(
@@ -125,17 +124,17 @@ describe('e2e class tests', () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...createDataAccountIx.ixs),
-			[setup.payerKp, createDataAccountIx.signers[0]],
+			[setup.payerKp, createDataAccountIx.signers[0], setup.authorityKp],
 		);
 		expect(txnId).toBeTruthy();
 		dataAccount = createDataAccountIx.signers[0].publicKey.toString();
 		console.log(
-			'data account: ',
+			"data account: ",
 			createDataAccountIx.signers[0].publicKey.toString(),
 		);
 	});
 
-	test('attach identity approval policy through class', async () => {
+	test("create identity approval policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			authority: setup.authority.toString(),
 			owner: setup.authority.toString(),
@@ -143,28 +142,27 @@ describe('e2e class tests', () => {
 			payer: setup.payer.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policyType: {
 				identityApproval: {},
 			},
 		};
 
-		const policyIx = await rwaClient.policyEngine.attachPolicy(policyArgs);
+		const policyIx = await rwaClient.policyEngine.createPolicy(policyArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...policyIx.ixs),
-			[setup.payerKp, ...policyIx.signers],
+			[setup.payerKp, setup.authorityKp],
 		);
-		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
 		console.log(
-			'identity approval policy: ',
-			policyIx.signers[0].publicKey.toString(),
+			"policy account: ",
+			getPolicyAccountPda(mint).toString(),
 		);
 	});
 
-	test('attach transaction amount limit policy through class', async () => {
+	test("attach transaction amount limit policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
@@ -172,7 +170,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policyType: {
 				transactionAmountLimit: {
@@ -185,16 +183,11 @@ describe('e2e class tests', () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...policyIx.ixs),
-			[setup.payerKp, ...policyIx.signers],
+			[setup.payerKp, setup.authorityKp],
 		);
-		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
-		console.log(
-			'transaction amount limit policy: ',
-			policyIx.signers[0].publicKey.toString(),
-		);
 	});
-	test('attach transaction amount velocity policy class', async () => {
+	test("attach transaction amount velocity policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
@@ -202,7 +195,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policyType: {
 				transactionAmountVelocity: {
@@ -216,16 +209,11 @@ describe('e2e class tests', () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...policyIx.ixs),
-			[setup.payerKp, ...policyIx.signers],
+			[setup.payerKp, setup.authorityKp],
 		);
-		remainingAccounts.push(policyIx.signers[0].publicKey.toString());
 		expect(txnId).toBeTruthy();
-		console.log(
-			'transaction amount velocity policy: ',
-			policyIx.signers[0].publicKey.toString(),
-		);
 	});
-	test('attach transaction count velocity policy', async () => {
+	test("attach transaction count velocity policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
@@ -233,7 +221,7 @@ describe('e2e class tests', () => {
 			authority: setup.authority.toString(),
 			identityFilter: {
 				identityLevels: [1],
-				comparisionType: { or: {} },
+				comparisionType: {or: {}},
 			},
 			policyType: {
 				transactionCountVelocity: {
@@ -247,16 +235,12 @@ describe('e2e class tests', () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...policyIx.ixs),
-			[setup.payerKp, ...policyIx.signers],
+			[setup.payerKp, setup.authorityKp],
 		);
 		expect(txnId).toBeTruthy();
-		console.log(
-			'transaction count velocity policy: ',
-			policyIx.signers[0].publicKey.toString(),
-		);
 	});
 
-	test('setup a user through class', async () => {
+	test("setup a user", async () => {
 		const setupUserArgs: SetupUserArgs = {
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
@@ -269,7 +253,7 @@ describe('e2e class tests', () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...setupIx.ixs),
-			[setup.payerKp, ...setupIx.signers],
+			[setup.payerKp, setup.authorityKp],
 		);
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
@@ -280,18 +264,18 @@ describe('e2e class tests', () => {
 		expect(trackerAccount).toBeTruthy();
 		expect(trackerAccount!.assetMint.toString()).toBe(mint);
 		console.log(
-			'tracker account: ',
+			"tracker account: ",
 			getTrackerAccountPda(mint, setup.authority.toString()).toString(),
 		);
 		console.log(
-			'identity account: ',
+			"identity account: ",
 			rwaClient.identityRegistry
 				.getIdentityAccountPda(mint, setup.authority.toString())
 				.toString(),
 		);
 	});
 
-	test('issue tokens through class', async () => {
+	test("issue tokens", async () => {
 		const issueArgs: IssueTokenArgs = {
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
@@ -303,13 +287,13 @@ describe('e2e class tests', () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(issueIx),
-			[setup.payerKp],
+			[setup.payerKp, setup.authorityKp],
 		);
 		expect(txnId).toBeTruthy();
-		console.log('issue tokens signature: ', txnId);
+		console.log("issue tokens signature: ", txnId);
 	});
 
-	test('void tokens through class', async () => {
+	test("void tokens", async () => {
 		const voidArgs: VoidTokensArgs = {
 			payer: setup.payer.toString(),
 			amount: 100,
@@ -326,12 +310,12 @@ describe('e2e class tests', () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	test('update data account through class', async t => {
+	test("update data account", async () => {
 		const updateDataAccountArgs: UpdateDataAccountArgs = {
 			dataAccount,
-			name: 'Example Token Updatse',
-			uri: 'newUri',
-			type: { tax: {} },
+			name: "Example Token Updatse",
+			uri: "newUri",
+			type: {tax: {}},
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			assetMint: mint,
@@ -345,10 +329,10 @@ describe('e2e class tests', () => {
 			[setup.payerKp, setup.authorityKp],
 		);
 		expect(txnId).toBeTruthy();
-		console.log('update data account signature: ', txnId);
+		console.log("update data account signature: ", txnId);
 	});
 
-	test('transfer tokens through class', async () => {
+	test("transfer tokens", async () => {
 		const transferArgs: TransferTokensArgs = {
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),

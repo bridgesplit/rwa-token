@@ -18,7 +18,7 @@ import {
 import {
 	getAssetControllerProgram, getAssetControllerPda, getExtraMetasListPda, getTrackerAccountPda,
 } from './utils';
-import { type AnchorProvider, BN } from '@coral-xyz/anchor';
+import { type AnchorProvider, BN } from '@bridgesplit/anchor';
 
 /** Common args with authority and decimals. */
 export type CreateAssetControllerIx = {

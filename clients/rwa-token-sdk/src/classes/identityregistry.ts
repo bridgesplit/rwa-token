@@ -1,6 +1,6 @@
-import {type PublicKey, type TransactionInstruction} from '@solana/web3.js';
-import {type SetupUserArgs, getSetupUserIxs} from '../asset_controller';
-import {type IxReturn} from '../utils';
+import {type PublicKey, type TransactionInstruction} from "@solana/web3.js";
+import {type SetupUserArgs, getSetupUserIxs} from "../assetController";
+import {type IxReturn} from "../utils";
 import {
 	type AddLevelToIdentityAccountArgs,
 	type RemoveLevelFromIdentityAccount,
@@ -8,8 +8,8 @@ import {
 	getRemoveLevelFromIdentityAccount,
 	getIdentityRegistryPda,
 	getIdentityAccountPda,
-} from '../identity_registry';
-import {type RwaClient} from './rwa';
+} from "../identityRegistry";
+import {type RwaClient} from "./client";
 
 /**
  * Represents the client for Identity Registry for an RWA.

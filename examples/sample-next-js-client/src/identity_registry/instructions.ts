@@ -9,7 +9,7 @@ import {
 	getIdentityRegistryProgram,
 	getIdentityRegistryPda,
 } from './utils';
-import {type AnchorProvider} from '@coral-xyz/anchor';
+import {type AnchorProvider} from '@bridgesplit/anchor';
 
 /** Common args but with authority. */
 export type CreateIdentityRegistryArgs = {

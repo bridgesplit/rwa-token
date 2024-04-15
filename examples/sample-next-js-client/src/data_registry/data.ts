@@ -1,4 +1,4 @@
-import { type AnchorProvider } from '@coral-xyz/anchor';
+import { type AnchorProvider } from '@bridgesplit/anchor';
 import { type DataRegistryAccount, type DataAccount } from './types';
 import { getDataRegistryPda, getDataRegistryProgram } from './utils';
 

@@ -1,4 +1,4 @@
-import { BN } from "@coral-xyz/anchor";
+import { BN } from "@bridgesplit/anchor";
 import { AddLevelToIdentityAccountArgs, AttachPolicyArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
 
 

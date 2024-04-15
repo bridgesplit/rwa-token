@@ -1,4 +1,4 @@
-import {type IdlAccounts} from '@coral-xyz/anchor';
+import {type IdlAccounts} from '@bridgesplit/anchor';
 import {type IdentityRegistryIdlType} from '../programs';
 
 /** Represents on chain identity registry account. */
