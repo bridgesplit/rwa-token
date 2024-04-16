@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { SendToParent } from "../policyEnum";
 import { BN } from "@bridgesplit/anchor";
-import { Policy } from "../../../src/policyEngine/types";
+import { PolicyType } from "../../../src/policyEngine/types";
 
 interface PolicyDetails {
   limit: number;
@@ -39,7 +39,7 @@ export const PolicyForm: React.FC<PolicyFormProps> = ({
     }
 
     if (errors.length === 0) {
-      const updatedPolicy: Policy = (() => {
+      const updatedPolicy: PolicyType = (() => {
         switch (message) {
           case "TRANSACTION_AMOUNT_LIMIT":
             return {

@@ -1,6 +1,6 @@
 import React from "react";
 import { SendToParent } from "../policyEnum";
-import { Policy } from "../../../src/policyEngine/types";
+import { PolicyType } from "../../../src/policyEngine/types";
 
 interface IdentityApprovalProps {
   onSubmit: SendToParent;
@@ -9,7 +9,7 @@ interface IdentityApprovalProps {
 export const IdentityApproval: React.FC<IdentityApprovalProps> = ({
   onSubmit,
 }) => {
-  const DEFAULT_IDENTITY_POLICY: Policy = {
+  const DEFAULT_IDENTITY_POLICY: PolicyType = {
     identityApproval: {},
   };
   const handleSubmit = () => {
