@@ -1,4 +1,4 @@
-import { BN, Wallet } from "@bridgesplit/anchor";
+import { BN, Wallet } from "@coral-xyz/anchor";
 import {
 	type AttachPolicyArgs,
 	type CreateDataAccountArgs,

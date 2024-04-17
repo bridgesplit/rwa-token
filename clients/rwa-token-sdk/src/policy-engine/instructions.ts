@@ -10,7 +10,7 @@ import {
 	getPolicyEngineProgram,
 } from "./utils";
 import { type PolicyType, type IdentityFilter } from "./types";
-import { type AnchorProvider } from "@bridgesplit/anchor";
+import { type AnchorProvider } from "@coral-xyz/anchor";
 
 /** Represents the arguments required to create a policy engine account. */
 export type CreatePolicyEngineArgs = {

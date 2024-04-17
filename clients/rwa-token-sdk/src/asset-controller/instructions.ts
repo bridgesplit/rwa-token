@@ -38,7 +38,7 @@ import {
 	getTrackerAccountPda,
 	assetControllerProgramId,
 } from "./utils";
-import { type AnchorProvider, BN } from "@bridgesplit/anchor";
+import { type AnchorProvider, BN } from "@coral-xyz/anchor";
 
 /** Represents arguments for creating an on chain asset controller. */
 export type CreateAssetControllerIx = {

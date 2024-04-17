@@ -1,4 +1,4 @@
-import { type AnchorProvider } from "@bridgesplit/anchor";
+import { type AnchorProvider } from "@coral-xyz/anchor";
 import { type IdentityRegistryAccount, type IdentityAccount } from "./types";
 import {
 	getIdentityAccountPda,

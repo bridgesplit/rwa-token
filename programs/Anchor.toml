@@ -23,7 +23,7 @@ identity_registry = "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
 policy_engine = "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
 
 [scripts]
-test = "cd ../clients/rwa-token-sdk && yarn test rwa-token-sdk.test.ts"
+test = "cd ../clients/rwa-token-sdk && yarn test"
 
 [test.validator]
 url = "https://api.mainnet-beta.solana.com"

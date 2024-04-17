@@ -7,7 +7,7 @@ import {
 import { type CommonArgs, type IxReturn } from "../utils";
 import { getDataRegistryProgram, getDataRegistryPda } from "./utils";
 import { type DataAccountType } from "./types";
-import { type AnchorProvider } from "@bridgesplit/anchor";
+import { type AnchorProvider } from "@coral-xyz/anchor";
 
 /** Represents arguments for creating an on chain data registry to store data accounts. */
 export type CreateDataRegistryArgs = {

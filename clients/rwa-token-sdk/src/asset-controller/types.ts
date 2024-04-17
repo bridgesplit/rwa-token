@@ -1,4 +1,4 @@
-import { type IdlAccounts } from "@bridgesplit/anchor";
+import { type IdlAccounts } from "@coral-xyz/anchor";
 import { AssetControllerIdlTypes } from "../programs";
 
 /** Represents on chain asset controller account. */
