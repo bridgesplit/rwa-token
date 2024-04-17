@@ -1,4 +1,4 @@
-export type { AssetController as AssetControllerIdlTypes } from "./assetController";
-export type { DataRegistry as DataRegistryIdlTypes } from "./dataRegistry";
-export type { IdentityRegistry as IdentityRegistryIdlTypes } from "./identityRegistry";
-export type { PolicyEngine as PolicyEngineIdlTypes } from "./policyEngine";
+export type { AssetController as AssetControllerIdlTypes } from "./AssetControllerTypes";
+export type { DataRegistry as DataRegistryIdlTypes } from "./DataRegistryTypes";
+export type { IdentityRegistry as IdentityRegistryIdlTypes } from "./IdentityRegistryTypes";
+export type { PolicyEngine as PolicyEngineIdlTypes } from "./PolicyEngineTypes";

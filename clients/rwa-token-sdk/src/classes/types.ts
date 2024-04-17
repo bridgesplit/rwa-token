@@ -1,12 +1,13 @@
-import {type ConfirmOptions, type Connection} from "@solana/web3.js";
+import { type ConfirmOptions, type Connection } from "@solana/web3.js";
 
-/* Config type for the RWA Client */
+//** Configuration type for the RWA client. */
 export type Config = {
-	connection: Connection;
-	rpcUrl: string;
-	confirmationOptions: ConfirmOptions;
+  connection: Connection;
+  rpcUrl: string;
+  confirmationOptions: ConfirmOptions;
 };
 
+//** Arguments to store an asset's mints. */
 export type AssetInfo = {
-	mint: string;
+  mint: string;
 };

@@ -11,7 +11,7 @@ import {
 } from "./utils";
 import { type AnchorProvider } from "@bridgesplit/anchor";
 
-/** Common args but with authority. */
+/** Represents arguments for creating an on identity registry on chain. */
 export type CreateIdentityRegistryArgs = {
   authority: string;
 } & CommonArgs;
@@ -41,7 +41,7 @@ export async function getCreateIdentityRegistryIx(
   return ix;
 }
 
-/** Common args but with level and owner. */
+/** Represents arguments for creating an identity account on chain. */
 export type CreateIdentityAccountArgs = {
   level: number;
   owner: string;
@@ -72,6 +72,7 @@ export async function getCreateIdentityAccountIx(
   return ix;
 }
 
+/** Represents the arguments required to add a level to an identity account. */
 export type AddLevelToIdentityAccountArgs = {
   owner: string;
   level: number;

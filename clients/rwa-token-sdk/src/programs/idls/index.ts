@@ -1,11 +1,11 @@
-import AssetControllerIdl from "./assetController.json";
-import DataRegistryIdl from "./dataRegistry.json";
-import IdentityRegistryIdl from "./identityRegistry.json";
-import PolicyEngineIdl from "./policyEngine.json";
+import AssetControllerIdl from "./AssetController.json";
+import DataRegistryIdl from "./DataRegistry.json";
+import IdentityRegistryIdl from "./IdentityRegistry.json";
+import PolicyEngineIdl from "./PolicyEngine.json";
 
 export {
-	AssetControllerIdl,
-	DataRegistryIdl,
-	IdentityRegistryIdl,
-	PolicyEngineIdl
+  AssetControllerIdl,
+  DataRegistryIdl,
+  IdentityRegistryIdl,
+  PolicyEngineIdl,
 };
