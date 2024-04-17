@@ -1,10 +1,15 @@
 /// creates a mint a new asset
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{Mint, Token2022};
+use anchor_spl::token_interface::{
+    token_metadata_initialize, Mint, Token2022, TokenMetadataInitialize,
+};
 use spl_tlv_account_resolution::state::ExtraAccountMetaList;
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
 
-use crate::{get_extra_account_metas, get_meta_list_size, state::*};
+use crate::{
+    get_extra_account_metas, get_meta_list_size, state::*,
+    update_account_lamports_to_minimum_balance,
+};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateAssetControllerArgs {
@@ -64,18 +69,18 @@ pub struct CreateAssetController<'info> {
 }
 
 impl<'info> CreateAssetController<'info> {
-    // fn initialize_token_metadata(&self, name: String, symbol: String, uri: String) -> Result<()> {
-    //     let cpi_accounts = TokenMetadataInitialize {
-    //         token_program_id: self.token_program.to_account_info(),
-    //         mint: self.asset_mint.to_account_info(),
-    //         metadata: self.asset_mint.to_account_info(), // metadata account is the mint, since data is stored in mint
-    //         mint_authority: self.authority.to_account_info(),
-    //         update_authority: self.asset_controller.to_account_info(),
-    //     };
-    //     let cpi_ctx = CpiContext::new(self.token_program.to_account_info(), cpi_accounts);
-    //     token_metadata_initialize(cpi_ctx, name, symbol, uri)?;
-    //     Ok(())
-    // }
+    fn initialize_token_metadata(&self, name: String, symbol: String, uri: String) -> Result<()> {
+        let cpi_accounts = TokenMetadataInitialize {
+            token_program_id: self.token_program.to_account_info(),
+            mint: self.asset_mint.to_account_info(),
+            metadata: self.asset_mint.to_account_info(), // metadata account is the mint, since data is stored in mint
+            mint_authority: self.authority.to_account_info(),
+            update_authority: self.asset_controller.to_account_info(),
+        };
+        let cpi_ctx = CpiContext::new(self.token_program.to_account_info(), cpi_accounts);
+        token_metadata_initialize(cpi_ctx, name, symbol, uri)?;
+        Ok(())
+    }
 }
 
 pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerArgs) -> Result<()> {
@@ -91,16 +96,16 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
     let mut data = extra_metas_account.try_borrow_mut_data()?;
     ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
 
-    // // initialize token metadata
-    // ctx.accounts
-    //     .initialize_token_metadata(args.name, args.symbol, args.uri)?;
+    // initialize token metadata
+    ctx.accounts
+        .initialize_token_metadata(args.name, args.symbol, args.uri)?;
 
-    // // transfer minimum rent to mint account
-    // update_account_lamports_to_minimum_balance(
-    //     ctx.accounts.asset_mint.to_account_info(),
-    //     ctx.accounts.payer.to_account_info(),
-    //     ctx.accounts.system_program.to_account_info(),
-    // )?;
+    // transfer minimum rent to mint account
+    update_account_lamports_to_minimum_balance(
+        ctx.accounts.asset_mint.to_account_info(),
+        ctx.accounts.payer.to_account_info(),
+        ctx.accounts.system_program.to_account_info(),
+    )?;
 
     Ok(())
 }

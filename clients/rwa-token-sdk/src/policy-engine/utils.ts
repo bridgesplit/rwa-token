@@ -5,7 +5,7 @@ import { type PolicyEngineIdlTypes } from "../programs/types";
 
 /** Program address for the policy engine program. */
 export const policyRegistryProgramId = new PublicKey(
-  "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
+	"po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
 );
 
 /**
@@ -26,10 +26,10 @@ export const getPolicyEngineProgram = (provider: Provider) =>
  * @returns The policy engines pda.
  */
 export const getPolicyEnginePda = (assetMint: string) =>
-  PublicKey.findProgramAddressSync(
-    [new PublicKey(assetMint).toBuffer()],
-    policyRegistryProgramId
-  )[0];
+	PublicKey.findProgramAddressSync(
+		[new PublicKey(assetMint).toBuffer()],
+		policyRegistryProgramId
+	)[0];
 
 /**
  * Retrieves the policy account pda for a specific asset mint.
@@ -37,7 +37,7 @@ export const getPolicyEnginePda = (assetMint: string) =>
  * @returns The policy accounts pda.
  */
 export const getPolicyAccountPda = (assetMint: string) =>
-  PublicKey.findProgramAddressSync(
-    [getPolicyEnginePda(assetMint).toBuffer()],
-    policyRegistryProgramId
-  )[0];
+	PublicKey.findProgramAddressSync(
+		[getPolicyEnginePda(assetMint).toBuffer()],
+		policyRegistryProgramId
+	)[0];

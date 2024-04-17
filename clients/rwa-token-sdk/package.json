@@ -4,7 +4,8 @@
     "description": "RWA Token SDK for the development of permissioned tokens on SVM blockchains.",
     "homepage": "https://github.com/bridgesplit/rwa-token#readme",
     "scripts": {
-        "test": "vitest run --testTimeout=120000"
+        "test": "vitest run --testTimeout=120000",
+        "lint": "eslint . --ext .ts"
     },
     "repository": {
         "type": "git",
@@ -16,7 +17,7 @@
         "tokenization"
     ],
     "dependencies": {
-        "@bridgesplit/anchor": "^0.29.0",
+        "@coral-xyz/anchor": "^0.30.0",
         "@solana/spl-token": "^0.3.11",
         "@solana/web3.js": "^1.89.0",
         "dotenv": "^16.4.4"

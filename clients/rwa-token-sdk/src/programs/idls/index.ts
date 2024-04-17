@@ -4,8 +4,8 @@ import IdentityRegistryIdl from "./IdentityRegistry.json";
 import PolicyEngineIdl from "./PolicyEngine.json";
 
 export {
-  AssetControllerIdl,
-  DataRegistryIdl,
-  IdentityRegistryIdl,
-  PolicyEngineIdl,
+	AssetControllerIdl,
+	DataRegistryIdl,
+	IdentityRegistryIdl,
+	PolicyEngineIdl,
 };

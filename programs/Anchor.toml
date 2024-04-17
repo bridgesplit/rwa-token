@@ -27,3 +27,6 @@ test = "cd ../clients/rwa-token-sdk && yarn test rwa-token-sdk.test.ts"
 
 [test.validator]
 url = "https://api.mainnet-beta.solana.com"
+
+[toolchain]
+anchor_version = "0.30.0"

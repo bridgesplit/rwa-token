@@ -4,7 +4,7 @@ import { PublicKey } from "@solana/web3.js";
 import { type DataRegistryIdlTypes } from "../programs/types";
 
 export const dataRegistryProgramId = new PublicKey(
-  "dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw"
+	"dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw"
 );
 
 /**
@@ -24,7 +24,7 @@ export const getDataRegistryProgram = (provider: Provider) =>
  * @returns The data registry pda.
  */
 export const getDataRegistryPda = (assetMint: string) =>
-  PublicKey.findProgramAddressSync(
-    [new PublicKey(assetMint).toBuffer()],
-    dataRegistryProgramId
-  )[0];
+	PublicKey.findProgramAddressSync(
+		[new PublicKey(assetMint).toBuffer()],
+		dataRegistryProgramId
+	)[0];

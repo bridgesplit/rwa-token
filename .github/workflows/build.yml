@@ -57,6 +57,7 @@ jobs:
           fetch-depth: 0
 
       - run: cd clients/rwa-token-sdk && yarn install
+      - run: cd clients/rwa-token-sdk && yarn lint
       - run: solana-keygen new --no-bip39-passphrase
       - run: cd programs && cargo fmt -- --check
       - run: cd programs && cargo clippy -- -D warnings

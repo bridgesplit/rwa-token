@@ -1,9 +1,9 @@
 import { type AnchorProvider } from "@bridgesplit/anchor";
 import { type IdentityRegistryAccount, type IdentityAccount } from "./types";
 import {
-  getIdentityAccountPda,
-  getIdentityRegistryPda,
-  getIdentityRegistryProgram,
+	getIdentityAccountPda,
+	getIdentityRegistryPda,
+	getIdentityRegistryProgram,
 } from "./utils";
 
 /**
@@ -12,15 +12,15 @@ import {
  * @returns A promise resolving to {@link IdentityRegistryAccount}, or `undefined` if it doesn't exist.
  */
 export async function getIdentityRegistryAccount(
-  assetMint: string,
-  provider: AnchorProvider
+	assetMint: string,
+	provider: AnchorProvider
 ): Promise<IdentityRegistryAccount | undefined> {
-  const identityRegistryProgram = getIdentityRegistryProgram(provider);
-  const identityRegistryPda = getIdentityRegistryPda(assetMint);
-  return identityRegistryProgram.account.identityRegistryAccount
-    .fetch(identityRegistryPda)
-    .then((account) => account)
-    .catch(() => undefined);
+	const identityRegistryProgram = getIdentityRegistryProgram(provider);
+	const identityRegistryPda = getIdentityRegistryPda(assetMint);
+	return identityRegistryProgram.account.identityRegistryAccount
+		.fetch(identityRegistryPda)
+		.then((account) => account)
+		.catch(() => undefined);
 }
 
 /**
@@ -30,14 +30,14 @@ export async function getIdentityRegistryAccount(
  * @returns A promise resolving to the {@link IdentityAccount}, or `undefined` if it doesn't exist.
  */
 export async function getIdentityAccount(
-  assetMint: string,
-  owner: string,
-  provider: AnchorProvider
+	assetMint: string,
+	owner: string,
+	provider: AnchorProvider
 ): Promise<IdentityAccount | undefined> {
-  const identityRegistryProgram = getIdentityRegistryProgram(provider);
-  const identityAccountPda = getIdentityAccountPda(assetMint, owner);
-  return identityRegistryProgram.account.identityAccount
-    .fetch(identityAccountPda)
-    .then((account) => account)
-    .catch(() => undefined);
+	const identityRegistryProgram = getIdentityRegistryProgram(provider);
+	const identityAccountPda = getIdentityAccountPda(assetMint, owner);
+	return identityRegistryProgram.account.identityAccount
+		.fetch(identityAccountPda)
+		.then((account) => account)
+		.catch(() => undefined);
 }
