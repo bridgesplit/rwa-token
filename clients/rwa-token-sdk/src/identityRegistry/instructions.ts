@@ -118,14 +118,15 @@ export async function getRemoveLevelFromIdentityAccount(
 ): Promise<TransactionInstruction> {
   const identityProgram = getIdentityRegistryProgram(provider);
   const ix = await identityProgram.methods
-    .removeLevelFromIdentityAccount(new PublicKey(args.owner), args.level)
+    .removeLevelFromIdentityAccount(args.level)
     .accountsStrict({
-      // TOOD: Have @MACHA check this
       signer: args.signer
         ? args.signer
         : getIdentityRegistryPda(args.assetMint),
       identityRegistry: getIdentityRegistryPda(args.assetMint),
       identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+      payer: args.signer,
+      systemProgram: SystemProgram.programId,
     })
     .instruction();
   return ix;
