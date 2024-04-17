@@ -13,18 +13,19 @@ pub struct CreateDataAccountArgs {
 pub struct CreateDataAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: can be either authority or delegate
-    pub signer: UncheckedAccount<'info>,
     #[account(
-        constraint = data_registry.verify_signer(data_registry.key(), signer.key(), signer.is_signer).is_ok()
+        constraint = data_registry.authority == signer.key() || data_registry.delegate == signer.key()
     )]
+    pub signer: Signer<'info>,
+    #[account()]
     pub data_registry: Box<Account<'info, DataRegistryAccount>>,
     #[account(
         init,
         signer,
         space = 8 + DataAccount::INIT_SPACE,
         payer = payer,
+        constraint = args.name.len() <= MAX_NAME_LEN,
+        constraint = args.uri.len() <= MAX_URI_LEN,
     )]
     pub data_account: Box<Account<'info, DataAccount>>,
     pub system_program: Program<'info, System>,

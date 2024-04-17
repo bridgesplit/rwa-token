@@ -1,6 +1,5 @@
 use crate::state::*;
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::Mint;
 
 #[derive(Accounts)]
 #[instruction()]
@@ -8,7 +7,7 @@ pub struct DelegateDataRegistry<'info> {
     #[account(
         constraint = authority.key() == data_registry.authority,
     )]
-    pub authority: Box<InterfaceAccount<'info, Mint>>,
+    pub authority: Signer<'info>,
     #[account(mut)]
     pub data_registry: Box<Account<'info, DataRegistryAccount>>,
 }

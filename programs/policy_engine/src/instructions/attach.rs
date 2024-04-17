@@ -4,37 +4,36 @@ use crate::state::*;
 
 #[derive(Accounts)]
 #[instruction()]
-pub struct AttachIdentityApproval<'info> {
+pub struct AttachToPolicyAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: internal ix checks
-    pub signer: UncheckedAccount<'info>,
     #[account(
-        mut,
-        constraint = policy_engine.verify_signer(policy_engine.key(), signer.key(), signer.is_signer).is_ok()
+        constraint = policy_engine.authority == signer.key() || policy_engine.delegate == signer.key()
     )]
+    pub signer: Signer<'info>,
+    #[account(mut)]
     pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
     #[account(
-        init,
-        signer,
-        space = 8 + PolicyAccount::INIT_SPACE,
-        payer = payer,
+        mut,
+        seeds = [policy_engine.key().as_ref()],
+        bump,
+        realloc = policy_account.to_account_info().data_len() + Policy::INIT_SPACE,
+        realloc::zero = false,
+        realloc::payer = payer,
     )]
     pub policy_account: Box<Account<'info, PolicyAccount>>,
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(
-    ctx: Context<AttachIdentityApproval>,
+    ctx: Context<AttachToPolicyAccount>,
     identity_filter: IdentityFilter,
-    policy: Policy,
+    policy_type: PolicyType,
 ) -> Result<()> {
+    let policy_account_address = ctx.accounts.policy_account.key();
     ctx.accounts
         .policy_account
-        .new(ctx.accounts.policy_engine.key(), identity_filter, policy);
-    ctx.accounts
-        .policy_engine
-        .add_policy(ctx.accounts.policy_account.key())?;
+        .attach(policy_account_address, policy_type, identity_filter)?;
+    ctx.accounts.policy_engine.update_max_timeframe(policy_type);
     Ok(())
 }

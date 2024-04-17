@@ -1,0 +1,517 @@
+{
+  "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau",
+  "metadata": {
+    "name": "policy_engine",
+    "version": "0.0.1",
+    "spec": "0.1.0",
+    "description": "The Policy Registry Program (PRP) enables the creation of policies that can be used to control the flow of funds in a programmatic way."
+  },
+  "instructions": [
+    {
+      "name": "attach_to_policy_account",
+      "docs": [
+        "attach a policy"
+      ],
+      "discriminator": [
+        247,
+        116,
+        130,
+        17,
+        89,
+        232,
+        103,
+        16
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "policy_engine",
+          "writable": true
+        },
+        {
+          "name": "policy_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "policy_engine"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "identity_filter",
+          "type": {
+            "defined": {
+              "name": "IdentityFilter"
+            }
+          }
+        },
+        {
+          "name": "policy_type",
+          "type": {
+            "defined": {
+              "name": "PolicyType"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_policy_account",
+      "docs": [
+        "policies",
+        "create policy account"
+      ],
+      "discriminator": [
+        52,
+        228,
+        143,
+        138,
+        102,
+        135,
+        59,
+        193
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "policy_engine",
+          "writable": true
+        },
+        {
+          "name": "policy_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "policy_engine"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "identity_filter",
+          "type": {
+            "defined": {
+              "name": "IdentityFilter"
+            }
+          }
+        },
+        {
+          "name": "policy_type",
+          "type": {
+            "defined": {
+              "name": "PolicyType"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "create_policy_engine",
+      "docs": [
+        "create a policy registry"
+      ],
+      "discriminator": [
+        85,
+        105,
+        207,
+        153,
+        73,
+        125,
+        225,
+        54
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "policy_engine",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "authority",
+          "type": "pubkey"
+        },
+        {
+          "name": "delegate",
+          "type": {
+            "option": "pubkey"
+          }
+        }
+      ]
+    },
+    {
+      "name": "detach_from_policy_account",
+      "docs": [
+        "remove policy"
+      ],
+      "discriminator": [
+        81,
+        24,
+        116,
+        10,
+        12,
+        108,
+        109,
+        242
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "policy_engine",
+          "writable": true
+        },
+        {
+          "name": "policy_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "policy_engine"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "hash",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "PolicyAccount",
+      "discriminator": [
+        218,
+        201,
+        183,
+        164,
+        156,
+        127,
+        81,
+        175
+      ]
+    },
+    {
+      "name": "PolicyEngineAccount",
+      "discriminator": [
+        124,
+        85,
+        205,
+        80,
+        2,
+        18,
+        26,
+        45
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "InvalidPolicy",
+      "msg": "Invalid policy passed"
+    },
+    {
+      "code": 6001,
+      "name": "TransactionAmountLimitExceeded",
+      "msg": "Transaction amount limit exceeded"
+    },
+    {
+      "code": 6002,
+      "name": "TransactionAmountVelocityExceeded",
+      "msg": "Transaction amount velocity exceeded"
+    },
+    {
+      "code": 6003,
+      "name": "TransactionCountVelocityExceeded",
+      "msg": "Transaction count velocity exceeded"
+    },
+    {
+      "code": 6004,
+      "name": "PolicyEngineFull",
+      "msg": "Policy registry is full, cannot add more policies"
+    },
+    {
+      "code": 6005,
+      "name": "PolicyNotFound",
+      "msg": "Policy not found"
+    },
+    {
+      "code": 6006,
+      "name": "IdentityFilterFailed",
+      "msg": "Identity filter failed"
+    },
+    {
+      "code": 6007,
+      "name": "UnauthorizedSigner",
+      "msg": "Unauthorized signer"
+    },
+    {
+      "code": 6008,
+      "name": "PolicyAlreadyExists",
+      "msg": "Policy already exists"
+    }
+  ],
+  "types": [
+    {
+      "name": "ComparisionType",
+      "repr": {
+        "kind": "rust"
+      },
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Or"
+          },
+          {
+            "name": "And"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IdentityFilter",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "identity_levels",
+            "type": {
+              "array": [
+                "u8",
+                10
+              ]
+            }
+          },
+          {
+            "name": "comparision_type",
+            "type": {
+              "defined": {
+                "name": "ComparisionType"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Policy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "hash",
+            "type": "string"
+          },
+          {
+            "name": "policy_type",
+            "type": {
+              "defined": {
+                "name": "PolicyType"
+              }
+            }
+          },
+          {
+            "name": "identity_filter",
+            "type": {
+              "defined": {
+                "name": "IdentityFilter"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PolicyAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "policy_engine",
+            "docs": [
+              "Engine account that the policy belongs to"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "policies",
+            "docs": [
+              "Different policies that can be applied to the policy account"
+            ],
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Policy"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "PolicyEngineAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "docs": [
+              "version"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "asset_mint",
+            "docs": [
+              "asset mint"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "docs": [
+              "authority of the registry"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "delegate",
+            "docs": [
+              "policy delegate"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "max_timeframe",
+            "docs": [
+              "max timeframe of all the policies"
+            ],
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PolicyType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "IdentityApproval"
+          },
+          {
+            "name": "TransactionAmountLimit",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              }
+            ]
+          },
+          {
+            "name": "TransactionAmountVelocity",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              },
+              {
+                "name": "timeframe",
+                "type": "i64"
+              }
+            ]
+          },
+          {
+            "name": "TransactionCountVelocity",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              },
+              {
+                "name": "timeframe",
+                "type": "i64"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

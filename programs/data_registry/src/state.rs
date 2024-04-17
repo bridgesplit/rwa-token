@@ -1,7 +1,5 @@
 use anchor_lang::prelude::*;
 
-use crate::DataRegistryErrors;
-
 #[account()]
 #[derive(InitSpace)]
 pub struct DataRegistryAccount {
@@ -17,29 +15,14 @@ pub struct DataRegistryAccount {
 
 impl DataRegistryAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(
-        &mut self,
-        address: Pubkey,
-        asset_mint: Pubkey,
-        authority: Pubkey,
-        delegate: Option<Pubkey>,
-    ) {
+    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Option<Pubkey>) {
         self.version = Self::VERSION;
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or(address);
+        self.delegate = delegate.unwrap_or(authority);
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
-    }
-    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
-        if signer == registry && self.delegate == registry {
-            return Ok(());
-        }
-        if (signer == self.authority || signer == self.delegate) && is_signer {
-            return Ok(());
-        }
-        Err(DataRegistryErrors::UnauthorizedSigner.into())
     }
 }
 
@@ -51,6 +34,9 @@ pub enum DataAccountType {
     Miscellaneous,
 }
 
+pub const MAX_NAME_LEN: usize = 32;
+pub const MAX_URI_LEN: usize = 255;
+
 #[account()]
 #[derive(InitSpace)]
 pub struct DataAccount {
@@ -60,10 +46,10 @@ pub struct DataAccount {
     /// type of the data account
     pub _type: DataAccountType,
     /// used by creator to store name of the document
-    #[max_len(32)]
+    #[max_len(MAX_NAME_LEN)]
     pub name: String,
     /// uri pointing to the data stored in the document
-    #[max_len(255)]
+    #[max_len(MAX_URI_LEN)]
     pub uri: String,
 }
 
