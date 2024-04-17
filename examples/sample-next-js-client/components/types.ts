@@ -1,48 +1,60 @@
-import { BN } from "@bridgesplit/anchor";
-import { AddLevelToIdentityAccountArgs, AttachPolicyArgs, IssueTokenArgs, RemoveLevelFromIdentityAccount, SetupAssetControllerArgs, SetupUserArgs, TransferTokensArgs, VoidTokensArgs, } from "../src";
-
+import { BN } from "@coral-xyz/anchor";
+import {
+  AddLevelToIdentityAccountArgs,
+  AttachPolicyArgs,
+  IssueTokenArgs,
+  RemoveLevelFromIdentityAccountArgs,
+  SetupAssetControllerArgs,
+  SetupUserArgs,
+  TransferTokensArgs,
+  VoidTokensArgs,
+} from "../src";
 
 export type FormInputValues =
-    | SetupAssetControllerArgs
-    | IssueTokenArgs
-    | VoidTokensArgs
-    | TransferTokensArgs
-    | SetupUserArgs
-    | AddLevelToIdentityAccountArgs
-    | AttachPolicyArgs
-    | RemoveLevelFromIdentityAccount
-    | Record<string, any>
+  | SetupAssetControllerArgs
+  | IssueTokenArgs
+  | VoidTokensArgs
+  | TransferTokensArgs
+  | SetupUserArgs
+  | AddLevelToIdentityAccountArgs
+  | AttachPolicyArgs
+  | RemoveLevelFromIdentityAccountArgs
+  | Record<string, any>;
 
 export interface ModalIx {
-    message: string,
-    inputValues: FormInputValues
+  message: string;
+  inputValues: FormInputValues;
 }
 export interface ModalProps {
-    closeModal: () => void;
-    handleSubmit: ({ message, inputValues }: { message: string; inputValues: FormInputValues }) => void;
-    modalContent: {
-        message: string;
-        args: { name: string }[];
-    } | null;
+  closeModal: () => void;
+  handleSubmit: ({
+    message,
+    inputValues,
+  }: {
+    message: string;
+    inputValues: FormInputValues;
+  }) => void;
+  modalContent: {
+    message: string;
+    args: { name: string }[];
+  } | null;
 }
 
-
 interface ModalContent {
-    message: string;
-    args: Record<string, BN | string | number>
+  message: string;
+  args: Record<string, BN | string | number>;
 }
 
 export interface ModalPropsTyped<T extends FormInputValues> {
-    closeModal: () => void;
-    handleSubmit: (payload: ModalContent) => void;
-    modalContent: ModalContent | null;
+  closeModal: () => void;
+  handleSubmit: (payload: ModalContent) => void;
+  modalContent: ModalContent | null;
 }
 
-
 export interface ModalGenericProps {
-    closeModal: () => void;
-    handleSubmit: () => void;
-    modalContent: ModalContent
+  closeModal: () => void;
+  handleSubmit: () => void;
+  modalContent: ModalContent;
 }
 /*
 
@@ -78,44 +90,44 @@ identity registry:  GZfxE9phybhF2jDA3BYDMDZAsFayhgcZFWyNaT8tY5be
  * identity registry:  ALonpXmFvkoEuNyQ4CF9wyv1aBJjg1u26yaFqphunz3s
  */
 
-interface AssetControllerAccount {
-    address: string;
-    mint: string;
-    authority: string;
-    delegate: string;
-    version: number;
-    closed: boolean;
+interface AssetColsntrollerAccount {
+  address: string;
+  mint: string;
+  authority: string;
+  delegate: string;
+  version: number;
+  closed: boolean;
 }
 
 interface DataRegistryAccount {
-    address: string;
-    mint: string;
-    version: number;
-    closed: boolean;
+  address: string;
+  mint: string;
+  version: number;
+  closed: boolean;
 }
 
 interface IdentityRegistryAccount {
-    address: string;
-    mint: string;
-    authority: string;
-    delegate: string;
-    version: number;
-    closed: boolean;
+  address: string;
+  mint: string;
+  authority: string;
+  delegate: string;
+  version: number;
+  closed: boolean;
 }
 
 interface PolicyEngine {
-    address: string;
-    mint: string;
-    authority: string;
-    delegate: string;
-    policies: string[];
-    version: number;
-    closed: boolean;
+  address: string;
+  mint: string;
+  authority: string;
+  delegate: string;
+  policies: string[];
+  version: number;
+  closed: boolean;
 }
 
 export interface FullRwaAccount {
-    asset_controller?: AssetControllerAccount;
-    data_registry?: DataRegistryAccount;
-    identity_registry?: IdentityRegistryAccount;
-    policy_engine?: PolicyEngine;
+  asset_controller?: AssetControllerAccount;
+  data_registry?: DataRegistryAccount;
+  identity_registry?: IdentityRegistryAccount;
+  policy_engine?: PolicyEngine;
 }

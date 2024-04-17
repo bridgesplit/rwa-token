@@ -41,6 +41,7 @@ export const handleMessage = (
   async function handleAddIdentityLevelToUserAccount(
     inputValues: AddLevelToIdentityAccountArgs
   ): Promise<void> {
+    console.log("wagababga on ", inputValues);
     const addLevelIx =
       await rwaClient?.identityRegistry.addIdentityLevelToUserAccount(
         inputValues

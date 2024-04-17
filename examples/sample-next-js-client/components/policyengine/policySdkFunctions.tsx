@@ -12,7 +12,7 @@ async function handleAttachPolicy(
   inputValues: AttachPolicyArgs,
   rwaClient: RwaClient
 ): Promise<void> {
-  console.log(inputValues, "submitting torwa client");
+  console.log(inputValues, "This is what is going to be sent to SOLAMI.");
   const setupPolicyIx = await rwaClient?.policyEngine.attachPolicy(inputValues);
   try {
     const confirmed = await sendV0SolanaTransaction(
