@@ -9,13 +9,12 @@ import {
 	getUpdateDataAccountIx,
 	getDataRegistryPda,
 } from "../data-registry";
-import { type RwaClient } from "./client";
+import { type RwaClient } from "./Client";
 
 /**
  * Represents the client for Data Registry for an RWA.
  */
 export class DataRegistry {
-	// eslint-disable-next-line @typescript-eslint/parameter-properties
 	private readonly rwaClient: RwaClient;
 
 	constructor(rwaClient: RwaClient) {

@@ -13,7 +13,7 @@ import {
 	getExtraMetasListPda,
 } from "../asset-controller";
 import { type IxReturn } from "../utils";
-import { type RwaClient } from "./client";
+import { type RwaClient } from "./Client";
 
 /**
  * Represents the client for Asset Controller for an RWA.

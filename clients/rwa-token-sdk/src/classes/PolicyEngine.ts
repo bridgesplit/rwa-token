@@ -5,14 +5,13 @@ import {
 	getCreatePolicyAccountIx,
 	getPolicyEnginePda,
 } from "../policy-engine";
-import { type RwaClient } from "./client";
+import { type RwaClient } from "./Client";
 import { type PublicKey } from "@solana/web3.js";
 
 /**
  * Represents the client Policy Engine for an RWA.
  */
 export class PolicyEngine {
-	// eslint-disable-next-line @typescript-eslint/parameter-properties
 	private readonly rwaClient: RwaClient;
 
 	constructor(rwaClient: RwaClient) {
