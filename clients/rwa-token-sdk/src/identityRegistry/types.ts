@@ -1,8 +1,8 @@
 import { type IdlAccounts } from "@bridgesplit/anchor";
-import { type IdentityRegistryIdlType } from "../programs";
+import { type IdentityRegistryIdlTypes } from "../programs";
 
 /** Represents on chain identity registry account. */
-export type IdentityRegistryAccount = IdlAccounts<IdentityRegistryIdlType>["identityRegistryAccount"];
+export type IdentityRegistryAccount = IdlAccounts<IdentityRegistryIdlTypes>["identityRegistryAccount"];
 
 /** Represents on chain identity account. */
-export type IdentityAccount = IdlAccounts<IdentityRegistryIdlType>["identityAccount"];
+export type IdentityAccount = IdlAccounts<IdentityRegistryIdlTypes>["identityAccount"];

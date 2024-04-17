@@ -3,7 +3,7 @@ import {type SetupUserArgs, getSetupUserIxs} from "../assetController";
 import {type IxReturn} from "../utils";
 import {
 	type AddLevelToIdentityAccountArgs,
-	type RemoveLevelFromIdentityAccount,
+	type RemoveLevelFromIdentityAccountArgs,
 	getAddLevelToIdentityAccount,
 	getRemoveLevelFromIdentityAccount,
 	getIdentityRegistryPda,
@@ -58,7 +58,7 @@ export class IdentityRegistry {
    * @returns A Promise that resolves to the instructions to reduce the level of a user identity account.
    */
 	async removeIdentityLevelFromUserAccount(
-		removeLevelArgs: RemoveLevelFromIdentityAccount,
+		removeLevelArgs: RemoveLevelFromIdentityAccountArgs,
 	): Promise<TransactionInstruction> {
 		const reduceLevelIx = await getRemoveLevelFromIdentityAccount(
 			removeLevelArgs,

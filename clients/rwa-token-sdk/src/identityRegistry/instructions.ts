@@ -75,6 +75,7 @@ export async function getCreateIdentityAccountIx(
 export type AddLevelToIdentityAccountArgs = {
 	owner: string;
 	level: number;
+	signer: string;
 } & CommonArgs;
 
 /**
@@ -88,22 +89,22 @@ export async function getAddLevelToIdentityAccount(
 ): Promise<TransactionInstruction> {
 	const identityProgram = getIdentityRegistryProgram(provider);
 	const ix = await identityProgram.methods
-		.addLevelToIdentityAccount(new PublicKey(args.owner), args.level)
+		.addLevelToIdentityAccount(args.level)
 		.accountsStrict({
-			// TOOD: Have @MACHA check this
-			signer: args.signer
-				? args.signer
-				: getIdentityRegistryPda(args.assetMint),
+			signer: args.signer,
 			identityRegistry: getIdentityRegistryPda(args.assetMint),
 			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+			payer: args.payer,
+			systemProgram: SystemProgram.programId,
 		})
 		.instruction();
 	return ix;
 }
 
-export type RemoveLevelFromIdentityAccount = {
+export type RemoveLevelFromIdentityAccountArgs = {
 	owner: string;
 	level: number;
+	signer: string;
 } & CommonArgs;
 
 /**
@@ -112,19 +113,18 @@ export type RemoveLevelFromIdentityAccount = {
  * @returns Add level to identity account transaction instruction.
  */
 export async function getRemoveLevelFromIdentityAccount(
-	args: AddLevelToIdentityAccountArgs,
+	args: RemoveLevelFromIdentityAccountArgs,
 	provider: AnchorProvider,
 ): Promise<TransactionInstruction> {
 	const identityProgram = getIdentityRegistryProgram(provider);
 	const ix = await identityProgram.methods
-		.removeLevelFromIdentityAccount(new PublicKey(args.owner), args.level)
+		.removeLevelFromIdentityAccount(args.level)
 		.accountsStrict({
-			// TOOD: Have @MACHA check this
-			signer: args.signer
-				? args.signer
-				: getIdentityRegistryPda(args.assetMint),
+			payer: args.payer,
+			signer: args.signer,
 			identityRegistry: getIdentityRegistryPda(args.assetMint),
 			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+			systemProgram: SystemProgram.programId,
 		})
 		.instruction();
 	return ix;
