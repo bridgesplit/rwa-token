@@ -1,6 +1,6 @@
 name: build
 env:
-  cli-id: anchor-v0.29.0-solana-1.18.8
+  cli-id: anchor-v0.30.0-solana-1.18.8
 on:
   push:
     branches:
@@ -58,8 +58,7 @@ jobs:
 
       - run: cd clients/rwa-token-sdk && yarn install
       - run: solana-keygen new --no-bip39-passphrase
-      - run: cd programs
-      - run: cargo fmt -- --check
-      - run: cargo clippy -- -D warnings
-      - run: anchor build
-      - run: anchor test
+      - run: cd programs && cargo fmt -- --check
+      - run: cd programs && cargo clippy -- -D warnings
+      - run: cd programs && anchor build
+      - run: cd programs && anchor test
