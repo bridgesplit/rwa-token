@@ -9,7 +9,7 @@ import {
 	getIdentityRegistryProgram,
 	getIdentityRegistryPda,
 } from "./utils";
-import { type AnchorProvider } from "@bridgesplit/anchor";
+import { type AnchorProvider } from "@coral-xyz/anchor";
 
 /** Represents arguments for creating an on identity registry on chain. */
 export type CreateIdentityRegistryArgs = {
