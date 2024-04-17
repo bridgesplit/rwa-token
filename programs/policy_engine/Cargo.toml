@@ -14,8 +14,10 @@ no-idl = []
 no-log-ix-name = []
 cpi = ["no-entrypoint"]
 default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 
 [dependencies]
-anchor-lang = { git = "https://git@github.com/bridgesplit/anchor" }
-anchor-spl = { git = "https://git@github.com/bridgesplit/anchor" }
+anchor-lang = { git = "https://github.com/abk-labs/anchor", branch = "bugfix/inline-variables-extensions-cpi" }
+anchor-spl = { git = "https://github.com/abk-labs/anchor", branch = "bugfix/inline-variables-extensions-cpi" }
 num_enum = "0.7.2"
+sha256 = "1.5.0"

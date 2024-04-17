@@ -19,29 +19,14 @@ pub const SKIP_POLICY_LEVEL: u8 = u8::MAX;
 
 impl IdentityRegistryAccount {
     pub const VERSION: u8 = 1;
-    pub fn new(
-        &mut self,
-        address: Pubkey,
-        asset_mint: Pubkey,
-        authority: Pubkey,
-        delegate: Option<Pubkey>,
-    ) {
+    pub fn new(&mut self, asset_mint: Pubkey, authority: Pubkey, delegate: Option<Pubkey>) {
         self.asset_mint = asset_mint;
         self.authority = authority;
-        self.delegate = delegate.unwrap_or(address);
+        self.delegate = delegate.unwrap_or(authority);
         self.version = Self::VERSION;
     }
     pub fn update_delegate(&mut self, delegate: Pubkey) {
         self.delegate = delegate;
-    }
-    pub fn verify_signer(&self, registry: Pubkey, signer: Pubkey, is_signer: bool) -> Result<()> {
-        if signer == registry && self.delegate == registry {
-            return Ok(());
-        }
-        if (signer == self.authority || signer == self.delegate) && is_signer {
-            return Ok(());
-        }
-        Err(IdentityRegistryErrors::UnauthorizedSigner.into())
     }
 }
 
@@ -55,7 +40,8 @@ pub struct IdentityAccount {
     /// owner of the identity account
     pub owner: Pubkey,
     // identity levels corresponding to the user
-    pub levels: [u8; 10],
+    #[max_len(1)] // initial length is 1
+    pub levels: Vec<u8>,
 }
 
 impl IdentityAccount {
@@ -64,31 +50,22 @@ impl IdentityAccount {
         self.identity_registry = identity_registry;
         self.owner = owner;
         self.version = Self::VERSION;
-        self.levels[0] = level;
+        self.levels = vec![level];
     }
 
     pub fn add_level(&mut self, level: u8) -> Result<()> {
-        // find and replace first 0, if not return error
-        for i in 0..self.levels.len() {
-            if self.levels[i] == 0 {
-                self.levels[i] = level;
-                return Ok(());
-            }
+        if self.levels.contains(&level) {
+            return Err(IdentityRegistryErrors::LevelAlreadyPresent.into());
         }
-        Err(IdentityRegistryErrors::MaxLevelsExceeded.into())
+        self.levels.push(level);
+        Ok(())
     }
 
     pub fn remove_level(&mut self, level: u8) -> Result<()> {
-        // find and replace first level, arrange to move all levels to the left
-        for i in 0..self.levels.len() {
-            if self.levels[i] == level {
-                for j in i..self.levels.len() - 1 {
-                    self.levels[j] = self.levels[j + 1];
-                }
-                self.levels[self.levels.len() - 1] = 0;
-                return Ok(());
-            }
+        if !self.levels.contains(&level) {
+            return Err(IdentityRegistryErrors::LevelNotFound.into());
         }
-        Err(IdentityRegistryErrors::LevelNotFound.into())
+        self.levels.retain(|&x| x != level);
+        Ok(())
     }
 }

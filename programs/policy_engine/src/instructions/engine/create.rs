@@ -28,13 +28,9 @@ pub fn handler(
     authority: Pubkey,
     delegate: Option<Pubkey>,
 ) -> Result<()> {
-    let registry_address = ctx.accounts.policy_engine.key();
-    ctx.accounts.policy_engine.new(
-        registry_address,
-        authority,
-        delegate,
-        ctx.accounts.asset_mint.key(),
-    );
+    ctx.accounts
+        .policy_engine
+        .new(authority, delegate, ctx.accounts.asset_mint.key());
 
     Ok(())
 }

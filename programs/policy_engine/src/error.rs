@@ -18,4 +18,6 @@ pub enum PolicyEngineErrors {
     IdentityFilterFailed,
     #[msg("Unauthorized signer")]
     UnauthorizedSigner,
+    #[msg("Policy already exists")]
+    PolicyAlreadyExists,
 }

@@ -25,19 +25,30 @@ pub mod policy_engine {
         instructions::engine::create::handler(ctx, authority, delegate)
     }
 
-    /// attach policies
-    /// attach a transaction count limit policy
-    pub fn attach_policy_account(
-        ctx: Context<AttachIdentityApproval>,
+    /// policies
+    /// create policy account
+    pub fn create_policy_account(
+        ctx: Context<CreatePolicyAccount>,
         identity_filter: IdentityFilter,
-        policy: Policy,
+        policy_type: PolicyType,
     ) -> Result<()> {
-        instructions::attach::handler(ctx, identity_filter, policy)
+        instructions::create::handler(ctx, identity_filter, policy_type)
+    }
+
+    /// attach a policy
+    pub fn attach_to_policy_account(
+        ctx: Context<AttachToPolicyAccount>,
+        identity_filter: IdentityFilter,
+        policy_type: PolicyType,
+    ) -> Result<()> {
+        instructions::attach::handler(ctx, identity_filter, policy_type)
     }
 
     /// remove policy
-    pub fn remove_policy(_ctx: Context<RemovePolicy>) -> Result<()> {
-        // policy account is closed, no further action required
-        Ok(())
+    pub fn detach_from_policy_account(
+        ctx: Context<DetachFromPolicyAccount>,
+        hash: String,
+    ) -> Result<()> {
+        instructions::detach::handler(ctx, hash)
     }
 }

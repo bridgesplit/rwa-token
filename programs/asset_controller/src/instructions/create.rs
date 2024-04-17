@@ -38,12 +38,12 @@ pub struct CreateAssetController<'info> {
         mint::freeze_authority = authority,
         extensions::transfer_hook::authority = asset_controller.key(),
         extensions::transfer_hook::program_id = crate::id(),
-        extensions::metadata_pointer::authority = asset_controller.key(),
-        extensions::metadata_pointer::metadata_address = asset_mint.key(),
         extensions::group_member_pointer::authority = asset_controller.key(),
         extensions::group_member_pointer::member_address = asset_mint.key(),
         extensions::group_pointer::authority = asset_controller.key(),
         extensions::group_pointer::group_address = asset_mint.key(),
+        extensions::metadata_pointer::authority = asset_controller.key(),
+        extensions::metadata_pointer::metadata_address = asset_mint.key(),
         extensions::permanent_delegate::delegate = asset_controller.key(),
     )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
@@ -84,14 +84,10 @@ impl<'info> CreateAssetController<'info> {
 }
 
 pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerArgs) -> Result<()> {
-    let delegate = match args.delegate {
-        Some(delegate) => delegate,
-        None => ctx.accounts.asset_controller.key(),
-    };
     ctx.accounts.asset_controller.new(
         ctx.accounts.asset_mint.key(),
         ctx.accounts.authority.key(),
-        delegate,
+        args.delegate,
     );
 
     // initialize the extra metas account

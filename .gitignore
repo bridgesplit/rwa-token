@@ -7,3 +7,5 @@ test-ledger
 .yarn
 dist
 .env
+yarn-error.log
+docs

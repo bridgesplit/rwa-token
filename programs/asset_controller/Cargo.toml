@@ -15,10 +15,11 @@ no-idl = []
 no-log-ix-name = []
 cpi = ["no-entrypoint"]
 default = []
+idl-build = ["anchor-lang/idl-build", "anchor-spl/idl-build"]
 
 [dependencies]
-anchor-lang = { git = "https://git@github.com/bridgesplit/anchor", features = ["interface-instructions", "init-if-needed"] }
-anchor-spl = { git = "https://git@github.com/bridgesplit/anchor", features = ["token_2022_extensions", "token_2022"] }
+anchor-lang = { git = "https://github.com/abk-labs/anchor", features = ["interface-instructions", "init-if-needed"], branch = "bugfix/inline-variables-extensions-cpi" }
+anchor-spl = { git = "https://github.com/abk-labs/anchor", features = ["token_2022_extensions", "token_2022"], branch = "bugfix/inline-variables-extensions-cpi" }
 spl-transfer-hook-interface = { version = "0.5.0" }
 spl-tlv-account-resolution = "0.4.0"
 policy_engine = { path = "../policy_engine", features = ["cpi"] }

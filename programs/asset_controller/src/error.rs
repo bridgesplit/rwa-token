@@ -10,8 +10,6 @@ pub enum AssetControllerErrors {
     TransferToNotApproved,
     #[msg("Transfer hasnt been approved for the specified amount")]
     TransferAmountNotApproved,
-    #[msg("All policy accounts must be sent in the instruction")]
-    PolicyAccountsMissing,
     #[msg("Invalid policy account passed")]
     InvalidPolicyAccount,
     #[msg("Invalid slot for approve account")]
