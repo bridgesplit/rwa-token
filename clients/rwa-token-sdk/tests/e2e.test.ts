@@ -22,7 +22,7 @@ import { expect, test, describe } from "vitest";
 import { type Config } from "../src/classes/types";
 import { RwaClient } from "../src/classes";
 
-describe("e2e class tests", () => {
+describe("e2e tests", () => {
 	let rwaClient: RwaClient;
 	let mint: string;
 	const setup = setupTests();
