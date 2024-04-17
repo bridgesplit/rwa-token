@@ -1,8 +1,8 @@
 import { type Config } from "./types";
-import { AssetController } from "./assetcontroller";
-import { IdentityRegistry } from "./identityregistry";
-import { PolicyEngine } from "./policyengine";
-import { DataRegistry } from "./dataregistry";
+import { AssetController } from "./AssetController";
+import { IdentityRegistry } from "./IdentityRegistry";
+import { PolicyEngine } from "./PolicyEngine";
+import { DataRegistry } from "./DataRegistry";
 import { AnchorProvider } from "@coral-xyz/anchor";
 import { Transaction, VersionedTransaction, PublicKey } from "@solana/web3.js";
 
