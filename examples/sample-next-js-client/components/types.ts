@@ -90,7 +90,7 @@ identity registry:  GZfxE9phybhF2jDA3BYDMDZAsFayhgcZFWyNaT8tY5be
  * identity registry:  ALonpXmFvkoEuNyQ4CF9wyv1aBJjg1u26yaFqphunz3s
  */
 
-interface AssetColsntrollerAccount {
+interface AssetControllerAccount {
   address: string;
   mint: string;
   authority: string;
