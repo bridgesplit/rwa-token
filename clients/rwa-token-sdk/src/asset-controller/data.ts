@@ -1,9 +1,9 @@
-import {type AnchorProvider} from "@bridgesplit/anchor";
-import {type AssetControllerAccount, type TrackerAccount} from "./types";
+import { type AnchorProvider } from "@bridgesplit/anchor";
+import { type AssetControllerAccount, type TrackerAccount } from "./types";
 import {
-	getAssetControllerPda,
-	getAssetControllerProgram,
-	getTrackerAccountPda,
+  getAssetControllerPda,
+  getAssetControllerProgram,
+  getTrackerAccountPda,
 } from "./utils";
 
 /**
@@ -12,15 +12,15 @@ import {
  * @returns A promise resolving to the fetched asset controller account, or `undefined` if it doesn't exist.
  */
 export async function getAssetControllerAccount(
-	assetMint: string,
-	provider: AnchorProvider,
+  assetMint: string,
+  provider: AnchorProvider
 ): Promise<AssetControllerAccount | undefined> {
-	const assetProgram = getAssetControllerProgram(provider);
-	const assetControllerPda = getAssetControllerPda(assetMint);
-	return assetProgram.account.assetControllerAccount
-		.fetch(assetControllerPda)
-		.then(account => account)
-		.catch(() => undefined);
+  const assetProgram = getAssetControllerProgram(provider);
+  const assetControllerPda = getAssetControllerPda(assetMint);
+  return assetProgram.account.assetControllerAccount
+    .fetch(assetControllerPda)
+    .then((account) => account)
+    .catch(() => undefined);
 }
 
 /**
@@ -30,14 +30,14 @@ export async function getAssetControllerAccount(
  * @returns A promise resolving to the fetched tracker account, or `undefined` if it doesn't exist.
  */
 export async function getTrackerAccount(
-	assetMint: string,
-	owner: string,
-	provider: AnchorProvider,
+  assetMint: string,
+  owner: string,
+  provider: AnchorProvider
 ): Promise<TrackerAccount | undefined> {
-	const assetProgram = getAssetControllerProgram(provider);
-	const trackerPda = getTrackerAccountPda(assetMint, owner);
-	return assetProgram.account.trackerAccount
-		.fetch(trackerPda)
-		.then(account => account)
-		.catch(() => undefined);
+  const assetProgram = getAssetControllerProgram(provider);
+  const trackerPda = getTrackerAccountPda(assetMint, owner);
+  return assetProgram.account.trackerAccount
+    .fetch(trackerPda)
+    .then((account) => account)
+    .catch(() => undefined);
 }

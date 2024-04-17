@@ -7,7 +7,7 @@ import { AnchorProvider } from "@bridgesplit/anchor";
 import { Transaction, VersionedTransaction, PublicKey } from "@solana/web3.js";
 
 /**
- * Copy of Anchor due to version mismatch.
+ * Copy of Anchor Wallet due to version typing mismatch.
  */
 export interface Wallet {
   signTransaction<T extends Transaction | VersionedTransaction>(
