@@ -23,7 +23,7 @@ export interface Wallet {
  * Represents a client for interacting with Real World Assets (RWA).
  */
 export class RwaClient {
-	/**
+	/**s
    * Configuration for the RWA client.
    */
 	config: Config;
