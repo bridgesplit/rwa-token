@@ -7,6 +7,7 @@ export const ComponentTypes = {
   TRANSACTION_AMOUNT_LIMIT: "TRANSACTION_AMOUNT_LIMIT",
   TRANSACTION_AMOUNT_VELOCITY: "TRANSACTION_AMOUNT_VELOCITY",
   TRANSACTION_COUNT_VELOCITY: "TRANSACTION_COUNT_VELOCITY",
+  CREATE_IDENTITY_ACCOUNT: "CREATE_IDENTITY_ACCOUNT",
 };
 
 const TRANSACTION_AMOUNT_LIMIT_ARGS = {
@@ -51,6 +52,9 @@ function DynamicComponent({
   };
 
   switch (type) {
+    case ComponentTypes.CREATE_IDENTITY_ACCOUNT:
+      componentToRender = <IdentityApproval onSubmit={sendPolicyToParent} />;
+      break;
     case ComponentTypes.IDENTITY_APPROVAL:
       componentToRender = <IdentityApproval onSubmit={sendPolicyToParent} />;
       break;

@@ -40,7 +40,6 @@ export const SampleHeliusRPCCalls = () => {
 
   const getRwaAccountByMint = async () => {
     const url = "http://localhost:9090";
-
     const body = {
       jsonrpc: "2.0",
       id: "0",

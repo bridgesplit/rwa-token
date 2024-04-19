@@ -11,10 +11,10 @@ import {
 import DynamicComponent from "./policyEnum";
 import { BN } from "@coral-xyz/anchor";
 import JSONPretty from "react-json-pretty";
-import { handleMessage } from "./policySdkFunctions";
 import { useAnchorWallet } from "@solana/wallet-adapter-react";
 import { IdentityFilterForm } from "./policyComponents/identityFilter";
 import { toast } from "react-toastify";
+import { handleMessage } from "./policySdkFunctions";
 
 interface Action {
   message: string;
@@ -46,6 +46,22 @@ export const PolicyEngine = () => {
   ); // Default to the first action
 
   const actions: Action[] = [
+    {
+      message: "CREATE_IDENTITY_ACCOUNT",
+      args: {
+        authority: "",
+        owner: "",
+        assetMint: "",
+        payer: "",
+        identityFilter: {
+          identityLevels: [1],
+          comparisionType: { or: {} },
+        },
+        policyType: {
+          identityApproval: {},
+        },
+      },
+    },
     {
       message: "IDENTITY_APPROVAL",
       args: {
@@ -136,11 +152,14 @@ export const PolicyEngine = () => {
     });
   };
 
-  const handleSubmit = async (args: AttachPolicyArgs | null) => {
+  const handleSubmit = async (args: AttachPolicyArgs) => {
     const hasEmptyArg = Object.values(args!).some((value) => value === "");
     if (!hasEmptyArg && args) {
       console.log(args, "these are the ag");
-      handleMessage(args, rwaClient as RwaClient);
+      handleMessage(
+        { message: selectedAction?.message, inputValues: args },
+        rwaClient as RwaClient
+      );
     } else {
       toast.error("Missing args, please try again.");
       console.error(

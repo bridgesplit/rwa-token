@@ -11,10 +11,13 @@ function SetupUser({ message, args, onSubmit }: SetUpUserProps) {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    const parsedValue = name === "level" ? parseFloat(value) : value;
+
     setSetupArgs((prev) => {
-      return { ...prev, [name]: value }; // Use square brackets to interpolate the name variable
+      return { ...prev, [name]: parsedValue };
     });
-    onSubmit(name, value);
+    onSubmit(name, parsedValue);
   };
   return (
     <div>

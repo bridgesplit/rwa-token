@@ -40,14 +40,23 @@ async function handleSetupDataAccount(
   inputValues: CreateDataAccountArgs,
   rwaClient: RwaClient
 ): Promise<void> {
-  console.log("running setup");
+  console.log("running setup", inputValues);
+
   const setupIx = await rwaClient?.dataRegistry.setupDataAccount(inputValues);
+
+  console.log(
+    setupIx,
+    "the instrucitons",
+    rwaClient.provider.wallet,
+    rwaClient.provider.connection
+  );
   try {
     const confirmed = await sendV0SolanaTransaction(
       rwaClient.provider.wallet,
       rwaClient.provider.connection,
       setupIx.ixs,
-      0
+      0,
+      setupIx.signers
     );
     if (confirmed) {
       console.log("Transaction confirmed:", confirmed);

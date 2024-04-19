@@ -27,7 +27,7 @@ export type DataRegistryArgs =
 export const DataRegistry = () => {
   const { rwaClient } = useRwaClient();
 
-  const actions = [
+  const actions: Action<DataRegistryArgs>[] = [
     {
       message: "SetupDataAccount",
       args: {

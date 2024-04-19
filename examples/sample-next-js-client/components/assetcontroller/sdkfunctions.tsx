@@ -76,9 +76,6 @@ async function handleSetupAssetController(
     toast.success(
       "Succesfully confirmed transaction. See console for asset data."
     );
-    toast.success(
-      "Note down mint: 5UHJGmFVh2yThuGjFtA8w8zN46x7ByrPipqsVynuTokF"
-    );
   } catch (error) {
     console.error("Error occurred while sending transaction:", error);
     toast.error(
