@@ -14,6 +14,7 @@ pub struct TrackerAccount {
     // owner of the policy account
     pub owner: Pubkey,
     // transfer amounts
+    // this ia not a realloc field because we dont have a mutable account during transfers to transfer the required amount
     #[max_len(MAX_TRANSFER_HISTORY)] // 25 is the max number of transfers we want to store
     pub transfers: Vec<Transfer>,
 }
@@ -32,6 +33,10 @@ impl TrackerAccount {
         timestamp: i64,
         max_timeframe: i64,
     ) -> Result<()> {
+        if max_timeframe == 0 {
+            // if max_timeframe is 0, we dont need to track any history
+            return Ok(());
+        }
         let min_timestamp = timestamp - max_timeframe;
         self.transfers
             .retain(|transfer| transfer.timestamp >= min_timestamp);
