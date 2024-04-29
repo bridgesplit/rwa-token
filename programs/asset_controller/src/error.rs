@@ -18,4 +18,6 @@ pub enum AssetControllerErrors {
     TransferHistoryFull,
     #[msg("Unauthorized")]
     Unauthorized,
+    #[msg("Pda passed in for transfer is wrong")]
+    InvalidPdaPassedIn,
 }
