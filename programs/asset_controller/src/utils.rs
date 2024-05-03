@@ -7,7 +7,7 @@ use spl_tlv_account_resolution::{
     account::ExtraAccountMeta, seeds::Seed, state::ExtraAccountMetaList,
 };
 
-use crate::{id, AccountInfo, Rent, SolanaSysvar};
+use crate::{id, AccountInfo, AssetControllerErrors, Rent, SolanaSysvar};
 
 pub fn get_meta_list_size() -> Result<usize> {
     Ok(ExtraAccountMetaList::size_of(get_extra_account_metas()?.len()).unwrap())
@@ -71,6 +71,14 @@ pub fn update_account_lamports_to_minimum_balance<'info>(
             &transfer(payer.key, account.key, extra_lamports),
             &[payer, account, system_program],
         )?;
+    }
+    Ok(())
+}
+
+pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Result<()> {
+    let (pda, _) = Pubkey::find_program_address(seeds, program_id);
+    if pda != address {
+        return Err(AssetControllerErrors::InvalidPdaPassedIn.into());
     }
     Ok(())
 }
