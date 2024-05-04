@@ -59,11 +59,15 @@ pub struct ExecuteTransferHook<'info> {
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     let asset_mint = ctx.accounts.asset_mint.key();
 
+    msg!("verifying policy engine  account pda");
+
     verify_pda(
         ctx.accounts.policy_engine_account.key(),
         &[&asset_mint.to_bytes()],
         &policy_engine::id(),
     )?;
+
+    msg!("verifying policy account pda");
 
     verify_pda(
         ctx.accounts.policy_account.key(),
@@ -88,12 +92,16 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         return Ok(());
     }
 
+    msg!("verifying identity registry account pda");
+
     // user must have identity account setup if there are policies attached
     verify_pda(
         ctx.accounts.identity_registry_account.key(),
         &[&asset_mint.to_bytes()],
         &identity_registry::id(),
     )?;
+
+    msg!("verifying identity account pda");
     verify_pda(
         ctx.accounts.identity_account.key(),
         &[
@@ -106,6 +114,8 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     let identity_account = IdentityAccount::deserialize(
         &mut &ctx.accounts.identity_registry_account.data.borrow_mut()[8..],
     )?;
+
+    msg!("enforcing policy");
 
     // if user has identity skip level, skip enforcing policy
     if identity_account.levels.contains(&SKIP_POLICY_LEVEL) {
