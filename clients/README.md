@@ -52,7 +52,7 @@ const SetupAssetControllerArgs = {
 	*/
 };
 
-const setupIx = await rwaClient.assetController.setUpNewRegistry(
+const setupIx = await rwaClient.assetController.setupNewRegistry(
   SetupAssetControllerArgs
 );
 const txnId = await sendAndConfirmTransaction(
