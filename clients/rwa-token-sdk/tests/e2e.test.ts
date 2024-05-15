@@ -22,10 +22,10 @@ import { expect, test, describe } from "vitest";
 import { type Config } from "../src/classes/types";
 import { RwaClient } from "../src/classes";
 
-describe("e2e tests", () => {
+describe("e2e tests", async () => {
 	let rwaClient: RwaClient;
 	let mint: string;
-	const setup = setupTests();
+	const setup = await setupTests();
 
 	const decimals = 2;
 	const remainingAccounts: string[] = [];
@@ -137,7 +137,6 @@ describe("e2e tests", () => {
 	test("create identity approval policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			authority: setup.authority.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			payer: setup.payer.toString(),
 			identityFilter: {
@@ -162,7 +161,6 @@ describe("e2e tests", () => {
 	test("attach transaction amount limit policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
@@ -188,7 +186,6 @@ describe("e2e tests", () => {
 	test("attach transaction amount velocity policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
@@ -214,7 +211,6 @@ describe("e2e tests", () => {
 	test("attach transaction count velocity policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {

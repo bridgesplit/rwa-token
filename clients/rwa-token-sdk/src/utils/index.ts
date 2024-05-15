@@ -1,6 +1,6 @@
 import { AnchorProvider } from "@coral-xyz/anchor";
 import {
-	Connection, type Keypair, PublicKey, type TransactionInstruction,
+	Connection, type Keypair, type TransactionInstruction,
 } from "@solana/web3.js";
 
 /** Retrieves the provider used for interacting with the Solana blockchain.
@@ -20,23 +20,6 @@ export type IxReturn = {
 	ixs: TransactionInstruction[];
 	signers: Keypair[];
 };
-
-/**
- * Parses remaining accounts received from a transaction instruction.
- * @param remainingAccounts - An optional array of strings representing account public keys.
- * @returns An array of parsed account objects.
- */
-export function parseRemainingAccounts(remainingAccounts?: string[]) {
-	if (!remainingAccounts) {
-		return [];
-	}
-
-	return remainingAccounts.map(account => ({
-		pubkey: new PublicKey(account),
-		isWritable: false,
-		isSigner: false,
-	}));
-}
 
 /** Common args for all RWA instructions */
 export type CommonArgs = {
