@@ -94,7 +94,7 @@ export async function getAttachToPolicyAccountIx(
 
 
 /**
- * Generate instructions to detac an identity policy account to an asset.
+ * Generate instructions to detach an identity policy account to an asset.
  *
  * This function constructs an instruction to attach a policy account to an asset
  * using the provided arguments. It creates a new policy account, calls the policy
