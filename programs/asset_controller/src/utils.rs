@@ -1,8 +1,10 @@
 use anchor_lang::{
     prelude::Result,
     solana_program::{
-        program::invoke, pubkey::Pubkey, system_instruction::transfer,
-        sysvar::instructions::get_instruction_relative,
+        program::invoke,
+        pubkey::Pubkey,
+        system_instruction::transfer,
+        sysvar::{self, instructions::get_instruction_relative},
     },
     Lamports,
 };
@@ -57,6 +59,8 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
             false,
             false,
         )?,
+        // instructions program
+        ExtraAccountMeta::new_with_pubkey(&sysvar::instructions::id(), false, false)?,
     ])
 }
 
@@ -96,8 +100,7 @@ pub fn verify_cpi_program_is_token22(
     if ix_relative.program_id != token_2022::ID {
         return Err(AssetControllerErrors::InvalidCpiTransferProgram.into());
     }
-
-    if ix_relative.data != amount.to_le_bytes() {
+    if ix_relative.data[1..9] != amount.to_le_bytes() {
         return Err(AssetControllerErrors::InvalidCpiTransferAmount.into());
     }
 

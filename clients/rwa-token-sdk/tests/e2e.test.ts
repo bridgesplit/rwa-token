@@ -29,7 +29,6 @@ describe("e2e tests", async () => {
 	const setup = await setupTests();
 
 	const decimals = 2;
-	const remainingAccounts: string[] = [];
 	let dataAccount: string;
 
 	test("setup provider", async () => {
@@ -309,7 +308,7 @@ describe("e2e tests", async () => {
 	test("update data account", async () => {
 		const updateDataAccountArgs: UpdateDataAccountArgs = {
 			dataAccount,
-			name: "Example Token Updatse",
+			name: "Example Token Updates",
 			uri: "newUri",
 			type: { tax: {} },
 			payer: setup.payer.toString(),
@@ -336,7 +335,6 @@ describe("e2e tests", async () => {
 			to: setup.authority.toString(),
 			assetMint: mint,
 			amount: 2000,
-			remainingAccounts,
 			decimals,
 		};
 

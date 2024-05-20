@@ -23,13 +23,14 @@ pub struct PolicyAccount {
     /// Engine account that the policy belongs to
     pub policy_engine: Pubkey,
     /// Different policies that can be applied to the policy account
-    #[max_len(3)] // initial max_len. There is an issue with policy account deserialization for any initial length < 3. TODO: investigate and fix
+    #[max_len(1)]
+    /// initial max len
     pub policies: Vec<Policy>,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct Policy {
-    #[max_len(32)]
+    #[max_len(64)]
     pub hash: String,
     pub identity_filter: IdentityFilter,
     pub policy_type: PolicyType,

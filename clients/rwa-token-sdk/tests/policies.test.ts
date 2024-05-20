@@ -33,25 +33,6 @@ describe("test policy setup", async () => {
 		};
 
 		rwaClient = new RwaClient(config, new Wallet(setup.payerKp));
-
-		await rwaClient.provider.connection.confirmTransaction(
-			await rwaClient.provider.connection.requestAirdrop(
-				setup.payerKp.publicKey,
-				1000000000
-			)
-		);
-		await rwaClient.provider.connection.confirmTransaction(
-			await rwaClient.provider.connection.requestAirdrop(
-				setup.authorityKp.publicKey,
-				1000000000
-			)
-		);
-		await rwaClient.provider.connection.confirmTransaction(
-			await rwaClient.provider.connection.requestAirdrop(
-				setup.delegateKp.publicKey,
-				1000000000
-			)
-		);
 	});
 
 	test("setup registries", async () => {
