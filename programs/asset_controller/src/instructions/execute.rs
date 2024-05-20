@@ -1,12 +1,20 @@
+<<<<<<< macha/update_tests
+use anchor_lang::prelude::*;
+=======
 use anchor_lang::{
     prelude::*,
     solana_program::sysvar::{self},
 };
+>>>>>>> macha/security-fixes
 use anchor_spl::token_interface::{Mint, TokenAccount};
 use identity_registry::{program::IdentityRegistry, IdentityAccount, SKIP_POLICY_LEVEL};
 use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
 
+<<<<<<< macha/update_tests
+use crate::{state::*, verify_pda};
+=======
 use crate::{state::*, verify_cpi_program_is_token22, verify_pda};
+>>>>>>> macha/security-fixes
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
@@ -57,6 +65,14 @@ pub struct ExecuteTransferHook<'info> {
     #[account()]
     /// CHECK: internal ix checks
     pub policy_account: UncheckedAccount<'info>,
+<<<<<<< macha/update_tests
+}
+
+pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
+    let asset_mint = ctx.accounts.asset_mint.key();
+
+    msg!("verifying policy engine  account pda");
+=======
     #[account(constraint = instructions_program.key() == sysvar::instructions::id())]
     /// CHECK: constraint check
     pub instructions_program: UncheckedAccount<'info>,
@@ -66,6 +82,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     verify_cpi_program_is_token22(&ctx.accounts.instructions_program.to_account_info(), amount)?;
 
     let asset_mint = ctx.accounts.asset_mint.key();
+>>>>>>> macha/security-fixes
 
     verify_pda(
         ctx.accounts.policy_engine_account.key(),
@@ -73,6 +90,11 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &policy_engine::id(),
     )?;
 
+<<<<<<< macha/update_tests
+    msg!("verifying policy account pda");
+
+=======
+>>>>>>> macha/security-fixes
     verify_pda(
         ctx.accounts.policy_account.key(),
         &[&ctx.accounts.policy_engine_account.key().to_bytes()],
@@ -84,6 +106,14 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         return Ok(());
     }
 
+<<<<<<< macha/update_tests
+    let policy_engine_account = PolicyEngineAccount::deserialize(
+        &mut &ctx.accounts.policy_engine_account.data.borrow_mut()[8..],
+    )?;
+
+    let policy_account =
+        PolicyAccount::deserialize(&mut &ctx.accounts.policy_account.data.borrow_mut()[8..])?;
+=======
     let policy_engine_account = Box::new(PolicyEngineAccount::deserialize(
         &mut &ctx.accounts.policy_engine_account.data.borrow_mut()[8..],
     )?);
@@ -91,18 +121,29 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     let policy_account = Box::new(PolicyAccount::deserialize(
         &mut &ctx.accounts.policy_account.data.borrow_mut()[8..],
     )?);
+>>>>>>> macha/security-fixes
 
     // go through with transfer if there aren't any policies attached
     if policy_account.policies.is_empty() {
         return Ok(());
     }
 
+<<<<<<< macha/update_tests
+    msg!("verifying identity registry account pda");
+
+=======
+>>>>>>> macha/security-fixes
     // user must have identity account setup if there are policies attached
     verify_pda(
         ctx.accounts.identity_registry_account.key(),
         &[&asset_mint.to_bytes()],
         &identity_registry::id(),
     )?;
+<<<<<<< macha/update_tests
+
+    msg!("verifying identity account pda");
+=======
+>>>>>>> macha/security-fixes
     verify_pda(
         ctx.accounts.identity_account.key(),
         &[
@@ -112,9 +153,17 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &identity_registry::id(),
     )?;
 
+<<<<<<< macha/update_tests
+    let identity_account = IdentityAccount::deserialize(
+        &mut &ctx.accounts.identity_registry_account.data.borrow_mut()[8..],
+    )?;
+
+    msg!("enforcing policy");
+=======
     let identity_account = Box::new(IdentityAccount::deserialize(
         &mut &ctx.accounts.identity_registry_account.data.borrow_mut()[8..],
     )?);
+>>>>>>> macha/security-fixes
 
     // if user has identity skip level, skip enforcing policy
     if identity_account.levels.contains(&SKIP_POLICY_LEVEL) {

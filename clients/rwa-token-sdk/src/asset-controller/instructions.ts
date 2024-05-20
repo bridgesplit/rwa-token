@@ -24,7 +24,6 @@ import {
 import {
 	type CommonArgs,
 	type IxReturn,
-	parseRemainingAccounts,
 } from "../utils";
 import {
 	ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -150,10 +149,7 @@ export type TransferTokensArgs = {
   from: string;
   to: string;
   amount: number;
-  authority: string;
   decimals: number;
-  /** Optional parameter for transfer controls (policies) and privacy (identity). */
-  remainingAccounts?: string[];
 } & CommonArgs;
 
 /**
@@ -216,7 +212,6 @@ export async function getTransferTokensIx(
 			isSigner: false,
 		},
 	];
-	remainingAccounts.push(...parseRemainingAccounts(args.remainingAccounts));
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),

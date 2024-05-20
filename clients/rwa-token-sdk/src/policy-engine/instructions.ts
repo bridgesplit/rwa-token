@@ -45,7 +45,6 @@ export async function getCreatePolicyEngineIx(
 /** Represents the arguments required to attach a policy to an asset. */
 export type AttachPolicyArgs = {
   authority: string;
-  owner: string;
   assetMint: string;
   payer: string;
   identityFilter: IdentityFilter;
