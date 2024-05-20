@@ -7,7 +7,7 @@ on:
       - 'staging'
 jobs:
   setup-tests:
-    runs-on: ubicloud-standard-8
+    runs-on: ubicloud-standard-16
     steps:
       - id: cache-cli-deps
         uses: actions/cache@v2
@@ -30,8 +30,8 @@ jobs:
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
         run: cargo install --git https://github.com/bridgesplit/anchor anchor-cli --locked
 
-  build:
-    runs-on: ubicloud-standard-8
+  run-tests:
+    runs-on: ubicloud-standard-16
     needs: [setup-tests]
     steps:
       - id: cache-cli-deps
