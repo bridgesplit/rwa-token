@@ -63,7 +63,7 @@ pub fn handler(ctx: Context<DetachFromPolicyAccount>, hash: String) -> Result<()
                 }
             }
         }
+        ctx.accounts.policy_engine.max_timeframe = max_timeframe;
     }
-    ctx.accounts.policy_engine.max_timeframe = max_timeframe;
     Ok(())
 }

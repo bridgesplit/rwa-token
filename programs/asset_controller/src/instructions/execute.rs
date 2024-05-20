@@ -1,9 +1,12 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{
+    prelude::*,
+    solana_program::sysvar::{self},
+};
 use anchor_spl::token_interface::{Mint, TokenAccount};
 use identity_registry::{program::IdentityRegistry, IdentityAccount, SKIP_POLICY_LEVEL};
 use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
 
-use crate::{state::*, verify_pda};
+use crate::{state::*, verify_cpi_program_is_token22, verify_pda};
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
@@ -54,9 +57,14 @@ pub struct ExecuteTransferHook<'info> {
     #[account()]
     /// CHECK: internal ix checks
     pub policy_account: UncheckedAccount<'info>,
+    #[account(constraint = instructions_program.key() == sysvar::instructions::id())]
+    /// CHECK: constraint check
+    pub instructions_program: UncheckedAccount<'info>,
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
+    verify_cpi_program_is_token22(&ctx.accounts.instructions_program.to_account_info(), amount)?;
+
     let asset_mint = ctx.accounts.asset_mint.key();
 
     verify_pda(
@@ -76,12 +84,13 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         return Ok(());
     }
 
-    let policy_engine_account = PolicyEngineAccount::deserialize(
+    let policy_engine_account = Box::new(PolicyEngineAccount::deserialize(
         &mut &ctx.accounts.policy_engine_account.data.borrow_mut()[8..],
-    )?;
+    )?);
 
-    let policy_account =
-        PolicyAccount::deserialize(&mut &ctx.accounts.policy_account.data.borrow_mut()[8..])?;
+    let policy_account = Box::new(PolicyAccount::deserialize(
+        &mut &ctx.accounts.policy_account.data.borrow_mut()[8..],
+    )?);
 
     // go through with transfer if there aren't any policies attached
     if policy_account.policies.is_empty() {
@@ -103,9 +112,9 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &identity_registry::id(),
     )?;
 
-    let identity_account = IdentityAccount::deserialize(
+    let identity_account = Box::new(IdentityAccount::deserialize(
         &mut &ctx.accounts.identity_registry_account.data.borrow_mut()[8..],
-    )?;
+    )?);
 
     // if user has identity skip level, skip enforcing policy
     if identity_account.levels.contains(&SKIP_POLICY_LEVEL) {

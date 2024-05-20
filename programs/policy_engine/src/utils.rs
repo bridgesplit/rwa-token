@@ -60,6 +60,7 @@ pub struct Transfer {
 }
 
 /// enforces different types of policies
+#[inline(never)]
 pub fn enforce_policy(
     policies: Vec<Policy>,
     amount: u64,

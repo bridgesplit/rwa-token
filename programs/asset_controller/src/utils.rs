@@ -1,8 +1,12 @@
 use anchor_lang::{
     prelude::Result,
-    solana_program::{program::invoke, pubkey::Pubkey, system_instruction::transfer},
+    solana_program::{
+        program::invoke, pubkey::Pubkey, system_instruction::transfer,
+        sysvar::instructions::get_instruction_relative,
+    },
     Lamports,
 };
+use anchor_spl::token_2022;
 use spl_tlv_account_resolution::{
     account::ExtraAccountMeta, seeds::Seed, state::ExtraAccountMetaList,
 };
@@ -75,10 +79,27 @@ pub fn update_account_lamports_to_minimum_balance<'info>(
     Ok(())
 }
 
+#[inline(never)]
 pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Result<()> {
     let (pda, _) = Pubkey::find_program_address(seeds, program_id);
     if pda != address {
         return Err(AssetControllerErrors::InvalidPdaPassedIn.into());
     }
+    Ok(())
+}
+
+pub fn verify_cpi_program_is_token22(
+    instructions_program: &AccountInfo,
+    amount: u64,
+) -> Result<()> {
+    let ix_relative = get_instruction_relative(0, instructions_program)?;
+    if ix_relative.program_id != token_2022::ID {
+        return Err(AssetControllerErrors::InvalidCpiTransferProgram.into());
+    }
+
+    if ix_relative.data != amount.to_le_bytes() {
+        return Err(AssetControllerErrors::InvalidCpiTransferAmount.into());
+    }
+
     Ok(())
 }
