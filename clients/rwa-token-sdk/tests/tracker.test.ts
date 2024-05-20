@@ -228,7 +228,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			rwaClient.provider.connection,
 			new Transaction().add(transferIx),
 			[setup.payerKp, setup.user1Kp]
-		)).rejects.toThrowErrorMatchingInlineSnapshot("failed ({\"err\":{\"InstructionError\":[0,{\"Custom\":6006}]}})");
+		)).rejects.toThrowError(/failed \(\{"err":\{"InstructionError":\[0,\{"Custom":6006\}\]\}\}\)/);
 	});
 
 });
