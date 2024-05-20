@@ -87,6 +87,10 @@ export type DataRegistry = {
           "signer": true
         },
         {
+          "name": "signer",
+          "signer": true
+        },
+        {
           "name": "assetMint"
         },
         {

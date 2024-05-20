@@ -1,7 +1,8 @@
 import { BN, Wallet } from "@coral-xyz/anchor";
 import {
 	type AttachPolicyArgs,
-	type CreateDataAccountArgs,
+	CreateDataAccountArgs,
+	getPolicyAccount,
 	getPolicyAccountPda,
 	getTrackerAccount,
 	getTrackerAccountPda,
@@ -22,13 +23,12 @@ import { expect, test, describe } from "vitest";
 import { type Config } from "../src/classes/types";
 import { RwaClient } from "../src/classes";
 
-describe("e2e tests", () => {
+describe("e2e tests", async () => {
 	let rwaClient: RwaClient;
 	let mint: string;
-	const setup = setupTests();
+	const setup = await setupTests();
 
 	const decimals = 2;
-	const remainingAccounts: string[] = [];
 	let dataAccount: string;
 
 	test("setup provider", async () => {
@@ -48,25 +48,6 @@ describe("e2e tests", () => {
 		};
 
 		rwaClient = new RwaClient(config, new Wallet(setup.payerKp));
-
-		await rwaClient.provider.connection.confirmTransaction(
-			await rwaClient.provider.connection.requestAirdrop(
-				setup.payerKp.publicKey,
-				1000000000
-			)
-		);
-		await rwaClient.provider.connection.confirmTransaction(
-			await rwaClient.provider.connection.requestAirdrop(
-				setup.authorityKp.publicKey,
-				1000000000
-			)
-		);
-		await rwaClient.provider.connection.confirmTransaction(
-			await rwaClient.provider.connection.requestAirdrop(
-				setup.delegateKp.publicKey,
-				1000000000
-			)
-		);
 	});
 
 	test("initalize asset controller", async () => {
@@ -137,7 +118,6 @@ describe("e2e tests", () => {
 	test("create identity approval policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			authority: setup.authority.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			payer: setup.payer.toString(),
 			identityFilter: {
@@ -162,7 +142,6 @@ describe("e2e tests", () => {
 	test("attach transaction amount limit policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
@@ -188,7 +167,6 @@ describe("e2e tests", () => {
 	test("attach transaction amount velocity policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
@@ -214,7 +192,6 @@ describe("e2e tests", () => {
 	test("attach transaction count velocity policy", async () => {
 		const policyArgs: AttachPolicyArgs = {
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
@@ -312,7 +289,7 @@ describe("e2e tests", () => {
 	test("update data account", async () => {
 		const updateDataAccountArgs: UpdateDataAccountArgs = {
 			dataAccount,
-			name: "Example Token Updatse",
+			name: "Example Token Updates",
 			uri: "newUri",
 			type: { tax: {} },
 			payer: setup.payer.toString(),
@@ -321,8 +298,7 @@ describe("e2e tests", () => {
 			authority: setup.authority.toString(),
 			signer: setup.authority.toString(),
 		};
-		const updateDataIx =
-      await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
+		const updateDataIx = await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(updateDataIx),
@@ -340,7 +316,6 @@ describe("e2e tests", () => {
 			to: setup.authority.toString(),
 			assetMint: mint,
 			amount: 2000,
-			remainingAccounts,
 			decimals,
 		};
 
@@ -351,5 +326,28 @@ describe("e2e tests", () => {
 			[setup.payerKp]
 		);
 		expect(txnId).toBeTruthy();
+	});
+
+	test("detach all policies", async () => {
+		let policyAccount = await getPolicyAccount(mint, rwaClient.provider);
+
+		for (const policy of policyAccount?.policies ?? []) {
+			const policyIx = await rwaClient.policyEngine.detachPolicy({
+				authority: setup.authority.toString(),
+				owner: setup.authority.toString(),
+				assetMint: mint,
+				payer: setup.payer.toString(),
+				hash: policy.hash,
+			});
+			const txnId = await sendAndConfirmTransaction(
+				rwaClient.provider.connection,
+				new Transaction().add(...policyIx.ixs),
+				[setup.payerKp, setup.authorityKp]
+			);
+			expect(txnId).toBeTruthy();
+		}
+		policyAccount = await getPolicyAccount(mint, rwaClient.provider);
+
+		expect(policyAccount?.policies.length).toBe(0);
 	});
 });

@@ -27,6 +27,7 @@ impl TrackerAccount {
         self.owner = owner;
     }
     /// for all timestamps, if timestamp is older than timestamp - max_timeframe. remove it,
+    #[inline(never)]
     pub fn update_transfer_history(
         &mut self,
         amount: u64,

@@ -12,6 +12,7 @@ import { type AnchorProvider } from "@coral-xyz/anchor";
 /** Represents arguments for creating an on chain data registry to store data accounts. */
 export type CreateDataRegistryArgs = {
   authority: string;
+  signer: string;
 } & CommonArgs;
 
 /**
@@ -31,6 +32,7 @@ export async function getCreateDataRegistryIx(
 		)
 		.accountsStrict({
 			payer: args.payer,
+			signer: args.signer,
 			assetMint: args.assetMint,
 			dataRegistry: getDataRegistryPda(args.assetMint),
 			systemProgram: SystemProgram.programId,

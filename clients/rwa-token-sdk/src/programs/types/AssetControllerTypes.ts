@@ -43,7 +43,93 @@ export type AssetController = {
         },
         {
           "name": "tokenAccount",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  215,
+                  101,
+                  161,
+                  147,
+                  217,
+                  203,
+                  225,
+                  70,
+                  206,
+                  235,
+                  121,
+                  172,
+                  28,
+                  180,
+                  133,
+                  237,
+                  95,
+                  91,
+                  55,
+                  145,
+                  58,
+                  140,
+                  245,
+                  133,
+                  126,
+                  255,
+                  0,
+                  169
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "tokenProgram",
@@ -182,7 +268,60 @@ export type AssetController = {
         },
         {
           "name": "tokenAccount",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "trackerAccount",
@@ -232,7 +371,93 @@ export type AssetController = {
       ],
       "accounts": [
         {
-          "name": "sourceAccount"
+          "name": "sourceAccount",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "ownerDelegate"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  238,
+                  117,
+                  143,
+                  222,
+                  24,
+                  66,
+                  93,
+                  188,
+                  228,
+                  108,
+                  205,
+                  218,
+                  182,
+                  26,
+                  252,
+                  77,
+                  131,
+                  185,
+                  13,
+                  39,
+                  254,
+                  189,
+                  249,
+                  40,
+                  216,
+                  161,
+                  139,
+                  252
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "assetMint"
@@ -302,6 +527,9 @@ export type AssetController = {
         },
         {
           "name": "policyAccount"
+        },
+        {
+          "name": "instructionsProgram"
         }
       ],
       "args": [
@@ -337,7 +565,60 @@ export type AssetController = {
         },
         {
           "name": "tokenAccount",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "arg",
+                "path": "args.to"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "tokenProgram",
@@ -381,7 +662,60 @@ export type AssetController = {
         },
         {
           "name": "tokenAccount",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "tokenProgram",
@@ -408,58 +742,6 @@ export type AssetController = {
         87,
         52,
         105
-      ]
-    },
-    {
-      "name": "identityAccount",
-      "discriminator": [
-        194,
-        90,
-        181,
-        160,
-        182,
-        206,
-        116,
-        158
-      ]
-    },
-    {
-      "name": "identityRegistryAccount",
-      "discriminator": [
-        154,
-        254,
-        118,
-        4,
-        115,
-        36,
-        125,
-        78
-      ]
-    },
-    {
-      "name": "policyAccount",
-      "discriminator": [
-        218,
-        201,
-        183,
-        164,
-        156,
-        127,
-        81,
-        175
-      ]
-    },
-    {
-      "name": "policyEngineAccount",
-      "discriminator": [
-        124,
-        85,
-        205,
-        80,
-        2,
-        18,
-        26,
-        45
       ]
     },
     {
@@ -516,6 +798,21 @@ export type AssetController = {
       "code": 6007,
       "name": "unauthorized",
       "msg": "unauthorized"
+    },
+    {
+      "code": 6008,
+      "name": "invalidPdaPassedIn",
+      "msg": "Pda passed in for transfer is wrong"
+    },
+    {
+      "code": 6009,
+      "name": "invalidCpiTransferProgram",
+      "msg": "Invalid cpi program in transfer"
+    },
+    {
+      "code": 6010,
+      "name": "invalidCpiTransferAmount",
+      "msg": "Invalid cpi amount in transfer"
     }
   ],
   "types": [
@@ -555,23 +852,6 @@ export type AssetController = {
       }
     },
     {
-      "name": "comparisionType",
-      "repr": {
-        "kind": "rust"
-      },
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "or"
-          },
-          {
-            "name": "and"
-          }
-        ]
-      }
-    },
-    {
       "name": "createAssetControllerArgs",
       "type": {
         "kind": "struct",
@@ -602,97 +882,6 @@ export type AssetController = {
       }
     },
     {
-      "name": "identityAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "docs": [
-              "version of the account"
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "identityRegistry",
-            "docs": [
-              "identity registry to which the account belongs"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "owner",
-            "docs": [
-              "owner of the identity account"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "levels",
-            "type": "bytes"
-          }
-        ]
-      }
-    },
-    {
-      "name": "identityFilter",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "identityLevels",
-            "type": {
-              "array": [
-                "u8",
-                10
-              ]
-            }
-          },
-          {
-            "name": "comparisionType",
-            "type": {
-              "defined": {
-                "name": "comparisionType"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "identityRegistryAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "assetMint",
-            "docs": [
-              "corresponding asset mint"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "authority",
-            "docs": [
-              "authority to manage the registry"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "delegate",
-            "docs": [
-              "registry delegate"
-            ],
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
       "name": "issueTokensArgs",
       "type": {
         "kind": "struct",
@@ -704,155 +893,6 @@ export type AssetController = {
           {
             "name": "to",
             "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "policy",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "hash",
-            "type": "string"
-          },
-          {
-            "name": "policyType",
-            "type": {
-              "defined": {
-                "name": "policyType"
-              }
-            }
-          },
-          {
-            "name": "identityFilter",
-            "type": {
-              "defined": {
-                "name": "identityFilter"
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "policyAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "policyEngine",
-            "docs": [
-              "Engine account that the policy belongs to"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "policies",
-            "docs": [
-              "Different policies that can be applied to the policy account"
-            ],
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "policy"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "policyEngineAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "docs": [
-              "version"
-            ],
-            "type": "u8"
-          },
-          {
-            "name": "assetMint",
-            "docs": [
-              "asset mint"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "authority",
-            "docs": [
-              "authority of the registry"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "delegate",
-            "docs": [
-              "policy delegate"
-            ],
-            "type": "pubkey"
-          },
-          {
-            "name": "maxTimeframe",
-            "docs": [
-              "max timeframe of all the policies"
-            ],
-            "type": "i64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "policyType",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "identityApproval"
-          },
-          {
-            "name": "transactionAmountLimit",
-            "fields": [
-              {
-                "name": "limit",
-                "type": "u64"
-              }
-            ]
-          },
-          {
-            "name": "transactionAmountVelocity",
-            "fields": [
-              {
-                "name": "limit",
-                "type": "u64"
-              },
-              {
-                "name": "timeframe",
-                "type": "i64"
-              }
-            ]
-          },
-          {
-            "name": "transactionCountVelocity",
-            "fields": [
-              {
-                "name": "limit",
-                "type": "u64"
-              },
-              {
-                "name": "timeframe",
-                "type": "i64"
-              }
-            ]
           }
         ]
       }

@@ -3,7 +3,7 @@ use anchor_lang::{prelude::*, AnchorSerialize};
 use crate::PolicyType;
 
 #[account()]
-#[derive(InitSpace)]
+#[derive(InitSpace, Copy)]
 pub struct PolicyEngineAccount {
     /// version
     pub version: u8,
