@@ -149,6 +149,10 @@
           "signer": true
         },
         {
+          "name": "signer",
+          "signer": true
+        },
+        {
           "name": "asset_mint"
         },
         {

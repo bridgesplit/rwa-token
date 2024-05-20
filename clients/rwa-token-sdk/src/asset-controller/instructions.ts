@@ -290,7 +290,7 @@ export async function getSetupAssetControllerIxs(
 ): Promise<IxReturn> {
 	const mintKp = new Keypair();
 	const mint = mintKp.publicKey;
-	const updatedArgs = { ...args, assetMint: mint.toString() };
+	const updatedArgs = { ...args, assetMint: mint.toString(), signer: args.authority };
 	// Get asset registry create ix
 	const assetControllerCreateIx = await getCreateAssetControllerIx(
 		updatedArgs,

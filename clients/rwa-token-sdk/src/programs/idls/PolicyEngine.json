@@ -160,6 +160,10 @@
           "signer": true
         },
         {
+          "name": "signer",
+          "signer": true
+        },
+        {
           "name": "asset_mint"
         },
         {
@@ -411,7 +415,8 @@
           {
             "name": "policies",
             "docs": [
-              "Different policies that can be applied to the policy account"
+              "Different policies that can be applied to the policy account",
+              "initial max len"
             ],
             "type": {
               "vec": {

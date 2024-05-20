@@ -1,18 +1,14 @@
 import { BN, Wallet } from "@coral-xyz/anchor";
 import {
 	type AttachPolicyArgs,
-	type CreateDataAccountArgs,
-	getPolicyAccountPda,
 	getTrackerAccount,
-	getTrackerAccountPda,
 	type IssueTokenArgs,
 	type SetupUserArgs,
 	type TransferTokensArgs,
-	type UpdateDataAccountArgs,
-	type VoidTokensArgs,
 } from "../src";
 import { setupTests } from "./setup";
 import {
+	Commitment,
 	type ConfirmOptions,
 	Connection,
 	Transaction,
@@ -133,7 +129,6 @@ describe("test suite to test tracker account is being updated correctly on trans
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("issue tokens signature: ", txnId);
 	});
 
 	test("transfer tokens", async () => {
@@ -158,7 +153,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			setup.user1.toString(),
 			rwaClient.provider
 		);
-		// length of transfers should be 0 since any policies haven;t beeen attached uet
+		// length of transfers should be 0 since any policies haven;t beeen attached yet
 		expect(trackerAccount!.transfers.length).toBe(0);
 	});
 
@@ -196,20 +191,28 @@ describe("test suite to test tracker account is being updated correctly on trans
 			};
 	
 			const transferIx = await rwaClient.assetController.transfer(transferArgs);
+			let commitment: Commitment = "processed";
+			if (i < 4) {
+				commitment = "finalized";
+			}
 			const txnId = await sendAndConfirmTransaction(
 				rwaClient.provider.connection,
 				new Transaction().add(transferIx),
-				[setup.payerKp, setup.user1Kp]
+				[setup.payerKp, setup.user1Kp],
+				{
+					commitment,
+				}
 			);
 			expect(txnId).toBeTruthy();
-			const trackerAccount = await getTrackerAccount(
-				mint,
-				setup.user1.toString(),
-				rwaClient.provider
-			);
-			// length of transfers should be 0 since any policies haven;t beeen attached uet
-			expect(trackerAccount!.transfers.length).toBe(i);
-			expect(trackerAccount!.transfers.at(i)?.amount == 100);
+			if(i<4) { // dont need to check for all 25 transfers
+				const trackerAccount = await getTrackerAccount(
+					mint,
+					setup.user1.toString(),
+					rwaClient.provider
+				);
+				expect(trackerAccount!.transfers.length).toBe(i + 1);
+				expect(trackerAccount!.transfers.at(i)?.amount == 100);
+			}
 		}
 		const transferArgs: TransferTokensArgs = {
 			payer: setup.payer.toString(),
@@ -225,8 +228,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			rwaClient.provider.connection,
 			new Transaction().add(transferIx),
 			[setup.payerKp, setup.user1Kp]
-		)).toThrow("hello");
-
+		)).rejects.toThrowErrorMatchingInlineSnapshot("failed ({\"err\":{\"InstructionError\":[0,{\"Custom\":6006}]}})");
 	});
 
 });

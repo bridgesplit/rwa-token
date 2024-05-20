@@ -166,6 +166,10 @@ export type PolicyEngine = {
           "signer": true
         },
         {
+          "name": "signer",
+          "signer": true
+        },
+        {
           "name": "assetMint"
         },
         {
@@ -417,7 +421,8 @@ export type PolicyEngine = {
           {
             "name": "policies",
             "docs": [
-              "Different policies that can be applied to the policy account"
+              "Different policies that can be applied to the policy account",
+              "initial max len"
             ],
             "type": {
               "vec": {

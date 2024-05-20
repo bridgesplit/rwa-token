@@ -1,4 +1,4 @@
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::program_option::COption};
 use anchor_spl::token_interface::Mint;
 
 use crate::state::*;
@@ -8,6 +8,10 @@ use crate::state::*;
 pub struct CreatePolicyEngine<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
+    #[account(
+        constraint = asset_mint.mint_authority == COption::Some(signer.key()),
+    )]
+    pub signer: Signer<'info>,
     #[account(
         mint::token_program = TOKEN22
     )]

@@ -15,6 +15,7 @@ import { type AnchorProvider } from "@coral-xyz/anchor";
 /** Represents the arguments required to create a policy engine account. */
 export type CreatePolicyEngineArgs = {
   authority: string;
+  signer: string;
 } & CommonArgs;
 
 /**
@@ -34,6 +35,7 @@ export async function getCreatePolicyEngineIx(
 		)
 		.accountsStrict({
 			payer: args.payer,
+			signer: args.signer,
 			assetMint: args.assetMint,
 			policyEngine: getPolicyEnginePda(args.assetMint),
 			systemProgram: SystemProgram.programId,

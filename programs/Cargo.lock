@@ -405,10 +405,8 @@ dependencies = [
  "anchor-spl",
  "identity_registry",
  "policy_engine",
- "proc-macro2",
  "spl-tlv-account-resolution 0.4.0",
  "spl-transfer-hook-interface 0.5.1",
- "syn 2.0.58",
 ]
 
 [[package]]
