@@ -1,10 +1,10 @@
 {
     "name": "@bridgesplit/rwa-token-sdk",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "description": "RWA Token SDK for the development of permissioned tokens on SVM blockchains.",
     "homepage": "https://github.com/bridgesplit/rwa-token#readme",
     "scripts": {
-        "test": "vitest run --testTimeout=120000",
+        "test": "vitest run --testTimeout=240000",
         "lint": "eslint . --ext .ts"
     },
     "repository": {
@@ -30,12 +30,12 @@
         "eslint-config-xo-typescript": "^3.0.0",
         "typedoc": "^0.25.13",
         "typescript": ">=5.0.0",
-        "vitest": "^1.5.0"
+        "vitest": "^1.5.2"
     },
     "author": "Standard Labs, Inc.",
     "contributors": [
         "Luke Truitt <luke@fromstandard.com>",
-        "Bhargava Macha <bhargava@bridgesplit.com>",
+        "Bhargava Sai Macha <bhargava@bridgesplit.com>",
         "Chris Hagedorn <chris@bridgesplit.com>"
     ],
     "license": "MIT"

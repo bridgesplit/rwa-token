@@ -160,6 +160,10 @@
           "signer": true
         },
         {
+          "name": "signer",
+          "signer": true
+        },
+        {
           "name": "asset_mint"
         },
         {
@@ -374,18 +378,18 @@
             "type": "string"
           },
           {
-            "name": "policy_type",
-            "type": {
-              "defined": {
-                "name": "PolicyType"
-              }
-            }
-          },
-          {
             "name": "identity_filter",
             "type": {
               "defined": {
                 "name": "IdentityFilter"
+              }
+            }
+          },
+          {
+            "name": "policy_type",
+            "type": {
+              "defined": {
+                "name": "PolicyType"
               }
             }
           }
@@ -411,7 +415,8 @@
           {
             "name": "policies",
             "docs": [
-              "Different policies that can be applied to the policy account"
+              "Different policies that can be applied to the policy account",
+              "initial max len"
             ],
             "type": {
               "vec": {

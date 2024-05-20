@@ -5,8 +5,8 @@ use crate::PolicyEngineErrors;
 
 #[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug)]
 pub struct IdentityFilter {
-    pub identity_levels: [u8; 10],
-    pub comparision_type: ComparisionType,
+    pub identity_levels: [u8; 10],         // 10
+    pub comparision_type: ComparisionType, // 2
 }
 
 #[repr(u8)]
@@ -23,16 +23,17 @@ pub struct PolicyAccount {
     /// Engine account that the policy belongs to
     pub policy_engine: Pubkey,
     /// Different policies that can be applied to the policy account
-    #[max_len(3)] // initial max_len
+    #[max_len(1)]
+    /// initial max len
     pub policies: Vec<Policy>,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace)]
 pub struct Policy {
-    #[max_len(32)]
+    #[max_len(64)]
     pub hash: String,
-    pub policy_type: PolicyType,
     pub identity_filter: IdentityFilter,
+    pub policy_type: PolicyType,
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq, Copy, Debug)]

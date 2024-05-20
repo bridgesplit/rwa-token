@@ -14,6 +14,7 @@ import { type AnchorProvider } from "@coral-xyz/anchor";
 /** Represents arguments for creating an on identity registry on chain. */
 export type CreateIdentityRegistryArgs = {
   authority: string;
+  signer: string;
 } & CommonArgs;
 
 /**
@@ -33,6 +34,7 @@ export async function getCreateIdentityRegistryIx(
 		)
 		.accountsStrict({
 			payer: args.payer,
+			signer: args.signer,
 			assetMint: args.assetMint,
 			identityRegistryAccount: getIdentityRegistryPda(args.assetMint),
 			systemProgram: SystemProgram.programId,
