@@ -4,6 +4,7 @@ import {
 	Keypair,
 	PublicKey,
 	SystemProgram,
+	SYSVAR_INSTRUCTIONS_PUBKEY,
 	type TransactionInstruction,
 } from "@solana/web3.js";
 import {
@@ -192,6 +193,11 @@ export async function getTransferTokensIx(
 		},
 		{
 			pubkey: getPolicyAccountPda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: SYSVAR_INSTRUCTIONS_PUBKEY,
 			isWritable: false,
 			isSigner: false,
 		},

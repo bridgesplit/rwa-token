@@ -380,18 +380,18 @@ export type PolicyEngine = {
             "type": "string"
           },
           {
-            "name": "policyType",
-            "type": {
-              "defined": {
-                "name": "policyType"
-              }
-            }
-          },
-          {
             "name": "identityFilter",
             "type": {
               "defined": {
                 "name": "identityFilter"
+              }
+            }
+          },
+          {
+            "name": "policyType",
+            "type": {
+              "defined": {
+                "name": "policyType"
               }
             }
           }

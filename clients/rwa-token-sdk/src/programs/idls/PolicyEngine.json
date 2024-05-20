@@ -374,18 +374,18 @@
             "type": "string"
           },
           {
-            "name": "policy_type",
-            "type": {
-              "defined": {
-                "name": "PolicyType"
-              }
-            }
-          },
-          {
             "name": "identity_filter",
             "type": {
               "defined": {
                 "name": "IdentityFilter"
+              }
+            }
+          },
+          {
+            "name": "policy_type",
+            "type": {
+              "defined": {
+                "name": "PolicyType"
               }
             }
           }

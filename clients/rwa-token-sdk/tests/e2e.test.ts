@@ -1,7 +1,8 @@
 import { BN, Wallet } from "@coral-xyz/anchor";
 import {
 	type AttachPolicyArgs,
-	type CreateDataAccountArgs,
+	CreateDataAccountArgs,
+	getPolicyAccount,
 	getPolicyAccountPda,
 	getTrackerAccount,
 	getTrackerAccountPda,
@@ -317,8 +318,7 @@ describe("e2e tests", async () => {
 			authority: setup.authority.toString(),
 			signer: setup.authority.toString(),
 		};
-		const updateDataIx =
-      await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
+		const updateDataIx = await rwaClient.dataRegistry.updateAssetsDataAccountInfoIxns(updateDataAccountArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(updateDataIx),
@@ -347,5 +347,28 @@ describe("e2e tests", async () => {
 			[setup.payerKp]
 		);
 		expect(txnId).toBeTruthy();
+	});
+
+	test("detach all policies", async () => {
+		let policyAccount = await getPolicyAccount(mint, rwaClient.provider);
+
+		for (const policy of policyAccount?.policies ?? []) {
+			const policyIx = await rwaClient.policyEngine.detachPolicy({
+				authority: setup.authority.toString(),
+				owner: setup.authority.toString(),
+				assetMint: mint,
+				payer: setup.payer.toString(),
+				hash: policy.hash,
+			});
+			const txnId = await sendAndConfirmTransaction(
+				rwaClient.provider.connection,
+				new Transaction().add(...policyIx.ixs),
+				[setup.payerKp, setup.authorityKp]
+			);
+			expect(txnId).toBeTruthy();
+		}
+		policyAccount = await getPolicyAccount(mint, rwaClient.provider);
+
+		expect(policyAccount?.policies.length).toBe(0);
 	});
 });
