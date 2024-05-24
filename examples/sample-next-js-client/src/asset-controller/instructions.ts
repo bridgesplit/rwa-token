@@ -4,6 +4,7 @@ import {
   Keypair,
   PublicKey,
   SystemProgram,
+  SYSVAR_INSTRUCTIONS_PUBKEY,
   type TransactionInstruction,
 } from "@solana/web3.js";
 import {
@@ -20,11 +21,7 @@ import {
   getIdentityAccountPda,
   getIdentityRegistryPda,
 } from "../identity-registry";
-import {
-  type CommonArgs,
-  type IxReturn,
-  parseRemainingAccounts,
-} from "../utils";
+import { type CommonArgs, type IxReturn } from "../utils";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
   TOKEN_2022_PROGRAM_ID,
@@ -149,10 +146,7 @@ export type TransferTokensArgs = {
   from: string;
   to: string;
   amount: number;
-  authority: string;
   decimals: number;
-  /** Optional parameter for transfer controls (policies) and privacy (identity). */
-  remainingAccounts?: string[];
 } & CommonArgs;
 
 /**
@@ -200,6 +194,11 @@ export async function getTransferTokensIx(
       isSigner: false,
     },
     {
+      pubkey: SYSVAR_INSTRUCTIONS_PUBKEY,
+      isWritable: false,
+      isSigner: false,
+    },
+    {
       pubkey: getExtraMetasListPda(args.assetMint),
       isWritable: false,
       isSigner: false,
@@ -210,7 +209,6 @@ export async function getTransferTokensIx(
       isSigner: false,
     },
   ];
-  remainingAccounts.push(...parseRemainingAccounts(args.remainingAccounts));
   const ix = createTransferCheckedInstruction(
     getAssociatedTokenAddressSync(
       new PublicKey(args.assetMint),
@@ -289,7 +287,11 @@ export async function getSetupAssetControllerIxs(
 ): Promise<IxReturn> {
   const mintKp = new Keypair();
   const mint = mintKp.publicKey;
-  const updatedArgs = { ...args, assetMint: mint.toString() };
+  const updatedArgs = {
+    ...args,
+    assetMint: mint.toString(),
+    signer: args.authority,
+  };
   // Get asset registry create ix
   const assetControllerCreateIx = await getCreateAssetControllerIx(
     updatedArgs,

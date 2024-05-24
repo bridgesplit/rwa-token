@@ -96,6 +96,7 @@ export const errorPopup = (error?: string) => {
 };
 
 export const connections = [
+  "https://mainnet.helius-rpc.com/?api-key=7ebf2adb-4958-415c-85ea-ef3f669e087b",
   "https://mainnet.helius-rpc.com/?api-key=dedb8e41-faf1-4d98-b9b5-fb82c4b59076",
   "https://mainnet.helius-rpc.com/?api-key=0a216b11-b590-49c0-b48b-53e7d5f55c39",
   "https://mainnet.helius-rpc.com/?api-key=5899ce49-071c-4a22-a6e0-c0e9217d5a5a",
@@ -108,8 +109,10 @@ export const devnetconnections = [
 ];
 
 export const randomConnection = () => {
-  let connect = "http://localhost:8899";
-  //   devnetconnections[Math.floor(Math.random() * devnetconnections.length)];
+  let connect =
+    // "http://localhost:8899";
+    //   devnetconnections[Math.floor(Math.random() * devnetconnections.length)];
+    connections[Math.floor(Math.random() * connections.length)];
   return {
     connection: new Connection(connect, {
       commitment: "confirmed",
@@ -216,6 +219,7 @@ export const sendV0SolanaTransaction = async (
   }
 
   console.log(signedTx);
+  console.log(await connection.simulateTransaction(signedTx), "simulating");
   const signature = await connection.sendRawTransaction(
     signedTx?.serialize()!,
     { skipPreflight: true }
@@ -230,22 +234,22 @@ export const sendV0SolanaTransaction = async (
   );
 
   // handles dropped transactions, and will try up to 5 times
-  if (attempt <= 5) {
-    if (confirmed === false) {
-      console.log("Transaction failed, please try again!");
-      return await sendV0SolanaTransaction(
-        wallet,
-        connection,
-        instructions,
-        attempt
-      );
-    } else {
-      return true;
-    }
-  } else {
-    console.log("Transaction failed after 5 tries.");
-    return false;
-  }
+  // if (attempt <= 5) {
+  //   if (confirmed === false) {
+  //     console.log("Transaction failed, please try again!");
+  //     return await sendV0SolanaTransaction(
+  //       wallet,
+  //       connection,
+  //       instructions,
+  //       attempt
+  //     );
+  //   } else {
+  //     return true;
+  //   }
+  // } else {
+  console.log("Transaction failed after 5 tries.");
+  return false;
+  // }
 };
 
 export const confirmSignatureStatus = async (

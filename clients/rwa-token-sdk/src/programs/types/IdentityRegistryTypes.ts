@@ -155,6 +155,10 @@ export type IdentityRegistry = {
           "signer": true
         },
         {
+          "name": "signer",
+          "signer": true
+        },
+        {
           "name": "assetMint"
         },
         {
