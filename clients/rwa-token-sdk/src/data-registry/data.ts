@@ -63,9 +63,8 @@ export const DATA_ACCOUNT_REGISTRY_OFFSET = 9;
 export const DATA_ACCOUNT_TYPE_OFFSET = 41;
 
 /**
- * Retrieves all data accounts associated with a specific asset mint.
+ * Retrieves all data accounts associated with a specific asset mint and owner.
  * @param assetMint - The string representation of the asset mint.
- * @returns A promise resolving to an array of {@link DataAccount}, or `undefined` if it doesn't exist.
  */
 export async function getDataAccountsWithFilter(filter: DataAccountFilter, provider: AnchorProvider): Promise<DataAccount[] | undefined> {
 	const { assetMint, registry, type } = filter;

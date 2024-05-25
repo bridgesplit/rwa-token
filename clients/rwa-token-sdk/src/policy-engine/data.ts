@@ -27,9 +27,9 @@ export const POLICY_ENGINE_AUTHORITY_OFFSET = 41;
 export const POLICY_ENGINE_DELEGATE_OFFSET = 73;
 
 /**
- * Retrieves policy engine account associated with a specific asset mint.
- * @param assetMint - The string representation of the asset mint.
- * @returns A promise resolving to {@link PolicyEngineAccount}, or `undefined` if it doesn't exist.
+ * Retrieves policy engine accounts with a filter.
+ * @param filter - The filter to apply to the policy engine accounts.
+ * @returns A promise resolving to an array of {@link PolicyEngineAccount}, or `undefined` if it doesn't exist.
  */
 export async function getPolicyEngineAccountsWithFilter(filter: PolicyEngineFilter, provider: AnchorProvider): Promise<PolicyEngineAccount[] | undefined> {
 	const { assetMint, authority, delegate } = filter;
@@ -51,9 +51,9 @@ export async function getPolicyEngineAccountsWithFilter(filter: PolicyEngineFilt
 }
 
 /**
- * Retrieves the policy engine account for a specific asset mint.
+ * Retrieves a policy account associated with a specific asset mint.
  * @param assetMint - The string representation of the asset mint.
- * @returns A promise resolving to an array of {@link PolicyAccount}, or `undefined` if undefined doesn't exist.
+ * @returns A promise resolving to the fetched policy account, or `undefined` if it doesn't exist.
  */
 export async function getPolicyAccount(assetMint: string, provider: AnchorProvider): Promise<PolicyAccount | undefined> {
 	const policyEngineProgram = getPolicyEngineProgram(provider);
