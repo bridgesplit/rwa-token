@@ -1,13 +1,19 @@
 use anchor_lang::{
     prelude::Result,
-    solana_program::{program::invoke, pubkey::Pubkey, system_instruction::transfer},
+    solana_program::{
+        program::invoke,
+        pubkey::Pubkey,
+        system_instruction::transfer,
+        sysvar::{self, instructions::get_instruction_relative},
+    },
     Lamports,
 };
+use anchor_spl::token_2022;
 use spl_tlv_account_resolution::{
     account::ExtraAccountMeta, seeds::Seed, state::ExtraAccountMetaList,
 };
 
-use crate::{id, AccountInfo, Rent, SolanaSysvar};
+use crate::{id, AccountInfo, AssetControllerErrors, Rent, SolanaSysvar};
 
 pub fn get_meta_list_size() -> Result<usize> {
     Ok(ExtraAccountMetaList::size_of(get_extra_account_metas()?.len()).unwrap())
@@ -53,6 +59,8 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
             false,
             false,
         )?,
+        // instructions program
+        ExtraAccountMeta::new_with_pubkey(&sysvar::instructions::id(), false, false)?,
     ])
 }
 
@@ -72,5 +80,29 @@ pub fn update_account_lamports_to_minimum_balance<'info>(
             &[payer, account, system_program],
         )?;
     }
+    Ok(())
+}
+
+#[inline(never)]
+pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Result<()> {
+    let (pda, _) = Pubkey::find_program_address(seeds, program_id);
+    if pda != address {
+        return Err(AssetControllerErrors::InvalidPdaPassedIn.into());
+    }
+    Ok(())
+}
+
+pub fn verify_cpi_program_is_token22(
+    instructions_program: &AccountInfo,
+    amount: u64,
+) -> Result<()> {
+    let ix_relative = get_instruction_relative(0, instructions_program)?;
+    if ix_relative.program_id != token_2022::ID {
+        return Err(AssetControllerErrors::InvalidCpiTransferProgram.into());
+    }
+    if ix_relative.data[1..9] != amount.to_le_bytes() {
+        return Err(AssetControllerErrors::InvalidCpiTransferAmount.into());
+    }
+
     Ok(())
 }

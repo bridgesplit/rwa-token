@@ -1,5 +1,5 @@
 use crate::{state::*, TOKEN22};
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::program_option::COption};
 use anchor_spl::token_interface::Mint;
 
 #[derive(Accounts)]
@@ -7,6 +7,10 @@ use anchor_spl::token_interface::Mint;
 pub struct CreateDataRegistry<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
+    #[account(
+        constraint = asset_mint.mint_authority == COption::Some(signer.key()),
+    )]
+    pub signer: Signer<'info>,
     #[account(
         mint::token_program = TOKEN22,
     )]

@@ -1,16 +1,13 @@
-name: build
+name: tests
 env:
   cli-id: anchor-v0.30.0-solana-1.18.8
 on:
-  push:
-    branches:
-      - '*'
   pull_request:
     branches:
-      - '*'
+      - 'staging'
 jobs:
-  build-cli-deps:
-    runs-on: ubicloud-standard-8
+  setup-tests:
+    runs-on: ubicloud-standard-16
     steps:
       - id: cache-cli-deps
         uses: actions/cache@v2
@@ -33,9 +30,9 @@ jobs:
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
         run: cargo install --git https://github.com/bridgesplit/anchor anchor-cli --locked
 
-  build:
-    runs-on: ubicloud-standard-8
-    needs: [build-cli-deps]
+  run-tests:
+    runs-on: ubicloud-standard-16
+    needs: [setup-tests]
     steps:
       - id: cache-cli-deps
         uses: actions/cache@v2

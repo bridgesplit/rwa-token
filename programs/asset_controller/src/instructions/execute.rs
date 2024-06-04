@@ -1,11 +1,12 @@
-use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{Mint, TokenAccount};
-use identity_registry::{
-    program::IdentityRegistry, IdentityAccount, IdentityRegistryAccount, SKIP_POLICY_LEVEL,
+use anchor_lang::{
+    prelude::*,
+    solana_program::sysvar::{self},
 };
+use anchor_spl::token_interface::{Mint, TokenAccount};
+use identity_registry::{program::IdentityRegistry, IdentityAccount, SKIP_POLICY_LEVEL};
 use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
 
-use crate::state::*;
+use crate::{state::*, verify_cpi_program_is_token22, verify_pda};
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
@@ -37,58 +38,102 @@ pub struct ExecuteTransferHook<'info> {
     pub policy_engine: Program<'info, PolicyEngine>,
     #[account(
         owner = policy_engine.key(),
-        constraint = policy_engine_account.asset_mint == asset_mint.key(),
     )]
-    pub policy_engine_account: Account<'info, PolicyEngineAccount>,
+    /// CHECK: internal ix checks
+    pub policy_engine_account: UncheckedAccount<'info>,
     pub identity_registry: Program<'info, IdentityRegistry>,
-    #[account(
-        owner = identity_registry.key(),
-        constraint = identity_registry_account.asset_mint == asset_mint.key(),
-    )]
-    pub identity_registry_account: Account<'info, IdentityRegistryAccount>,
-    #[account(
-        mut,
-        owner = identity_registry.key(),
-        constraint = identity_account.owner == owner_delegate.key(),
-    )]
-    pub identity_account: Account<'info, IdentityAccount>,
+    #[account()]
+    /// CHECK: internal ix checks
+    pub identity_registry_account: UncheckedAccount<'info>,
+    #[account(mut)]
+    /// CHECK: internal ix checks
+    pub identity_account: UncheckedAccount<'info>,
     #[account(
         mut,
         constraint = tracker_account.owner == owner_delegate.key(),
         constraint = tracker_account.asset_mint == asset_mint.key(),
     )]
-    pub tracker_account: Account<'info, TrackerAccount>,
-    #[account(
-        owner = policy_engine.key(),
-        constraint = policy_account.policy_engine == policy_engine_account.key(),
-    )]
-    pub policy_account: Account<'info, PolicyAccount>,
+    pub tracker_account: Box<Account<'info, TrackerAccount>>,
+    #[account()]
+    /// CHECK: internal ix checks
+    pub policy_account: UncheckedAccount<'info>,
+    #[account(constraint = instructions_program.key() == sysvar::instructions::id())]
+    /// CHECK: constraint check
+    pub instructions_program: UncheckedAccount<'info>,
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
-    // if user has identity skip level, can skip enforcing policy
-    if ctx
-        .accounts
-        .identity_account
-        .levels
-        .contains(&SKIP_POLICY_LEVEL)
-    {
+    verify_cpi_program_is_token22(&ctx.accounts.instructions_program.to_account_info(), amount)?;
+
+    let asset_mint = ctx.accounts.asset_mint.key();
+
+    verify_pda(
+        ctx.accounts.policy_engine_account.key(),
+        &[&asset_mint.to_bytes()],
+        &policy_engine::id(),
+    )?;
+
+    verify_pda(
+        ctx.accounts.policy_account.key(),
+        &[&ctx.accounts.policy_engine_account.key().to_bytes()],
+        &policy_engine::id(),
+    )?;
+
+    // if policy account hasnt been created, skip enforcing token hook logic
+    if ctx.accounts.policy_account.data_is_empty() {
         return Ok(());
     }
 
-    // evaluate policy
+    let policy_engine_account = PolicyEngineAccount::deserialize(
+        &mut &ctx.accounts.policy_engine_account.data.borrow()[8..],
+    )?;
+
+    let policy_account =
+        PolicyAccount::deserialize(&mut &ctx.accounts.policy_account.data.borrow()[8..])?;
+
+    // go through with transfer if there aren't any policies attached
+    if policy_account.policies.is_empty() {
+        return Ok(());
+    }
+
+    // user must have identity account setup if there are policies attached
+    verify_pda(
+        ctx.accounts.identity_registry_account.key(),
+        &[&asset_mint.to_bytes()],
+        &identity_registry::id(),
+    )?;
+
+    verify_pda(
+        ctx.accounts.identity_account.key(),
+        &[
+            &ctx.accounts.identity_registry_account.key().to_bytes(),
+            &ctx.accounts.owner_delegate.key().to_bytes(),
+        ],
+        &identity_registry::id(),
+    )?;
+
+    let identity_account =
+        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])?;
+
+    // if user has identity skip level, skip enforcing policy
+    if identity_account.levels.contains(&SKIP_POLICY_LEVEL) {
+        return Ok(());
+    }
+
+    // evaluate policies
     enforce_policy(
-        ctx.accounts.policy_account.policies.clone(),
+        policy_account.policies.clone(),
         amount,
         Clock::get()?.unix_timestamp,
-        &ctx.accounts.identity_account.levels,
+        &identity_account.levels,
         &ctx.accounts.tracker_account.transfers,
     )?;
 
+    // update transfer history
     ctx.accounts.tracker_account.update_transfer_history(
         amount,
         Clock::get()?.unix_timestamp,
-        ctx.accounts.policy_engine_account.max_timeframe,
+        policy_engine_account.max_timeframe,
     )?;
 
     Ok(())
