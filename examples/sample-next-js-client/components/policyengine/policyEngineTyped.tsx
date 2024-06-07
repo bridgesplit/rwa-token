@@ -28,7 +28,6 @@ export const PolicyEngine = () => {
 
   const DEFAULT_ATTACH_POLICY_ARGS: AttachPolicyArgs = {
     authority: "",
-    owner: "",
     assetMint: "",
     payer: "",
     identityFilter: {
@@ -50,7 +49,6 @@ export const PolicyEngine = () => {
       message: "CREATE_IDENTITY_ACCOUNT",
       args: {
         authority: "",
-        owner: "",
         assetMint: "",
         payer: "",
         identityFilter: {
@@ -66,7 +64,6 @@ export const PolicyEngine = () => {
       message: "IDENTITY_APPROVAL",
       args: {
         authority: "",
-        owner: "",
         assetMint: "",
         payer: "",
         identityFilter: {
@@ -82,7 +79,6 @@ export const PolicyEngine = () => {
       message: "TRANSACTION_COUNT_VELOCITY",
       args: {
         authority: "",
-        owner: "",
         assetMint: "",
         payer: "",
         identityFilter: {
@@ -101,7 +97,6 @@ export const PolicyEngine = () => {
       message: "TRANSACTION_AMOUNT_VELOCITY",
       args: {
         authority: "",
-        owner: "",
         assetMint: "",
         payer: "",
         identityFilter: {
@@ -120,7 +115,6 @@ export const PolicyEngine = () => {
       message: "TRANSACTION_AMOUNT_LIMIT",
       args: {
         authority: "",
-        owner: "",
         assetMint: "",
         payer: "",
         identityFilter: {
@@ -215,25 +209,6 @@ export const PolicyEngine = () => {
                 onChange={(e) =>
                   setPolicyArgs((prev) => {
                     return { ...prev, authority: e.target.value }; // Update policy property while keeping other properties
-                  })
-                }
-                className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
-              />
-            </div>
-            <div className="flex items-center justify-center my-4">
-              <label
-                htmlFor="owner"
-                className="w-1/4 text-gray-700 text-xs font-bold"
-              >
-                Owner:
-              </label>
-              <input
-                type="text"
-                id="owner"
-                value={policyArgs?.owner || ""} // Use optional chaining to avoid errors when policyArgs is null
-                onChange={(e) =>
-                  setPolicyArgs((prev) => {
-                    return { ...prev, owner: e.target.value }; // Update policy property while keeping other properties
                   })
                 }
                 className="w-1/2 px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:border-blue-500 text-xs"
