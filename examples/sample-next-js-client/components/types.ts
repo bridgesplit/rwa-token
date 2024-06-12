@@ -4,7 +4,6 @@ import {
   AttachPolicyArgs,
   IssueTokenArgs,
   RemoveLevelFromIdentityAccountArgs,
-  SetupAssetControllerArgs,
   SetupUserArgs,
   TransferTokensArgs,
   VoidTokensArgs,
@@ -56,6 +55,15 @@ export interface ModalGenericProps {
   handleSubmit: () => void;
   modalContent: ModalContent;
 }
+export type SetupAssetControllerArgs = {
+  authority: string;
+  decimals: number;
+  payer: string;
+  delegate?: string;
+  name: string;
+  uri: string;
+  symbol: string;
+};
 /*
 
 Test Asset WITH DELEGATE owned by EYhnBtcxoZ4SX2u6n5Kyg1ZZvLnhhda3df11QC8X8xrk
