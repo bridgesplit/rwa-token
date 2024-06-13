@@ -5,7 +5,8 @@
     "homepage": "https://github.com/bridgesplit/rwa-token#readme",
     "scripts": {
         "test": "vitest run --testTimeout=240000",
-        "lint": "eslint . --ext .ts"
+        "lint": "eslint . --ext .ts",
+        "build": "tsc -p tsconfig.json"
     },
     "repository": {
         "type": "git",
