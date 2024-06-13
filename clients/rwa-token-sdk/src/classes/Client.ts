@@ -3,21 +3,7 @@ import { AssetController } from "./AssetController";
 import { IdentityRegistry } from "./IdentityRegistry";
 import { PolicyEngine } from "./PolicyEngine";
 import { DataRegistry } from "./DataRegistry";
-import { AnchorProvider } from "@coral-xyz/anchor";
-import { Transaction, VersionedTransaction, PublicKey } from "@solana/web3.js";
-
-/**
- * Copy of Anchor Wallet due to version typing mismatch.
- */
-export interface Wallet {
-  signTransaction<T extends Transaction | VersionedTransaction>(
-    tx: T
-  ): Promise<T>;
-  signAllTransactions<T extends Transaction | VersionedTransaction>(
-    txs: T[]
-  ): Promise<T[]>;
-  publicKey: PublicKey;
-}
+import { AnchorProvider, Wallet } from "@coral-xyz/anchor";
 
 /**
  * Represents a client for interacting with Real World Assets (RWA).
