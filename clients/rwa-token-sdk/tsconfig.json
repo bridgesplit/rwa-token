@@ -16,6 +16,9 @@
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true,
         "strictNullChecks": true,
-        "skipLibCheck": true,
-    }
+        "skipLibCheck": true
+    },
+    "exclude": [
+        "tests" // Add this line to exclude the "tests" directory from the build output
+    ]
 }
