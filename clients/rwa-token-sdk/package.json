@@ -1,10 +1,10 @@
 {
     "name": "@bridgesplit/rwa-token-sdk",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "RWA Token SDK for the development of permissioned tokens on SVM blockchains.",
     "homepage": "https://github.com/bridgesplit/rwa-token#readme",
-    "main": "dist/src/index",
-    "types": "dist/src/index",
+    "main": "dist/index",
+    "types": "dist/index",
     "publishConfig": {
         "access": "public"
     },
