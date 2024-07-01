@@ -24,4 +24,6 @@ pub enum AssetControllerErrors {
     InvalidCpiTransferProgram,
     #[msg("Invalid cpi amount in transfer")]
     InvalidCpiTransferAmount,
+    #[msg("Invalid cpi mint in transfer")]
+    InvalidCpiTransferMint,
 }
