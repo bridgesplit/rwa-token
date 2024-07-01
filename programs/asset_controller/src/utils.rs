@@ -95,6 +95,7 @@ pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Resu
 pub fn verify_cpi_program_is_token22(
     instructions_program: &AccountInfo,
     amount: u64,
+    mint: Pubkey,
 ) -> Result<()> {
     let ix_relative = get_instruction_relative(0, instructions_program)?;
     if ix_relative.program_id != token_2022::ID {
@@ -102,6 +103,14 @@ pub fn verify_cpi_program_is_token22(
     }
     if ix_relative.data[1..9] != amount.to_le_bytes() {
         return Err(AssetControllerErrors::InvalidCpiTransferAmount.into());
+    }
+    // make sure transfer mint is same
+    if let Some(account) = ix_relative.accounts.get(2) {
+        if account.pubkey != mint {
+            return Err(AssetControllerErrors::InvalidCpiTransferMint.into());
+        }
+    } else {
+        return Err(AssetControllerErrors::InvalidCpiTransferProgram.into());
     }
 
     Ok(())
