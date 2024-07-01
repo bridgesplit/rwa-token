@@ -5,7 +5,8 @@
         "target": "ES2015",
         "module": "commonjs",
         "moduleResolution": "node",
-        "outDir": "build",
+        "outDir": "dist",
+        "declaration": true,
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "sourceMap": true,
@@ -16,9 +17,11 @@
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true,
         "strictNullChecks": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
     },
     "exclude": [
-        "tests" // Add this line to exclude the "tests" directory from the build output
+        "tests", // Add this line to exclude the "tests" directory from the build output
+        "dist",
+        "node_modules"
     ]
 }

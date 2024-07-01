@@ -63,7 +63,11 @@ pub struct ExecuteTransferHook<'info> {
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
-    verify_cpi_program_is_token22(&ctx.accounts.instructions_program.to_account_info(), amount)?;
+    verify_cpi_program_is_token22(
+        &ctx.accounts.instructions_program.to_account_info(),
+        amount,
+        ctx.accounts.asset_mint.key(),
+    )?;
 
     let asset_mint = ctx.accounts.asset_mint.key();
 

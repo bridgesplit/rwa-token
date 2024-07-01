@@ -1,8 +1,16 @@
 {
     "name": "@bridgesplit/rwa-token-sdk",
-    "version": "0.0.1",
+    "version": "0.0.4",
     "description": "RWA Token SDK for the development of permissioned tokens on SVM blockchains.",
     "homepage": "https://github.com/bridgesplit/rwa-token#readme",
+    "main": "dist/index",
+    "types": "dist/index",
+    "publishConfig": {
+        "access": "public"
+    },
+    "files": [
+        "dist"
+    ],
     "scripts": {
         "test": "vitest run --testTimeout=240000",
         "lint": "eslint . --ext .ts",
