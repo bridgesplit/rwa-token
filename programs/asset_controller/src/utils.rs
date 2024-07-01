@@ -92,6 +92,8 @@ pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Resu
     Ok(())
 }
 
+pub const TRANSFER_HOOK_MINT_INDEX: usize = 1;
+
 pub fn verify_cpi_program_is_token22(
     instructions_program: &AccountInfo,
     amount: u64,
@@ -105,7 +107,7 @@ pub fn verify_cpi_program_is_token22(
         return Err(AssetControllerErrors::InvalidCpiTransferAmount.into());
     }
     // make sure transfer mint is same
-    if let Some(account) = ix_relative.accounts.get(2) {
+    if let Some(account) = ix_relative.accounts.get(TRANSFER_HOOK_MINT_INDEX) {
         if account.pubkey != mint {
             return Err(AssetControllerErrors::InvalidCpiTransferMint.into());
         }
