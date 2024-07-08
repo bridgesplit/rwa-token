@@ -3,7 +3,8 @@ members = [
     "asset_controller",
     "data_registry",
     "identity_registry",
-    "policy_engine"
+    "policy_engine",
+    "rwa-utils"
 ]
 
 [profile.release]

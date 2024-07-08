@@ -10,7 +10,7 @@ pub use instructions::*;
 pub use state::*;
 pub use utils::*;
 
-pub use anchor_lang::prelude::*;
+use anchor_lang::prelude::*;
 
 declare_id!("acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan");
 
