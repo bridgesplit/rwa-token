@@ -4,7 +4,7 @@ members = [
     "data_registry",
     "identity_registry",
     "policy_engine",
-    "rwa-utils"
+    "rwa_utils"
 ]
 
 [profile.release]
