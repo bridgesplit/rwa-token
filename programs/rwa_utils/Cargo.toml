@@ -1,0 +1,13 @@
+[package]
+name = "rwa_utils"
+version = "0.0.1"
+description = "Util functions for the RWA programs."
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "rwa_utils"
+
+[dependencies]
+anchor-lang = { git = "https://github.com/coral-xyz/anchor" }
+anchor-spl = { git = "https://github.com/coral-xyz/anchor" }
