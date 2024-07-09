@@ -1,6 +1,6 @@
 name: tests
 env:
-  cli-id: anchor-v0.30.0-solana-1.18.8
+  cli-id: anchor-v0.30.1-solana-1.18.8
 on:
   pull_request:
     branches:
