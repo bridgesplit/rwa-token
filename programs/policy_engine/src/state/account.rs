@@ -1,17 +1,29 @@
 use anchor_lang::prelude::*;
 use num_enum::IntoPrimitive;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 use crate::PolicyEngineErrors;
 
-#[derive(AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug, Serialize, Deserialize)]
+#[derive(
+    AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug, Serialize, Deserialize,
+)]
 pub struct IdentityFilter {
     pub identity_levels: [u8; 10],         // 10
     pub comparision_type: ComparisionType, // 2
 }
 
 #[repr(u8)]
-#[derive(IntoPrimitive, AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug, Serialize, Deserialize)]
+#[derive(
+    IntoPrimitive,
+    AnchorDeserialize,
+    AnchorSerialize,
+    Clone,
+    InitSpace,
+    Copy,
+    Debug,
+    Serialize,
+    Deserialize,
+)]
 pub enum ComparisionType {
     Or,
     And,
@@ -37,7 +49,17 @@ pub struct Policy {
     pub policy_type: PolicyType,
 }
 
-#[derive(AnchorSerialize, AnchorDeserialize, Clone, InitSpace, PartialEq, Copy, Debug, Serialize, Deserialize)]
+#[derive(
+    AnchorSerialize,
+    AnchorDeserialize,
+    Clone,
+    InitSpace,
+    PartialEq,
+    Copy,
+    Debug,
+    Serialize,
+    Deserialize,
+)]
 pub enum PolicyType {
     IdentityApproval,
     TransactionAmountLimit { limit: u64 },
