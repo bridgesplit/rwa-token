@@ -432,6 +432,7 @@ dependencies = [
  "policy_engine",
  "spl-tlv-account-resolution",
  "spl-transfer-hook-interface",
+ "rwa_utils"
 ]
 
 [[package]]
@@ -933,6 +934,7 @@ version = "0.0.1"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
+ "rwa_utils",
 ]
 
 [[package]]
@@ -1183,6 +1185,7 @@ version = "0.0.1"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
+ "rwa_utils",
 ]
 
 [[package]]
@@ -1533,6 +1536,7 @@ dependencies = [
  "anchor-lang",
  "anchor-spl",
  "num_enum",
+ "rwa_utils",
  "sha256",
 ]
 
@@ -1797,6 +1801,14 @@ name = "rustversion"
 version = "1.0.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
+
+[[package]]
+name = "rwa_utils"
+version = "0.0.1"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+]
 
 [[package]]
 name = "ryu"

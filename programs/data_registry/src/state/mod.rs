@@ -1,22 +1,22 @@
 pub mod account;
-pub mod engine;
+pub mod registry;
 
 pub use account::*;
-pub use engine::*;
+pub use registry::*;
 
 use anchor_lang::{solana_program::program_error::ProgramError, AnchorDeserialize, Discriminator};
 use rwa_utils::GeyserProgramAccount;
 
-pub enum PolicyEngineAccounts {
-    PolicyAccount(PolicyAccount),
-    PolicyEngineAccount(PolicyEngineAccount),
+pub enum DataRegistryAccounts {
+    DataAccount(DataAccount),
+    DataRegistryAccount(DataRegistryAccount),
 }
 
-impl GeyserProgramAccount for PolicyEngineAccounts {
+impl GeyserProgramAccount for DataRegistryAccounts {
     fn discriminator(&self) -> [u8; 8] {
         match self {
-            PolicyEngineAccounts::PolicyAccount(_) => PolicyAccount::DISCRIMINATOR,
-            PolicyEngineAccounts::PolicyEngineAccount(_) => PolicyEngineAccount::DISCRIMINATOR,
+            DataRegistryAccounts::DataAccount(_) => DataAccount::DISCRIMINATOR,
+            DataRegistryAccounts::DataRegistryAccount(_) => DataRegistryAccount::DISCRIMINATOR,
         }
     }
 
@@ -34,13 +34,13 @@ impl GeyserProgramAccount for PolicyEngineAccounts {
             .ok_or(ProgramError::InvalidAccountData)?;
         let account_data = &mut &data[8..];
         match discriminator {
-            PolicyAccount::DISCRIMINATOR => {
-                let account = PolicyAccount::deserialize(account_data)?;
-                Ok(PolicyEngineAccounts::PolicyAccount(account))
+            DataAccount::DISCRIMINATOR => {
+                let account = DataAccount::deserialize(account_data)?;
+                Ok(DataRegistryAccounts::DataAccount(account))
             }
-            PolicyEngineAccount::DISCRIMINATOR => {
-                let account = PolicyEngineAccount::deserialize(account_data)?;
-                Ok(PolicyEngineAccounts::PolicyEngineAccount(account))
+            DataRegistryAccount::DISCRIMINATOR => {
+                let account = DataRegistryAccount::deserialize(account_data)?;
+                Ok(DataRegistryAccounts::DataRegistryAccount(account))
             }
             _ => Err(ProgramError::InvalidAccountData),
         }
