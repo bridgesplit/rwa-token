@@ -430,9 +430,9 @@ dependencies = [
  "anchor-spl",
  "identity_registry",
  "policy_engine",
+ "rwa_utils",
  "spl-tlv-account-resolution",
  "spl-transfer-hook-interface",
- "rwa_utils"
 ]
 
 [[package]]
