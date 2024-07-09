@@ -1537,6 +1537,7 @@ dependencies = [
  "anchor-spl",
  "num_enum",
  "rwa_utils",
+ "serde",
  "sha256",
 ]
 
