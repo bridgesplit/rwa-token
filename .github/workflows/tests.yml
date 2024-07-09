@@ -28,7 +28,7 @@ jobs:
 
       - id: install-anchor-cli
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
-        run: cargo install --git https://github.com/bridgesplit/anchor anchor-cli --locked
+        run: cargo install --git https://github.com/coral-xyz/anchor anchor-cli --locked
 
   run-tests:
     runs-on: ubicloud-standard-16
