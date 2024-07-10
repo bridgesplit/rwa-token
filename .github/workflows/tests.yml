@@ -1,6 +1,6 @@
 name: tests
 env:
-  cli-id: anchor-v0.30.0-solana-1.18.8
+  cli-id: anchor-v0.30.1-solana-1.18.8
 on:
   pull_request:
     branches:
@@ -28,7 +28,7 @@ jobs:
 
       - id: install-anchor-cli
         if: steps.cache-cli-deps.outputs.cache-hit != 'true'
-        run: cargo install --git https://github.com/bridgesplit/anchor anchor-cli --locked
+        run: cargo install --git https://github.com/coral-xyz/anchor --tag v0.30.1  anchor-cli --locked
 
   run-tests:
     runs-on: ubicloud-standard-16
