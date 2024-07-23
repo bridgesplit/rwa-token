@@ -63,11 +63,12 @@ pub fn handler(ctx: Context<UpdateAssetMetadata>, args: UpdateAssetMetadataArgs)
         ctx.accounts.update_token_metadata_field(Field::Uri, uri)?;
     }
 
-    emit_cpi!(AssetMetadata {
+    emit_cpi!(AssetMetadataEvent {
         mint: ctx.accounts.asset_mint.key().to_string(),
         name: args.name,
         symbol: args.symbol,
         uri: args.uri,
+        decimals: None,
     });
 
     Ok(())

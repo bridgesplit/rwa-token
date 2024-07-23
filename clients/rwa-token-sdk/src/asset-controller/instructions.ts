@@ -102,7 +102,7 @@ export async function getUpdateAssetMetadataIx(
 ): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods
-		.updateAssetMetadata({
+		.updateMetadata({
 			name: args.name,
 			uri: args.uri,
 			symbol: args.symbol,

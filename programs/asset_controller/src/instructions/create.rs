@@ -111,11 +111,12 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
         ctx.accounts.system_program.to_account_info(),
     )?;
 
-    emit_cpi!(AssetMetadata {
+    emit_cpi!(AssetMetadataEvent {
         mint: ctx.accounts.asset_mint.key().to_string(),
         name: Some(args.name),
         symbol: Some(args.symbol),
         uri: Some(args.uri),
+        decimals: Some(args.decimals),
     });
 
     Ok(())

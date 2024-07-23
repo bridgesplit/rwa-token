@@ -25,9 +25,10 @@ impl AssetControllerAccount {
 }
 
 #[event]
-pub struct AssetMetadata {
+pub struct AssetMetadataEvent {
     pub mint: String,
     pub name: Option<String>,
     pub symbol: Option<String>,
     pub uri: Option<String>,
+    pub decimals: Option<u8>,
 }
