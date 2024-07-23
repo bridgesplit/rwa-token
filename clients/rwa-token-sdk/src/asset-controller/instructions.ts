@@ -103,9 +103,9 @@ export async function getUpdateAssetMetadataIx(
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods
 		.updateMetadata({
-			name: args.name,
-			uri: args.uri,
-			symbol: args.symbol,
+			name: args.name || null,
+			uri: args.uri || null,
+			symbol: args.symbol || null,
 		})
 		.accountsStrict({
 			payer: args.payer,
@@ -114,6 +114,7 @@ export async function getUpdateAssetMetadataIx(
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			authority: args.authority,
 			eventAuthority: getAssetControllerEventAuthority(),
+			systemProgram: SystemProgram.programId,
 			program: assetControllerProgramId,
 		})
 		.instruction();

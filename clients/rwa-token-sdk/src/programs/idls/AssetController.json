@@ -685,6 +685,7 @@
         },
         {
           "name": "authority",
+          "writable": true,
           "signer": true
         },
         {
@@ -692,7 +693,19 @@
           "writable": true
         },
         {
-          "name": "asset_controller"
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         },
         {
           "name": "token_program",

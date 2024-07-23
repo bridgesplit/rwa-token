@@ -691,6 +691,7 @@ export type AssetController = {
         },
         {
           "name": "authority",
+          "writable": true,
           "signer": true
         },
         {
@@ -698,7 +699,19 @@ export type AssetController = {
           "writable": true
         },
         {
-          "name": "assetController"
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         },
         {
           "name": "tokenProgram",
