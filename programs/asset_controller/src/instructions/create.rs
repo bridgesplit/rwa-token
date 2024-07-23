@@ -22,6 +22,7 @@ pub struct CreateAssetControllerArgs {
 
 #[derive(Accounts)]
 #[instruction(args: CreateAssetControllerArgs)]
+#[event_cpi]
 pub struct CreateAssetController<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -97,8 +98,11 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
     ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
 
     // initialize token metadata
-    ctx.accounts
-        .initialize_token_metadata(args.name, args.symbol, args.uri)?;
+    ctx.accounts.initialize_token_metadata(
+        args.name.clone(),
+        args.symbol.clone(),
+        args.uri.clone(),
+    )?;
 
     // transfer minimum rent to mint account
     update_account_lamports_to_minimum_balance(
@@ -106,6 +110,13 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
         ctx.accounts.payer.to_account_info(),
         ctx.accounts.system_program.to_account_info(),
     )?;
+
+    emit_cpi!(AssetMetadata {
+        mint: ctx.accounts.asset_mint.key().to_string(),
+        name: Some(args.name),
+        symbol: Some(args.symbol),
+        uri: Some(args.uri),
+    });
 
     Ok(())
 }
