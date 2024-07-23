@@ -37,6 +37,7 @@ import {
 	getExtraMetasListPda,
 	getTrackerAccountPda,
 	assetControllerProgramId,
+	getAssetControllerEventAuthority,
 } from "./utils";
 import { type AnchorProvider, BN } from "@coral-xyz/anchor";
 
@@ -75,10 +76,50 @@ export async function getCreateAssetControllerIx(
 			systemProgram: SystemProgram.programId,
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			authority: args.authority,
+			eventAuthority: getAssetControllerEventAuthority(),
+			program: assetControllerProgramId,
 		})
 		.instruction();
 	return ix;
 }
+
+/** Represents arguments for update an on chain asset metadata. */
+export type UpdateAssetMetadataArgs = {
+	authority: string;
+	name?: string;
+	uri?: string;
+	symbol?: string;
+  } & CommonArgs;
+
+/**
+ * Builds the transaction instruction to create an Asset Controller.
+ * @param args - {@link UpdateAssetMetadataArgs}
+ * @returns Create asset controller transaction instruction
+ */
+export async function getUpdateAssetMetadataIx(
+	args: UpdateAssetMetadataArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.updateAssetMetadata({
+			name: args.name,
+			uri: args.uri,
+			symbol: args.symbol,
+		})
+		.accountsStrict({
+			payer: args.payer,
+			assetMint: args.assetMint,
+			assetController: getAssetControllerPda(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			authority: args.authority,
+			eventAuthority: getAssetControllerEventAuthority(),
+			program: assetControllerProgramId,
+		})
+		.instruction();
+	return ix;
+}
+
 
 /** Represents arguments for issuing an on chain asset/token. */
 export type IssueTokenArgs = {

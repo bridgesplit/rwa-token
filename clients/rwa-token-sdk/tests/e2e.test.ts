@@ -90,6 +90,25 @@ describe("e2e tests", async () => {
 		);
 	});
 
+	test("update asset metadata", async () => {
+		const updateAssetMetadataArgs = {
+			authority: setup.authority.toString(),
+			name: "Test Class Asset - Updated",
+			assetMint: mint,
+			payer: setup.payer.toString(),
+		};
+
+		const updateIx = await rwaClient.assetController.updateAssetMetadata(
+			updateAssetMetadataArgs
+		);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(updateIx),
+			[setup.payerKp]
+		);
+		expect(txnId).toBeTruthy();
+	});
+
 	test("setup data account", async () => {
 		const createDataAccountArgs: CreateDataAccountArgs = {
 			type: { legal: {} },

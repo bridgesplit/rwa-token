@@ -226,6 +226,38 @@ export type AssetController = {
         {
           "name": "tokenProgram",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
         }
       ],
       "args": [
@@ -637,6 +669,86 @@ export type AssetController = {
       ]
     },
     {
+      "name": "updateMetadata",
+      "docs": [
+        "edit metadata of the rwa asset"
+      ],
+      "discriminator": [
+        170,
+        182,
+        43,
+        239,
+        97,
+        78,
+        225,
+        186
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController"
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "updateAssetMetadataArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "voidTokens",
       "docs": [
         "void shares of the rwa asset"
@@ -758,6 +870,21 @@ export type AssetController = {
       ]
     }
   ],
+  "events": [
+    {
+      "name": "assetMetadata",
+      "discriminator": [
+        153,
+        130,
+        85,
+        8,
+        245,
+        42,
+        182,
+        62
+      ]
+    }
+  ],
   "errors": [
     {
       "code": 6000,
@@ -813,6 +940,11 @@ export type AssetController = {
       "code": 6010,
       "name": "invalidCpiTransferAmount",
       "msg": "Invalid cpi amount in transfer"
+    },
+    {
+      "code": 6011,
+      "name": "invalidCpiTransferMint",
+      "msg": "Invalid cpi mint in transfer"
     }
   ],
   "types": [
@@ -847,6 +979,36 @@ export type AssetController = {
               "update to any other account to control cpis"
             ],
             "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "assetMetadata",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "symbol",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }
@@ -939,6 +1101,32 @@ export type AssetController = {
           {
             "name": "timestamp",
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "updateAssetMetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "symbol",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }

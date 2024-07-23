@@ -5,9 +5,13 @@ on:
   pull_request:
     branches:
       - 'staging'
+
 jobs:
   setup-tests:
     runs-on: ubicloud-standard-16
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
       - id: cache-cli-deps
         uses: actions/cache@v2
