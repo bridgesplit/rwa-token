@@ -20,7 +20,6 @@ import {
 	getCreateIdentityRegistryIx,
 	getIdentityAccountPda,
 	getIdentityRegistryPda,
-	POLICY_SKIP_LEVEL,
 } from "../identity-registry";
 import {
 	type CommonArgs,
@@ -355,18 +354,12 @@ export async function getSetupAssetControllerIxs(
 		provider
 	);
 
-	// Get create identity account for authority ix
-	const identityAccountCreateIx = await getCreateIdentityAccountIx(
-		{...updatedArgs, level: POLICY_SKIP_LEVEL, owner: args.authority},
-		provider
-	);
 	return {
 		ixs: [
 			assetControllerCreateIx,
 			policyEngineCreateIx,
 			dataRegistryCreateIx,
 			identityRegistryCreateIx,
-			identityAccountCreateIx,
 		],
 		signers: [mintKp],
 	};
