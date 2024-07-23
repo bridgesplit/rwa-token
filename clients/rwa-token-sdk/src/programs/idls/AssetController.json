@@ -866,16 +866,16 @@
   ],
   "events": [
     {
-      "name": "AssetMetadata",
+      "name": "AssetMetadataEvent",
       "discriminator": [
-        153,
-        130,
-        85,
-        8,
-        245,
-        42,
-        182,
-        62
+        90,
+        19,
+        200,
+        229,
+        103,
+        82,
+        218,
+        16
       ]
     }
   ],
@@ -978,7 +978,7 @@
       }
     },
     {
-      "name": "AssetMetadata",
+      "name": "AssetMetadataEvent",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1002,6 +1002,12 @@
             "name": "uri",
             "type": {
               "option": "string"
+            }
+          },
+          {
+            "name": "decimals",
+            "type": {
+              "option": "u8"
             }
           }
         ]

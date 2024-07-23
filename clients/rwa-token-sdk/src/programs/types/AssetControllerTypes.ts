@@ -872,16 +872,16 @@ export type AssetController = {
   ],
   "events": [
     {
-      "name": "assetMetadata",
+      "name": "assetMetadataEvent",
       "discriminator": [
-        153,
-        130,
-        85,
-        8,
-        245,
-        42,
-        182,
-        62
+        90,
+        19,
+        200,
+        229,
+        103,
+        82,
+        218,
+        16
       ]
     }
   ],
@@ -984,7 +984,7 @@ export type AssetController = {
       }
     },
     {
-      "name": "assetMetadata",
+      "name": "assetMetadataEvent",
       "type": {
         "kind": "struct",
         "fields": [
@@ -1008,6 +1008,12 @@ export type AssetController = {
             "name": "uri",
             "type": {
               "option": "string"
+            }
+          },
+          {
+            "name": "decimals",
+            "type": {
+              "option": "u8"
             }
           }
         ]

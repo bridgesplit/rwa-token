@@ -68,7 +68,7 @@ pub enum PolicyType {
 }
 
 impl PolicyAccount {
-    fn hash_policy(
+    pub fn hash_policy(
         policy_account: Pubkey,
         policy_type: PolicyType,
         identity_filter: IdentityFilter,
