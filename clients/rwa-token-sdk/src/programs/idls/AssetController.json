@@ -220,6 +220,38 @@
         {
           "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
         }
       ],
       "args": [
@@ -631,6 +663,99 @@
       ]
     },
     {
+      "name": "update_metadata",
+      "docs": [
+        "edit metadata of the rwa asset"
+      ],
+      "discriminator": [
+        170,
+        182,
+        43,
+        239,
+        97,
+        78,
+        225,
+        186
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "UpdateAssetMetadataArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "void_tokens",
       "docs": [
         "void shares of the rwa asset"
@@ -752,6 +877,21 @@
       ]
     }
   ],
+  "events": [
+    {
+      "name": "AssetMetadataEvent",
+      "discriminator": [
+        90,
+        19,
+        200,
+        229,
+        103,
+        82,
+        218,
+        16
+      ]
+    }
+  ],
   "errors": [
     {
       "code": 6000,
@@ -807,6 +947,11 @@
       "code": 6010,
       "name": "InvalidCpiTransferAmount",
       "msg": "Invalid cpi amount in transfer"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidCpiTransferMint",
+      "msg": "Invalid cpi mint in transfer"
     }
   ],
   "types": [
@@ -841,6 +986,42 @@
               "update to any other account to control cpis"
             ],
             "type": "pubkey"
+          }
+        ]
+      }
+    },
+    {
+      "name": "AssetMetadataEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "symbol",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "decimals",
+            "type": {
+              "option": "u8"
+            }
           }
         ]
       }
@@ -933,6 +1114,32 @@
           {
             "name": "timestamp",
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "UpdateAssetMetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "symbol",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }

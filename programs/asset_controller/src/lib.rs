@@ -31,6 +31,14 @@ pub mod asset_controller {
         instructions::issue::handler(ctx, args)
     }
 
+    /// edit metadata of the rwa asset
+    pub fn update_metadata(
+        ctx: Context<UpdateAssetMetadata>,
+        args: UpdateAssetMetadataArgs,
+    ) -> Result<()> {
+        instructions::update::handler(ctx, args)
+    }
+
     /// void shares of the rwa asset
     pub fn void_tokens(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
         instructions::void::handler(ctx, amount)
