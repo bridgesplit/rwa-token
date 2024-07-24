@@ -50,4 +50,9 @@ pub mod data_registry {
     ) -> Result<()> {
         instructions::account::update::handler(ctx, args)
     }
+
+    /// delete data account
+    pub fn delete_data_account(_ctx: Context<DeleteDataAccount>) -> Result<()> {
+        Ok(())
+    }
 }
