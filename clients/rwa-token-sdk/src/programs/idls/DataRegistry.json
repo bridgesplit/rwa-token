@@ -150,6 +150,36 @@
       ]
     },
     {
+      "name": "delete_data_account",
+      "docs": [
+        "delete data account"
+      ],
+      "discriminator": [
+        159,
+        5,
+        34,
+        220,
+        166,
+        192,
+        76,
+        92
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "data_registry"
+        },
+        {
+          "name": "data_account",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "update_data_account",
       "docs": [
         "update data account"

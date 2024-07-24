@@ -8,6 +8,8 @@ import {
 	getDelegateDataRegistryIx,
 	getUpdateDataAccountIx,
 	getDataRegistryPda,
+	DeleteDataAccountArgs,
+	getDeleteDataAccountIx,
 } from "../data-registry";
 import { type RwaClient } from "./Client";
 
@@ -47,6 +49,20 @@ export class DataRegistry {
 			this.rwaClient.provider
 		);
 		return updateIx;
+	}
+
+	/**
+   * Asynchronously generates instructions to delete asset information.
+   * @returns A Promise that resolves to the instructions to delete asset information.
+   */
+	async deleteAssetsDataAccountInfoIxns(
+		deleteArgs: DeleteDataAccountArgs
+	): Promise<TransactionInstruction> {
+		const deleteIx = await getDeleteDataAccountIx(
+			deleteArgs,
+			this.rwaClient.provider
+		);
+		return deleteIx;
 	}
 
 	/**

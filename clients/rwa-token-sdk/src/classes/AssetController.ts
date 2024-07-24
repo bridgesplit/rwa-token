@@ -11,6 +11,8 @@ import {
 	getAssetControllerPda,
 	getTrackerAccountPda,
 	getExtraMetasListPda,
+	getUpdateAssetMetadataIx,
+	UpdateAssetMetadataArgs,
 } from "../asset-controller";
 import { type IxReturn } from "../utils";
 import { type RwaClient } from "./Client";
@@ -39,6 +41,21 @@ export class AssetController {
 		);
 
 		return setupControllerIx;
+	}
+
+	/**
+	 * Update the asset controller's metadata.
+	 * @param - {@link UpdateAssetMetadataArgs}
+	 * @returns A Promise that resolves to the instructions to update the asset controller's metadata.
+	 * */
+	async updateAssetMetadata(
+		updateAssetControllerArgs: UpdateAssetMetadataArgs
+	): Promise<TransactionInstruction> {
+		const updateMetadataIx = await getUpdateAssetMetadataIx(
+			updateAssetControllerArgs,
+			this.rwaClient.provider
+		);
+		return updateMetadataIx;
 	}
 
 	/**

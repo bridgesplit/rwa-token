@@ -7,6 +7,7 @@ use crate::PolicyEngineErrors;
 #[derive(
     AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug, Serialize, Deserialize,
 )]
+#[serde(rename_all = "camelCase")]
 pub struct IdentityFilter {
     pub identity_levels: [u8; 10],         // 10
     pub comparision_type: ComparisionType, // 2
@@ -68,7 +69,7 @@ pub enum PolicyType {
 }
 
 impl PolicyAccount {
-    fn hash_policy(
+    pub fn hash_policy(
         policy_account: Pubkey,
         policy_type: PolicyType,
         identity_filter: IdentityFilter,

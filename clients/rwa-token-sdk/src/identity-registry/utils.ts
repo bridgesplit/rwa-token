@@ -31,3 +31,5 @@ export const getIdentityAccountPda = (assetMint: string, owner: string) => Publi
 	[getIdentityRegistryPda(assetMint).toBuffer(), new PublicKey(owner).toBuffer()],
 	identityRegistryProgramId,
 )[0];
+
+export const POLICY_SKIP_LEVEL = 255;

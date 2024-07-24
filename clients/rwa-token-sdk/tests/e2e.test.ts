@@ -2,6 +2,8 @@ import { BN, Wallet } from "@coral-xyz/anchor";
 import {
 	type AttachPolicyArgs,
 	CreateDataAccountArgs,
+	DeleteDataAccountArgs,
+	getDataAccountsWithFilter,
 	getPolicyAccount,
 	getPolicyAccountPda,
 	getTrackerAccount,
@@ -88,6 +90,25 @@ describe("e2e tests", async () => {
 			"identity registry: ",
 			rwaClient.identityRegistry.getIdentityRegistryPda(mint).toString()
 		);
+	});
+
+	test("update asset metadata", async () => {
+		const updateAssetMetadataArgs = {
+			authority: setup.authority.toString(),
+			name: "Test Class Asset - Updated",
+			assetMint: mint,
+			payer: setup.payer.toString(),
+		};
+
+		const updateIx = await rwaClient.assetController.updateAssetMetadata(
+			updateAssetMetadataArgs
+		);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(updateIx),
+			[setup.payerKp]
+		);
+		expect(txnId).toBeTruthy();
 	});
 
 	test("setup data account", async () => {
@@ -305,7 +326,25 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("update data account signature: ", txnId);
+	});
+
+	test("delete data account", async () => {
+		const deleteDataAccountArgs: DeleteDataAccountArgs = {
+			dataAccount,
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			authority: setup.authority.toString(),
+			signer: setup.authority.toString(),
+		};
+		const updateDataIx = await rwaClient.dataRegistry.deleteAssetsDataAccountInfoIxns(deleteDataAccountArgs);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(updateDataIx),
+			[setup.payerKp, setup.authorityKp]
+		);
+		expect(txnId).toBeTruthy();
+		expect(await getDataAccountsWithFilter({assetMint: mint}, rwaClient.provider)).toHaveLength(0);
 	});
 
 	test("transfer tokens", async () => {

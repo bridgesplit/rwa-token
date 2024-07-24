@@ -23,3 +23,12 @@ impl AssetControllerAccount {
         self.version = Self::VERSION;
     }
 }
+
+#[event]
+pub struct AssetMetadataEvent {
+    pub mint: String,
+    pub name: Option<String>,
+    pub symbol: Option<String>,
+    pub uri: Option<String>,
+    pub decimals: Option<u8>,
+}
