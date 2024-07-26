@@ -354,12 +354,26 @@ export async function getSetupAssetControllerIxs(
 		provider
 	);
 
+	// Setup user ixs
+	const setupUserIxs = await getSetupUserIxs(
+		{
+			payer: args.payer,
+			owner: args.authority,
+			signer: args.authority,
+			assetMint: mint.toString(),
+			level: 255,
+		},
+		provider
+	);
+	
+
 	return {
 		ixs: [
 			assetControllerCreateIx,
 			policyEngineCreateIx,
 			dataRegistryCreateIx,
 			identityRegistryCreateIx,
+			...setupUserIxs.ixs,
 		],
 		signers: [mintKp],
 	};

@@ -5,11 +5,8 @@ import {
 	DeleteDataAccountArgs,
 	getDataAccountsWithFilter,
 	getPolicyAccount,
-	getPolicyAccountPda,
 	getTrackerAccount,
-	getTrackerAccountPda,
 	type IssueTokenArgs,
-	type SetupUserArgs,
 	type TransferTokensArgs,
 	type UpdateDataAccountArgs,
 	type VoidTokensArgs,
@@ -72,24 +69,13 @@ describe("e2e tests", async () => {
 		);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
-
-		console.log("mint: ", mint);
-		console.log(
-			"data registry: ",
-			rwaClient.dataRegistry.getDataRegistryPda(mint).toString()
+		const trackerAccount = await getTrackerAccount(
+			mint,
+			setup.authority.toString(),
+			rwaClient.provider
 		);
-		console.log(
-			"asset controller: ",
-			rwaClient.assetController.getAssetControllerPda(mint).toString()
-		);
-		console.log(
-			"policy engine: ",
-			rwaClient.policyEngine.getPolicyEnginePda(mint).toString()
-		);
-		console.log(
-			"identity registry: ",
-			rwaClient.identityRegistry.getIdentityRegistryPda(mint).toString()
-		);
+		expect(trackerAccount).toBeTruthy();
+		expect(trackerAccount!.assetMint.toString()).toBe(mint);
 	});
 
 	test("update asset metadata", async () => {
@@ -157,7 +143,6 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("policy account: ", getPolicyAccountPda(mint).toString());
 	});
 
 	test("attach transaction amount limit policy", async () => {
@@ -236,42 +221,6 @@ describe("e2e tests", async () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	test("setup a user", async () => {
-		const setupUserArgs: SetupUserArgs = {
-			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
-			signer: setup.authority.toString(),
-			assetMint: mint,
-			level: 1,
-		};
-		const setupIx = await rwaClient.identityRegistry.setupUserIxns(
-			setupUserArgs
-		);
-		const txnId = await sendAndConfirmTransaction(
-			rwaClient.provider.connection,
-			new Transaction().add(...setupIx.ixs),
-			[setup.payerKp, setup.authorityKp]
-		);
-		expect(txnId).toBeTruthy();
-		const trackerAccount = await getTrackerAccount(
-			mint,
-			setup.authority.toString(),
-			rwaClient.provider
-		);
-		expect(trackerAccount).toBeTruthy();
-		expect(trackerAccount!.assetMint.toString()).toBe(mint);
-		console.log(
-			"tracker account: ",
-			getTrackerAccountPda(mint, setup.authority.toString()).toString()
-		);
-		console.log(
-			"identity account: ",
-			rwaClient.identityRegistry
-				.getIdentityAccountPda(mint, setup.authority.toString())
-				.toString()
-		);
-	});
-
 	test("issue tokens", async () => {
 		const issueArgs: IssueTokenArgs = {
 			authority: setup.authority.toString(),
@@ -287,7 +236,6 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("issue tokens signature: ", txnId);
 	});
 
 	test("void tokens", async () => {
