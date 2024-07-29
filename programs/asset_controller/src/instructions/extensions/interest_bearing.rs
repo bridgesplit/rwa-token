@@ -49,6 +49,6 @@ pub fn handler(ctx: Context<UpdateInterestBearingMintRate>, rate: i16) -> Result
     ];
     ctx.accounts
         .update_interest_bearing_mint(rate, &[&signer_seeds])?;
-    
+
     Ok(())
 }

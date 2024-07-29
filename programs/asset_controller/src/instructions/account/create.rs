@@ -50,11 +50,10 @@ pub struct CreateTokenAccount<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-
 pub fn handler(ctx: Context<CreateTokenAccount>, args: CreateTokenAccountArgs) -> Result<()> {
     ctx.accounts
         .tracker_account
         .new(ctx.accounts.asset_mint.key(), ctx.accounts.owner.key());
-    
+
     Ok(())
 }
