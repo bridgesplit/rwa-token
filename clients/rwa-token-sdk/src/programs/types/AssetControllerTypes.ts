@@ -14,6 +14,48 @@ export type AssetController = {
   },
   "instructions": [
     {
+      "name": "closeMintAccount",
+      "docs": [
+        "close mint account"
+      ],
+      "discriminator": [
+        14,
+        121,
+        72,
+        246,
+        96,
+        224,
+        42,
+        162
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "closeTokenAccount",
       "docs": [
         "close a token account"
@@ -372,6 +414,17 @@ export type AssetController = {
           }
         },
         {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
@@ -382,6 +435,46 @@ export type AssetController = {
         {
           "name": "associatedTokenProgram",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "createTokenAccountArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "disableMemoTransfer",
+      "docs": [
+        "memo transfer disable"
+      ],
+      "discriminator": [
+        68,
+        156,
+        197,
+        9,
+        43,
+        91,
+        114,
+        19
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         }
       ],
       "args": []
@@ -665,6 +758,53 @@ export type AssetController = {
               "name": "issueTokensArgs"
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "updateInterestBearingMintRate",
+      "docs": [
+        "interest bearing mint rate update"
+      ],
+      "discriminator": [
+        29,
+        174,
+        109,
+        163,
+        227,
+        75,
+        2,
+        144
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "rate",
+          "type": "i16"
         }
       ]
     },
@@ -1058,6 +1198,24 @@ export type AssetController = {
             "type": {
               "option": "pubkey"
             }
+          },
+          {
+            "name": "interestRate",
+            "type": {
+              "option": "i16"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "createTokenAccountArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transferMemo",
+            "type": "bool"
           }
         ]
       }
