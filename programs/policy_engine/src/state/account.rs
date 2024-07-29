@@ -66,7 +66,6 @@ pub enum PolicyType {
     TransactionAmountLimit { limit: u64 },
     TransactionAmountVelocity { limit: u64, timeframe: i64 },
     TransactionCountVelocity { limit: u64, timeframe: i64 },
-    IdentityLevelLimit { limit: u64 },
 }
 
 impl PolicyAccount {
