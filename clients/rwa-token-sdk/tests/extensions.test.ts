@@ -16,7 +16,7 @@ import { type Config } from "../src/classes/types";
 import { RwaClient } from "../src/classes";
 import { getInterestBearingMintConfigState, getMint, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
-describe("e2e tests", async () => {
+describe("extension tests", async () => {
 	let rwaClient: RwaClient;
 	let mint: string;
 	const setup = await setupTests();

@@ -100,13 +100,6 @@ pub fn enforce_policy(
                     }
                 }
             }
-            PolicyType::IdentityLevelLimit { limit } => {
-                if enforce_identity_filter(identity, policy.identity_filter).is_ok()
-                    && identity.len() as u64 > limit
-                {
-                    return Err(PolicyEngineErrors::IdentityLevelLimitExceeded.into());
-                }
-            }
         }
     }
     Ok(())
