@@ -15,7 +15,7 @@ pub enum AssetControllerAccounts {
 }
 
 impl GeyserProgramAccount for AssetControllerAccounts {
-    fn discriminator(&self) -> [u8; 8] {
+    fn discriminator(&self) -> &[u8] {
         match self {
             AssetControllerAccounts::AssetControllerAccount(_) => {
                 AssetControllerAccount::DISCRIMINATOR
@@ -28,14 +28,14 @@ impl GeyserProgramAccount for AssetControllerAccounts {
     where
         Self: Sized,
     {
-        let discriminator = data
+        let discriminator = &data
             .get(..8)
             .map(|bytes| {
                 let mut array = [0u8; 8];
                 array.copy_from_slice(bytes);
                 array
             })
-            .ok_or(ProgramError::InvalidAccountData)?;
+            .ok_or(ProgramError::InvalidAccountData)?[..];
         let account_data = &mut &data[8..];
         match discriminator {
             AssetControllerAccount::DISCRIMINATOR => {

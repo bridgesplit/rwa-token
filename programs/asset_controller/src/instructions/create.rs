@@ -18,6 +18,7 @@ pub struct CreateAssetControllerArgs {
     pub symbol: String,
     pub uri: String,
     pub delegate: Option<Pubkey>,
+    pub interest_rate: Option<i16>,
 }
 
 #[derive(Accounts)]
@@ -46,6 +47,9 @@ pub struct CreateAssetController<'info> {
         extensions::metadata_pointer::authority = asset_controller.key(),
         extensions::metadata_pointer::metadata_address = asset_mint.key(),
         extensions::permanent_delegate::delegate = asset_controller.key(),
+        extensions::interest_bearing_mint::authority = asset_controller.key(),
+        extensions::interest_bearing_mint::rate = args.interest_rate.unwrap_or(0),
+        extensions::close_authority::authority = asset_controller.key(),
     )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(

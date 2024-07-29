@@ -1,10 +1,15 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{Mint, Token2022, TokenAccount},
+    token_interface::{memo_transfer_initialize, MemoTransfer, Mint, Token2022, TokenAccount},
 };
 
-use crate::TrackerAccount;
+use crate::{AssetControllerAccount, TrackerAccount};
+
+#[derive(AnchorDeserialize, AnchorSerialize)]
+pub struct CreateTokenAccountArgs {
+    pub transfer_memo: bool,
+}
 
 #[derive(Accounts)]
 #[instruction()]
@@ -35,14 +40,21 @@ pub struct CreateTokenAccount<'info> {
         payer = payer,
     )]
     pub tracker_account: Box<Account<'info, TrackerAccount>>,
+    #[account(
+        seeds = [asset_mint.key().as_ref()],
+        bump,
+    )]
+    pub asset_controller: Account<'info, AssetControllerAccount>,
     pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token2022>,
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn handler(ctx: Context<CreateTokenAccount>) -> Result<()> {
+
+pub fn handler(ctx: Context<CreateTokenAccount>, args: CreateTokenAccountArgs) -> Result<()> {
     ctx.accounts
         .tracker_account
         .new(ctx.accounts.asset_mint.key(), ctx.accounts.owner.key());
+    
     Ok(())
 }
