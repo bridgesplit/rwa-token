@@ -8,6 +8,48 @@
   },
   "instructions": [
     {
+      "name": "close_mint_account",
+      "docs": [
+        "close mint account"
+      ],
+      "discriminator": [
+        14,
+        121,
+        72,
+        246,
+        96,
+        224,
+        42,
+        162
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "close_token_account",
       "docs": [
         "close a token account"
@@ -366,6 +408,17 @@
           }
         },
         {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         },
@@ -376,6 +429,46 @@
         {
           "name": "associated_token_program",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "CreateTokenAccountArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "disable_memo_transfer",
+      "docs": [
+        "memo transfer disable"
+      ],
+      "discriminator": [
+        68,
+        156,
+        197,
+        9,
+        43,
+        91,
+        114,
+        19
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         }
       ],
       "args": []
@@ -659,6 +752,53 @@
               "name": "IssueTokensArgs"
             }
           }
+        }
+      ]
+    },
+    {
+      "name": "update_interest_bearing_mint_rate",
+      "docs": [
+        "interest bearing mint rate update"
+      ],
+      "discriminator": [
+        29,
+        174,
+        109,
+        163,
+        227,
+        75,
+        2,
+        144
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "rate",
+          "type": "i16"
         }
       ]
     },
@@ -1052,6 +1192,24 @@
             "type": {
               "option": "pubkey"
             }
+          },
+          {
+            "name": "interest_rate",
+            "type": {
+              "option": "i16"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "CreateTokenAccountArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "transfer_memo",
+            "type": "bool"
           }
         ]
       }

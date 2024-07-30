@@ -150,7 +150,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
 			mint,
-			setup.user1.toString(),
+			setup.user2.toString(),
 			rwaClient.provider
 		);
 		// length of transfers should be 0 since any policies haven;t beeen attached yet
@@ -207,7 +207,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			if(i<4) { // dont need to check for all 25 transfers
 				const trackerAccount = await getTrackerAccount(
 					mint,
-					setup.user1.toString(),
+					setup.user2.toString(),
 					rwaClient.provider
 				);
 				expect(trackerAccount!.transfers.length).toBe(i + 1);

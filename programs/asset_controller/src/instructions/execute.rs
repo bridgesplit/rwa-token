@@ -50,7 +50,7 @@ pub struct ExecuteTransferHook<'info> {
     pub identity_account: UncheckedAccount<'info>,
     #[account(
         mut,
-        constraint = tracker_account.owner == owner_delegate.key(),
+        constraint = tracker_account.owner == destination_account.owner,
         constraint = tracker_account.asset_mint == asset_mint.key(),
     )]
     pub tracker_account: Box<Account<'info, TrackerAccount>>,
@@ -111,7 +111,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         ctx.accounts.identity_account.key(),
         &[
             &ctx.accounts.identity_registry_account.key().to_bytes(),
-            &ctx.accounts.owner_delegate.key().to_bytes(),
+            &ctx.accounts.destination_account.owner.to_bytes(),
         ],
         &identity_registry::id(),
     )?;

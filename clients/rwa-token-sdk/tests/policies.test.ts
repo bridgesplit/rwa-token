@@ -58,7 +58,7 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
-				identityLevels: [1, 2, 255],
+				identityLevels: [1, 2],
 				comparisionType: { or: {} },
 			},
 			policyType: {
@@ -94,7 +94,7 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			authority: setup.authority.toString(),
 			identityFilter: {
-				identityLevels: [1], // Going to skip other identity levels
+				identityLevels: [2], // Going to skip other identity levels
 				comparisionType: { or: {} },
 			},
 			policyType: {
@@ -239,8 +239,8 @@ describe("test policy setup", async () => {
 		let transferTokensIx = await getTransferTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
-			from: setup.user1.toString(),
-			to: setup.user2.toString(),
+			from: setup.user2.toString(),
+			to: setup.user1.toString(),
 			assetMint: mint,
 			amount: 1000,
 			decimals,
@@ -248,13 +248,13 @@ describe("test policy setup", async () => {
 		void expect(sendAndConfirmTransaction(
 			setup.provider.connection,
 			new Transaction().add(transferTokensIx),
-			[setup.payerKp, setup.user1Kp],
+			[setup.payerKp, setup.user2Kp],
 		)).rejects.toThrowError();
 		transferTokensIx = await getTransferTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
-			from: setup.user2.toString(),
-			to: setup.user3.toString(),
+			from: setup.user3.toString(),
+			to: setup.user2.toString(),
 			assetMint: mint,
 			amount: 1000,
 			decimals,
@@ -262,14 +262,14 @@ describe("test policy setup", async () => {
 		let txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
 			new Transaction().add(transferTokensIx),
-			[setup.payerKp, setup.user2Kp],
+			[setup.payerKp, setup.user3Kp],
 		);
 		expect(txnId).toBeTruthy();
 		transferTokensIx = await getTransferTokensIx({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
-			from: setup.user3.toString(),
-			to: setup.user1.toString(),
+			from: setup.user1.toString(),
+			to: setup.user3.toString(),
 			assetMint: mint,
 			amount: 1000,
 			decimals,
@@ -277,7 +277,7 @@ describe("test policy setup", async () => {
 		txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
 			new Transaction().add(transferTokensIx),
-			[setup.payerKp, setup.user3Kp],
+			[setup.payerKp, setup.user1Kp],
 		);
 		expect(txnId).toBeTruthy();
 	});
