@@ -1,9 +1,5 @@
-use anchor_lang::{prelude::*, solana_program::program_option::COption};
-use anchor_spl::token_interface::{
-    memo_transfer_disable, MemoTransfer, Mint, Token2022, TokenAccount,
-};
-
-use crate::AssetControllerAccount;
+use anchor_lang::prelude::*;
+use anchor_spl::token_interface::{memo_transfer_disable, MemoTransfer, Token2022, TokenAccount};
 
 #[derive(Accounts)]
 #[instruction()]

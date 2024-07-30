@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{memo_transfer_initialize, MemoTransfer, Mint, Token2022, TokenAccount},
+    token_interface::{Mint, Token2022, TokenAccount},
 };
 
 use crate::{AssetControllerAccount, TrackerAccount};
@@ -50,7 +50,7 @@ pub struct CreateTokenAccount<'info> {
     pub associated_token_program: Program<'info, AssociatedToken>,
 }
 
-pub fn handler(ctx: Context<CreateTokenAccount>, args: CreateTokenAccountArgs) -> Result<()> {
+pub fn handler(ctx: Context<CreateTokenAccount>, _args: CreateTokenAccountArgs) -> Result<()> {
     ctx.accounts
         .tracker_account
         .new(ctx.accounts.asset_mint.key(), ctx.accounts.owner.key());

@@ -226,12 +226,12 @@ export async function getTransferTokensIx(
 			isSigner: false,
 		},
 		{
-			pubkey: getIdentityAccountPda(args.assetMint, args.from),
+			pubkey: getIdentityAccountPda(args.assetMint, args.to),
 			isWritable: true,
 			isSigner: false,
 		},
 		{
-			pubkey: getTrackerAccountPda(args.assetMint, args.from),
+			pubkey: getTrackerAccountPda(args.assetMint, args.to),
 			isWritable: true,
 			isSigner: false,
 		},
