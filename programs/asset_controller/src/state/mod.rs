@@ -2,9 +2,11 @@ pub const META_LIST_ACCOUNT_SEED: &[u8] = b"extra-account-metas";
 
 pub mod registry;
 pub mod track;
+pub mod extensions;
 
 pub use registry::*;
 pub use track::*;
+pub use extensions::*;
 
 use anchor_lang::{solana_program::program_error::ProgramError, AnchorDeserialize, Discriminator};
 use rwa_utils::GeyserProgramAccount;
