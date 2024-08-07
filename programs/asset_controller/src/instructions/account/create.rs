@@ -35,7 +35,7 @@ pub struct CreateTokenAccount<'info> {
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
-        init,
+        init_if_needed,
         space = 8 + TrackerAccount::INIT_SPACE,
         seeds = [asset_mint.key().as_ref(), owner.key().as_ref()],
         bump,
@@ -94,9 +94,8 @@ pub fn handler(ctx: Context<CreateTokenAccount>, args: CreateTokenAccountArgs) -
         .tracker_account
         .new(ctx.accounts.asset_mint.key(), ctx.accounts.owner.key());
 
-    ctx.accounts.reallocate_ta(TOKEN_EXTENSIONS.to_vec())?;
-
     if args.memo_transfer {
+        ctx.accounts.reallocate_ta(TOKEN_EXTENSIONS.to_vec())?;
         ctx.accounts.enable_memo_transfer()?;
         emit_cpi!(ExtensionMetadataEvent {
             address: ctx.accounts.token_account.key().to_string(),
