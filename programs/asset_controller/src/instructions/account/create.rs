@@ -53,12 +53,13 @@ pub struct CreateTokenAccount<'info> {
 }
 
 impl<'info> CreateTokenAccount<'info> {
+    #[allow(clippy::needless_borrow)]
     fn reallocate_ta(&self, extensions: Vec<ExtensionType>) -> Result<()> {
         let ix = reallocate(
             &self.token_program.key,
             &self.token_account.key(),
-            &self.payer.key,
-            &self.owner.key,
+            self.payer.key,
+            self.owner.key,
             &[],
             &extensions,
         )?;
