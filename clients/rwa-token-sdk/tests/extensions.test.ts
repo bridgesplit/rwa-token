@@ -1,6 +1,7 @@
 import { Wallet } from "@coral-xyz/anchor";
 import {
 	getCloseMintIx,
+	getDisableMemoTransferIx,
 	getUpdateInterestBearingMintRateIx,
 } from "../src";
 import { setupTests } from "./setup";
@@ -14,7 +15,7 @@ import {
 import { expect, test, describe } from "vitest";
 import { type Config } from "../src/classes/types";
 import { RwaClient } from "../src/classes";
-import { getInterestBearingMintConfigState, getMint, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import { getAccount, getAssociatedTokenAddressSync, getInterestBearingMintConfigState, getMemoTransfer, getMint, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 describe("extension tests", async () => {
 	let rwaClient: RwaClient;
@@ -51,7 +52,7 @@ describe("extension tests", async () => {
 			uri: "https://test.com",
 			symbol: "TFT",
 			interestRate: 100,
-			tranferMemo: true,
+			memoTransfer: true,
 		};
 
 		const setupIx = await rwaClient.assetController.setupNewRegistry(
@@ -74,17 +75,17 @@ describe("extension tests", async () => {
 			mintData,
 		);
 		expect(interestBearingMintConfig?.currentRate).toEqual(100);
-		// const tokenAccount = await getAccount(
-		// 	rwaClient.provider.connection,
-		// 	getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID),
-		// 	undefined,
-		// 	TOKEN_2022_PROGRAM_ID
-		// );
-		// // Get Interest Config for Mint Account
-		// const memoTransfer = getMemoTransfer(
-		// 	tokenAccount, 
-		// );
-		// expect(memoTransfer?.requireIncomingTransferMemos).toEqual(true);
+		const tokenAccount = await getAccount(
+			rwaClient.provider.connection,
+			getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID),
+			undefined,
+			TOKEN_2022_PROGRAM_ID
+		);
+		// Get Interest Config for Mint Account
+		const memoTransfer = getMemoTransfer(
+			tokenAccount, 
+		);
+		expect(memoTransfer?.requireIncomingTransferMemos).toEqual(true);
 	});
 
 
@@ -116,6 +117,33 @@ describe("extension tests", async () => {
 		expect(interestBearingMintConfig?.currentRate).toEqual(200);
 	});
 
+	test("disable transfer memo", async () => {
+		const updateIx = await getDisableMemoTransferIx(
+			{
+				owner: setup.authority.toString(),
+				tokenAccount: getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID).toString(),
+			},
+			rwaClient.provider
+		);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(updateIx),
+			[setup.authorityKp]
+		);
+		expect(txnId).toBeTruthy();
+		const mintAccount = await getAccount(
+			rwaClient.provider.connection,
+			getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID),
+			undefined,
+			TOKEN_2022_PROGRAM_ID,
+		);
+		// Get Interest Config for Mint Account
+		const interestBearingMintConfig = getMemoTransfer(
+			mintAccount, 
+		);
+		expect(interestBearingMintConfig?.requireIncomingTransferMemos).toEqual(false);
+	});
+
 	test("close mint account", async () => {
 		const closeIx = await getCloseMintIx(
 			{
@@ -138,32 +166,5 @@ describe("extension tests", async () => {
 			TOKEN_2022_PROGRAM_ID,
 		)).rejects.toThrow();
 	});
-
-	// test("disable transfer memo", async () => {
-	// 	const updateIx = await getDisableMemoTransferIx(
-	// 		{
-	// 			owner: setup.authority.toString(),
-	// 			tokenAccount: getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID).toString(),
-	// 		},
-	// 		rwaClient.provider
-	// 	);
-	// 	const txnId = await sendAndConfirmTransaction(
-	// 		rwaClient.provider.connection,
-	// 		new Transaction().add(updateIx),
-	// 		[setup.authorityKp]
-	// 	);
-	// 	expect(txnId).toBeTruthy();
-	// 	const mintAccount = await getAccount(
-	// 		rwaClient.provider.connection,
-	// 		new PublicKey(mint),
-	// 		undefined,
-	// 		TOKEN_2022_PROGRAM_ID,
-	// 	);
-	// 	// Get Interest Config for Mint Account
-	// 	const interestBearingMintConfig = getMemoTransfer(
-	// 		mintAccount, 
-	// 	);
-	// 	expect(interestBearingMintConfig?.requireIncomingTransferMemos).toEqual(false);
-	// });
 
 });
