@@ -1,8 +1,12 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{memo_transfer_disable, MemoTransfer, Token2022, TokenAccount};
+use spl_token_2022::extension::ExtensionType;
+
+use crate::ExtensionMetadataEvent;
 
 #[derive(Accounts)]
 #[instruction()]
+#[event_cpi]
 pub struct DisableMemoTransfer<'info> {
     #[account()]
     pub owner: Signer<'info>,
@@ -29,5 +33,10 @@ impl<'info> DisableMemoTransfer<'info> {
 
 pub fn handler(ctx: Context<DisableMemoTransfer>) -> Result<()> {
     ctx.accounts.disable_memo_transfer()?;
+    emit_cpi!(ExtensionMetadataEvent {
+        address: ctx.accounts.token_account.key().to_string(),
+        extension_type: ExtensionType::MemoTransfer as u8,
+        metadata: vec![0]
+    });
     Ok(())
 }

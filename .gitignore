@@ -9,3 +9,4 @@ dist
 .env
 yarn-error.log
 docs
+buffer*.json

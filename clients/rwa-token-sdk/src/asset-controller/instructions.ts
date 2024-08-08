@@ -283,7 +283,7 @@ export async function getTransferTokensIx(
 
 export type CreateTokenAccountArgs = {
   owner: string;
-  transferMemo?: boolean;
+  memoTransfer?: boolean;
 } & CommonArgs;
 
 export async function getCreateTokenAccountIx(
@@ -293,7 +293,7 @@ export async function getCreateTokenAccountIx(
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods
 		.createTokenAccount({
-			transferMemo: args.transferMemo || false,
+			memoTransfer: args.memoTransfer || false,
 		})
 		.accountsStrict({
 			payer: args.payer,
@@ -310,6 +310,8 @@ export async function getCreateTokenAccountIx(
 				TOKEN_2022_PROGRAM_ID
 			),
 			trackerAccount: getTrackerAccountPda(args.assetMint, args.owner),
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
 		})
 		.instruction();
 	return ix;
@@ -325,7 +327,7 @@ export type SetupAssetControllerArgs = {
   uri: string;
   symbol: string;
   interestRate?: number;
-  transferMemo?: boolean;
+  memoTransfer?: boolean;
 };
 
 /**
@@ -370,7 +372,7 @@ export async function getSetupAssetControllerIxs(
 			signer: args.authority,
 			assetMint: mint.toString(),
 			level: 255,
-			transferMemo: args.transferMemo,
+			memoTransfer: args.memoTransfer,
 		},
 		provider
 	);
@@ -395,7 +397,7 @@ export type SetupUserArgs = {
   signer: string;
   assetMint: string;
   level: number;
-  transferMemo?: boolean;
+  memoTransfer?: boolean;
 };
 
 /**
@@ -448,6 +450,8 @@ export async function getUpdateInterestBearingMintRateIx(
 			assetMint: new PublicKey(args.assetMint),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			assetController: getAssetControllerPda(args.assetMint),
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
 		})
 		.instruction();
 	return ix;
@@ -474,6 +478,8 @@ export async function getDisableMemoTransferIx(
 			owner: new PublicKey(args.owner),
 			tokenAccount: new PublicKey(args.tokenAccount),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
 		})
 		.instruction();
 	return ix;
