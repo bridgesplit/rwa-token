@@ -137,6 +137,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         amount,
         Clock::get()?.unix_timestamp,
         &levels,
+        ctx.accounts.destination_account.amount,
         &ctx.accounts.tracker_account.transfers,
     )?;
 

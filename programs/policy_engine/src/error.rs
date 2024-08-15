@@ -22,4 +22,6 @@ pub enum PolicyEngineErrors {
     UnauthorizedSigner,
     #[msg("Policy already exists")]
     PolicyAlreadyExists,
+    #[msg("Max balance exceeded")]
+    MaxBalanceExceeded,
 }

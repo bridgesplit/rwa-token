@@ -67,6 +67,7 @@ pub fn enforce_policy(
     amount: u64,
     timestamp: i64,
     identity: &[u8],
+    balance: u64,
     transfers: &Vec<Transfer>,
 ) -> Result<()> {
     for policy in policies.iter() {
@@ -97,6 +98,13 @@ pub fn enforce_policy(
                         get_total_transactions_in_timeframe(transfers, timeframe, timestamp);
                     if total_transactions + 1 > limit {
                         return Err(PolicyEngineErrors::TransactionCountVelocityExceeded.into());
+                    }
+                }
+            }
+            PolicyType::MaxBalance { limit } => {
+                if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
+                    if amount + balance > limit {
+                        return Err(PolicyEngineErrors::MaxBalanceExceeded.into());
                     }
                 }
             }
