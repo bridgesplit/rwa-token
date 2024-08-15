@@ -4,7 +4,7 @@ use anchor_lang::{
 };
 use anchor_spl::token_interface::{Mint, TokenAccount};
 use identity_registry::{
-    program::IdentityRegistry, IdentityAccount, NO_IDENTITY_LEVEL, SKIP_POLICY_LEVEL,
+    program::IdentityRegistry, IdentityAccount, NO_IDENTITY_DEFAULT_LEVEL, SKIP_POLICY_LEVEL,
 };
 use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
 
@@ -123,7 +123,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     {
         identity_account.levels
     } else {
-        vec![NO_IDENTITY_LEVEL]
+        vec![NO_IDENTITY_DEFAULT_LEVEL]
     };
 
     // if user has identity skip level, skip enforcing policy

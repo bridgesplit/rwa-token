@@ -16,7 +16,7 @@ pub struct IdentityRegistryAccount {
 pub const SKIP_POLICY_LEVEL: u8 = u8::MAX;
 
 /// level to be used if user does not have any identity
-pub const NO_IDENTITY_LEVEL: u8 = u8::MIN;
+pub const NO_IDENTITY_DEFAULT_LEVEL: u8 = u8::MIN;
 
 impl IdentityRegistryAccount {
     pub const VERSION: u8 = 1;
