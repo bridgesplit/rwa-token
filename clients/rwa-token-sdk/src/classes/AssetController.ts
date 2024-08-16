@@ -6,13 +6,13 @@ import {
 	type VoidTokensArgs,
 	getIssueTokensIx,
 	getSetupAssetControllerIxs,
-	getTransferTokensIx,
 	getVoidTokensIx,
 	getAssetControllerPda,
 	getTrackerAccountPda,
 	getExtraMetasListPda,
 	getUpdateAssetMetadataIx,
 	UpdateAssetMetadataArgs,
+	getTransferTokensIxs,
 } from "../asset-controller";
 import { type IxReturn } from "../utils";
 import { type RwaClient } from "./Client";
@@ -94,9 +94,9 @@ export class AssetController {
    */
 	async transfer(
 		transferArgs: TransferTokensArgs
-	): Promise<TransactionInstruction> {
-		const transferIx = await getTransferTokensIx(transferArgs);
-		return transferIx;
+	): Promise<TransactionInstruction[]> {
+		const transferIxs = await getTransferTokensIxs(transferArgs, this.rwaClient.provider);
+		return transferIxs;
 	}
 
 	/**

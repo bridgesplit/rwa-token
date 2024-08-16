@@ -5,7 +5,7 @@ import {
 	PublicKey,
 	SystemProgram,
 	SYSVAR_INSTRUCTIONS_PUBKEY,
-	type TransactionInstruction,
+	TransactionInstruction,
 } from "@solana/web3.js";
 import {
 	policyRegistryProgramId,
@@ -29,7 +29,9 @@ import {
 	ASSOCIATED_TOKEN_PROGRAM_ID,
 	TOKEN_2022_PROGRAM_ID,
 	createTransferCheckedInstruction,
+	getAccount,
 	getAssociatedTokenAddressSync,
+	getMemoTransfer,
 } from "@solana/spl-token";
 import {
 	getAssetControllerProgram,
@@ -194,6 +196,7 @@ export type TransferTokensArgs = {
   to: string;
   amount: number;
   decimals: number;
+  message?: string;
 } & CommonArgs;
 
 /**
@@ -201,9 +204,10 @@ export type TransferTokensArgs = {
  * @param args {@link TransferTokensArgs}
  * @returns Transaction instruction to transfer RWA token.
  */
-export async function getTransferTokensIx(
-	args: TransferTokensArgs
-): Promise<TransactionInstruction> {
+export async function getTransferTokensIxs(
+	args: TransferTokensArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction[]> {
 	const remainingAccounts = [
 		{
 			pubkey: policyRegistryProgramId,
@@ -256,6 +260,30 @@ export async function getTransferTokensIx(
 			isSigner: false,
 		},
 	];
+	const ixs: TransactionInstruction[] = [];
+	try {
+		const ta = await getAccount(provider.connection, getAssociatedTokenAddressSync(
+			new PublicKey(args.assetMint),
+			new PublicKey(args.to),
+			false,
+			TOKEN_2022_PROGRAM_ID
+		));
+		if(ta) {
+			const isMemoTransfer = getMemoTransfer(ta);
+			if (isMemoTransfer) {
+				if(!args.message) {
+					throw new Error("Memo is required for memo transfer");
+				}
+				ixs.push(new TransactionInstruction({
+					keys: [{ pubkey: new PublicKey(args.from), isSigner: true, isWritable: true }],
+					data: Buffer.from(args.message, "utf-8"),
+					programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+				}));
+			}
+		}
+	} catch (error) {
+		// do nothing
+	}
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),
@@ -278,7 +306,8 @@ export async function getTransferTokensIx(
 	);
 	ix.keys = ix.keys.concat(remainingAccounts);
 
-	return ix;
+	ixs.push(ix);
+	return ixs;
 }
 
 export type CreateTokenAccountArgs = {
