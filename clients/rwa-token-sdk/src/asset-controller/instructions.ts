@@ -5,7 +5,7 @@ import {
 	PublicKey,
 	SystemProgram,
 	SYSVAR_INSTRUCTIONS_PUBKEY,
-	type TransactionInstruction,
+	TransactionInstruction,
 } from "@solana/web3.js";
 import {
 	policyRegistryProgramId,
@@ -29,7 +29,9 @@ import {
 	ASSOCIATED_TOKEN_PROGRAM_ID,
 	TOKEN_2022_PROGRAM_ID,
 	createTransferCheckedInstruction,
+	getAccount,
 	getAssociatedTokenAddressSync,
+	getMemoTransfer,
 } from "@solana/spl-token";
 import {
 	getAssetControllerProgram,
@@ -37,6 +39,7 @@ import {
 	getExtraMetasListPda,
 	getTrackerAccountPda,
 	assetControllerProgramId,
+	getAssetControllerEventAuthority,
 } from "./utils";
 import { type AnchorProvider, BN } from "@coral-xyz/anchor";
 
@@ -47,6 +50,7 @@ export type CreateAssetControllerIx = {
   name: string;
   uri: string;
   symbol: string;
+  interestRate?: number;
 } & CommonArgs;
 
 /**
@@ -66,6 +70,7 @@ export async function getCreateAssetControllerIx(
 			uri: args.uri,
 			symbol: args.symbol,
 			delegate: args.delegate ? new PublicKey(args.delegate) : null,
+			interestRate: args.interestRate ? new BN(args.interestRate) : null,
 		})
 		.accountsStrict({
 			payer: args.payer,
@@ -75,10 +80,51 @@ export async function getCreateAssetControllerIx(
 			systemProgram: SystemProgram.programId,
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			authority: args.authority,
+			eventAuthority: getAssetControllerEventAuthority(),
+			program: assetControllerProgramId,
 		})
 		.instruction();
 	return ix;
 }
+
+/** Represents arguments for update an on chain asset metadata. */
+export type UpdateAssetMetadataArgs = {
+	authority: string;
+	name?: string;
+	uri?: string;
+	symbol?: string;
+  } & CommonArgs;
+
+/**
+ * Builds the transaction instruction to create an Asset Controller.
+ * @param args - {@link UpdateAssetMetadataArgs}
+ * @returns Create asset controller transaction instruction
+ */
+export async function getUpdateAssetMetadataIx(
+	args: UpdateAssetMetadataArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.updateMetadata({
+			name: args.name || null,
+			uri: args.uri || null,
+			symbol: args.symbol || null,
+		})
+		.accountsStrict({
+			payer: args.payer,
+			assetMint: args.assetMint,
+			assetController: getAssetControllerPda(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			authority: args.authority,
+			eventAuthority: getAssetControllerEventAuthority(),
+			systemProgram: SystemProgram.programId,
+			program: assetControllerProgramId,
+		})
+		.instruction();
+	return ix;
+}
+
 
 /** Represents arguments for issuing an on chain asset/token. */
 export type IssueTokenArgs = {
@@ -150,6 +196,7 @@ export type TransferTokensArgs = {
   to: string;
   amount: number;
   decimals: number;
+  message?: string;
 } & CommonArgs;
 
 /**
@@ -157,9 +204,10 @@ export type TransferTokensArgs = {
  * @param args {@link TransferTokensArgs}
  * @returns Transaction instruction to transfer RWA token.
  */
-export async function getTransferTokensIx(
-	args: TransferTokensArgs
-): Promise<TransactionInstruction> {
+export async function getTransferTokensIxs(
+	args: TransferTokensArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction[]> {
 	const remainingAccounts = [
 		{
 			pubkey: policyRegistryProgramId,
@@ -182,12 +230,12 @@ export async function getTransferTokensIx(
 			isSigner: false,
 		},
 		{
-			pubkey: getIdentityAccountPda(args.assetMint, args.from),
+			pubkey: getIdentityAccountPda(args.assetMint, args.to),
 			isWritable: true,
 			isSigner: false,
 		},
 		{
-			pubkey: getTrackerAccountPda(args.assetMint, args.from),
+			pubkey: getTrackerAccountPda(args.assetMint, args.to),
 			isWritable: true,
 			isSigner: false,
 		},
@@ -212,6 +260,30 @@ export async function getTransferTokensIx(
 			isSigner: false,
 		},
 	];
+	const ixs: TransactionInstruction[] = [];
+	try {
+		const ta = await getAccount(provider.connection, getAssociatedTokenAddressSync(
+			new PublicKey(args.assetMint),
+			new PublicKey(args.to),
+			false,
+			TOKEN_2022_PROGRAM_ID
+		));
+		if(ta) {
+			const isMemoTransfer = getMemoTransfer(ta);
+			if (isMemoTransfer) {
+				if(!args.message) {
+					throw new Error("Memo is required for memo transfer");
+				}
+				ixs.push(new TransactionInstruction({
+					keys: [{ pubkey: new PublicKey(args.from), isSigner: true, isWritable: true }],
+					data: Buffer.from(args.message, "utf-8"),
+					programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+				}));
+			}
+		}
+	} catch (error) {
+		// do nothing
+	}
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),
@@ -234,11 +306,13 @@ export async function getTransferTokensIx(
 	);
 	ix.keys = ix.keys.concat(remainingAccounts);
 
-	return ix;
+	ixs.push(ix);
+	return ixs;
 }
 
 export type CreateTokenAccountArgs = {
   owner: string;
+  memoTransfer?: boolean;
 } & CommonArgs;
 
 export async function getCreateTokenAccountIx(
@@ -247,12 +321,15 @@ export async function getCreateTokenAccountIx(
 ): Promise<TransactionInstruction> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods
-		.createTokenAccount()
+		.createTokenAccount({
+			memoTransfer: args.memoTransfer || false,
+		})
 		.accountsStrict({
 			payer: args.payer,
 			assetMint: args.assetMint,
 			owner: args.owner,
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
 			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
 			systemProgram: SystemProgram.programId,
 			tokenAccount: getAssociatedTokenAddressSync(
@@ -262,6 +339,8 @@ export async function getCreateTokenAccountIx(
 				TOKEN_2022_PROGRAM_ID
 			),
 			trackerAccount: getTrackerAccountPda(args.assetMint, args.owner),
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
 		})
 		.instruction();
 	return ix;
@@ -276,6 +355,8 @@ export type SetupAssetControllerArgs = {
   name: string;
   uri: string;
   symbol: string;
+  interestRate?: number;
+  memoTransfer?: boolean;
 };
 
 /**
@@ -311,12 +392,28 @@ export async function getSetupAssetControllerIxs(
 		updatedArgs,
 		provider
 	);
+
+	// Setup user ixs
+	const setupUserIxs = await getSetupUserIxs(
+		{
+			payer: args.payer,
+			owner: args.authority,
+			signer: args.authority,
+			assetMint: mint.toString(),
+			level: 255,
+			memoTransfer: args.memoTransfer,
+		},
+		provider
+	);
+	
+
 	return {
 		ixs: [
 			assetControllerCreateIx,
 			policyEngineCreateIx,
 			dataRegistryCreateIx,
 			identityRegistryCreateIx,
+			...setupUserIxs.ixs,
 		],
 		signers: [mintKp],
 	};
@@ -329,6 +426,7 @@ export type SetupUserArgs = {
   signer: string;
   assetMint: string;
   level: number;
+  memoTransfer?: boolean;
 };
 
 /**
@@ -357,4 +455,87 @@ export async function getSetupUserIxs(
 		ixs: [identityAccountIx, createTaIx],
 		signers: [],
 	};
+}
+
+export type InterestBearingMintArgs = {
+	rate: number;
+	authority: string;
+  } & CommonArgs;
+
+/**
+ * Generate Instructions to update interest rate
+ * @param args - {@link InterestRateArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getUpdateInterestBearingMintRateIx(
+	args: { rate: number, authority: string } & CommonArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.updateInterestBearingMintRate(new BN(args.rate))
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
+		})
+		.instruction();
+	return ix;
+}
+
+export type MemoTranferArgs = {
+	owner: string;
+	tokenAccount: string;
+};
+
+/**
+ * Generate Instructions to disable memo transfer
+ * @param args - {@link MemoTranferArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getDisableMemoTransferIx(
+	args: MemoTranferArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.disableMemoTransfer()
+		.accountsStrict({
+			owner: new PublicKey(args.owner),
+			tokenAccount: new PublicKey(args.tokenAccount),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
+		})
+		.instruction();
+	return ix;
+}
+
+export type CloseMintArgs = {
+	authority: string;
+} & CommonArgs;
+
+/**
+ * Generate Instructions to close a mint
+ * @param args - {@link CloseMintArgs}
+ * @returns - {@link TransactionInstruction}
+ */
+export async function getCloseMintIx(
+	args: CloseMintArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.closeMintAccount()
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+		})
+		.instruction();
+	return ix;
 }

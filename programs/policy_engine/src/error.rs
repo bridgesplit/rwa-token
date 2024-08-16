@@ -10,6 +10,8 @@ pub enum PolicyEngineErrors {
     TransactionAmountVelocityExceeded,
     #[msg("Transaction count velocity exceeded")]
     TransactionCountVelocityExceeded,
+    #[msg("Identity level limit exceeded")]
+    IdentityLevelLimitExceeded,
     #[msg("Policy registry is full, cannot add more policies")]
     PolicyEngineFull,
     #[msg("Policy not found")]
@@ -20,4 +22,6 @@ pub enum PolicyEngineErrors {
     UnauthorizedSigner,
     #[msg("Policy already exists")]
     PolicyAlreadyExists,
+    #[msg("Max balance exceeded")]
+    MaxBalanceExceeded,
 }

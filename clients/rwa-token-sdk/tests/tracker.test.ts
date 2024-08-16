@@ -141,16 +141,16 @@ describe("test suite to test tracker account is being updated correctly on trans
 			decimals,
 		};
 
-		const transferIx = await rwaClient.assetController.transfer(transferArgs);
+		const transferIxs = await rwaClient.assetController.transfer(transferArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(transferIx),
+			new Transaction().add(...transferIxs),
 			[setup.payerKp, setup.user1Kp]
 		);
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
 			mint,
-			setup.user1.toString(),
+			setup.user2.toString(),
 			rwaClient.provider
 		);
 		// length of transfers should be 0 since any policies haven;t beeen attached yet
@@ -190,14 +190,14 @@ describe("test suite to test tracker account is being updated correctly on trans
 				decimals,
 			};
 	
-			const transferIx = await rwaClient.assetController.transfer(transferArgs);
+			const transferIxs = await rwaClient.assetController.transfer(transferArgs);
 			let commitment: Commitment = "processed";
 			if (i < 4) {
 				commitment = "finalized";
 			}
 			const txnId = await sendAndConfirmTransaction(
 				rwaClient.provider.connection,
-				new Transaction().add(transferIx),
+				new Transaction().add(...transferIxs),
 				[setup.payerKp, setup.user1Kp],
 				{
 					commitment,
@@ -207,7 +207,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			if(i<4) { // dont need to check for all 25 transfers
 				const trackerAccount = await getTrackerAccount(
 					mint,
-					setup.user1.toString(),
+					setup.user2.toString(),
 					rwaClient.provider
 				);
 				expect(trackerAccount!.transfers.length).toBe(i + 1);
@@ -223,10 +223,10 @@ describe("test suite to test tracker account is being updated correctly on trans
 			decimals,
 		};
 
-		const transferIx = await rwaClient.assetController.transfer(transferArgs);
+		const transferIxs = await rwaClient.assetController.transfer(transferArgs);
 		expect(sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(transferIx),
+			new Transaction().add(...transferIxs),
 			[setup.payerKp, setup.user1Kp]
 		)).rejects.toThrowError(/failed \(\{"err":\{"InstructionError":\[0,\{"Custom":6006\}\]\}\}\)/);
 	});

@@ -34,7 +34,7 @@ pub mod policy_engine {
         identity_filter: IdentityFilter,
         policy_type: PolicyType,
     ) -> Result<()> {
-        instructions::create::handler(ctx, identity_filter, policy_type)
+        instructions::account::create::handler(ctx, identity_filter, policy_type)
     }
 
     /// attach a policy
@@ -43,7 +43,7 @@ pub mod policy_engine {
         identity_filter: IdentityFilter,
         policy_type: PolicyType,
     ) -> Result<()> {
-        instructions::attach::handler(ctx, identity_filter, policy_type)
+        instructions::account::attach::handler(ctx, identity_filter, policy_type)
     }
 
     /// remove policy
@@ -51,6 +51,6 @@ pub mod policy_engine {
         ctx: Context<DetachFromPolicyAccount>,
         hash: String,
     ) -> Result<()> {
-        instructions::detach::handler(ctx, hash)
+        instructions::account::detach::handler(ctx, hash)
     }
 }

@@ -6,11 +6,13 @@ import {
 	type VoidTokensArgs,
 	getIssueTokensIx,
 	getSetupAssetControllerIxs,
-	getTransferTokensIx,
 	getVoidTokensIx,
 	getAssetControllerPda,
 	getTrackerAccountPda,
 	getExtraMetasListPda,
+	getUpdateAssetMetadataIx,
+	UpdateAssetMetadataArgs,
+	getTransferTokensIxs,
 } from "../asset-controller";
 import { type IxReturn } from "../utils";
 import { type RwaClient } from "./Client";
@@ -39,6 +41,21 @@ export class AssetController {
 		);
 
 		return setupControllerIx;
+	}
+
+	/**
+	 * Update the asset controller's metadata.
+	 * @param - {@link UpdateAssetMetadataArgs}
+	 * @returns A Promise that resolves to the instructions to update the asset controller's metadata.
+	 * */
+	async updateAssetMetadata(
+		updateAssetControllerArgs: UpdateAssetMetadataArgs
+	): Promise<TransactionInstruction> {
+		const updateMetadataIx = await getUpdateAssetMetadataIx(
+			updateAssetControllerArgs,
+			this.rwaClient.provider
+		);
+		return updateMetadataIx;
 	}
 
 	/**
@@ -77,9 +94,9 @@ export class AssetController {
    */
 	async transfer(
 		transferArgs: TransferTokensArgs
-	): Promise<TransactionInstruction> {
-		const transferIx = await getTransferTokensIx(transferArgs);
-		return transferIx;
+	): Promise<TransactionInstruction[]> {
+		const transferIxs = await getTransferTokensIxs(transferArgs, this.rwaClient.provider);
+		return transferIxs;
 	}
 
 	/**

@@ -3,7 +3,9 @@ use anchor_lang::{
     solana_program::sysvar::{self},
 };
 use anchor_spl::token_interface::{Mint, TokenAccount};
-use identity_registry::{program::IdentityRegistry, IdentityAccount, SKIP_POLICY_LEVEL};
+use identity_registry::{
+    program::IdentityRegistry, IdentityAccount, NO_IDENTITY_LEVEL, SKIP_POLICY_LEVEL,
+};
 use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
 
 use crate::{state::*, verify_cpi_program_is_token22, verify_pda};
@@ -50,7 +52,7 @@ pub struct ExecuteTransferHook<'info> {
     pub identity_account: UncheckedAccount<'info>,
     #[account(
         mut,
-        constraint = tracker_account.owner == owner_delegate.key(),
+        constraint = tracker_account.owner == destination_account.owner,
         constraint = tracker_account.asset_mint == asset_mint.key(),
     )]
     pub tracker_account: Box<Account<'info, TrackerAccount>>,
@@ -111,16 +113,21 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         ctx.accounts.identity_account.key(),
         &[
             &ctx.accounts.identity_registry_account.key().to_bytes(),
-            &ctx.accounts.owner_delegate.key().to_bytes(),
+            &ctx.accounts.destination_account.owner.to_bytes(),
         ],
         &identity_registry::id(),
     )?;
 
-    let identity_account =
-        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])?;
+    let levels = if let Ok(identity_account) =
+        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])
+    {
+        identity_account.levels
+    } else {
+        vec![NO_IDENTITY_LEVEL]
+    };
 
     // if user has identity skip level, skip enforcing policy
-    if identity_account.levels.contains(&SKIP_POLICY_LEVEL) {
+    if levels.contains(&SKIP_POLICY_LEVEL) {
         return Ok(());
     }
 
@@ -129,7 +136,8 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         policy_account.policies.clone(),
         amount,
         Clock::get()?.unix_timestamp,
-        &identity_account.levels,
+        &levels,
+        ctx.accounts.destination_account.amount,
         &ctx.accounts.tracker_account.transfers,
     )?;
 

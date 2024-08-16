@@ -156,6 +156,36 @@ export type DataRegistry = {
       ]
     },
     {
+      "name": "deleteDataAccount",
+      "docs": [
+        "delete data account"
+      ],
+      "discriminator": [
+        159,
+        5,
+        34,
+        220,
+        166,
+        192,
+        76,
+        92
+      ],
+      "accounts": [
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "dataRegistry"
+        },
+        {
+          "name": "dataAccount",
+          "writable": true
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "updateDataAccount",
       "docs": [
         "update data account"

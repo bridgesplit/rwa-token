@@ -14,6 +14,48 @@ export type AssetController = {
   },
   "instructions": [
     {
+      "name": "closeMintAccount",
+      "docs": [
+        "close mint account"
+      ],
+      "discriminator": [
+        14,
+        121,
+        72,
+        246,
+        96,
+        224,
+        42,
+        162
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "closeTokenAccount",
       "docs": [
         "close a token account"
@@ -226,6 +268,38 @@ export type AssetController = {
         {
           "name": "tokenProgram",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
         }
       ],
       "args": [
@@ -340,6 +414,17 @@ export type AssetController = {
           }
         },
         {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
@@ -350,6 +435,110 @@ export type AssetController = {
         {
           "name": "associatedTokenProgram",
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "createTokenAccountArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "disableMemoTransfer",
+      "docs": [
+        "memo transfer disable"
+      ],
+      "discriminator": [
+        68,
+        156,
+        197,
+        9,
+        43,
+        91,
+        114,
+        19
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
         }
       ],
       "args": []
@@ -637,6 +826,178 @@ export type AssetController = {
       ]
     },
     {
+      "name": "updateInterestBearingMintRate",
+      "docs": [
+        "interest bearing mint rate update"
+      ],
+      "discriminator": [
+        29,
+        174,
+        109,
+        163,
+        227,
+        75,
+        2,
+        144
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "rate",
+          "type": "i16"
+        }
+      ]
+    },
+    {
+      "name": "updateMetadata",
+      "docs": [
+        "edit metadata of the rwa asset"
+      ],
+      "discriminator": [
+        170,
+        182,
+        43,
+        239,
+        97,
+        78,
+        225,
+        186
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": [
+        {
+          "name": "args",
+          "type": {
+            "defined": {
+              "name": "updateAssetMetadataArgs"
+            }
+          }
+        }
+      ]
+    },
+    {
       "name": "voidTokens",
       "docs": [
         "void shares of the rwa asset"
@@ -758,6 +1119,34 @@ export type AssetController = {
       ]
     }
   ],
+  "events": [
+    {
+      "name": "assetMetadataEvent",
+      "discriminator": [
+        90,
+        19,
+        200,
+        229,
+        103,
+        82,
+        218,
+        16
+      ]
+    },
+    {
+      "name": "extensionMetadataEvent",
+      "discriminator": [
+        22,
+        198,
+        253,
+        69,
+        234,
+        122,
+        248,
+        117
+      ]
+    }
+  ],
   "errors": [
     {
       "code": 6000,
@@ -813,6 +1202,11 @@ export type AssetController = {
       "code": 6010,
       "name": "invalidCpiTransferAmount",
       "msg": "Invalid cpi amount in transfer"
+    },
+    {
+      "code": 6011,
+      "name": "invalidCpiTransferMint",
+      "msg": "Invalid cpi mint in transfer"
     }
   ],
   "types": [
@@ -852,6 +1246,42 @@ export type AssetController = {
       }
     },
     {
+      "name": "assetMetadataEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "string"
+          },
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "symbol",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "decimals",
+            "type": {
+              "option": "u8"
+            }
+          }
+        ]
+      }
+    },
+    {
       "name": "createAssetControllerArgs",
       "type": {
         "kind": "struct",
@@ -877,6 +1307,44 @@ export type AssetController = {
             "type": {
               "option": "pubkey"
             }
+          },
+          {
+            "name": "interestRate",
+            "type": {
+              "option": "i16"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "createTokenAccountArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "memoTransfer",
+            "type": "bool"
+          }
+        ]
+      }
+    },
+    {
+      "name": "extensionMetadataEvent",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "address",
+            "type": "string"
+          },
+          {
+            "name": "extensionType",
+            "type": "u8"
+          },
+          {
+            "name": "metadata",
+            "type": "bytes"
           }
         ]
       }
@@ -939,6 +1407,32 @@ export type AssetController = {
           {
             "name": "timestamp",
             "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "updateAssetMetadataArgs",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "name",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "symbol",
+            "type": {
+              "option": "string"
+            }
+          },
+          {
+            "name": "uri",
+            "type": {
+              "option": "string"
+            }
           }
         ]
       }

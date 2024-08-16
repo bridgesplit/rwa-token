@@ -1,7 +1,13 @@
 /// creates a mint a new asset
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{
-    token_metadata_initialize, Mint, Token2022, TokenMetadataInitialize,
+use anchor_spl::{
+    token_2022::spl_token_2022::extension::{
+        interest_bearing_mint::InterestBearingConfig, ExtensionType,
+    },
+    token_interface::{
+        get_mint_extension_data, token_metadata_initialize, Mint, Token2022,
+        TokenMetadataInitialize,
+    },
 };
 use spl_tlv_account_resolution::state::ExtraAccountMetaList;
 use spl_transfer_hook_interface::instruction::ExecuteInstruction;
@@ -18,10 +24,12 @@ pub struct CreateAssetControllerArgs {
     pub symbol: String,
     pub uri: String,
     pub delegate: Option<Pubkey>,
+    pub interest_rate: Option<i16>,
 }
 
 #[derive(Accounts)]
 #[instruction(args: CreateAssetControllerArgs)]
+#[event_cpi]
 pub struct CreateAssetController<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -45,6 +53,9 @@ pub struct CreateAssetController<'info> {
         extensions::metadata_pointer::authority = asset_controller.key(),
         extensions::metadata_pointer::metadata_address = asset_mint.key(),
         extensions::permanent_delegate::delegate = asset_controller.key(),
+        extensions::interest_bearing_mint::authority = asset_controller.key(),
+        extensions::interest_bearing_mint::rate = args.interest_rate.unwrap_or(0),
+        extensions::close_authority::authority = asset_controller.key(),
     )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
@@ -97,8 +108,11 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
     ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
 
     // initialize token metadata
-    ctx.accounts
-        .initialize_token_metadata(args.name, args.symbol, args.uri)?;
+    ctx.accounts.initialize_token_metadata(
+        args.name.clone(),
+        args.symbol.clone(),
+        args.uri.clone(),
+    )?;
 
     // transfer minimum rent to mint account
     update_account_lamports_to_minimum_balance(
@@ -106,6 +120,25 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
         ctx.accounts.payer.to_account_info(),
         ctx.accounts.system_program.to_account_info(),
     )?;
+
+    emit_cpi!(AssetMetadataEvent {
+        mint: ctx.accounts.asset_mint.key().to_string(),
+        name: Some(args.name),
+        symbol: Some(args.symbol),
+        uri: Some(args.uri),
+        decimals: Some(args.decimals),
+    });
+
+    let extension_metadata = get_mint_extension_data::<InterestBearingConfig>(
+        &ctx.accounts.asset_mint.to_account_info(),
+    )?;
+
+    emit_cpi!(ExtensionMetadataEvent {
+        address: ctx.accounts.asset_mint.key().to_string(),
+        extension_type: ExtensionType::InterestBearingConfig as u8,
+        metadata: serde_json::to_vec(&extension_metadata)
+            .map_err(|_| ProgramError::InvalidAccountData)?,
+    });
 
     Ok(())
 }

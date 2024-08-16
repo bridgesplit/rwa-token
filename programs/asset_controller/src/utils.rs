@@ -42,13 +42,27 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
         // user identity account
         ExtraAccountMeta::new_external_pda_with_seeds(
             7,
-            &[Seed::AccountKey { index: 8 }, Seed::AccountKey { index: 3 }],
+            &[
+                Seed::AccountKey { index: 8 },
+                Seed::AccountData {
+                    account_index: 2,
+                    data_index: 32,
+                    length: 32,
+                },
+            ],
             false,
             true,
         )?,
         // user tracker account
         ExtraAccountMeta::new_with_seeds(
-            &[Seed::AccountKey { index: 1 }, Seed::AccountKey { index: 3 }],
+            &[
+                Seed::AccountKey { index: 1 },
+                Seed::AccountData {
+                    account_index: 2,
+                    data_index: 32,
+                    length: 32,
+                },
+            ],
             false,
             true,
         )?,
@@ -73,10 +87,10 @@ pub fn update_account_lamports_to_minimum_balance<'info>(
     payer: AccountInfo<'info>,
     system_program: AccountInfo<'info>,
 ) -> Result<()> {
-    let extra_lamports = Rent::get()?.minimum_balance(account.data_len()) - account.get_lamports();
-    if extra_lamports > 0 {
+    let min_balance = Rent::get()?.minimum_balance(account.data_len());
+    if min_balance > account.get_lamports() {
         invoke(
-            &transfer(payer.key, account.key, extra_lamports),
+            &transfer(payer.key, account.key, min_balance - account.get_lamports()),
             &[payer, account, system_program],
         )?;
     }

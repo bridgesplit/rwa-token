@@ -2,12 +2,11 @@ import { BN, Wallet } from "@coral-xyz/anchor";
 import {
 	type AttachPolicyArgs,
 	CreateDataAccountArgs,
+	DeleteDataAccountArgs,
+	getDataAccountsWithFilter,
 	getPolicyAccount,
-	getPolicyAccountPda,
 	getTrackerAccount,
-	getTrackerAccountPda,
 	type IssueTokenArgs,
-	type SetupUserArgs,
 	type TransferTokensArgs,
 	type UpdateDataAccountArgs,
 	type VoidTokensArgs,
@@ -70,24 +69,32 @@ describe("e2e tests", async () => {
 		);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
+		const trackerAccount = await getTrackerAccount(
+			mint,
+			setup.authority.toString(),
+			rwaClient.provider
+		);
+		expect(trackerAccount).toBeTruthy();
+		expect(trackerAccount!.assetMint.toString()).toBe(mint);
+	});
 
-		console.log("mint: ", mint);
-		console.log(
-			"data registry: ",
-			rwaClient.dataRegistry.getDataRegistryPda(mint).toString()
+	test("update asset metadata", async () => {
+		const updateAssetMetadataArgs = {
+			authority: setup.authority.toString(),
+			name: "Test Class Asset - Updated",
+			assetMint: mint,
+			payer: setup.payer.toString(),
+		};
+
+		const updateIx = await rwaClient.assetController.updateAssetMetadata(
+			updateAssetMetadataArgs
 		);
-		console.log(
-			"asset controller: ",
-			rwaClient.assetController.getAssetControllerPda(mint).toString()
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(updateIx),
+			[setup.payerKp]
 		);
-		console.log(
-			"policy engine: ",
-			rwaClient.policyEngine.getPolicyEnginePda(mint).toString()
-		);
-		console.log(
-			"identity registry: ",
-			rwaClient.identityRegistry.getIdentityRegistryPda(mint).toString()
-		);
+		expect(txnId).toBeTruthy();
 	});
 
 	test("setup data account", async () => {
@@ -136,7 +143,6 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("policy account: ", getPolicyAccountPda(mint).toString());
 	});
 
 	test("attach transaction amount limit policy", async () => {
@@ -215,42 +221,6 @@ describe("e2e tests", async () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	test("setup a user", async () => {
-		const setupUserArgs: SetupUserArgs = {
-			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
-			signer: setup.authority.toString(),
-			assetMint: mint,
-			level: 1,
-		};
-		const setupIx = await rwaClient.identityRegistry.setupUserIxns(
-			setupUserArgs
-		);
-		const txnId = await sendAndConfirmTransaction(
-			rwaClient.provider.connection,
-			new Transaction().add(...setupIx.ixs),
-			[setup.payerKp, setup.authorityKp]
-		);
-		expect(txnId).toBeTruthy();
-		const trackerAccount = await getTrackerAccount(
-			mint,
-			setup.authority.toString(),
-			rwaClient.provider
-		);
-		expect(trackerAccount).toBeTruthy();
-		expect(trackerAccount!.assetMint.toString()).toBe(mint);
-		console.log(
-			"tracker account: ",
-			getTrackerAccountPda(mint, setup.authority.toString()).toString()
-		);
-		console.log(
-			"identity account: ",
-			rwaClient.identityRegistry
-				.getIdentityAccountPda(mint, setup.authority.toString())
-				.toString()
-		);
-	});
-
 	test("issue tokens", async () => {
 		const issueArgs: IssueTokenArgs = {
 			authority: setup.authority.toString(),
@@ -266,7 +236,6 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("issue tokens signature: ", txnId);
 	});
 
 	test("void tokens", async () => {
@@ -305,7 +274,25 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
-		console.log("update data account signature: ", txnId);
+	});
+
+	test("delete data account", async () => {
+		const deleteDataAccountArgs: DeleteDataAccountArgs = {
+			dataAccount,
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			authority: setup.authority.toString(),
+			signer: setup.authority.toString(),
+		};
+		const updateDataIx = await rwaClient.dataRegistry.deleteAssetsDataAccountInfoIxns(deleteDataAccountArgs);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(updateDataIx),
+			[setup.payerKp, setup.authorityKp]
+		);
+		expect(txnId).toBeTruthy();
+		expect(await getDataAccountsWithFilter({assetMint: mint}, rwaClient.provider)).toHaveLength(0);
 	});
 
 	test("transfer tokens", async () => {
@@ -319,10 +306,10 @@ describe("e2e tests", async () => {
 			decimals,
 		};
 
-		const transferIx = await rwaClient.assetController.transfer(transferArgs);
+		const transferIxs = await rwaClient.assetController.transfer(transferArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(transferIx),
+			new Transaction().add(...transferIxs),
 			[setup.payerKp]
 		);
 		expect(txnId).toBeTruthy();

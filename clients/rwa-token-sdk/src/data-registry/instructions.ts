@@ -102,6 +102,27 @@ export async function getUpdateDataAccountIx(
 	return ix;
 }
 
+export type DeleteDataAccountArgs = {
+	signer: string;
+	dataAccount: string;
+  } & CommonArgs;
+  
+export async function getDeleteDataAccountIx(
+	args: DeleteDataAccountArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const dataProgram = getDataRegistryProgram(provider);
+	const ix = await dataProgram.methods
+		.deleteDataAccount()
+		.accountsStrict({
+			signer: args.signer,
+			dataAccount: args.dataAccount,
+			dataRegistry: getDataRegistryPda(args.assetMint),
+		})
+		.instruction();
+	return ix;
+}
+
 export type DelegateDataRegistryArgs = {
   delegate: string;
   authority: string;

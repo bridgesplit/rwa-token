@@ -14,8 +14,9 @@ pub struct TrackerAccount {
     // owner of the policy account
     pub owner: Pubkey,
     // transfer amounts
-    // this ia not a realloc field because we dont have a mutable account during transfers to transfer the required amount
-    #[max_len(MAX_TRANSFER_HISTORY)] // 25 is the max number of transfers we want to store
+    // this is not a realloc field because we dont have a mutable account during transfers to transfer the required amount
+    #[max_len(MAX_TRANSFER_HISTORY)]
+    // MAX_TRANSFER_HISTORY is the max number of transfers we want to store
     pub transfers: Vec<Transfer>,
 }
 

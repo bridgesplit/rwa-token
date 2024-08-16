@@ -13,7 +13,7 @@ pub enum DataRegistryAccounts {
 }
 
 impl GeyserProgramAccount for DataRegistryAccounts {
-    fn discriminator(&self) -> [u8; 8] {
+    fn discriminator(&self) -> &[u8] {
         match self {
             DataRegistryAccounts::DataAccount(_) => DataAccount::DISCRIMINATOR,
             DataRegistryAccounts::DataRegistryAccount(_) => DataRegistryAccount::DISCRIMINATOR,
@@ -24,14 +24,14 @@ impl GeyserProgramAccount for DataRegistryAccounts {
     where
         Self: Sized,
     {
-        let discriminator = data
+        let discriminator = &data
             .get(..8)
             .map(|bytes| {
                 let mut array = [0u8; 8];
                 array.copy_from_slice(bytes);
                 array
             })
-            .ok_or(ProgramError::InvalidAccountData)?;
+            .ok_or(ProgramError::InvalidAccountData)?[..];
         let account_data = &mut &data[8..];
         match discriminator {
             DataAccount::DISCRIMINATOR => {

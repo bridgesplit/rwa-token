@@ -1,5 +1,5 @@
 import { PublicKey } from "@solana/web3.js";
-import { type Idl, Program, type Provider } from "@coral-xyz/anchor";
+import { type Idl, Program, type Provider, utils } from "@coral-xyz/anchor";
 import { AssetControllerIdl, AssetControllerIdlTypes } from "../programs";
 import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
@@ -48,3 +48,8 @@ export const getTrackerAccountPda = (assetMint: string, owner: string) =>
 		[new PublicKey(assetMint).toBuffer(), new PublicKey(owner).toBuffer()],
 		assetControllerProgramId
 	)[0];
+
+export const getAssetControllerEventAuthority = () => PublicKey.findProgramAddressSync(
+	[utils.bytes.utf8.encode("__event_authority")],
+	assetControllerProgramId
+)[0];
