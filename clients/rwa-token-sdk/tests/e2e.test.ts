@@ -306,10 +306,10 @@ describe("e2e tests", async () => {
 			decimals,
 		};
 
-		const transferIx = await rwaClient.assetController.transfer(transferArgs);
+		const transferIxs = await rwaClient.assetController.transfer(transferArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(transferIx),
+			new Transaction().add(...transferIxs),
 			[setup.payerKp]
 		);
 		expect(txnId).toBeTruthy();

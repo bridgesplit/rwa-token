@@ -1,7 +1,7 @@
 
 import { BN, Wallet } from "@coral-xyz/anchor";
 import {
-	getPolicyAccountPda, getPolicyEngineProgram, getTransferTokensIx, 
+	getPolicyAccountPda, getPolicyEngineProgram, getTransferTokensIxs, 
 	RwaClient,
 } from "../src";
 import { setupTests } from "./setup";
@@ -236,7 +236,7 @@ describe("test policy setup", async () => {
 	});
 
 	test("transfer 1000 tokens from user1, user2 and user3. fail for user1, success for others", async () => {
-		let transferTokensIx = await getTransferTokensIx({
+		let transferTokensIxs = await getTransferTokensIxs({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.user2.toString(),
@@ -244,13 +244,13 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 1000,
 			decimals,
-		});
+		}, rwaClient.provider);
 		void expect(sendAndConfirmTransaction(
 			setup.provider.connection,
-			new Transaction().add(transferTokensIx),
+			new Transaction().add(...transferTokensIxs),
 			[setup.payerKp, setup.user2Kp],
 		)).rejects.toThrowError();
-		transferTokensIx = await getTransferTokensIx({
+		transferTokensIxs = await getTransferTokensIxs({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.user3.toString(),
@@ -258,14 +258,14 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 1000,
 			decimals,
-		});
+		},  rwaClient.provider);
 		let txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
-			new Transaction().add(transferTokensIx),
+			new Transaction().add(...transferTokensIxs),
 			[setup.payerKp, setup.user3Kp],
 		);
 		expect(txnId).toBeTruthy();
-		transferTokensIx = await getTransferTokensIx({
+		transferTokensIxs = await getTransferTokensIxs({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.user1.toString(),
@@ -273,17 +273,17 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 1000,
 			decimals,
-		});
+		}, rwaClient.provider);
 		txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
-			new Transaction().add(transferTokensIx),
+			new Transaction().add(...transferTokensIxs),
 			[setup.payerKp, setup.user1Kp],
 		);
 		expect(txnId).toBeTruthy();
 	});
 
 	test("transfer 10 tokens 3 times from user1, fail 3rd time", async () => {
-		let transferTokensIx = await getTransferTokensIx({
+		let transferTokensIxs = await getTransferTokensIxs({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.user1.toString(),
@@ -291,14 +291,14 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 10,
 			decimals,
-		});
+		}, rwaClient.provider);
 		let txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
-			new Transaction().add(transferTokensIx),
+			new Transaction().add(...transferTokensIxs),
 			[setup.payerKp, setup.user1Kp],
 		);
 		expect(txnId).toBeTruthy();
-		transferTokensIx = await getTransferTokensIx({
+		transferTokensIxs = await getTransferTokensIxs({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.user1.toString(),
@@ -306,14 +306,14 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 10,
 			decimals,
-		});
+		}, rwaClient.provider);
 		txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
-			new Transaction().add(transferTokensIx),
+			new Transaction().add(...transferTokensIxs),
 			[setup.payerKp, setup.user1Kp],
 		);
 		expect(txnId).toBeTruthy();
-		transferTokensIx = await getTransferTokensIx({
+		transferTokensIxs = await getTransferTokensIxs({
 			authority: setup.authority.toString(),
 			payer: setup.payer.toString(),
 			from: setup.user1.toString(),
@@ -321,10 +321,10 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 10,
 			decimals,
-		});
+		}, rwaClient.provider);
 		void expect(sendAndConfirmTransaction(
 			setup.provider.connection,
-			new Transaction().add(transferTokensIx),
+			new Transaction().add(...transferTokensIxs),
 			[setup.payerKp, setup.user1Kp],
 		)).rejects.toThrowError();
 	});
