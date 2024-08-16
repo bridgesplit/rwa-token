@@ -102,10 +102,10 @@ pub fn enforce_policy(
                 }
             }
             PolicyType::MaxBalance { limit } => {
-                if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
-                    if amount + balance > limit {
-                        return Err(PolicyEngineErrors::MaxBalanceExceeded.into());
-                    }
+                if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                    && amount + balance > limit
+                {
+                    return Err(PolicyEngineErrors::MaxBalanceExceeded.into());
                 }
             }
         }
