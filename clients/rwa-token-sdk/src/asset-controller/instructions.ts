@@ -28,6 +28,7 @@ import {
 import {
 	ASSOCIATED_TOKEN_PROGRAM_ID,
 	TOKEN_2022_PROGRAM_ID,
+	createAssociatedTokenAccountInstruction,
 	createTransferCheckedInstruction,
 	getAccount,
 	getAssociatedTokenAddressSync,
@@ -197,6 +198,7 @@ export type TransferTokensArgs = {
   amount: number;
   decimals: number;
   message?: string;
+  createTa?: boolean;
 } & CommonArgs;
 
 /**
@@ -265,37 +267,42 @@ export async function getTransferTokensIxs(
 		const ta = await getAccount(provider.connection, getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),
 			new PublicKey(args.to),
-			false,
+			true,
 			TOKEN_2022_PROGRAM_ID
-		));
-		if(ta) {
-			const isMemoTransfer = getMemoTransfer(ta);
-			if (isMemoTransfer) {
-				if(!args.message) {
-					throw new Error("Memo is required for memo transfer");
-				}
-				ixs.push(new TransactionInstruction({
-					keys: [{ pubkey: new PublicKey(args.from), isSigner: true, isWritable: true }],
-					data: Buffer.from(args.message, "utf-8"),
-					programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
-				}));
+		), undefined, TOKEN_2022_PROGRAM_ID);
+		const isMemoTransfer = getMemoTransfer(ta);
+		if (isMemoTransfer) {
+			if(!args.message) {
+				throw new Error("Memo is required for memo transfer");
 			}
+			ixs.push(new TransactionInstruction({
+				keys: [{ pubkey: new PublicKey(args.from), isSigner: true, isWritable: true }],
+				data: Buffer.from(args.message, "utf-8"),
+				programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
+			}));
 		}
 	} catch (error) {
-		// do nothing
+		if (args.createTa) {
+			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.payer), getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.to),
+				true,
+				TOKEN_2022_PROGRAM_ID
+			), new PublicKey(args.to), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
+		}
 	}
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),
 			new PublicKey(args.from),
-			false,
+			true,
 			TOKEN_2022_PROGRAM_ID
 		),
 		new PublicKey(args.assetMint),
 		getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),
 			new PublicKey(args.to),
-			false,
+			true,
 			TOKEN_2022_PROGRAM_ID
 		),
 		new PublicKey(args.from),
@@ -356,7 +363,6 @@ export type SetupAssetControllerArgs = {
   uri: string;
   symbol: string;
   interestRate?: number;
-  memoTransfer?: boolean;
 };
 
 /**
@@ -393,27 +399,12 @@ export async function getSetupAssetControllerIxs(
 		provider
 	);
 
-	// Setup user ixs
-	const setupUserIxs = await getSetupUserIxs(
-		{
-			payer: args.payer,
-			owner: args.authority,
-			signer: args.authority,
-			assetMint: mint.toString(),
-			level: 255,
-			memoTransfer: args.memoTransfer,
-		},
-		provider
-	);
-	
-
 	return {
 		ixs: [
 			assetControllerCreateIx,
 			policyEngineCreateIx,
 			dataRegistryCreateIx,
 			identityRegistryCreateIx,
-			...setupUserIxs.ixs,
 		],
 		signers: [mintKp],
 	};

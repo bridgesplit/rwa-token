@@ -139,6 +139,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			assetMint: mint,
 			amount: 100,
 			decimals,
+			createTa: true,
 		};
 
 		const transferIxs = await rwaClient.assetController.transfer(transferArgs);
