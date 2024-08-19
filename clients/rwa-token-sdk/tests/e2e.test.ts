@@ -5,6 +5,7 @@ import {
 	DeleteDataAccountArgs,
 	getDataAccountsWithFilter,
 	getPolicyAccount,
+	getSetupUserIxs,
 	getTrackerAccount,
 	type IssueTokenArgs,
 	type TransferTokensArgs,
@@ -62,12 +63,19 @@ describe("e2e tests", async () => {
 		const setupIx = await rwaClient.assetController.setupNewRegistry(
 			setupAssetControllerArgs
 		);
+		mint = setupIx.signers[0].publicKey.toString();
+		const setupUserIxs = await getSetupUserIxs({
+			assetMint: mint,
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			signer: setup.authority.toString(),
+			level: 255
+		}, rwaClient.provider);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(...setupIx.ixs),
-			[setup.payerKp, ...setupIx.signers]
+			new Transaction().add(...setupIx.ixs).add(...setupUserIxs.ixs),
+			[setup.payerKp, ...setupIx.signers, ...setupUserIxs.signers]
 		);
-		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
 			mint,

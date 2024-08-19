@@ -198,6 +198,7 @@ export type TransferTokensArgs = {
   amount: number;
   decimals: number;
   message?: string;
+  createTa?: boolean;
 } & CommonArgs;
 
 /**
@@ -281,13 +282,14 @@ export async function getTransferTokensIxs(
 			}));
 		}
 	} catch (error) {
-		console.log(error);
-		ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.payer), getAssociatedTokenAddressSync(
-			new PublicKey(args.assetMint),
-			new PublicKey(args.to),
-			true,
-			TOKEN_2022_PROGRAM_ID
-		), new PublicKey(args.to), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
+		if (args.createTa) {
+			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.payer), getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.to),
+				true,
+				TOKEN_2022_PROGRAM_ID
+			), new PublicKey(args.to), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
+		}
 	}
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
