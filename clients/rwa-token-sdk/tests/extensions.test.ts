@@ -2,6 +2,7 @@ import { Wallet } from "@coral-xyz/anchor";
 import {
 	getCloseMintIx,
 	getDisableMemoTransferIx,
+	getSetupUserIxs,
 	getUpdateInterestBearingMintRateIx,
 } from "../src";
 import { setupTests } from "./setup";
@@ -58,10 +59,21 @@ describe("extension tests", async () => {
 		const setupIx = await rwaClient.assetController.setupNewRegistry(
 			setupAssetControllerArgs
 		);
+		const setupUser = await getSetupUserIxs(
+			{
+				assetMint: setupIx.signers[0].publicKey.toString(),
+				payer: setup.payer.toString(),
+				owner: setup.authority.toString(),
+				signer: setup.authority.toString(),
+				level: 255,
+				memoTransfer: true,
+			},
+			rwaClient.provider
+		);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(...setupIx.ixs),
-			[setup.payerKp, ...setupIx.signers]
+			new Transaction().add(...setupIx.ixs).add(...setupUser.ixs),
+			[setup.payerKp, ...setupIx.signers, ...setupUser.signers]
 		);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
