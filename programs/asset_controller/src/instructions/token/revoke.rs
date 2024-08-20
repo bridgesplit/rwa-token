@@ -36,7 +36,7 @@ impl<'info> RevokeTokens<'info> {
         let cpi_ctx = CpiContext::new_with_signer(
             self.token_program.to_account_info(),
             accounts,
-            &signer_seeds,
+            signer_seeds,
         );
         transfer_checked(cpi_ctx, amount, self.asset_mint.decimals)?;
         Ok(())

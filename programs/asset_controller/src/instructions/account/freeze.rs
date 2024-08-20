@@ -34,7 +34,7 @@ impl<'info> FreezeTokenAccount<'info> {
         let cpi_ctx = CpiContext::new_with_signer(
             self.token_program.to_account_info(),
             accounts,
-            &signer_seeds,
+            signer_seeds,
         );
         freeze_account(cpi_ctx)?;
         Ok(())
