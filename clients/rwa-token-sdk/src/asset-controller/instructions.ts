@@ -132,6 +132,7 @@ export type IssueTokenArgs = {
   amount: number;
   authority: string;
   owner: string;
+  createTa?: boolean;
 } & CommonArgs;
 
 /**
@@ -142,8 +143,26 @@ export type IssueTokenArgs = {
 export async function getIssueTokensIx(
 	args: IssueTokenArgs,
 	provider: AnchorProvider
-): Promise<TransactionInstruction> {
+): Promise<TransactionInstruction[]> {
 	const assetProgram = getAssetControllerProgram(provider);
+	const ixs: TransactionInstruction[] = [];
+	try {
+		await getAccount(provider.connection, getAssociatedTokenAddressSync(
+			new PublicKey(args.assetMint),
+			new PublicKey(args.owner),
+			true,
+			TOKEN_2022_PROGRAM_ID
+		), undefined, TOKEN_2022_PROGRAM_ID);
+	} catch (error) {
+		if (args.createTa) {
+			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.payer), getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				true,
+				TOKEN_2022_PROGRAM_ID
+			), new PublicKey(args.owner), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
+		}
+	}
 	const ix = await assetProgram.methods
 		.issueTokens({
 			amount: new BN(args.amount),
@@ -161,7 +180,8 @@ export async function getIssueTokensIx(
 			),
 		})
 		.instruction();
-	return ix;
+	ixs.push(ix);
+	return ixs;
 }
 
 export type VoidTokensArgs = {
@@ -176,7 +196,7 @@ export async function getVoidTokensIx(
 	const assetProgram = getAssetControllerProgram(provider);
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	const ix = await assetProgram.methods
-		.voidTokens(new BN(args.amount))
+		.burnTokens(new BN(args.amount))
 		.accountsStrict({
 			assetMint: new PublicKey(args.assetMint),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
@@ -526,6 +546,107 @@ export async function getCloseMintIx(
 			assetMint: new PublicKey(args.assetMint),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			assetController: getAssetControllerPda(args.assetMint),
+		})
+		.instruction();
+	return ix;
+}
+
+export type FreezeTokenArgs = {
+	authority: string;
+	owner: string;
+} & CommonArgs;
+
+/**
+ * Generate Instructions to freeze token account
+ * @param args - {@link FreezeTokenArgs}
+ * @returns - {@link TransactionInstruction}
+ */
+export async function getFreezeTokenIx(
+	args: FreezeTokenArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.freezeTokenAccount()
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			tokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
+		})
+		.instruction();
+	return ix;
+}
+
+/**
+ * Generate Instructions to thaw token account
+ * @param args - {@link FreezeTokenArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getThawTokenIx(
+	args: FreezeTokenArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.thawTokenAccount()
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			tokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
+		})
+		.instruction();
+	return ix;
+}
+
+export type RevokeTokensArgs = {
+	amount: number;
+	owner: string;
+	authority: string;
+} & CommonArgs;
+
+/**
+ * Revoke tokens from a user
+ * @param args - {@link RevokeTokensArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getRevokeTokensIx(
+	args: RevokeTokensArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.revokeTokens(new BN(args.amount))
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			revokeTokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
+			authorityTokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.authority),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
 		})
 		.instruction();
 	return ix;

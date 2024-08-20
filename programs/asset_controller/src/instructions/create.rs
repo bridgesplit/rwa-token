@@ -43,7 +43,7 @@ pub struct CreateAssetController<'info> {
         mint::token_program = token_program,
         mint::decimals = args.decimals,
         mint::authority = authority,
-        mint::freeze_authority = authority,
+        mint::freeze_authority = asset_controller.key(),
         extensions::transfer_hook::authority = asset_controller.key(),
         extensions::transfer_hook::program_id = crate::id(),
         extensions::group_member_pointer::authority = asset_controller.key(),

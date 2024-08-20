@@ -4,8 +4,11 @@ import {
 	CreateDataAccountArgs,
 	DeleteDataAccountArgs,
 	getDataAccountsWithFilter,
+	getFreezeTokenIx,
 	getPolicyAccount,
+	getRevokeTokensIx,
 	getSetupUserIxs,
+	getThawTokenIx,
 	getTrackerAccount,
 	type IssueTokenArgs,
 	type TransferTokensArgs,
@@ -240,7 +243,7 @@ describe("e2e tests", async () => {
 		const issueIx = await rwaClient.assetController.issueTokenIxns(issueArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(issueIx),
+			new Transaction().add(...issueIx),
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
@@ -261,6 +264,50 @@ describe("e2e tests", async () => {
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
+	});
+
+	test("revoke tokens", async () => {
+		const revokeIx = await getRevokeTokensIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+			amount: 100,
+		}, rwaClient.provider);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(revokeIx),
+			[setup.payerKp, setup.authorityKp]
+		);
+		expect(txnId).toBeTruthy();
+	});
+
+	test("freeze and thaw token account", async () => {
+		const freezeIx = await getFreezeTokenIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+		}, rwaClient.provider);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(freezeIx),
+			[setup.payerKp, setup.authorityKp]
+		);
+		expect(txnId).toBeTruthy();
+
+		const thawIx = await getThawTokenIx({
+			authority: setup.authority.toString(),
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			assetMint: mint,
+		}, rwaClient.provider);
+		const txnId2 = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(thawIx),
+			[setup.payerKp, setup.authorityKp]
+		);
+		expect(txnId2).toBeTruthy();
 	});
 
 	test("update data account", async () => {

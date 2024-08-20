@@ -307,28 +307,38 @@ export type PolicyEngine = {
     },
     {
       "code": 6004,
+      "name": "identityLevelLimitExceeded",
+      "msg": "Identity level limit exceeded"
+    },
+    {
+      "code": 6005,
       "name": "policyEngineFull",
       "msg": "Policy registry is full, cannot add more policies"
     },
     {
-      "code": 6005,
+      "code": 6006,
       "name": "policyNotFound",
       "msg": "Policy not found"
     },
     {
-      "code": 6006,
+      "code": 6007,
       "name": "identityFilterFailed",
       "msg": "Identity filter failed"
     },
     {
-      "code": 6007,
+      "code": 6008,
       "name": "unauthorizedSigner",
       "msg": "Unauthorized signer"
     },
     {
-      "code": 6008,
+      "code": 6009,
       "name": "policyAlreadyExists",
       "msg": "Policy already exists"
+    },
+    {
+      "code": 6010,
+      "name": "maxBalanceExceeded",
+      "msg": "Max balance exceeded"
     }
   ],
   "types": [
@@ -518,6 +528,15 @@ export type PolicyEngine = {
               {
                 "name": "timeframe",
                 "type": "i64"
+              }
+            ]
+          },
+          {
+            "name": "maxBalance",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
               }
             ]
           }

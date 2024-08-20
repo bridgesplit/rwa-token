@@ -213,7 +213,7 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 1000000,
 		});
-		let txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
+		let txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 		issueTokens = await rwaClient.assetController.issueTokenIxns({
 			authority: setup.authority.toString(),
@@ -222,7 +222,7 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 1000000,
 		});
-		txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
+		txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 		issueTokens = await rwaClient.assetController.issueTokenIxns({
 			authority: setup.authority.toString(),
@@ -231,7 +231,7 @@ describe("test policy setup", async () => {
 			assetMint: mint,
 			amount: 1000000,
 		});
-		txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(issueTokens), [setup.payerKp]);
+		txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...issueTokens), [setup.payerKp]);
 		expect(txnId).toBeTruthy();
 	});
 

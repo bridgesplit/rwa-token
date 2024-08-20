@@ -301,28 +301,38 @@
     },
     {
       "code": 6004,
+      "name": "IdentityLevelLimitExceeded",
+      "msg": "Identity level limit exceeded"
+    },
+    {
+      "code": 6005,
       "name": "PolicyEngineFull",
       "msg": "Policy registry is full, cannot add more policies"
     },
     {
-      "code": 6005,
+      "code": 6006,
       "name": "PolicyNotFound",
       "msg": "Policy not found"
     },
     {
-      "code": 6006,
+      "code": 6007,
       "name": "IdentityFilterFailed",
       "msg": "Identity filter failed"
     },
     {
-      "code": 6007,
+      "code": 6008,
       "name": "UnauthorizedSigner",
       "msg": "Unauthorized signer"
     },
     {
-      "code": 6008,
+      "code": 6009,
       "name": "PolicyAlreadyExists",
       "msg": "Policy already exists"
+    },
+    {
+      "code": 6010,
+      "name": "MaxBalanceExceeded",
+      "msg": "Max balance exceeded"
     }
   ],
   "types": [
@@ -512,6 +522,15 @@
               {
                 "name": "timeframe",
                 "type": "i64"
+              }
+            ]
+          },
+          {
+            "name": "MaxBalance",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
               }
             ]
           }

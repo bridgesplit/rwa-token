@@ -39,9 +39,14 @@ pub mod asset_controller {
         instructions::update::handler(ctx, args)
     }
 
-    /// void shares of the rwa asset
-    pub fn void_tokens(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
-        instructions::void::handler(ctx, amount)
+    /// burn shares of the rwa asset
+    pub fn burn_tokens(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
+        instructions::burn::handler(ctx, amount)
+    }
+
+    /// revoke shares of the rwa asset
+    pub fn revoke_tokens(ctx: Context<RevokeTokens>, amount: u64) -> Result<()> {
+        instructions::revoke::handler(ctx, amount)
     }
 
     /// create a token account
@@ -73,6 +78,16 @@ pub mod asset_controller {
     /// close mint account
     pub fn close_mint_account(ctx: Context<CloseMintAccount>) -> Result<()> {
         instructions::extensions::close_mint::handler(ctx)
+    }
+
+    /// freeze token account
+    pub fn freeze_token_account(ctx: Context<FreezeTokenAccount>) -> Result<()> {
+        instructions::account::freeze::handler(ctx)
+    }
+
+    /// thaw token account
+    pub fn thaw_token_account(ctx: Context<ThawTokenAccount>) -> Result<()> {
+        instructions::account::thaw::handler(ctx)
     }
 
     /// execute transfer hook

@@ -65,12 +65,12 @@ export class AssetController {
    */
 	async issueTokenIxns(
 		IssueArgs: IssueTokenArgs
-	): Promise<TransactionInstruction> {
-		const issueTokensIx = await getIssueTokensIx(
+	): Promise<TransactionInstruction[]> {
+		const issueTokensIxs = await getIssueTokensIx(
 			IssueArgs,
 			this.rwaClient.provider
 		);
-		return issueTokensIx;
+		return issueTokensIxs;
 	}
 
 	/**

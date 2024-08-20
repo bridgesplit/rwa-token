@@ -125,7 +125,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 		const issueIx = await rwaClient.assetController.issueTokenIxns(issueArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(issueIx),
+			new Transaction().add(...issueIx),
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
