@@ -115,10 +115,8 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &identity_registry::id(),
     )?;
 
-    let levels = if let Ok(identity_account) =
-        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])
-    {
-        identity_account.levels
+    let levels = if !ctx.accounts.identity_account.data_is_empty() {
+        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])?.levels
     } else {
         vec![NO_IDENTITY_LEVEL]
     };
@@ -128,11 +126,16 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         return Ok(());
     }
 
-    let tracker_account: &mut Option<TrackerAccount> =
-        &mut TrackerAccount::deserialize(&mut &ctx.accounts.tracker_account.data.borrow()[8..])
-            .ok();
+    let mut tracker_account: Option<TrackerAccount> =
+        if ctx.accounts.tracker_account.data_is_empty() {
+            None
+        } else {
+            Some(TrackerAccount::deserialize(
+                &mut &ctx.accounts.tracker_account.data.borrow()[8..],
+            )?)
+        };
 
-    let transfers = if let Some(tracker_account) = tracker_account {
+    let transfers = if let Some(tracker_account) = tracker_account.clone() {
         tracker_account.transfers.clone()
     } else {
         vec![]
