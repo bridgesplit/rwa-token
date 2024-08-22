@@ -73,7 +73,7 @@ describe("extension tests", async () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...setupIx.ixs).add(...setupUser.ixs),
-			[setup.payerKp, ...setupIx.signers, ...setupUser.signers]
+			[setup.payerKp, setup.authorityKp, ...setupIx.signers, ...setupUser.signers]
 		);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();

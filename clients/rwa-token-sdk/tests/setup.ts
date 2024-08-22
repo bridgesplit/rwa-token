@@ -4,8 +4,8 @@ import "dotenv/config";
 
 export async function setupTests() {
 	const payerKp = new Keypair();
-	const authorityKp = payerKp;
-	const delegateKp = authorityKp;
+	const authorityKp = new Keypair();
+	const delegateKp = new Keypair();
 	const user1Kp = new Keypair();
 	const user2Kp = new Keypair();
 	const user3Kp = new Keypair();

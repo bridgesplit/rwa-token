@@ -50,12 +50,9 @@ pub struct ExecuteTransferHook<'info> {
     #[account(mut)]
     /// CHECK: internal ix checks
     pub identity_account: UncheckedAccount<'info>,
-    #[account(
-        mut,
-        constraint = tracker_account.owner == destination_account.owner,
-        constraint = tracker_account.asset_mint == asset_mint.key(),
-    )]
-    pub tracker_account: Box<Account<'info, TrackerAccount>>,
+    #[account(mut)]
+    /// CHECK: internal ix checks
+    pub tracker_account: UncheckedAccount<'info>,
     #[account()]
     /// CHECK: internal ix checks
     pub policy_account: UncheckedAccount<'info>,
@@ -131,6 +128,16 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         return Ok(());
     }
 
+    let tracker_account: &mut Option<TrackerAccount> =
+        &mut TrackerAccount::deserialize(&mut &ctx.accounts.tracker_account.data.borrow()[8..])
+            .ok();
+
+    let transfers = if let Some(tracker_account) = tracker_account {
+        tracker_account.transfers.clone()
+    } else {
+        vec![]
+    };
+
     // evaluate policies
     enforce_policy(
         policy_account.policies.clone(),
@@ -138,15 +145,21 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         Clock::get()?.unix_timestamp,
         &levels,
         ctx.accounts.destination_account.amount,
-        &ctx.accounts.tracker_account.transfers,
+        &transfers,
     )?;
 
-    // update transfer history
-    ctx.accounts.tracker_account.update_transfer_history(
-        amount,
-        Clock::get()?.unix_timestamp,
-        policy_engine_account.max_timeframe,
-    )?;
+    if let Some(ref mut tracker_account) = tracker_account {
+        // update transfer history
+        tracker_account.update_transfer_history(
+            amount,
+            Clock::get()?.unix_timestamp,
+            policy_engine_account.max_timeframe,
+        )?;
+        let tracker_account_data = tracker_account.try_to_vec()?;
+        let tracker_account_data_len = tracker_account_data.len();
+        ctx.accounts.tracker_account.data.borrow_mut()[8..8 + tracker_account_data_len]
+            .copy_from_slice(&tracker_account_data);
+    }
 
     Ok(())
 }

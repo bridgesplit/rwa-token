@@ -77,7 +77,7 @@ describe("e2e tests", async () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...setupIx.ixs).add(...setupUserIxs.ixs),
-			[setup.payerKp, ...setupIx.signers, ...setupUserIxs.signers]
+			[setup.payerKp, setup.authorityKp, ...setupIx.signers, ...setupUserIxs.signers]
 		);
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
@@ -103,7 +103,7 @@ describe("e2e tests", async () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(updateIx),
-			[setup.payerKp]
+			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
 	});
@@ -127,10 +127,6 @@ describe("e2e tests", async () => {
 		);
 		expect(txnId).toBeTruthy();
 		dataAccount = createDataAccountIx.signers[0].publicKey.toString();
-		console.log(
-			"data account: ",
-			createDataAccountIx.signers[0].publicKey.toString()
-		);
 	});
 
 	test("create identity approval policy", async () => {
@@ -335,16 +331,14 @@ describe("e2e tests", async () => {
 		const deleteDataAccountArgs: DeleteDataAccountArgs = {
 			dataAccount,
 			payer: setup.payer.toString(),
-			owner: setup.authority.toString(),
 			assetMint: mint,
-			authority: setup.authority.toString(),
 			signer: setup.authority.toString(),
 		};
 		const updateDataIx = await rwaClient.dataRegistry.deleteAssetsDataAccountInfoIxns(deleteDataAccountArgs);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(updateDataIx),
-			[setup.payerKp, setup.authorityKp]
+			[setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
 		expect(await getDataAccountsWithFilter({assetMint: mint}, rwaClient.provider)).toHaveLength(0);
@@ -352,10 +346,8 @@ describe("e2e tests", async () => {
 
 	test("transfer tokens", async () => {
 		const transferArgs: TransferTokensArgs = {
-			authority: setup.authority.toString(),
-			payer: setup.payer.toString(),
 			from: setup.authority.toString(),
-			to: setup.authority.toString(),
+			to: setup.user1.toString(),
 			assetMint: mint,
 			amount: 2000,
 			decimals,
@@ -365,7 +357,7 @@ describe("e2e tests", async () => {
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...transferIxs),
-			[setup.payerKp]
+			[setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();
 	});

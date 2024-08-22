@@ -216,10 +216,11 @@ export type TransferTokensArgs = {
   from: string;
   to: string;
   amount: number;
+  assetMint: string;
   decimals: number;
   message?: string;
   createTa?: boolean;
-} & CommonArgs;
+}
 
 /**
  * Creates a transaction instruction to transfer a token between addresses with transfer controls.

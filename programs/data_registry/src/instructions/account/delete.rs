@@ -5,6 +5,7 @@ use anchor_lang::prelude::*;
 #[instruction()]
 pub struct DeleteDataAccount<'info> {
     #[account(
+        mut,
         constraint = data_registry.authority == signer.key() || data_registry.delegate == signer.key()
     )]
     pub signer: Signer<'info>,

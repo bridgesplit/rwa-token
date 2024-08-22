@@ -58,7 +58,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...setupIx.ixs),
-			[setup.payerKp, ...setupIx.signers]
+			[setup.payerKp, setup.authorityKp, ...setupIx.signers]
 		);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
@@ -133,7 +133,6 @@ describe("test suite to test tracker account is being updated correctly on trans
 
 	test("transfer tokens", async () => {
 		const transferArgs: TransferTokensArgs = {
-			payer: setup.payer.toString(),
 			from: setup.user1.toString(),
 			to: setup.user2.toString(),
 			assetMint: mint,
@@ -146,7 +145,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...transferIxs),
-			[setup.payerKp, setup.user1Kp]
+			[setup.user1Kp]
 		);
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
@@ -183,7 +182,6 @@ describe("test suite to test tracker account is being updated correctly on trans
 	test("do 25 transfers, fail for the 26th time because transfer history is full", async () => {
 		for(let i = 0; i < 25; i++) {
 			const transferArgs: TransferTokensArgs = {
-				payer: setup.payer.toString(),
 				from: setup.user1.toString(),
 				to: setup.user2.toString(),
 				assetMint: mint,
@@ -199,7 +197,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			const txnId = await sendAndConfirmTransaction(
 				rwaClient.provider.connection,
 				new Transaction().add(...transferIxs),
-				[setup.payerKp, setup.user1Kp],
+				[setup.user1Kp],
 				{
 					commitment,
 				}
@@ -216,7 +214,6 @@ describe("test suite to test tracker account is being updated correctly on trans
 			}
 		}
 		const transferArgs: TransferTokensArgs = {
-			payer: setup.payer.toString(),
 			from: setup.user1.toString(),
 			to: setup.user2.toString(),
 			assetMint: mint,
@@ -228,7 +225,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 		expect(sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...transferIxs),
-			[setup.payerKp, setup.user1Kp]
+			[setup.user1Kp]
 		)).rejects.toThrowError(/failed \(\{"err":\{"InstructionError":\[0,\{"Custom":6006\}\]\}\}\)/);
 	});
 
