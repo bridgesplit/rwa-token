@@ -304,7 +304,7 @@ export async function getTransferTokensIxs(
 		}
 	} catch (error) {
 		if (args.createTa) {
-			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.payer), getAssociatedTokenAddressSync(
+			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.from), getAssociatedTokenAddressSync(
 				new PublicKey(args.assetMint),
 				new PublicKey(args.to),
 				true,

@@ -351,6 +351,7 @@ describe("e2e tests", async () => {
 			assetMint: mint,
 			amount: 2000,
 			decimals,
+			createTa: true,
 		};
 
 		const transferIxs = await rwaClient.assetController.transfer(transferArgs);
