@@ -13,7 +13,6 @@ import {
 } from "./utils";
 import { type PolicyType, type IdentityFilter } from "./types";
 import { type AnchorProvider } from "@coral-xyz/anchor";
-import { getTrackerAccount } from "./data";
 
 /** Represents the arguments required to create a policy engine account. */
 export type CreatePolicyEngineArgs = {
