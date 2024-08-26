@@ -8,13 +8,13 @@ import {
 	getSetupAssetControllerIxs,
 	getVoidTokensIx,
 	getAssetControllerPda,
-	getExtraMetasListPda,
 	getUpdateAssetMetadataIx,
 	UpdateAssetMetadataArgs,
 	getTransferTokensIxs,
 } from "../asset-controller";
 import { type IxReturn } from "../utils";
 import { type RwaClient } from "./Client";
+import { getExtraMetasListPda } from "../policy-engine";
 
 /**
  * Represents the client for Asset Controller for an RWA.
