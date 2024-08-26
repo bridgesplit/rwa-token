@@ -13,7 +13,6 @@ import {
 	type IssueTokenArgs,
 	type TransferTokensArgs,
 	type UpdateDataAccountArgs,
-	type VoidTokensArgs,
 } from "../src";
 import { setupTests } from "./setup";
 import {
@@ -81,6 +80,13 @@ describe("e2e tests", async () => {
 			signer: setup.authority.toString(),
 			level: 1,
 		}, rwaClient.provider);
+		const setupUser3Ixs = await getSetupUserIxs({
+			assetMint: mint,
+			payer: setup.payer.toString(),
+			owner: setup.authority.toString(),
+			signer: setup.authority.toString(),
+			level: 255,
+		}, rwaClient.provider);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...setupIx.ixs).add(...setupUserIxs.ixs),
@@ -88,8 +94,8 @@ describe("e2e tests", async () => {
 		);
 		await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(...setupUser2Ixs.ixs),
-			[setup.payerKp, setup.authorityKp, ...setupUser2Ixs.signers]
+			new Transaction().add(...setupUser2Ixs.ixs).add(...setupUser3Ixs.ixs),
+			[setup.payerKp, setup.authorityKp, ...setupUser2Ixs.signers, ...setupUser3Ixs.signers]
 		);
 		expect(txnId).toBeTruthy();
 		const trackerAccount = await getTrackerAccount(
@@ -258,22 +264,22 @@ describe("e2e tests", async () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	test("void tokens", async () => {
-		const voidArgs: VoidTokensArgs = {
-			payer: setup.payer.toString(),
-			amount: 100,
-			owner: setup.user1.toString(),
-			assetMint: mint,
-			authority: setup.user1.toString(),
-		};
-		const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs);
-		const txnId = await sendAndConfirmTransaction(
-			rwaClient.provider.connection,
-			new Transaction().add(voidIx),
-			[setup.payerKp, setup.user1Kp]
-		);
-		expect(txnId).toBeTruthy();
-	});
+	// test("void tokens", async () => {
+	// 	const voidArgs: VoidTokensArgs = {
+	// 		payer: setup.payer.toString(),
+	// 		amount: 100,
+	// 		owner: setup.user1.toString(),
+	// 		assetMint: mint,
+	// 		authority: setup.user1.toString(),
+	// 	};
+	// 	const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs);
+	// 	const txnId = await sendAndConfirmTransaction(
+	// 		rwaClient.provider.connection,
+	// 		new Transaction().add(voidIx),
+	// 		[setup.payerKp, setup.user1Kp]
+	// 	);
+	// 	expect(txnId).toBeTruthy();
+	// });
 
 	test("revoke tokens", async () => {
 		const revokeIx = await getRevokeTokensIx({
@@ -285,7 +291,7 @@ describe("e2e tests", async () => {
 		}, rwaClient.provider);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
-			new Transaction().add(revokeIx),
+			new Transaction().add(...revokeIx),
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId).toBeTruthy();

@@ -1,17 +1,12 @@
-pub const META_LIST_ACCOUNT_SEED: &[u8] = b"extra-account-metas";
-
 pub mod registry;
-pub mod track;
 
 pub use registry::*;
-pub use track::*;
 
 use anchor_lang::{solana_program::program_error::ProgramError, AnchorDeserialize, Discriminator};
 use rwa_utils::GeyserProgramAccount;
 
 pub enum AssetControllerAccounts {
     AssetControllerAccount(AssetControllerAccount),
-    TrackerAccount(TrackerAccount),
 }
 
 impl GeyserProgramAccount for AssetControllerAccounts {
@@ -20,7 +15,6 @@ impl GeyserProgramAccount for AssetControllerAccounts {
             AssetControllerAccounts::AssetControllerAccount(_) => {
                 AssetControllerAccount::DISCRIMINATOR
             }
-            AssetControllerAccounts::TrackerAccount(_) => TrackerAccount::DISCRIMINATOR,
         }
     }
 
@@ -41,10 +35,6 @@ impl GeyserProgramAccount for AssetControllerAccounts {
             AssetControllerAccount::DISCRIMINATOR => {
                 let account = AssetControllerAccount::deserialize(account_data)?;
                 Ok(AssetControllerAccounts::AssetControllerAccount(account))
-            }
-            TrackerAccount::DISCRIMINATOR => {
-                let account = TrackerAccount::deserialize(account_data)?;
-                Ok(AssetControllerAccounts::TrackerAccount(account))
             }
             _ => Err(ProgramError::InvalidAccountData),
         }

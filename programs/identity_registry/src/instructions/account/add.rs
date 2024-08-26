@@ -19,6 +19,7 @@ pub struct AddLevelToIdentityAccount<'info> {
         realloc = identity_account.to_account_info().data_len() + 1, // u8
         realloc::zero = false,
         realloc::payer = payer,
+        constraint = level != 0,
     )]
     pub identity_account: Box<Account<'info, IdentityAccount>>,
     pub system_program: Program<'info, System>,
