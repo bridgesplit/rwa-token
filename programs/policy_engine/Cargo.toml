@@ -25,4 +25,5 @@ identity_registry = { path = "../identity_registry", features = ["no-entrypoint"
 serde = "1.0"
 num_enum = "0.7.2"
 sha256 = "1.5.0"
-spl-transfer-hook-interface = "0.3.0"
+spl-tlv-account-resolution = "0.6.3"
+spl-transfer-hook-interface = { version = "0.6.3" }

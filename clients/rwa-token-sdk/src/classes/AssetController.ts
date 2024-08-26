@@ -8,7 +8,6 @@ import {
 	getSetupAssetControllerIxs,
 	getVoidTokensIx,
 	getAssetControllerPda,
-	getTrackerAccountPda,
 	getExtraMetasListPda,
 	getUpdateAssetMetadataIx,
 	UpdateAssetMetadataArgs,
@@ -115,16 +114,5 @@ export class AssetController {
    */
 	getExtraMetasListPda(assetMint: string): PublicKey {
 		return getExtraMetasListPda(assetMint);
-	}
-
-	/**
-   * Retrieves the tracker pda for a specific asset controller mint and owner.
-   * Tracks the transfers happening from user account. Important for enforcing policies.
-   * @param assetMint - The string representation of the asset's mint address.
-   * @param owner - The string representation of asset's owner.
-   * @returns The asset controller's tracker pda.
-   */
-	getTrackerAccountPda(assetMint: string, owner: string): PublicKey {
-		return getTrackerAccountPda(assetMint, owner);
 	}
 }

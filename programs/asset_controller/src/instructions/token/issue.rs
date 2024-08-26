@@ -38,7 +38,7 @@ impl<'info> IssueTokens<'info> {
         let accounts = MintTo {
             mint: self.asset_mint.to_account_info(),
             to: self.token_account.to_account_info(),
-            authority: self.authority.to_account_info(),
+            authority: self.asset_controller.to_account_info(),
         };
         let cpi_ctx = CpiContext::new_with_signer(
             self.token_program.to_account_info(),

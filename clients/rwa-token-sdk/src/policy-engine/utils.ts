@@ -2,6 +2,7 @@ import { type Idl, Program, type Provider, utils } from "@coral-xyz/anchor";
 import { PolicyEngineIdl } from "../programs/idls";
 import { PublicKey } from "@solana/web3.js";
 import { type PolicyEngineIdlTypes } from "../programs/types";
+import { utf8 } from "@coral-xyz/anchor/dist/cjs/utils/bytes";
 
 /** Program address for the policy engine program. */
 export const policyEngineProgramId = new PublicKey(
@@ -58,3 +59,16 @@ export const getPolicyEnginerEventAuthority = () => PublicKey.findProgramAddress
 	[utils.bytes.utf8.encode("__event_authority")],
 	policyEngineProgramId
 )[0];
+
+
+/**
+ * Retrieves the asset controller's metadata pda account for a specific asset mint.
+ * @param assetMint - The string representation of the asset's mint address.
+ * @returns The asset controller's extra metadata pda.
+ */
+export const getExtraMetasListPda = (assetMint: string) =>
+	PublicKey.findProgramAddressSync(
+		[utf8.encode("extra-account-metas"), new PublicKey(assetMint).toBuffer()],
+		policyEngineProgramId
+	)[0];
+

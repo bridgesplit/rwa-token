@@ -302,11 +302,6 @@ export type AssetController = {
           "name": "authority"
         },
         {
-          "name": "assetMint",
-          "writable": true,
-          "signer": true
-        },
-        {
           "name": "assetController",
           "writable": true,
           "pda": {
@@ -317,6 +312,11 @@ export type AssetController = {
               }
             ]
           }
+        },
+        {
+          "name": "assetMint",
+          "writable": true,
+          "signer": true
         },
         {
           "name": "extraMetasAccount",
@@ -355,13 +355,16 @@ export type AssetController = {
           }
         },
         {
-          "name": "policyEngineAccount"
+          "name": "policyEngineAccount",
+          "writable": true
         },
         {
-          "name": "identityRegistryAccount"
+          "name": "identityRegistryAccount",
+          "writable": true
         },
         {
-          "name": "dataRegistryAccount"
+          "name": "dataRegistryAccount",
+          "writable": true
         },
         {
           "name": "policyEngine",

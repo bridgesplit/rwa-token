@@ -12,7 +12,7 @@
         "dist"
     ],
     "scripts": {
-        "test": "vitest run tests/tracker.test.ts --testTimeout=240000",
+        "test": "vitest run  --testTimeout=240000",
         "lint": "eslint . --ext .ts",
         "build": "tsc"
     },

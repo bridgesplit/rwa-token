@@ -1,6 +1,12 @@
 use crate::{state::*, PolicyEngineErrors};
-use anchor_lang::{prelude::*, solana_program::sysvar::instructions::get_instruction_relative};
+use anchor_lang::{
+    prelude::*,
+    solana_program::sysvar::{self, instructions::get_instruction_relative},
+};
 use anchor_spl::token_2022;
+use spl_tlv_account_resolution::{
+    account::ExtraAccountMeta, seeds::Seed, state::ExtraAccountMetaList,
+};
 
 pub fn enforce_identity_filter(identity: &[u8], identity_filter: IdentityFilter) -> Result<()> {
     match identity_filter.comparision_type {
@@ -147,4 +153,56 @@ pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Resu
         return Err(PolicyEngineErrors::InvalidPdaPassedIn.into());
     }
     Ok(())
+}
+
+pub fn get_meta_list_size() -> Result<usize> {
+    Ok(ExtraAccountMetaList::size_of(get_extra_account_metas()?.len()).unwrap())
+}
+
+pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
+    Ok(vec![
+        // policy engine account
+        ExtraAccountMeta::new_with_seeds(&[Seed::AccountKey { index: 1 }], false, false)?,
+        // identity program
+        ExtraAccountMeta::new_with_pubkey(&identity_registry::id(), false, false)?,
+        // identity registry account
+        ExtraAccountMeta::new_external_pda_with_seeds(
+            6,
+            &[Seed::AccountKey { index: 1 }],
+            false,
+            false,
+        )?,
+        // user identity account
+        ExtraAccountMeta::new_external_pda_with_seeds(
+            6,
+            &[
+                Seed::AccountKey { index: 7 },
+                Seed::AccountData {
+                    // to pubkey
+                    account_index: 2, // to token account
+                    data_index: 32,
+                    length: 32,
+                },
+            ],
+            false,
+            false,
+        )?,
+        // user tracker account
+        ExtraAccountMeta::new_with_seeds(
+            &[
+                Seed::AccountKey { index: 1 },
+                Seed::AccountData {
+                    account_index: 2,
+                    data_index: 32,
+                    length: 32,
+                },
+            ],
+            false,
+            true,
+        )?,
+        // policy account
+        ExtraAccountMeta::new_with_seeds(&[Seed::AccountKey { index: 5 }], false, true)?,
+        // instructions program
+        ExtraAccountMeta::new_with_pubkey(&sysvar::instructions::id(), false, false)?,
+    ])
 }

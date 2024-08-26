@@ -296,11 +296,6 @@
           "name": "authority"
         },
         {
-          "name": "asset_mint",
-          "writable": true,
-          "signer": true
-        },
-        {
           "name": "asset_controller",
           "writable": true,
           "pda": {
@@ -311,6 +306,11 @@
               }
             ]
           }
+        },
+        {
+          "name": "asset_mint",
+          "writable": true,
+          "signer": true
         },
         {
           "name": "extra_metas_account",
@@ -349,13 +349,16 @@
           }
         },
         {
-          "name": "policy_engine_account"
+          "name": "policy_engine_account",
+          "writable": true
         },
         {
-          "name": "identity_registry_account"
+          "name": "identity_registry_account",
+          "writable": true
         },
         {
-          "name": "data_registry_account"
+          "name": "data_registry_account",
+          "writable": true
         },
         {
           "name": "policy_engine",

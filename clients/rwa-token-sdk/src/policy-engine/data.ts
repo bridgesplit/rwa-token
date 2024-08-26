@@ -73,11 +73,8 @@ export async function getTrackerAccount(
 	assetMint: string,
 	owner: string,
 	provider: AnchorProvider
-): Promise<TrackerAccount | undefined> {
-	const assetProgram = getPolicyEngineProgram(provider);
+): Promise<TrackerAccount> {
+	const policyEngineProgram = getPolicyEngineProgram(provider);
 	const trackerPda = getTrackerAccountPda(assetMint, owner);
-	return assetProgram.account.trackerAccount
-		.fetch(trackerPda)
-		.then((account) => account)
-		.catch(() => undefined);
+	return await policyEngineProgram.account.trackerAccount.fetch(trackerPda);
 }

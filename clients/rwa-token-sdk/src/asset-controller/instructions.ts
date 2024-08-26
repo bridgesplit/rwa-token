@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
+	ComputeBudgetProgram,
 	Keypair,
 	PublicKey,
 	SystemProgram,
@@ -14,6 +15,7 @@ import {
 	policyEngineProgramId,
 	getTrackerAccount,
 	getCreateTrackerAccountIx,
+	getExtraMetasListPda,
 } from "../policy-engine";
 import { dataRegistryProgramId, getDataRegistryPda } from "../data-registry";
 import {
@@ -38,7 +40,6 @@ import {
 import {
 	getAssetControllerProgram,
 	getAssetControllerPda,
-	getExtraMetasListPda,
 	assetControllerProgramId,
 	getAssetControllerEventAuthority,
 } from "./utils";
@@ -169,6 +170,21 @@ export async function getIssueTokensIx(
 			), new PublicKey(args.owner), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
 		}
 	}
+	try {
+		await getTrackerAccount(args.assetMint, args.owner, provider);
+	} catch (error) {
+		if (args.createTa) {
+			const createTrackerAccountIx = await getCreateTrackerAccountIx(
+				{
+					payer: args.payer,
+					owner: args.owner,
+					assetMint: args.assetMint,
+				},
+				provider
+			);
+			ixs.push(createTrackerAccountIx);
+		}
+	}
 	const ix = await assetProgram.methods
 		.issueTokens({
 			amount: new BN(args.amount),
@@ -240,11 +256,6 @@ export async function getTransferTokensIxs(
 ): Promise<TransactionInstruction[]> {
 	const remainingAccounts = [
 		{
-			pubkey: policyEngineProgramId,
-			isWritable: false,
-			isSigner: false,
-		},
-		{
 			pubkey: getPolicyEnginePda(args.assetMint),
 			isWritable: false,
 			isSigner: false,
@@ -261,7 +272,7 @@ export async function getTransferTokensIxs(
 		},
 		{
 			pubkey: getIdentityAccountPda(args.assetMint, args.to),
-			isWritable: true,
+			isWritable: false,
 			isSigner: false,
 		},
 		{
@@ -271,7 +282,7 @@ export async function getTransferTokensIxs(
 		},
 		{
 			pubkey: getPolicyAccountPda(args.assetMint),
-			isWritable: false,
+			isWritable: true,
 			isSigner: false,
 		},
 		{
@@ -320,18 +331,21 @@ export async function getTransferTokensIxs(
 			), new PublicKey(args.to), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
 		}
 	}
+
 	try {
 		await getTrackerAccount(args.assetMint, args.to, provider);
 	} catch (error) {
-		const createTrackerAccountIx = await getCreateTrackerAccountIx(
-			{
-				payer: args.from,
-				owner: args.to,
-				assetMint: args.assetMint,
-			},
-			provider
-		);
-		ixs.push(createTrackerAccountIx);
+		if (args.createTa) {
+			const createTrackerAccountIx = await getCreateTrackerAccountIx(
+				{
+					payer: args.from,
+					owner: args.to,
+					assetMint: args.assetMint,
+				},
+				provider
+			);
+			ixs.push(createTrackerAccountIx);
+		}
 	}
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
@@ -427,6 +441,7 @@ export async function getSetupAssetControllerIxs(
 
 	return {
 		ixs: [
+			ComputeBudgetProgram.setComputeUnitLimit({units: 300_000}),
 			assetControllerCreateIx,
 		],
 		signers: [mintKp],
@@ -634,11 +649,6 @@ export async function getRevokeTokensIx(
 	const assetProgram = getAssetControllerProgram(provider);
 	const remainingAccounts = [
 		{
-			pubkey: policyEngineProgramId,
-			isWritable: false,
-			isSigner: false,
-		},
-		{
 			pubkey: getPolicyEnginePda(args.assetMint),
 			isWritable: false,
 			isSigner: false,
@@ -655,7 +665,7 @@ export async function getRevokeTokensIx(
 		},
 		{
 			pubkey: getIdentityAccountPda(args.assetMint, args.authority),
-			isWritable: true,
+			isWritable: false,
 			isSigner: false,
 		},
 		{
@@ -665,7 +675,7 @@ export async function getRevokeTokensIx(
 		},
 		{
 			pubkey: getPolicyAccountPda(args.assetMint),
-			isWritable: false,
+			isWritable: true,
 			isSigner: false,
 		},
 		{

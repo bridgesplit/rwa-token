@@ -1,6 +1,6 @@
 use crate::{
-    enforce_policy, program::PolicyEngine, verify_cpi_program_is_token22, verify_pda,
-    PolicyAccount, PolicyEngineAccount, TrackerAccount,
+    enforce_policy, verify_cpi_program_is_token22, verify_pda, PolicyAccount, PolicyEngineAccount,
+    TrackerAccount,
 };
 use anchor_lang::{
     prelude::*,
@@ -39,23 +39,17 @@ pub struct ExecuteTransferHook<'info> {
         bump,
     )]
     pub extra_metas_account: UncheckedAccount<'info>,
-    pub policy_engine: Program<'info, PolicyEngine>,
-    #[account(
-        owner = policy_engine.key(),
-    )]
     /// CHECK: internal ix checks
     pub policy_engine_account: UncheckedAccount<'info>,
     pub identity_registry: Program<'info, IdentityRegistry>,
-    #[account()]
     /// CHECK: internal ix checks
     pub identity_registry_account: UncheckedAccount<'info>,
-    #[account(mut)]
     /// CHECK: internal ix checks
     pub identity_account: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK: internal ix checks
     pub tracker_account: UncheckedAccount<'info>,
-    #[account()]
+    #[account(mut)]
     /// CHECK: internal ix checks
     pub policy_account: UncheckedAccount<'info>,
     #[account(constraint = instructions_program.key() == sysvar::instructions::id())]
@@ -64,13 +58,13 @@ pub struct ExecuteTransferHook<'info> {
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
+    let asset_mint = ctx.accounts.asset_mint.key();
+
     verify_cpi_program_is_token22(
         &ctx.accounts.instructions_program.to_account_info(),
         amount,
-        ctx.accounts.asset_mint.key(),
+        asset_mint,
     )?;
-
-    let asset_mint = ctx.accounts.asset_mint.key();
 
     verify_pda(
         ctx.accounts.policy_engine_account.key(),

@@ -9,17 +9,21 @@ use anchor_spl::{
         TokenMetadataInitialize,
     },
 };
-use data_registry::{cpi::{accounts::CreateDataRegistry, create_data_registry}, program::DataRegistry};
-use identity_registry::{cpi::{accounts::CreateIdentityRegistry, create_identity_registry}, program::IdentityRegistry};
-use policy_engine::{cpi::{accounts::CreatePolicyEngine, create_policy_engine}, program::PolicyEngine};
-use rwa_utils::{get_bump_in_seed_form, META_LIST_ACCOUNT_SEED};
-use spl_tlv_account_resolution::state::ExtraAccountMetaList;
-use spl_transfer_hook_interface::instruction::ExecuteInstruction;
-
-use crate::{
-    get_extra_account_metas, get_meta_list_size, state::*,
-    update_account_lamports_to_minimum_balance,
+use data_registry::{
+    cpi::{accounts::CreateDataRegistry, create_data_registry},
+    program::DataRegistry,
 };
+use identity_registry::{
+    cpi::{accounts::CreateIdentityRegistry, create_identity_registry},
+    program::IdentityRegistry,
+};
+use policy_engine::{
+    cpi::{accounts::CreatePolicyEngine, create_policy_engine},
+    program::PolicyEngine,
+};
+use rwa_utils::get_bump_in_seed_form;
+
+use crate::{state::*, update_account_lamports_to_minimum_balance};
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct CreateAssetControllerArgs {
@@ -70,20 +74,17 @@ pub struct CreateAssetController<'info> {
         extensions::close_authority::authority = asset_controller.key(),
     )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
-    #[account(
-        init,
-        space = get_meta_list_size()?,
-        seeds = [META_LIST_ACCOUNT_SEED, asset_mint.key().as_ref()],
-        bump,
-        payer = payer,
-    )]
-    /// CHECK: extra metas account
+    #[account(mut)]
+    /// CHECK: cpi checks
     pub extra_metas_account: UncheckedAccount<'info>,
     /// CHECK: cpi checks
+    #[account(mut)]
     pub policy_engine_account: UncheckedAccount<'info>,
     /// CHECK: cpi checks
+    #[account(mut)]
     pub identity_registry_account: UncheckedAccount<'info>,
     /// CHECK: cpi checks
+    #[account(mut)]
     pub data_registry_account: UncheckedAccount<'info>,
     pub policy_engine: Program<'info, PolicyEngine>,
     pub identity_registry: Program<'info, IdentityRegistry>,
@@ -125,6 +126,7 @@ impl<'info> CreateAssetController<'info> {
             payer: self.payer.to_account_info(),
             signer: self.asset_controller.to_account_info(),
             asset_mint: self.asset_mint.to_account_info(),
+            extra_metas_account: self.extra_metas_account.to_account_info(),
             policy_engine_account: self.policy_engine_account.to_account_info(),
             system_program: self.system_program.to_account_info(),
         };
@@ -192,12 +194,6 @@ pub fn handler(ctx: Context<CreateAssetController>, args: CreateAssetControllerA
         asset_mint.as_ref(),
         &get_bump_in_seed_form(&ctx.bumps.asset_controller),
     ];
-
-    // initialize the extra metas account
-    let extra_metas_account = &ctx.accounts.extra_metas_account;
-    let metas = get_extra_account_metas()?;
-    let mut data = extra_metas_account.try_borrow_mut_data()?;
-    ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
 
     // initialize token metadata
     ctx.accounts.initialize_token_metadata(

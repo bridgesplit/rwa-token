@@ -118,8 +118,8 @@ describe("test policy setup", async () => {
 			},
 			policyType: {
 				transactionAmountVelocity: {
-					limit: new BN(199),
-					timeframe: new BN(60),
+					limit: new BN(20),
+					timeframe: new BN(3000),
 				},
 			},
 		});
@@ -276,10 +276,10 @@ describe("test policy setup", async () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	test("transfer 10 tokens 3 times from user1, fail 3rd time", async () => {
+	test("transfer 10 tokens 3 times to user1, fail 3rd time", async () => {
 		let transferTokensIxs = await getTransferTokensIxs({
-			from: setup.user1.toString(),
-			to: setup.user2.toString(),
+			from: setup.user2.toString(),
+			to: setup.user1.toString(),
 			assetMint: mint,
 			amount: 10,
 			decimals,
@@ -287,12 +287,12 @@ describe("test policy setup", async () => {
 		let txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
 			new Transaction().add(...transferTokensIxs),
-			[setup.user1Kp],
+			[setup.user2Kp],
 		);
 		expect(txnId).toBeTruthy();
 		transferTokensIxs = await getTransferTokensIxs({
-			from: setup.user1.toString(),
-			to: setup.user2.toString(),
+			from: setup.user2.toString(),
+			to: setup.user1.toString(),
 			assetMint: mint,
 			amount: 10,
 			decimals,
@@ -300,20 +300,20 @@ describe("test policy setup", async () => {
 		txnId = await sendAndConfirmTransaction(
 			setup.provider.connection,
 			new Transaction().add(...transferTokensIxs),
-			[setup.user1Kp],
+			[setup.user2Kp],
 		);
 		expect(txnId).toBeTruthy();
 		transferTokensIxs = await getTransferTokensIxs({
-			from: setup.user1.toString(),
-			to: setup.user2.toString(),
+			from: setup.user2.toString(),
+			to: setup.user1.toString(),
 			assetMint: mint,
-			amount: 10,
+			amount: 1000,
 			decimals,
 		}, rwaClient.provider);
 		void expect(sendAndConfirmTransaction(
 			setup.provider.connection,
 			new Transaction().add(...transferTokensIxs),
-			[setup.user1Kp],
+			[setup.user2Kp],
 		)).rejects.toThrowError();
 	});
 });
