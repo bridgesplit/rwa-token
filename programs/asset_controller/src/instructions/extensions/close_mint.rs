@@ -1,4 +1,4 @@
-use anchor_lang::{prelude::*, solana_program::program_option::COption};
+use anchor_lang::prelude::*;
 use anchor_spl::{
     token_2022::{close_account, CloseAccount},
     token_interface::{Mint, Token2022},
@@ -14,7 +14,6 @@ pub struct CloseMintAccount<'info> {
     pub authority: Signer<'info>,
     #[account(
         mut,
-        constraint = asset_mint.mint_authority == COption::Some(authority.key()),
         constraint = asset_mint.supply == 0,
     )]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
