@@ -97,21 +97,6 @@ describe("test suite to test tracker account is being updated correctly on trans
 			[setup.payerKp, setup.authorityKp]
 		);
 		expect(txnId2).toBeTruthy();
-		const trackerAccount1 = await getTrackerAccount(
-			mint,
-			setup.user1.toString(),
-			rwaClient.provider
-		);
-		expect(trackerAccount1).toBeTruthy();
-		expect(trackerAccount1!.assetMint.toString()).toBe(mint);
-		expect(trackerAccount1!.owner.toString()).toBe(setup.user1.toString());
-		const trackerAccount2 = await getTrackerAccount(
-			mint,
-			setup.user2.toString(),
-			rwaClient.provider
-		);
-		expect(trackerAccount2).toBeTruthy();
-		expect(trackerAccount2!.assetMint.toString()).toBe(mint);
 	});
 
 	test("issue tokens", async () => {

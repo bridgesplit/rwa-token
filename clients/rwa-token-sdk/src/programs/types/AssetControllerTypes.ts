@@ -355,6 +355,27 @@ export type AssetController = {
           }
         },
         {
+          "name": "policyEngineAccount"
+        },
+        {
+          "name": "identityRegistryAccount"
+        },
+        {
+          "name": "dataRegistryAccount"
+        },
+        {
+          "name": "policyEngine",
+          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
+        },
+        {
+          "name": "identityRegistry",
+          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
+        },
+        {
+          "name": "dataRegistry",
+          "address": "dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw"
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         },
@@ -491,22 +512,6 @@ export type AssetController = {
           }
         },
         {
-          "name": "trackerAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "assetMint"
-              },
-              {
-                "kind": "account",
-                "path": "owner"
-              }
-            ]
-          }
-        },
-        {
           "name": "assetController",
           "pda": {
             "seeds": [
@@ -637,191 +642,6 @@ export type AssetController = {
       "args": []
     },
     {
-      "name": "executeTransaction",
-      "docs": [
-        "execute transfer hook"
-      ],
-      "discriminator": [
-        105,
-        37,
-        101,
-        197,
-        75,
-        251,
-        102,
-        26
-      ],
-      "accounts": [
-        {
-          "name": "sourceAccount",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "ownerDelegate"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  238,
-                  117,
-                  143,
-                  222,
-                  24,
-                  66,
-                  93,
-                  188,
-                  228,
-                  108,
-                  205,
-                  218,
-                  182,
-                  26,
-                  252,
-                  77,
-                  131,
-                  185,
-                  13,
-                  39,
-                  254,
-                  189,
-                  249,
-                  40,
-                  216,
-                  161,
-                  139,
-                  252
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "assetMint"
-        },
-        {
-          "name": "destinationAccount"
-        },
-        {
-          "name": "ownerDelegate"
-        },
-        {
-          "name": "extraMetasAccount",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  120,
-                  116,
-                  114,
-                  97,
-                  45,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  45,
-                  109,
-                  101,
-                  116,
-                  97,
-                  115
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "policyEngine",
-          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
-        },
-        {
-          "name": "policyEngineAccount"
-        },
-        {
-          "name": "identityRegistry",
-          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
-        },
-        {
-          "name": "identityRegistryAccount"
-        },
-        {
-          "name": "identityAccount",
-          "writable": true
-        },
-        {
-          "name": "trackerAccount",
-          "writable": true
-        },
-        {
-          "name": "policyAccount"
-        },
-        {
-          "name": "instructionsProgram"
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
       "name": "freezeTokenAccount",
       "docs": [
         "freeze token account"
@@ -890,6 +710,17 @@ export type AssetController = {
         {
           "name": "assetMint",
           "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
         },
         {
           "name": "tokenAccount",
@@ -1004,7 +835,8 @@ export type AssetController = {
           "writable": true
         },
         {
-          "name": "revokeTokenAccount"
+          "name": "revokeTokenAccount",
+          "writable": true
         },
         {
           "name": "tokenProgram",
@@ -1250,19 +1082,6 @@ export type AssetController = {
         52,
         105
       ]
-    },
-    {
-      "name": "trackerAccount",
-      "discriminator": [
-        83,
-        95,
-        166,
-        148,
-        57,
-        30,
-        90,
-        210
-      ]
     }
   ],
   "events": [
@@ -1507,52 +1326,6 @@ export type AssetController = {
           {
             "name": "to",
             "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "trackerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "assetMint",
-            "type": "pubkey"
-          },
-          {
-            "name": "owner",
-            "type": "pubkey"
-          },
-          {
-            "name": "transfers",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "transfer"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "transfer",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
           }
         ]
       }

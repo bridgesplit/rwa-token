@@ -1,3 +1,7 @@
+use crate::{
+    enforce_policy, program::PolicyEngine, verify_cpi_program_is_token22, verify_pda,
+    PolicyAccount, PolicyEngineAccount, TrackerAccount,
+};
 use anchor_lang::{
     prelude::*,
     solana_program::sysvar::{self},
@@ -6,9 +10,7 @@ use anchor_spl::token_interface::{Mint, TokenAccount};
 use identity_registry::{
     program::IdentityRegistry, IdentityAccount, NO_IDENTITY_LEVEL, SKIP_POLICY_LEVEL,
 };
-use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
-
-use crate::{state::*, verify_cpi_program_is_token22, verify_pda};
+use rwa_utils::META_LIST_ACCOUNT_SEED;
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
@@ -73,13 +75,13 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     verify_pda(
         ctx.accounts.policy_engine_account.key(),
         &[&asset_mint.to_bytes()],
-        &policy_engine::id(),
+        &crate::id(),
     )?;
 
     verify_pda(
         ctx.accounts.policy_account.key(),
         &[&ctx.accounts.policy_engine_account.key().to_bytes()],
-        &policy_engine::id(),
+        &crate::id(),
     )?;
 
     // if policy account hasnt been created, skip enforcing token hook logic

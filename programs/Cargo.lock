@@ -88,7 +88,7 @@ dependencies = [
 [[package]]
 name = "anchor-attribute-access-control"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "proc-macro2",
@@ -99,7 +99,7 @@ dependencies = [
 [[package]]
 name = "anchor-attribute-account"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "bs58 0.5.1",
@@ -111,7 +111,7 @@ dependencies = [
 [[package]]
 name = "anchor-attribute-constant"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "quote",
@@ -121,7 +121,7 @@ dependencies = [
 [[package]]
 name = "anchor-attribute-error"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "quote",
@@ -131,7 +131,7 @@ dependencies = [
 [[package]]
 name = "anchor-attribute-event"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "proc-macro2",
@@ -142,7 +142,7 @@ dependencies = [
 [[package]]
 name = "anchor-attribute-program"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-lang-idl",
  "anchor-syn",
@@ -158,7 +158,7 @@ dependencies = [
 [[package]]
 name = "anchor-derive-accounts"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "quote",
@@ -168,7 +168,7 @@ dependencies = [
 [[package]]
 name = "anchor-derive-serde"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-syn",
  "borsh-derive-internal 0.10.3",
@@ -180,7 +180,7 @@ dependencies = [
 [[package]]
 name = "anchor-derive-space"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -190,7 +190,7 @@ dependencies = [
 [[package]]
 name = "anchor-lang"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-attribute-access-control",
  "anchor-attribute-account",
@@ -214,7 +214,7 @@ dependencies = [
 [[package]]
 name = "anchor-lang-idl"
 version = "0.1.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-lang-idl-spec",
  "anyhow",
@@ -228,7 +228,7 @@ dependencies = [
 [[package]]
 name = "anchor-lang-idl-spec"
 version = "0.1.0"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anyhow",
  "serde",
@@ -237,11 +237,11 @@ dependencies = [
 [[package]]
 name = "anchor-spl"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anchor-lang",
  "spl-associated-token-account",
- "spl-pod",
+ "spl-pod 0.2.2",
  "spl-token",
  "spl-token-2022",
  "spl-token-group-interface",
@@ -251,7 +251,7 @@ dependencies = [
 [[package]]
 name = "anchor-syn"
 version = "0.30.1"
-source = "git+https://github.com/bridgesplit/anchor#c46c1bf1b12163d5d00ed9edd7e72e1a117362bb"
+source = "git+https://github.com/bridgesplit/anchor#b5eb8650733a4e057dbb115192c3f399ce121b4d"
 dependencies = [
  "anyhow",
  "bs58 0.5.1",
@@ -428,13 +428,14 @@ version = "0.0.1"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
+ "data_registry",
  "identity_registry",
  "policy_engine",
  "rwa_utils",
  "serde_json",
- "spl-tlv-account-resolution",
+ "spl-tlv-account-resolution 0.6.3",
  "spl-token-2022",
- "spl-transfer-hook-interface",
+ "spl-transfer-hook-interface 0.6.3",
 ]
 
 [[package]]
@@ -1610,10 +1611,12 @@ version = "0.0.1"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
+ "identity_registry",
  "num_enum",
  "rwa_utils",
  "serde",
  "sha256",
+ "spl-transfer-hook-interface 0.3.0",
 ]
 
 [[package]]
@@ -2322,13 +2325,35 @@ dependencies = [
 
 [[package]]
 name = "spl-discriminator"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cce5d563b58ef1bb2cdbbfe0dfb9ffdc24903b10ae6a4df2d8f425ece375033f"
+dependencies = [
+ "bytemuck",
+ "solana-program",
+ "spl-discriminator-derive 0.1.2",
+]
+
+[[package]]
+name = "spl-discriminator"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "34d1814406e98b08c5cd02c1126f83fd407ad084adce0b05fda5730677822eac"
 dependencies = [
  "bytemuck",
  "solana-program",
- "spl-discriminator-derive",
+ "spl-discriminator-derive 0.2.0",
+]
+
+[[package]]
+name = "spl-discriminator-derive"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "07fd7858fc4ff8fb0e34090e41d7eb06a823e1057945c26d480bfc21d2338a93"
+dependencies = [
+ "quote",
+ "spl-discriminator-syn 0.1.2",
+ "syn 2.0.58",
 ]
 
 [[package]]
@@ -2338,8 +2363,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9e8418ea6269dcfb01c712f0444d2c75542c04448b480e87de59d2865edc750"
 dependencies = [
  "quote",
- "spl-discriminator-syn",
+ "spl-discriminator-syn 0.2.0",
  "syn 2.0.58",
+]
+
+[[package]]
+name = "spl-discriminator-syn"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18fea7be851bd98d10721782ea958097c03a0c2a07d8d4997041d0ece6319a63"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "sha2 0.10.8",
+ "syn 2.0.58",
+ "thiserror",
 ]
 
 [[package]]
@@ -2366,6 +2404,18 @@ dependencies = [
 
 [[package]]
 name = "spl-pod"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2881dddfca792737c0706fa0175345ab282b1b0879c7d877bad129645737c079"
+dependencies = [
+ "bytemuck",
+ "solana-program",
+ "solana-zk-token-sdk",
+ "spl-program-error 0.3.0",
+]
+
+[[package]]
+name = "spl-pod"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "046ce669f48cf2eca1ec518916d8725596bfb655beb1c74374cf71dc6cb773c9"
@@ -2376,7 +2426,20 @@ dependencies = [
  "serde",
  "solana-program",
  "solana-zk-token-sdk",
- "spl-program-error",
+ "spl-program-error 0.4.1",
+]
+
+[[package]]
+name = "spl-program-error"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "249e0318493b6bcf27ae9902600566c689b7dfba9f1bdff5893e92253374e78c"
+dependencies = [
+ "num-derive",
+ "num-traits",
+ "solana-program",
+ "spl-program-error-derive 0.3.2",
+ "thiserror",
 ]
 
 [[package]]
@@ -2388,8 +2451,20 @@ dependencies = [
  "num-derive",
  "num-traits",
  "solana-program",
- "spl-program-error-derive",
+ "spl-program-error-derive 0.4.1",
  "thiserror",
+]
+
+[[package]]
+name = "spl-program-error-derive"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1845dfe71fd68f70382232742e758557afe973ae19e6c06807b2c30f5d5cb474"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "sha2 0.10.8",
+ "syn 2.0.58",
 ]
 
 [[package]]
@@ -2406,16 +2481,30 @@ dependencies = [
 
 [[package]]
 name = "spl-tlv-account-resolution"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "062e148d3eab7b165582757453632ffeef490c02c86a48bfdb4988f63eefb3b9"
+dependencies = [
+ "bytemuck",
+ "solana-program",
+ "spl-discriminator 0.1.0",
+ "spl-pod 0.1.0",
+ "spl-program-error 0.3.0",
+ "spl-type-length-value 0.3.0",
+]
+
+[[package]]
+name = "spl-tlv-account-resolution"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cace91ba08984a41556efe49cbf2edca4db2f577b649da7827d3621161784bf8"
 dependencies = [
  "bytemuck",
  "solana-program",
- "spl-discriminator",
- "spl-pod",
- "spl-program-error",
- "spl-type-length-value",
+ "spl-discriminator 0.2.2",
+ "spl-pod 0.2.2",
+ "spl-program-error 0.4.1",
+ "spl-type-length-value 0.4.3",
 ]
 
 [[package]]
@@ -2451,12 +2540,12 @@ dependencies = [
  "solana-security-txt",
  "solana-zk-token-sdk",
  "spl-memo",
- "spl-pod",
+ "spl-pod 0.2.2",
  "spl-token",
  "spl-token-group-interface",
  "spl-token-metadata-interface",
- "spl-transfer-hook-interface",
- "spl-type-length-value",
+ "spl-transfer-hook-interface 0.6.3",
+ "spl-type-length-value 0.4.3",
  "thiserror",
 ]
 
@@ -2468,9 +2557,9 @@ checksum = "d419b5cfa3ee8e0f2386fd7e02a33b3ec8a7db4a9c7064a2ea24849dc4a273b6"
 dependencies = [
  "bytemuck",
  "solana-program",
- "spl-discriminator",
- "spl-pod",
- "spl-program-error",
+ "spl-discriminator 0.2.2",
+ "spl-pod 0.2.2",
+ "spl-program-error 0.4.1",
 ]
 
 [[package]]
@@ -2481,10 +2570,26 @@ checksum = "30179c47e93625680dabb620c6e7931bd12d62af390f447bc7beb4a3a9b5feee"
 dependencies = [
  "borsh 1.5.1",
  "solana-program",
- "spl-discriminator",
- "spl-pod",
- "spl-program-error",
- "spl-type-length-value",
+ "spl-discriminator 0.2.2",
+ "spl-pod 0.2.2",
+ "spl-program-error 0.4.1",
+ "spl-type-length-value 0.4.3",
+]
+
+[[package]]
+name = "spl-transfer-hook-interface"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "051d31803f873cabe71aec3c1b849f35248beae5d19a347d93a5c9cccc5d5a9b"
+dependencies = [
+ "arrayref",
+ "bytemuck",
+ "solana-program",
+ "spl-discriminator 0.1.0",
+ "spl-pod 0.1.0",
+ "spl-program-error 0.3.0",
+ "spl-tlv-account-resolution 0.4.0",
+ "spl-type-length-value 0.3.0",
 ]
 
 [[package]]
@@ -2496,11 +2601,24 @@ dependencies = [
  "arrayref",
  "bytemuck",
  "solana-program",
- "spl-discriminator",
- "spl-pod",
- "spl-program-error",
- "spl-tlv-account-resolution",
- "spl-type-length-value",
+ "spl-discriminator 0.2.2",
+ "spl-pod 0.2.2",
+ "spl-program-error 0.4.1",
+ "spl-tlv-account-resolution 0.6.3",
+ "spl-type-length-value 0.4.3",
+]
+
+[[package]]
+name = "spl-type-length-value"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a468e6f6371f9c69aae760186ea9f1a01c2908351b06a5e0026d21cfc4d7ecac"
+dependencies = [
+ "bytemuck",
+ "solana-program",
+ "spl-discriminator 0.1.0",
+ "spl-pod 0.1.0",
+ "spl-program-error 0.3.0",
 ]
 
 [[package]]
@@ -2511,9 +2629,9 @@ checksum = "422ce13429dbd41d2cee8a73931c05fda0b0c8ca156a8b0c19445642550bb61a"
 dependencies = [
  "bytemuck",
  "solana-program",
- "spl-discriminator",
- "spl-pod",
- "spl-program-error",
+ "spl-discriminator 0.2.2",
+ "spl-pod 0.2.2",
+ "spl-program-error 0.4.1",
 ]
 
 [[package]]

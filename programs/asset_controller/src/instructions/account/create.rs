@@ -5,7 +5,7 @@ use anchor_spl::{
     token_interface::{memo_transfer_initialize, MemoTransfer, Mint, Token2022, TokenAccount},
 };
 
-use crate::{AssetControllerAccount, ExtensionMetadataEvent, TrackerAccount};
+use crate::{AssetControllerAccount, ExtensionMetadataEvent};
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
 pub struct CreateTokenAccountArgs {
@@ -34,14 +34,6 @@ pub struct CreateTokenAccount<'info> {
         associated_token::authority = owner,
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
-    #[account(
-        init_if_needed,
-        space = 8 + TrackerAccount::INIT_SPACE,
-        seeds = [asset_mint.key().as_ref(), owner.key().as_ref()],
-        bump,
-        payer = payer,
-    )]
-    pub tracker_account: Box<Account<'info, TrackerAccount>>,
     #[account(
         seeds = [asset_mint.key().as_ref()],
         bump,
@@ -90,10 +82,6 @@ impl<'info> CreateTokenAccount<'info> {
 pub const TOKEN_EXTENSIONS: [ExtensionType; 1] = [ExtensionType::MemoTransfer];
 
 pub fn handler(ctx: Context<CreateTokenAccount>, args: CreateTokenAccountArgs) -> Result<()> {
-    ctx.accounts
-        .tracker_account
-        .new(ctx.accounts.asset_mint.key(), ctx.accounts.owner.key());
-
     if args.memo_transfer {
         ctx.accounts.reallocate_ta(TOKEN_EXTENSIONS.to_vec())?;
         ctx.accounts.enable_memo_transfer()?;

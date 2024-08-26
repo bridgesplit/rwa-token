@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
-use policy_engine::Transfer;
 
-use crate::AssetControllerErrors;
+use crate::{PolicyEngineErrors, Transfer};
 
 pub const MAX_TRANSFER_HISTORY: usize = 25;
 
@@ -45,7 +44,7 @@ impl TrackerAccount {
         self.transfers.push(Transfer { amount, timestamp });
         // return error if the transfer history is too large
         if self.transfers.len() > MAX_TRANSFER_HISTORY {
-            return Err(AssetControllerErrors::TransferHistoryFull.into());
+            return Err(PolicyEngineErrors::TransferHistoryFull.into());
         }
         Ok(())
     }

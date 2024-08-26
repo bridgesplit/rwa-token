@@ -203,6 +203,88 @@ export type PolicyEngine = {
       ]
     },
     {
+      "name": "createTrackerAccount",
+      "docs": [
+        "create tracker account"
+      ],
+      "discriminator": [
+        40,
+        16,
+        40,
+        191,
+        109,
+        177,
+        83,
+        190
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "owner"
+        },
+        {
+          "name": "assetMint"
+        },
+        {
+          "name": "trackerAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "detachFromPolicyAccount",
       "docs": [
         "remove policy"
@@ -254,6 +336,191 @@ export type PolicyEngine = {
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "executeTransaction",
+      "docs": [
+        "execute transfer hook"
+      ],
+      "discriminator": [
+        105,
+        37,
+        101,
+        197,
+        75,
+        251,
+        102,
+        26
+      ],
+      "accounts": [
+        {
+          "name": "sourceAccount",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "ownerDelegate"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  238,
+                  117,
+                  143,
+                  222,
+                  24,
+                  66,
+                  93,
+                  188,
+                  228,
+                  108,
+                  205,
+                  218,
+                  182,
+                  26,
+                  252,
+                  77,
+                  131,
+                  185,
+                  13,
+                  39,
+                  254,
+                  189,
+                  249,
+                  40,
+                  216,
+                  161,
+                  139,
+                  252
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "assetMint"
+        },
+        {
+          "name": "destinationAccount"
+        },
+        {
+          "name": "ownerDelegate"
+        },
+        {
+          "name": "extraMetasAccount",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "policyEngine",
+          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
+        },
+        {
+          "name": "policyEngineAccount"
+        },
+        {
+          "name": "identityRegistry",
+          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
+        },
+        {
+          "name": "identityRegistryAccount"
+        },
+        {
+          "name": "identityAccount",
+          "writable": true
+        },
+        {
+          "name": "trackerAccount",
+          "writable": true
+        },
+        {
+          "name": "policyAccount"
+        },
+        {
+          "name": "instructionsProgram"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -281,6 +548,19 @@ export type PolicyEngine = {
         18,
         26,
         45
+      ]
+    },
+    {
+      "name": "trackerAccount",
+      "discriminator": [
+        83,
+        95,
+        166,
+        148,
+        57,
+        30,
+        90,
+        210
       ]
     }
   ],
@@ -339,6 +619,31 @@ export type PolicyEngine = {
       "code": 6010,
       "name": "maxBalanceExceeded",
       "msg": "Max balance exceeded"
+    },
+    {
+      "code": 6011,
+      "name": "invalidCpiTransferAmount",
+      "msg": "Invalid CPI transfer amount"
+    },
+    {
+      "code": 6012,
+      "name": "invalidCpiTransferMint",
+      "msg": "Invalid CPI transfer mint"
+    },
+    {
+      "code": 6013,
+      "name": "invalidCpiTransferProgram",
+      "msg": "Invalid CPI transfer program"
+    },
+    {
+      "code": 6014,
+      "name": "invalidPdaPassedIn",
+      "msg": "Invalid PDA passed in"
+    },
+    {
+      "code": 6015,
+      "name": "transferHistoryFull",
+      "msg": "Transfer history full"
     }
   ],
   "types": [
@@ -539,6 +844,52 @@ export type PolicyEngine = {
                 "type": "u64"
               }
             ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "trackerAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "assetMint",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "transfers",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "transfer"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "transfer",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }

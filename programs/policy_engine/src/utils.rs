@@ -1,5 +1,6 @@
 use crate::{state::*, PolicyEngineErrors};
-use anchor_lang::prelude::*;
+use anchor_lang::{prelude::*, solana_program::sysvar::instructions::get_instruction_relative};
+use anchor_spl::token_2022;
 
 pub fn enforce_identity_filter(identity: &[u8], identity_filter: IdentityFilter) -> Result<()> {
     match identity_filter.comparision_type {
@@ -109,6 +110,41 @@ pub fn enforce_policy(
                 }
             }
         }
+    }
+    Ok(())
+}
+
+pub const TRANSFER_HOOK_MINT_INDEX: usize = 1;
+
+pub fn verify_cpi_program_is_token22(
+    instructions_program: &AccountInfo,
+    amount: u64,
+    mint: Pubkey,
+) -> Result<()> {
+    let ix_relative = get_instruction_relative(0, instructions_program)?;
+    if ix_relative.program_id != token_2022::ID {
+        return Err(PolicyEngineErrors::InvalidCpiTransferProgram.into());
+    }
+    if ix_relative.data[1..9] != amount.to_le_bytes() {
+        return Err(PolicyEngineErrors::InvalidCpiTransferAmount.into());
+    }
+    // make sure transfer mint is same
+    if let Some(account) = ix_relative.accounts.get(TRANSFER_HOOK_MINT_INDEX) {
+        if account.pubkey != mint {
+            return Err(PolicyEngineErrors::InvalidCpiTransferMint.into());
+        }
+    } else {
+        return Err(PolicyEngineErrors::InvalidCpiTransferProgram.into());
+    }
+
+    Ok(())
+}
+
+#[inline(never)]
+pub fn verify_pda(address: Pubkey, seeds: &[&[u8]], program_id: &Pubkey) -> Result<()> {
+    let (pda, _) = Pubkey::find_program_address(seeds, program_id);
+    if pda != address {
+        return Err(PolicyEngineErrors::InvalidPdaPassedIn.into());
     }
     Ok(())
 }

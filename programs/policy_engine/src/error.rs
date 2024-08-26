@@ -24,4 +24,14 @@ pub enum PolicyEngineErrors {
     PolicyAlreadyExists,
     #[msg("Max balance exceeded")]
     MaxBalanceExceeded,
+    #[msg("Invalid CPI transfer amount")]
+    InvalidCpiTransferAmount,
+    #[msg("Invalid CPI transfer mint")]
+    InvalidCpiTransferMint,
+    #[msg("Invalid CPI transfer program")]
+    InvalidCpiTransferProgram,
+    #[msg("Invalid PDA passed in")]
+    InvalidPdaPassedIn,
+    #[msg("Transfer history full")]
+    TransferHistoryFull,
 }

@@ -47,7 +47,7 @@ impl<'info> UpdateAssetMetadata<'info> {
         signer_seeds: &[&[&[u8]]],
     ) -> Result<()> {
         let cpi_accounts = TokenMetadataUpdateField {
-            token_program_id: self.token_program.to_account_info(),
+            program_id: self.token_program.to_account_info(),
             metadata: self.asset_mint.to_account_info(), // metadata account is the mint, since data is stored in mint
             update_authority: self.asset_controller.to_account_info(),
         };

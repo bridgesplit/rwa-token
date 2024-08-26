@@ -1,6 +1,5 @@
 use anchor_lang::{prelude::*, solana_program::program_option::COption};
 use anchor_spl::token_interface::Mint;
-use rwa_utils::TOKEN22;
 
 use crate::state::*;
 
@@ -13,9 +12,7 @@ pub struct CreatePolicyEngine<'info> {
         constraint = asset_mint.mint_authority == COption::Some(signer.key()),
     )]
     pub signer: Signer<'info>,
-    #[account(
-        mint::token_program = TOKEN22
-    )]
+    #[account()]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
@@ -24,7 +21,7 @@ pub struct CreatePolicyEngine<'info> {
         bump,
         payer = payer,
     )]
-    pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
+    pub policy_engine_account: Box<Account<'info, PolicyEngineAccount>>,
     pub system_program: Program<'info, System>,
 }
 
@@ -34,7 +31,7 @@ pub fn handler(
     delegate: Option<Pubkey>,
 ) -> Result<()> {
     ctx.accounts
-        .policy_engine
+        .policy_engine_account
         .new(authority, delegate, ctx.accounts.asset_mint.key());
 
     Ok(())

@@ -1,10 +1,10 @@
-import { type Idl, Program, type Provider } from "@coral-xyz/anchor";
+import { type Idl, Program, type Provider, utils } from "@coral-xyz/anchor";
 import { PolicyEngineIdl } from "../programs/idls";
 import { PublicKey } from "@solana/web3.js";
 import { type PolicyEngineIdlTypes } from "../programs/types";
 
 /** Program address for the policy engine program. */
-export const policyRegistryProgramId = new PublicKey(
+export const policyEngineProgramId = new PublicKey(
 	"po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
 );
 
@@ -28,7 +28,7 @@ export const getPolicyEngineProgram = (provider: Provider) =>
 export const getPolicyEnginePda = (assetMint: string) =>
 	PublicKey.findProgramAddressSync(
 		[new PublicKey(assetMint).toBuffer()],
-		policyRegistryProgramId
+		policyEngineProgramId
 	)[0];
 
 /**
@@ -39,5 +39,22 @@ export const getPolicyEnginePda = (assetMint: string) =>
 export const getPolicyAccountPda = (assetMint: string) =>
 	PublicKey.findProgramAddressSync(
 		[getPolicyEnginePda(assetMint).toBuffer()],
-		policyRegistryProgramId
+		policyEngineProgramId
 	)[0];
+
+/**
+ * Retrieves the tracker pda for a specific asset controller mint and owner.
+ * @param assetMint - The string representation of the asset's mint address.
+ * @param owner - The string representation of asset's owner.
+ * @returns The asset controller's tracker pda.
+ */
+export const getTrackerAccountPda = (assetMint: string, owner: string) =>
+	PublicKey.findProgramAddressSync(
+		[new PublicKey(assetMint).toBuffer(), new PublicKey(owner).toBuffer()],
+		policyEngineProgramId
+	)[0];
+
+export const getPolicyEnginerEventAuthority = () => PublicKey.findProgramAddressSync(
+	[utils.bytes.utf8.encode("__event_authority")],
+	policyEngineProgramId
+)[0];

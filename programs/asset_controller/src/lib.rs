@@ -45,7 +45,10 @@ pub mod asset_controller {
     }
 
     /// revoke shares of the rwa asset
-    pub fn revoke_tokens(ctx: Context<RevokeTokens>, amount: u64) -> Result<()> {
+    pub fn revoke_tokens<'info>(
+        ctx: Context<'_, '_, '_, 'info, RevokeTokens<'info>>,
+        amount: u64,
+    ) -> Result<()> {
         instructions::revoke::handler(ctx, amount)
     }
 
@@ -88,11 +91,5 @@ pub mod asset_controller {
     /// thaw token account
     pub fn thaw_token_account(ctx: Context<ThawTokenAccount>) -> Result<()> {
         instructions::account::thaw::handler(ctx)
-    }
-
-    /// execute transfer hook
-    #[interface(spl_transfer_hook_interface::execute)]
-    pub fn execute_transaction(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
-        instructions::execute::handler(ctx, amount)
     }
 }
