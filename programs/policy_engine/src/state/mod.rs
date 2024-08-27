@@ -1,8 +1,10 @@
 pub mod account;
 pub mod engine;
+pub mod track;
 
 pub use account::*;
 pub use engine::*;
+pub use track::*;
 
 use anchor_lang::{solana_program::program_error::ProgramError, AnchorDeserialize, Discriminator};
 use rwa_utils::GeyserProgramAccount;
@@ -10,6 +12,7 @@ use rwa_utils::GeyserProgramAccount;
 pub enum PolicyEngineAccounts {
     PolicyAccount(PolicyAccount),
     PolicyEngineAccount(PolicyEngineAccount),
+    TrackerAccount(TrackerAccount),
 }
 
 impl GeyserProgramAccount for PolicyEngineAccounts {
@@ -17,6 +20,7 @@ impl GeyserProgramAccount for PolicyEngineAccounts {
         match self {
             PolicyEngineAccounts::PolicyAccount(_) => PolicyAccount::DISCRIMINATOR,
             PolicyEngineAccounts::PolicyEngineAccount(_) => PolicyEngineAccount::DISCRIMINATOR,
+            PolicyEngineAccounts::TrackerAccount(_) => TrackerAccount::DISCRIMINATOR,
         }
     }
 
@@ -41,6 +45,10 @@ impl GeyserProgramAccount for PolicyEngineAccounts {
             PolicyEngineAccount::DISCRIMINATOR => {
                 let account = PolicyEngineAccount::deserialize(account_data)?;
                 Ok(PolicyEngineAccounts::PolicyEngineAccount(account))
+            }
+            TrackerAccount::DISCRIMINATOR => {
+                let account = TrackerAccount::deserialize(account_data)?;
+                Ok(PolicyEngineAccounts::TrackerAccount(account))
             }
             _ => Err(ProgramError::InvalidAccountData),
         }

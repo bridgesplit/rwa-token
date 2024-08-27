@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import {
+	ComputeBudgetProgram,
 	Keypair,
 	PublicKey,
 	SystemProgram,
@@ -8,16 +9,17 @@ import {
 	TransactionInstruction,
 } from "@solana/web3.js";
 import {
-	policyRegistryProgramId,
-	getCreatePolicyEngineIx,
 	getPolicyEnginePda,
 	getPolicyAccountPda,
+	getTrackerAccountPda,
+	policyEngineProgramId,
+	getCreateTrackerAccountIx,
+	getExtraMetasListPda,
 } from "../policy-engine";
-import { getCreateDataRegistryIx } from "../data-registry";
+import { dataRegistryProgramId, getDataRegistryPda } from "../data-registry";
 import {
 	identityRegistryProgramId,
 	getCreateIdentityAccountIx,
-	getCreateIdentityRegistryIx,
 	getIdentityAccountPda,
 	getIdentityRegistryPda,
 } from "../identity-registry";
@@ -37,8 +39,6 @@ import {
 import {
 	getAssetControllerProgram,
 	getAssetControllerPda,
-	getExtraMetasListPda,
-	getTrackerAccountPda,
 	assetControllerProgramId,
 	getAssetControllerEventAuthority,
 } from "./utils";
@@ -81,6 +81,12 @@ export async function getCreateAssetControllerIx(
 			systemProgram: SystemProgram.programId,
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			authority: args.authority,
+			policyEngineAccount: getPolicyEnginePda(args.assetMint),
+			dataRegistryAccount: getDataRegistryPda(args.assetMint),
+			identityRegistryAccount: getIdentityRegistryPda(args.assetMint),
+			policyEngine: policyEngineProgramId,
+			identityRegistry: identityRegistryProgramId,
+			dataRegistry: dataRegistryProgramId,
 			eventAuthority: getAssetControllerEventAuthority(),
 			program: assetControllerProgramId,
 		})
@@ -142,16 +148,14 @@ export type IssueTokenArgs = {
 export async function getIssueTokensIx(
 	args: IssueTokenArgs,
 	provider: AnchorProvider
-): Promise<TransactionInstruction> {
+): Promise<TransactionInstruction[]> {
 	const assetProgram = getAssetControllerProgram(provider);
 	const ix = await assetProgram.methods
-		.issueTokens({
-			amount: new BN(args.amount),
-			to: new PublicKey(args.owner),
-		})
+		.issueTokens(new BN(args.amount))
 		.accountsStrict({
 			authority: new PublicKey(args.authority),
 			assetMint: new PublicKey(args.assetMint),
+			assetController: getAssetControllerPda(args.assetMint),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
 			tokenAccount: getAssociatedTokenAddressSync(
 				new PublicKey(args.assetMint),
@@ -159,9 +163,12 @@ export async function getIssueTokensIx(
 				false,
 				TOKEN_2022_PROGRAM_ID
 			),
+			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+			systemProgram: SystemProgram.programId,
+			to: new PublicKey(args.owner),
 		})
 		.instruction();
-	return ix;
+	return [ix];
 }
 
 export type VoidTokensArgs = {
@@ -176,7 +183,7 @@ export async function getVoidTokensIx(
 	const assetProgram = getAssetControllerProgram(provider);
 	// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 	const ix = await assetProgram.methods
-		.voidTokens(new BN(args.amount))
+		.burnTokens(new BN(args.amount))
 		.accountsStrict({
 			assetMint: new PublicKey(args.assetMint),
 			tokenProgram: TOKEN_2022_PROGRAM_ID,
@@ -196,10 +203,11 @@ export type TransferTokensArgs = {
   from: string;
   to: string;
   amount: number;
+  assetMint: string;
   decimals: number;
   message?: string;
   createTa?: boolean;
-} & CommonArgs;
+}
 
 /**
  * Creates a transaction instruction to transfer a token between addresses with transfer controls.
@@ -211,11 +219,6 @@ export async function getTransferTokensIxs(
 	provider: AnchorProvider
 ): Promise<TransactionInstruction[]> {
 	const remainingAccounts = [
-		{
-			pubkey: policyRegistryProgramId,
-			isWritable: false,
-			isSigner: false,
-		},
 		{
 			pubkey: getPolicyEnginePda(args.assetMint),
 			isWritable: false,
@@ -233,7 +236,7 @@ export async function getTransferTokensIxs(
 		},
 		{
 			pubkey: getIdentityAccountPda(args.assetMint, args.to),
-			isWritable: true,
+			isWritable: false,
 			isSigner: false,
 		},
 		{
@@ -243,7 +246,7 @@ export async function getTransferTokensIxs(
 		},
 		{
 			pubkey: getPolicyAccountPda(args.assetMint),
-			isWritable: false,
+			isWritable: true,
 			isSigner: false,
 		},
 		{
@@ -257,11 +260,12 @@ export async function getTransferTokensIxs(
 			isSigner: false,
 		},
 		{
-			pubkey: assetControllerProgramId,
+			pubkey: policyEngineProgramId,
 			isWritable: false,
 			isSigner: false,
 		},
 	];
+
 	const ixs: TransactionInstruction[] = [];
 	try {
 		const ta = await getAccount(provider.connection, getAssociatedTokenAddressSync(
@@ -283,7 +287,7 @@ export async function getTransferTokensIxs(
 		}
 	} catch (error) {
 		if (args.createTa) {
-			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.payer), getAssociatedTokenAddressSync(
+			ixs.push(createAssociatedTokenAccountInstruction(new PublicKey(args.from), getAssociatedTokenAddressSync(
 				new PublicKey(args.assetMint),
 				new PublicKey(args.to),
 				true,
@@ -291,6 +295,7 @@ export async function getTransferTokensIxs(
 			), new PublicKey(args.to), new PublicKey(args.assetMint), TOKEN_2022_PROGRAM_ID));
 		}
 	}
+
 	const ix = createTransferCheckedInstruction(
 		getAssociatedTokenAddressSync(
 			new PublicKey(args.assetMint),
@@ -315,42 +320,6 @@ export async function getTransferTokensIxs(
 
 	ixs.push(ix);
 	return ixs;
-}
-
-export type CreateTokenAccountArgs = {
-  owner: string;
-  memoTransfer?: boolean;
-} & CommonArgs;
-
-export async function getCreateTokenAccountIx(
-	args: CreateTokenAccountArgs,
-	provider: AnchorProvider
-): Promise<TransactionInstruction> {
-	const assetProgram = getAssetControllerProgram(provider);
-	const ix = await assetProgram.methods
-		.createTokenAccount({
-			memoTransfer: args.memoTransfer || false,
-		})
-		.accountsStrict({
-			payer: args.payer,
-			assetMint: args.assetMint,
-			owner: args.owner,
-			tokenProgram: TOKEN_2022_PROGRAM_ID,
-			assetController: getAssetControllerPda(args.assetMint),
-			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
-			systemProgram: SystemProgram.programId,
-			tokenAccount: getAssociatedTokenAddressSync(
-				new PublicKey(args.assetMint),
-				new PublicKey(args.owner),
-				false,
-				TOKEN_2022_PROGRAM_ID
-			),
-			trackerAccount: getTrackerAccountPda(args.assetMint, args.owner),
-			program: assetControllerProgramId,
-			eventAuthority: getAssetControllerEventAuthority(),
-		})
-		.instruction();
-	return ix;
 }
 
 /** Args used to generate new asset controller */
@@ -383,28 +352,11 @@ export async function getSetupAssetControllerIxs(
 		updatedArgs,
 		provider
 	);
-	// Get policy registry create ix
-	const policyEngineCreateIx = await getCreatePolicyEngineIx(
-		updatedArgs,
-		provider
-	);
-	// Get data registry create ix
-	const dataRegistryCreateIx = await getCreateDataRegistryIx(
-		updatedArgs,
-		provider
-	);
-	// Get identity registry create ix
-	const identityRegistryCreateIx = await getCreateIdentityRegistryIx(
-		updatedArgs,
-		provider
-	);
 
 	return {
 		ixs: [
+			ComputeBudgetProgram.setComputeUnitLimit({units: 450_000}),
 			assetControllerCreateIx,
-			policyEngineCreateIx,
-			dataRegistryCreateIx,
-			identityRegistryCreateIx,
 		],
 		signers: [mintKp],
 	};
@@ -417,7 +369,6 @@ export type SetupUserArgs = {
   signer: string;
   assetMint: string;
   level: number;
-  memoTransfer?: boolean;
 };
 
 /**
@@ -441,9 +392,16 @@ export async function getSetupUserIxs(
 		},
 		provider
 	);
-	const createTaIx = await getCreateTokenAccountIx(args, provider);
+	const trackerAccountIx = await getCreateTrackerAccountIx(
+		{
+			payer: args.payer,
+			owner: args.owner,
+			assetMint: args.assetMint,
+		},
+		provider
+	);
 	return {
-		ixs: [identityAccountIx, createTaIx],
+		ixs: [identityAccountIx, trackerAccountIx],
 		signers: [],
 	};
 }
@@ -480,7 +438,35 @@ export async function getUpdateInterestBearingMintRateIx(
 export type MemoTranferArgs = {
 	owner: string;
 	tokenAccount: string;
+	assetMint: string;
 };
+
+/**
+ * Generate Instructions to disable memo transfer
+ * @param args - {@link MemoTranferArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getEnableMemoTransferIx(
+	args: MemoTranferArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.enableMemoTransfer()
+		.accountsStrict({
+			owner: new PublicKey(args.owner),
+			tokenAccount: new PublicKey(args.tokenAccount),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetMint: new PublicKey(args.assetMint),
+			program: assetControllerProgramId,
+			eventAuthority: getAssetControllerEventAuthority(),
+			payer: new PublicKey(args.owner),
+			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+			systemProgram: SystemProgram.programId,
+		})
+		.instruction();
+	return ix;
+}
 
 /**
  * Generate Instructions to disable memo transfer
@@ -529,4 +515,158 @@ export async function getCloseMintIx(
 		})
 		.instruction();
 	return ix;
+}
+
+export type FreezeTokenArgs = {
+	authority: string;
+	owner: string;
+} & CommonArgs;
+
+/**
+ * Generate Instructions to freeze token account
+ * @param args - {@link FreezeTokenArgs}
+ * @returns - {@link TransactionInstruction}
+ */
+export async function getFreezeTokenIx(
+	args: FreezeTokenArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.freezeTokenAccount()
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			tokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
+		})
+		.instruction();
+	return ix;
+}
+
+/**
+ * Generate Instructions to thaw token account
+ * @param args - {@link FreezeTokenArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getThawTokenIx(
+	args: FreezeTokenArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const ix = await assetProgram.methods
+		.thawTokenAccount()
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			tokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
+		})
+		.instruction();
+	return ix;
+}
+
+export type RevokeTokensArgs = {
+	amount: number;
+	owner: string;
+	authority: string;
+	assetMint: string;
+};
+
+/**
+ * Revoke tokens from a user
+ * @param args - {@link RevokeTokensArgs}
+ * @returns - {@link TransactionInstruction}
+ * */
+export async function getRevokeTokensIx(
+	args: RevokeTokensArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction[]> {
+	const assetProgram = getAssetControllerProgram(provider);
+	const remainingAccounts = [
+		{
+			pubkey: getPolicyEnginePda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: identityRegistryProgramId,
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getIdentityRegistryPda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getIdentityAccountPda(args.assetMint, getAssetControllerPda(args.assetMint).toString()),
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getTrackerAccountPda(args.assetMint, getAssetControllerPda(args.assetMint).toString()),
+			isWritable: true,
+			isSigner: false,
+		},
+		{
+			pubkey: getPolicyAccountPda(args.assetMint),
+			isWritable: true,
+			isSigner: false,
+		},
+		{
+			pubkey: SYSVAR_INSTRUCTIONS_PUBKEY,
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: policyEngineProgramId,
+			isWritable: false,
+			isSigner: false,
+		},
+		{
+			pubkey: getExtraMetasListPda(args.assetMint),
+			isWritable: false,
+			isSigner: false,
+		},
+	];
+	const ixs: TransactionInstruction[] = [];
+	const ix = await assetProgram.methods
+		.revokeTokens(new BN(args.amount))
+		.accountsStrict({
+			authority: new PublicKey(args.authority),
+			assetMint: new PublicKey(args.assetMint),
+			tokenProgram: TOKEN_2022_PROGRAM_ID,
+			assetController: getAssetControllerPda(args.assetMint),
+			revokeTokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				new PublicKey(args.owner),
+				false,
+				TOKEN_2022_PROGRAM_ID
+			),
+			authorityTokenAccount: getAssociatedTokenAddressSync(
+				new PublicKey(args.assetMint),
+				getAssetControllerPda(args.assetMint),
+				true,
+				TOKEN_2022_PROGRAM_ID
+			),
+			associatedTokenProgram: ASSOCIATED_TOKEN_PROGRAM_ID,
+			systemProgram: SystemProgram.programId,
+		})
+		.remainingAccounts(remainingAccounts)
+		.instruction();
+	ixs.push(ix);
+	return ixs;
 }

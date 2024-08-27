@@ -197,6 +197,88 @@
       ]
     },
     {
+      "name": "create_tracker_account",
+      "docs": [
+        "create tracker account"
+      ],
+      "discriminator": [
+        40,
+        16,
+        40,
+        191,
+        109,
+        177,
+        83,
+        190
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "owner"
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "tracker_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              },
+              {
+                "kind": "account",
+                "path": "owner"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
       "name": "detach_from_policy_account",
       "docs": [
         "remove policy"
@@ -248,6 +330,191 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "execute_transaction",
+      "docs": [
+        "execute transfer hook"
+      ],
+      "discriminator": [
+        105,
+        37,
+        101,
+        197,
+        75,
+        251,
+        102,
+        26
+      ],
+      "accounts": [
+        {
+          "name": "source_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner_delegate"
+              },
+              {
+                "kind": "const",
+                "value": [
+                  6,
+                  221,
+                  246,
+                  225,
+                  238,
+                  117,
+                  143,
+                  222,
+                  24,
+                  66,
+                  93,
+                  188,
+                  228,
+                  108,
+                  205,
+                  218,
+                  182,
+                  26,
+                  252,
+                  77,
+                  131,
+                  185,
+                  13,
+                  39,
+                  254,
+                  189,
+                  249,
+                  40,
+                  216,
+                  161,
+                  139,
+                  252
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "asset_mint"
+        },
+        {
+          "name": "destination_account"
+        },
+        {
+          "name": "owner_delegate"
+        },
+        {
+          "name": "extra_metas_account",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "policy_engine",
+          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
+        },
+        {
+          "name": "policy_engine_account"
+        },
+        {
+          "name": "identity_registry",
+          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
+        },
+        {
+          "name": "identity_registry_account"
+        },
+        {
+          "name": "identity_account",
+          "writable": true
+        },
+        {
+          "name": "tracker_account",
+          "writable": true
+        },
+        {
+          "name": "policy_account"
+        },
+        {
+          "name": "instructions_program"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
@@ -276,6 +543,19 @@
         26,
         45
       ]
+    },
+    {
+      "name": "TrackerAccount",
+      "discriminator": [
+        83,
+        95,
+        166,
+        148,
+        57,
+        30,
+        90,
+        210
+      ]
     }
   ],
   "errors": [
@@ -301,28 +581,63 @@
     },
     {
       "code": 6004,
+      "name": "IdentityLevelLimitExceeded",
+      "msg": "Identity level limit exceeded"
+    },
+    {
+      "code": 6005,
       "name": "PolicyEngineFull",
       "msg": "Policy registry is full, cannot add more policies"
     },
     {
-      "code": 6005,
+      "code": 6006,
       "name": "PolicyNotFound",
       "msg": "Policy not found"
     },
     {
-      "code": 6006,
+      "code": 6007,
       "name": "IdentityFilterFailed",
       "msg": "Identity filter failed"
     },
     {
-      "code": 6007,
+      "code": 6008,
       "name": "UnauthorizedSigner",
       "msg": "Unauthorized signer"
     },
     {
-      "code": 6008,
+      "code": 6009,
       "name": "PolicyAlreadyExists",
       "msg": "Policy already exists"
+    },
+    {
+      "code": 6010,
+      "name": "MaxBalanceExceeded",
+      "msg": "Max balance exceeded"
+    },
+    {
+      "code": 6011,
+      "name": "InvalidCpiTransferAmount",
+      "msg": "Invalid CPI transfer amount"
+    },
+    {
+      "code": 6012,
+      "name": "InvalidCpiTransferMint",
+      "msg": "Invalid CPI transfer mint"
+    },
+    {
+      "code": 6013,
+      "name": "InvalidCpiTransferProgram",
+      "msg": "Invalid CPI transfer program"
+    },
+    {
+      "code": 6014,
+      "name": "InvalidPdaPassedIn",
+      "msg": "Invalid PDA passed in"
+    },
+    {
+      "code": 6015,
+      "name": "TransferHistoryFull",
+      "msg": "Transfer history full"
     }
   ],
   "types": [
@@ -514,6 +829,61 @@
                 "type": "i64"
               }
             ]
+          },
+          {
+            "name": "MaxBalance",
+            "fields": [
+              {
+                "name": "limit",
+                "type": "u64"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "TrackerAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "type": "u8"
+          },
+          {
+            "name": "asset_mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "transfers",
+            "type": {
+              "vec": {
+                "defined": {
+                  "name": "Transfer"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Transfer",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
           }
         ]
       }

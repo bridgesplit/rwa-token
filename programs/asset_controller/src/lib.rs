@@ -27,8 +27,8 @@ pub mod asset_controller {
     }
 
     /// issue shares of the rwa asset
-    pub fn issue_tokens(ctx: Context<IssueTokens>, args: IssueTokensArgs) -> Result<()> {
-        instructions::issue::handler(ctx, args)
+    pub fn issue_tokens(ctx: Context<IssueTokens>, amount: u64) -> Result<()> {
+        instructions::issue::handler(ctx, amount)
     }
 
     /// edit metadata of the rwa asset
@@ -39,17 +39,17 @@ pub mod asset_controller {
         instructions::update::handler(ctx, args)
     }
 
-    /// void shares of the rwa asset
-    pub fn void_tokens(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
-        instructions::void::handler(ctx, amount)
+    /// burn shares of the rwa asset
+    pub fn burn_tokens(ctx: Context<VoidTokens>, amount: u64) -> Result<()> {
+        instructions::burn::handler(ctx, amount)
     }
 
-    /// create a token account
-    pub fn create_token_account(
-        ctx: Context<CreateTokenAccount>,
-        args: CreateTokenAccountArgs,
+    /// revoke shares of the rwa asset
+    pub fn revoke_tokens<'info>(
+        ctx: Context<'_, '_, '_, 'info, RevokeTokens<'info>>,
+        amount: u64,
     ) -> Result<()> {
-        instructions::account::create::handler(ctx, args)
+        instructions::revoke::handler(ctx, amount)
     }
 
     /// close a token account
@@ -57,9 +57,14 @@ pub mod asset_controller {
         instructions::account::close::handler(ctx)
     }
 
+    /// memo transfer enable
+    pub fn enable_memo_transfer(ctx: Context<EnableMemoTransfer>) -> Result<()> {
+        instructions::extensions::enable_memo::handler(ctx)
+    }
+
     /// memo transfer disable
     pub fn disable_memo_transfer(ctx: Context<DisableMemoTransfer>) -> Result<()> {
-        instructions::extensions::memo::handler(ctx)
+        instructions::extensions::disable_memo::handler(ctx)
     }
 
     /// interest bearing mint rate update
@@ -75,9 +80,13 @@ pub mod asset_controller {
         instructions::extensions::close_mint::handler(ctx)
     }
 
-    /// execute transfer hook
-    #[interface(spl_transfer_hook_interface::execute)]
-    pub fn execute_transaction(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
-        instructions::execute::handler(ctx, amount)
+    /// freeze token account
+    pub fn freeze_token_account(ctx: Context<FreezeTokenAccount>) -> Result<()> {
+        instructions::account::freeze::handler(ctx)
+    }
+
+    /// thaw token account
+    pub fn thaw_token_account(ctx: Context<ThawTokenAccount>) -> Result<()> {
+        instructions::account::thaw::handler(ctx)
     }
 }

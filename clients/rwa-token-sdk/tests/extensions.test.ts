@@ -2,6 +2,7 @@ import { Wallet } from "@coral-xyz/anchor";
 import {
 	getCloseMintIx,
 	getDisableMemoTransferIx,
+	getEnableMemoTransferIx,
 	getSetupUserIxs,
 	getUpdateInterestBearingMintRateIx,
 } from "../src";
@@ -66,14 +67,13 @@ describe("extension tests", async () => {
 				owner: setup.authority.toString(),
 				signer: setup.authority.toString(),
 				level: 255,
-				memoTransfer: true,
 			},
 			rwaClient.provider
 		);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...setupIx.ixs).add(...setupUser.ixs),
-			[setup.payerKp, ...setupIx.signers, ...setupUser.signers]
+			[setup.payerKp, setup.authorityKp, ...setupIx.signers, ...setupUser.signers]
 		);
 		mint = setupIx.signers[0].publicKey.toString();
 		expect(txnId).toBeTruthy();
@@ -87,13 +87,29 @@ describe("extension tests", async () => {
 			mintData,
 		);
 		expect(interestBearingMintConfig?.currentRate).toEqual(100);
+	});
+
+	test("enable memo transfer", async () => {
+		const enableMemoTransferIx = await getEnableMemoTransferIx(
+			{
+				owner: setup.authority.toString(),
+				tokenAccount: getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID).toString(),
+				assetMint: mint,
+			},
+			rwaClient.provider
+		);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(enableMemoTransferIx),
+			[setup.payerKp, setup.authorityKp]
+		);
+		expect(txnId).toBeTruthy();
 		const tokenAccount = await getAccount(
 			rwaClient.provider.connection,
 			getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID),
 			undefined,
 			TOKEN_2022_PROGRAM_ID
 		);
-		// Get Interest Config for Mint Account
 		const memoTransfer = getMemoTransfer(
 			tokenAccount, 
 		);
@@ -129,11 +145,13 @@ describe("extension tests", async () => {
 		expect(interestBearingMintConfig?.currentRate).toEqual(200);
 	});
 
+
 	test("disable transfer memo", async () => {
 		const updateIx = await getDisableMemoTransferIx(
 			{
 				owner: setup.authority.toString(),
 				tokenAccount: getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(setup.authority.toString()), undefined, TOKEN_2022_PROGRAM_ID).toString(),
+				assetMint: mint,
 			},
 			rwaClient.provider
 		);

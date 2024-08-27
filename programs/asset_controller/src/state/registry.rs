@@ -22,6 +22,9 @@ impl AssetControllerAccount {
         self.delegate = delegate.unwrap_or(authority);
         self.version = Self::VERSION;
     }
+    pub fn get_pda(asset_mint: Pubkey) -> Pubkey {
+        Pubkey::find_program_address(&[asset_mint.as_ref()], &crate::id()).0
+    }
 }
 
 #[event]

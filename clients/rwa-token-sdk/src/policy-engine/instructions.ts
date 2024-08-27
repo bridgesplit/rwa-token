@@ -8,6 +8,8 @@ import {
 	getPolicyAccountPda,
 	getPolicyEnginePda,
 	getPolicyEngineProgram,
+	getPolicyEnginerEventAuthority,
+	getTrackerAccountPda,
 } from "./utils";
 import { type PolicyType, type IdentityFilter } from "./types";
 import { type AnchorProvider } from "@coral-xyz/anchor";
@@ -148,4 +150,31 @@ export async function getCreatePolicyAccountIx(
 		ixs: [ix],
 		signers: [],
 	};
+}
+
+export interface CreateTrackerAccountArgs {
+	payer: string;
+	owner: string;
+	assetMint: string;
+}
+
+export async function getCreateTrackerAccountIx(
+	args: CreateTrackerAccountArgs,
+	provider: AnchorProvider
+): Promise<TransactionInstruction> {
+	const policyProgram = getPolicyEngineProgram(provider);
+	const trackerAccount = getTrackerAccountPda(args.assetMint, args.owner);
+	const ix = await policyProgram.methods
+		.createTrackerAccount()
+		.accountsStrict({
+			payer: args.payer,
+			trackerAccount,
+			owner: new PublicKey(args.owner),
+			systemProgram: SystemProgram.programId,
+			program: policyProgram.programId,
+			assetMint: new PublicKey(args.assetMint),
+			eventAuthority: getPolicyEnginerEventAuthority(),
+		})
+		.instruction();
+	return ix;
 }

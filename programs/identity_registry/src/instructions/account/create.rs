@@ -2,7 +2,7 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(owner: Pubkey)]
+#[instruction(owner: Pubkey, level: u8)]
 pub struct CreateIdentityAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -18,6 +18,7 @@ pub struct CreateIdentityAccount<'info> {
         seeds = [identity_registry.key().as_ref(), owner.as_ref()],
         bump,
         payer = payer,
+        constraint = level != 0,
     )]
     pub identity_account: Box<Account<'info, IdentityAccount>>,
     pub system_program: Program<'info, System>,
