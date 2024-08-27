@@ -27,8 +27,8 @@ pub mod asset_controller {
     }
 
     /// issue shares of the rwa asset
-    pub fn issue_tokens(ctx: Context<IssueTokens>, args: IssueTokensArgs) -> Result<()> {
-        instructions::issue::handler(ctx, args)
+    pub fn issue_tokens(ctx: Context<IssueTokens>, amount: u64) -> Result<()> {
+        instructions::issue::handler(ctx, amount)
     }
 
     /// edit metadata of the rwa asset
@@ -52,22 +52,19 @@ pub mod asset_controller {
         instructions::revoke::handler(ctx, amount)
     }
 
-    /// create a token account
-    pub fn create_token_account(
-        ctx: Context<CreateTokenAccount>,
-        args: CreateTokenAccountArgs,
-    ) -> Result<()> {
-        instructions::account::create::handler(ctx, args)
-    }
-
     /// close a token account
     pub fn close_token_account(ctx: Context<CloseTokenAccount>) -> Result<()> {
         instructions::account::close::handler(ctx)
     }
 
+    /// memo transfer enable
+    pub fn enable_memo_transfer(ctx: Context<EnableMemoTransfer>) -> Result<()> {
+        instructions::extensions::enable_memo::handler(ctx)
+    }
+
     /// memo transfer disable
     pub fn disable_memo_transfer(ctx: Context<DisableMemoTransfer>) -> Result<()> {
-        instructions::extensions::memo::handler(ctx)
+        instructions::extensions::disable_memo::handler(ctx)
     }
 
     /// interest bearing mint rate update

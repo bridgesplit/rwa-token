@@ -23,16 +23,12 @@ pub struct UpdateAssetMetadata<'info> {
     pub payer: Signer<'info>,
     #[account(mut)]
     pub authority: Signer<'info>,
-    #[account(
-        mut,
-        mint::token_program = token_program,
-        mint::authority = authority,
-    )]
+    #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         seeds = [asset_mint.key().as_ref()],
         bump,
-        constraint = asset_controller.authority == *authority.key,
+        constraint = asset_controller.authority == authority.key(),
     )]
     pub asset_controller: Box<Account<'info, AssetControllerAccount>>,
     pub system_program: Program<'info, System>,

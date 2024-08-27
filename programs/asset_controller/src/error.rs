@@ -20,10 +20,4 @@ pub enum AssetControllerErrors {
     Unauthorized,
     #[msg("Pda passed in for transfer is wrong")]
     InvalidPdaPassedIn,
-    #[msg("Invalid cpi program in transfer")]
-    InvalidCpiTransferProgram,
-    #[msg("Invalid cpi amount in transfer")]
-    InvalidCpiTransferAmount,
-    #[msg("Invalid cpi mint in transfer")]
-    InvalidCpiTransferMint,
 }

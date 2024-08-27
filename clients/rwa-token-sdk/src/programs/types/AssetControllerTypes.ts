@@ -320,39 +320,7 @@ export type AssetController = {
         },
         {
           "name": "extraMetasAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  120,
-                  116,
-                  114,
-                  97,
-                  45,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  45,
-                  109,
-                  101,
-                  116,
-                  97,
-                  115
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ]
-          }
+          "writable": true
         },
         {
           "name": "policyEngineAccount",
@@ -431,19 +399,82 @@ export type AssetController = {
       ]
     },
     {
-      "name": "createTokenAccount",
+      "name": "disableMemoTransfer",
       "docs": [
-        "create a token account"
+        "memo transfer disable"
       ],
       "discriminator": [
-        147,
-        241,
-        123,
-        100,
-        244,
-        132,
-        174,
-        118
+        68,
+        156,
+        197,
+        9,
+        43,
+        91,
+        114,
+        19
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "enableMemoTransfer",
+      "docs": [
+        "memo transfer enable"
+      ],
+      "discriminator": [
+        186,
+        78,
+        97,
+        172,
+        71,
+        172,
+        99,
+        0
       ],
       "accounts": [
         {
@@ -452,7 +483,8 @@ export type AssetController = {
           "signer": true
         },
         {
-          "name": "owner"
+          "name": "owner",
+          "signer": true
         },
         {
           "name": "assetMint"
@@ -515,21 +547,6 @@ export type AssetController = {
           }
         },
         {
-          "name": "assetController",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        },
-        {
           "name": "tokenProgram",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
         },
@@ -538,76 +555,8 @@ export type AssetController = {
           "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
         },
         {
-          "name": "eventAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  95,
-                  95,
-                  101,
-                  118,
-                  101,
-                  110,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  111,
-                  114,
-                  105,
-                  116,
-                  121
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "program"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "createTokenAccountArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "disableMemoTransfer",
-      "docs": [
-        "memo transfer disable"
-      ],
-      "discriminator": [
-        68,
-        156,
-        197,
-        9,
-        43,
-        91,
-        114,
-        19
-      ],
-      "accounts": [
-        {
-          "name": "owner",
-          "signer": true
-        },
-        {
-          "name": "tokenAccount",
-          "writable": true
-        },
-        {
-          "name": "tokenProgram",
-          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         },
         {
           "name": "eventAuthority",
@@ -708,6 +657,7 @@ export type AssetController = {
       "accounts": [
         {
           "name": "authority",
+          "writable": true,
           "signer": true
         },
         {
@@ -726,13 +676,16 @@ export type AssetController = {
           }
         },
         {
+          "name": "to"
+        },
+        {
           "name": "tokenAccount",
           "writable": true,
           "pda": {
             "seeds": [
               {
-                "kind": "arg",
-                "path": "args.to"
+                "kind": "account",
+                "path": "to"
               },
               {
                 "kind": "account",
@@ -785,16 +738,20 @@ export type AssetController = {
         {
           "name": "tokenProgram",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "issueTokensArgs"
-            }
-          }
+          "name": "amount",
+          "type": "u64"
         }
       ]
     },
@@ -816,6 +773,7 @@ export type AssetController = {
       "accounts": [
         {
           "name": "authority",
+          "writable": true,
           "signer": true
         },
         {
@@ -835,7 +793,60 @@ export type AssetController = {
         },
         {
           "name": "authorityTokenAccount",
-          "writable": true
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetController"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
         },
         {
           "name": "revokeTokenAccount",
@@ -844,6 +855,14 @@ export type AssetController = {
         {
           "name": "tokenProgram",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
@@ -1160,21 +1179,6 @@ export type AssetController = {
       "code": 6008,
       "name": "invalidPdaPassedIn",
       "msg": "Pda passed in for transfer is wrong"
-    },
-    {
-      "code": 6009,
-      "name": "invalidCpiTransferProgram",
-      "msg": "Invalid cpi program in transfer"
-    },
-    {
-      "code": 6010,
-      "name": "invalidCpiTransferAmount",
-      "msg": "Invalid cpi amount in transfer"
-    },
-    {
-      "code": 6011,
-      "name": "invalidCpiTransferMint",
-      "msg": "Invalid cpi mint in transfer"
     }
   ],
   "types": [
@@ -1286,18 +1290,6 @@ export type AssetController = {
       }
     },
     {
-      "name": "createTokenAccountArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "memoTransfer",
-            "type": "bool"
-          }
-        ]
-      }
-    },
-    {
       "name": "extensionMetadataEvent",
       "type": {
         "kind": "struct",
@@ -1313,22 +1305,6 @@ export type AssetController = {
           {
             "name": "metadata",
             "type": "bytes"
-          }
-        ]
-      }
-    },
-    {
-      "name": "issueTokensArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "to",
-            "type": "pubkey"
           }
         ]
       }

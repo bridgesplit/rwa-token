@@ -13,6 +13,7 @@ import {
 	type IssueTokenArgs,
 	type TransferTokensArgs,
 	type UpdateDataAccountArgs,
+	VoidTokensArgs,
 } from "../src";
 import { setupTests } from "./setup";
 import {
@@ -52,7 +53,7 @@ describe("e2e tests", async () => {
 		rwaClient = new RwaClient(config, new Wallet(setup.payerKp));
 	});
 
-	test("initalize asset controller", async () => {
+	test("initialize asset controller", async () => {
 		const setupAssetControllerArgs = {
 			decimals,
 			payer: setup.payer.toString(),
@@ -255,7 +256,7 @@ describe("e2e tests", async () => {
 			amount: 1000000,
 		};
 		const issueIx = await rwaClient.assetController.issueTokenIxns(issueArgs);
-		const issue2Ix = await rwaClient.assetController.issueTokenIxns({...issueArgs, owner: setup.authority.toString(), createTa: true });
+		const issue2Ix = await rwaClient.assetController.issueTokenIxns({...issueArgs, owner: setup.authority.toString() });
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
 			new Transaction().add(...issueIx).add(...issue2Ix),
@@ -264,30 +265,29 @@ describe("e2e tests", async () => {
 		expect(txnId).toBeTruthy();
 	});
 
-	// test("void tokens", async () => {
-	// 	const voidArgs: VoidTokensArgs = {
-	// 		payer: setup.payer.toString(),
-	// 		amount: 100,
-	// 		owner: setup.user1.toString(),
-	// 		assetMint: mint,
-	// 		authority: setup.user1.toString(),
-	// 	};
-	// 	const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs);
-	// 	const txnId = await sendAndConfirmTransaction(
-	// 		rwaClient.provider.connection,
-	// 		new Transaction().add(voidIx),
-	// 		[setup.payerKp, setup.user1Kp]
-	// 	);
-	// 	expect(txnId).toBeTruthy();
-	// });
+	test("void tokens", async () => {
+		const voidArgs: VoidTokensArgs = {
+			payer: setup.payer.toString(),
+			amount: 100,
+			owner: setup.user1.toString(),
+			assetMint: mint,
+			authority: setup.user1.toString(),
+		};
+		const voidIx = await rwaClient.assetController.voidTokenIxns(voidArgs);
+		const txnId = await sendAndConfirmTransaction(
+			rwaClient.provider.connection,
+			new Transaction().add(voidIx),
+			[setup.payerKp, setup.user1Kp]
+		);
+		expect(txnId).toBeTruthy();
+	});
 
 	test("revoke tokens", async () => {
 		const revokeIx = await getRevokeTokensIx({
-			authority: setup.authority.toString(),
-			payer: setup.payer.toString(),
 			owner: setup.user1.toString(),
 			assetMint: mint,
 			amount: 100,
+			authority: setup.authority.toString(),
 		}, rwaClient.provider);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,
@@ -369,6 +369,7 @@ describe("e2e tests", async () => {
 			assetMint: mint,
 			amount: 2000,
 			decimals,
+			createTa: true,
 		};
 
 		const transferIxs = await rwaClient.assetController.transfer(transferArgs);

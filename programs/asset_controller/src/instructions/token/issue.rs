@@ -1,19 +1,16 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token_interface::{mint_to, Mint, MintTo, Token2022, TokenAccount};
+use anchor_spl::{
+    associated_token::AssociatedToken,
+    token_interface::{mint_to, Mint, MintTo, Token2022, TokenAccount},
+};
 use rwa_utils::get_bump_in_seed_form;
 
 use crate::AssetControllerAccount;
 
-#[derive(AnchorDeserialize, AnchorSerialize)]
-pub struct IssueTokensArgs {
-    pub amount: u64,
-    pub to: Pubkey,
-}
-
 #[derive(Accounts)]
-#[instruction(args: IssueTokensArgs)]
+#[instruction()]
 pub struct IssueTokens<'info> {
-    #[account()]
+    #[account(mut)]
     pub authority: Signer<'info>,
     #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
@@ -23,14 +20,19 @@ pub struct IssueTokens<'info> {
         constraint = asset_controller.authority == authority.key(),
     )]
     pub asset_controller: Box<Account<'info, AssetControllerAccount>>,
+    /// CHECK: can be any account
+    pub to: UncheckedAccount<'info>,
     #[account(
-        mut,
+        init_if_needed,
+        payer = authority,
         associated_token::token_program = token_program,
         associated_token::mint = asset_mint,
-        associated_token::authority = args.to,
+        associated_token::authority = to,
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     pub token_program: Program<'info, Token2022>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
 }
 
 impl<'info> IssueTokens<'info> {
@@ -50,12 +52,12 @@ impl<'info> IssueTokens<'info> {
     }
 }
 
-pub fn handler(ctx: Context<IssueTokens>, args: IssueTokensArgs) -> Result<()> {
+pub fn handler(ctx: Context<IssueTokens>, amount: u64) -> Result<()> {
     let asset_mint = ctx.accounts.asset_mint.key();
     let signer_seeds = [
         asset_mint.as_ref(),
         &get_bump_in_seed_form(&ctx.bumps.asset_controller),
     ];
-    ctx.accounts.issue_tokens(args.amount, &[&signer_seeds])?;
+    ctx.accounts.issue_tokens(amount, &[&signer_seeds])?;
     Ok(())
 }

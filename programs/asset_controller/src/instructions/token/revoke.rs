@@ -1,6 +1,7 @@
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_spl::{
+    associated_token::AssociatedToken,
     token_2022::{burn, Burn},
     token_interface::{Mint, Token2022, TokenAccount},
 };
@@ -11,7 +12,7 @@ use spl_transfer_hook_interface::onchain::add_extra_accounts_for_execute_cpi;
 #[derive(Accounts)]
 #[instruction()]
 pub struct RevokeTokens<'info> {
-    #[account()]
+    #[account(mut)]
     pub authority: Signer<'info>,
     #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
@@ -21,11 +22,19 @@ pub struct RevokeTokens<'info> {
         constraint = asset_controller.authority == authority.key()
     )]
     pub asset_controller: Box<Account<'info, AssetControllerAccount>>,
-    #[account(mut)]
+    #[account(
+        init_if_needed,
+        payer = authority,
+        associated_token::mint = asset_mint,
+        associated_token::authority = asset_controller,
+        associated_token::token_program = token_program,
+    )]
     pub authority_token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(mut)]
     pub revoke_token_account: Box<InterfaceAccount<'info, TokenAccount>>,
     pub token_program: Program<'info, Token2022>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
 }
 
 impl<'info> RevokeTokens<'info> {
@@ -56,7 +65,7 @@ impl<'info> RevokeTokens<'info> {
         add_extra_accounts_for_execute_cpi(
             &mut ix,
             &mut account_infos,
-            &crate::ID,
+            &policy_engine::id(),
             self.revoke_token_account.to_account_info(),
             self.asset_mint.to_account_info(),
             self.authority_token_account.to_account_info(),

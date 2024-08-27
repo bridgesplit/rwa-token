@@ -1,6 +1,6 @@
 use crate::{
-    enforce_policy, verify_cpi_program_is_token22, verify_pda, PolicyAccount, PolicyEngineAccount,
-    TrackerAccount,
+    enforce_policy, get_asset_controller_account_pda, verify_cpi_program_is_token22, verify_pda,
+    PolicyAccount, PolicyEngineAccount, TrackerAccount,
 };
 use anchor_lang::{
     prelude::*,
@@ -15,11 +15,7 @@ use rwa_utils::META_LIST_ACCOUNT_SEED;
 #[derive(Accounts)]
 #[instruction(amount: u64)]
 pub struct ExecuteTransferHook<'info> {
-    #[account(
-        associated_token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
-        associated_token::authority = owner_delegate,
-        associated_token::mint = asset_mint,
-    )]
+    #[account()]
     pub source_account: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
         token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
@@ -59,13 +55,16 @@ pub struct ExecuteTransferHook<'info> {
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     let asset_mint = ctx.accounts.asset_mint.key();
+    if ctx.accounts.destination_account.owner == get_asset_controller_account_pda(asset_mint) {
+        // if destination account is asset controller, skip enforcing token hook logic, since it is only used for revoking tokens
+        return Ok(());
+    }
 
     verify_cpi_program_is_token22(
         &ctx.accounts.instructions_program.to_account_info(),
         amount,
         asset_mint,
     )?;
-
     verify_pda(
         ctx.accounts.policy_engine_account.key(),
         &[&asset_mint.to_bytes()],
