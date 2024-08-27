@@ -5,54 +5,35 @@ use anchor_spl::{
     token_interface::{memo_transfer_initialize, MemoTransfer, Mint, Token2022, TokenAccount},
 };
 
-use crate::{AssetControllerAccount, ExtensionMetadataEvent, TrackerAccount};
+use crate::ExtensionMetadataEvent;
 
 #[derive(AnchorDeserialize, AnchorSerialize)]
-pub struct CreateTokenAccountArgs {
+pub struct EnableMemoTransferArgs {
     pub memo_transfer: bool,
 }
 
 #[derive(Accounts)]
 #[instruction()]
 #[event_cpi]
-pub struct CreateTokenAccount<'info> {
+pub struct EnableMemoTransfer<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
-    #[account()]
-    /// CHECK: can be any account
-    pub owner: UncheckedAccount<'info>,
-    // Note: All ATAs are are initialized with ImmutableOwner because the mint is created with Token22.
-    #[account(
-        mint::token_program = token_program,
-    )]
+    pub owner: Signer<'info>,
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init_if_needed,
         payer = payer,
-        associated_token::token_program = token_program,
         associated_token::mint = asset_mint,
         associated_token::authority = owner,
+        associated_token::token_program = token_program,
     )]
     pub token_account: Box<InterfaceAccount<'info, TokenAccount>>,
-    #[account(
-        init_if_needed,
-        space = 8 + TrackerAccount::INIT_SPACE,
-        seeds = [asset_mint.key().as_ref(), owner.key().as_ref()],
-        bump,
-        payer = payer,
-    )]
-    pub tracker_account: Box<Account<'info, TrackerAccount>>,
-    #[account(
-        seeds = [asset_mint.key().as_ref()],
-        bump,
-    )]
-    pub asset_controller: Account<'info, AssetControllerAccount>,
-    pub system_program: Program<'info, System>,
     pub token_program: Program<'info, Token2022>,
     pub associated_token_program: Program<'info, AssociatedToken>,
+    pub system_program: Program<'info, System>,
 }
 
-impl<'info> CreateTokenAccount<'info> {
+impl<'info> EnableMemoTransfer<'info> {
     #[allow(clippy::needless_borrow)]
     fn reallocate_ta(&self, extensions: Vec<ExtensionType>) -> Result<()> {
         let ix = reallocate(
@@ -69,7 +50,7 @@ impl<'info> CreateTokenAccount<'info> {
                 self.token_account.to_account_info(),
                 self.payer.to_account_info(),
                 self.system_program.to_account_info(),
-                self.owner.to_account_info(),
+                self.payer.to_account_info(),
             ],
         )?;
         Ok(())
@@ -87,22 +68,15 @@ impl<'info> CreateTokenAccount<'info> {
     }
 }
 
-pub const TOKEN_EXTENSIONS: [ExtensionType; 1] = [ExtensionType::MemoTransfer];
-
-pub fn handler(ctx: Context<CreateTokenAccount>, args: CreateTokenAccountArgs) -> Result<()> {
+pub fn handler(ctx: Context<EnableMemoTransfer>) -> Result<()> {
     ctx.accounts
-        .tracker_account
-        .new(ctx.accounts.asset_mint.key(), ctx.accounts.owner.key());
-
-    if args.memo_transfer {
-        ctx.accounts.reallocate_ta(TOKEN_EXTENSIONS.to_vec())?;
-        ctx.accounts.enable_memo_transfer()?;
-        emit_cpi!(ExtensionMetadataEvent {
-            address: ctx.accounts.token_account.key().to_string(),
-            extension_type: ExtensionType::MemoTransfer as u8,
-            metadata: vec![1]
-        });
-    }
+        .reallocate_ta(vec![ExtensionType::MemoTransfer])?;
+    ctx.accounts.enable_memo_transfer()?;
+    emit_cpi!(ExtensionMetadataEvent {
+        address: ctx.accounts.token_account.key().to_string(),
+        extension_type: ExtensionType::MemoTransfer as u8,
+        metadata: vec![1]
+    });
 
     Ok(())
 }

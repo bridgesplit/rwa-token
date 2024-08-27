@@ -8,14 +8,13 @@ import {
 	getSetupAssetControllerIxs,
 	getVoidTokensIx,
 	getAssetControllerPda,
-	getTrackerAccountPda,
-	getExtraMetasListPda,
 	getUpdateAssetMetadataIx,
 	UpdateAssetMetadataArgs,
 	getTransferTokensIxs,
 } from "../asset-controller";
 import { type IxReturn } from "../utils";
 import { type RwaClient } from "./Client";
+import { getExtraMetasListPda } from "../policy-engine";
 
 /**
  * Represents the client for Asset Controller for an RWA.
@@ -65,12 +64,12 @@ export class AssetController {
    */
 	async issueTokenIxns(
 		IssueArgs: IssueTokenArgs
-	): Promise<TransactionInstruction> {
-		const issueTokensIx = await getIssueTokensIx(
+	): Promise<TransactionInstruction[]> {
+		const issueTokensIxs = await getIssueTokensIx(
 			IssueArgs,
 			this.rwaClient.provider
 		);
-		return issueTokensIx;
+		return issueTokensIxs;
 	}
 
 	/**
@@ -115,16 +114,5 @@ export class AssetController {
    */
 	getExtraMetasListPda(assetMint: string): PublicKey {
 		return getExtraMetasListPda(assetMint);
-	}
-
-	/**
-   * Retrieves the tracker pda for a specific asset controller mint and owner.
-   * Tracks the transfers happening from user account. Important for enforcing policies.
-   * @param assetMint - The string representation of the asset's mint address.
-   * @param owner - The string representation of asset's owner.
-   * @returns The asset controller's tracker pda.
-   */
-	getTrackerAccountPda(assetMint: string, owner: string): PublicKey {
-		return getTrackerAccountPda(assetMint, owner);
 	}
 }

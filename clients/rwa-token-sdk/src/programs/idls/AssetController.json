@@ -8,6 +8,99 @@
   },
   "instructions": [
     {
+      "name": "burn_tokens",
+      "docs": [
+        "burn shares of the rwa asset"
+      ],
+      "discriminator": [
+        76,
+        15,
+        51,
+        254,
+        229,
+        215,
+        121,
+        66
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "close_mint_account",
       "docs": [
         "close mint account"
@@ -203,11 +296,6 @@
           "name": "authority"
         },
         {
-          "name": "asset_mint",
-          "writable": true,
-          "signer": true
-        },
-        {
           "name": "asset_controller",
           "writable": true,
           "pda": {
@@ -220,40 +308,37 @@
           }
         },
         {
-          "name": "extra_metas_account",
+          "name": "asset_mint",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  120,
-                  116,
-                  114,
-                  97,
-                  45,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  45,
-                  109,
-                  101,
-                  116,
-                  97,
-                  115
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              }
-            ]
-          }
+          "signer": true
+        },
+        {
+          "name": "extra_metas_account",
+          "writable": true
+        },
+        {
+          "name": "policy_engine_account",
+          "writable": true
+        },
+        {
+          "name": "identity_registry_account",
+          "writable": true
+        },
+        {
+          "name": "data_registry_account",
+          "writable": true
+        },
+        {
+          "name": "policy_engine",
+          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
+        },
+        {
+          "name": "identity_registry",
+          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
+        },
+        {
+          "name": "data_registry",
+          "address": "dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw"
         },
         {
           "name": "system_program",
@@ -302,173 +387,6 @@
           "type": {
             "defined": {
               "name": "CreateAssetControllerArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "create_token_account",
-      "docs": [
-        "create a token account"
-      ],
-      "discriminator": [
-        147,
-        241,
-        123,
-        100,
-        244,
-        132,
-        174,
-        118
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "owner"
-        },
-        {
-          "name": "asset_mint"
-        },
-        {
-          "name": "token_account",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "owner"
-              },
-              {
-                "kind": "account",
-                "path": "token_program"
-              },
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "tracker_account",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              },
-              {
-                "kind": "account",
-                "path": "owner"
-              }
-            ]
-          }
-        },
-        {
-          "name": "asset_controller",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "system_program",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "token_program",
-          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
-        },
-        {
-          "name": "associated_token_program",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
-        },
-        {
-          "name": "event_authority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  95,
-                  95,
-                  101,
-                  118,
-                  101,
-                  110,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  111,
-                  114,
-                  105,
-                  116,
-                  121
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "program"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "CreateTokenAccountArgs"
             }
           }
         }
@@ -538,213 +456,32 @@
       "args": []
     },
     {
-      "name": "execute_transaction",
+      "name": "enable_memo_transfer",
       "docs": [
-        "execute transfer hook"
+        "memo transfer enable"
       ],
       "discriminator": [
-        105,
-        37,
-        101,
-        197,
-        75,
-        251,
-        102,
-        26
+        186,
+        78,
+        97,
+        172,
+        71,
+        172,
+        99,
+        0
       ],
       "accounts": [
         {
-          "name": "source_account",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "owner_delegate"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  238,
-                  117,
-                  143,
-                  222,
-                  24,
-                  66,
-                  93,
-                  188,
-                  228,
-                  108,
-                  205,
-                  218,
-                  182,
-                  26,
-                  252,
-                  77,
-                  131,
-                  185,
-                  13,
-                  39,
-                  254,
-                  189,
-                  249,
-                  40,
-                  216,
-                  161,
-                  139,
-                  252
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "asset_mint"
-        },
-        {
-          "name": "destination_account"
-        },
-        {
-          "name": "owner_delegate"
-        },
-        {
-          "name": "extra_metas_account",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  120,
-                  116,
-                  114,
-                  97,
-                  45,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  45,
-                  109,
-                  101,
-                  116,
-                  97,
-                  115
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "policy_engine",
-          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
-        },
-        {
-          "name": "policy_engine_account"
-        },
-        {
-          "name": "identity_registry",
-          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
-        },
-        {
-          "name": "identity_registry_account"
-        },
-        {
-          "name": "identity_account",
-          "writable": true
-        },
-        {
-          "name": "tracker_account",
-          "writable": true
-        },
-        {
-          "name": "policy_account"
-        },
-        {
-          "name": "instructions_program"
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "issue_tokens",
-      "docs": [
-        "issue shares of the rwa asset"
-      ],
-      "discriminator": [
-        40,
-        207,
-        145,
-        106,
-        249,
-        54,
-        23,
-        179
-      ],
-      "accounts": [
-        {
-          "name": "authority",
+          "name": "payer",
+          "writable": true,
           "signer": true
         },
         {
-          "name": "asset_mint",
-          "writable": true
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "asset_mint"
         },
         {
           "name": "token_account",
@@ -752,8 +489,8 @@
           "pda": {
             "seeds": [
               {
-                "kind": "arg",
-                "path": "args.to"
+                "kind": "account",
+                "path": "owner"
               },
               {
                 "kind": "account",
@@ -806,18 +543,374 @@
         {
           "name": "token_program",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "event_authority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "freeze_token_account",
+      "docs": [
+        "freeze token account"
+      ],
+      "discriminator": [
+        138,
+        168,
+        178,
+        109,
+        205,
+        224,
+        209,
+        93
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "issue_tokens",
+      "docs": [
+        "issue shares of the rwa asset"
+      ],
+      "discriminator": [
+        40,
+        207,
+        145,
+        106,
+        249,
+        54,
+        23,
+        179
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "to"
+        },
+        {
+          "name": "token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "to"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "IssueTokensArgs"
-            }
-          }
+          "name": "amount",
+          "type": "u64"
         }
       ]
+    },
+    {
+      "name": "revoke_tokens",
+      "docs": [
+        "revoke shares of the rwa asset"
+      ],
+      "discriminator": [
+        215,
+        42,
+        15,
+        134,
+        173,
+        80,
+        33,
+        21
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority_token_account",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_controller"
+              },
+              {
+                "kind": "account",
+                "path": "token_program"
+              },
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "revoke_token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associated_token_program",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "thaw_token_account",
+      "docs": [
+        "thaw token account"
+      ],
+      "discriminator": [
+        199,
+        172,
+        96,
+        93,
+        244,
+        252,
+        137,
+        171
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "asset_mint",
+          "writable": true
+        },
+        {
+          "name": "asset_controller",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "asset_mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "token_account",
+          "writable": true
+        },
+        {
+          "name": "token_program",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
     },
     {
       "name": "update_interest_bearing_mint_rate",
@@ -990,99 +1083,6 @@
           }
         }
       ]
-    },
-    {
-      "name": "void_tokens",
-      "docs": [
-        "void shares of the rwa asset"
-      ],
-      "discriminator": [
-        101,
-        147,
-        63,
-        157,
-        106,
-        103,
-        119,
-        74
-      ],
-      "accounts": [
-        {
-          "name": "owner",
-          "signer": true
-        },
-        {
-          "name": "asset_mint",
-          "writable": true
-        },
-        {
-          "name": "token_account",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "owner"
-              },
-              {
-                "kind": "account",
-                "path": "token_program"
-              },
-              {
-                "kind": "account",
-                "path": "asset_mint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "token_program",
-          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
     }
   ],
   "accounts": [
@@ -1097,19 +1097,6 @@
         87,
         52,
         105
-      ]
-    },
-    {
-      "name": "TrackerAccount",
-      "discriminator": [
-        83,
-        95,
-        166,
-        148,
-        57,
-        30,
-        90,
-        210
       ]
     }
   ],
@@ -1186,21 +1173,6 @@
       "code": 6008,
       "name": "InvalidPdaPassedIn",
       "msg": "Pda passed in for transfer is wrong"
-    },
-    {
-      "code": 6009,
-      "name": "InvalidCpiTransferProgram",
-      "msg": "Invalid cpi program in transfer"
-    },
-    {
-      "code": 6010,
-      "name": "InvalidCpiTransferAmount",
-      "msg": "Invalid cpi amount in transfer"
-    },
-    {
-      "code": 6011,
-      "name": "InvalidCpiTransferMint",
-      "msg": "Invalid cpi mint in transfer"
     }
   ],
   "types": [
@@ -1312,18 +1284,6 @@
       }
     },
     {
-      "name": "CreateTokenAccountArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "memo_transfer",
-            "type": "bool"
-          }
-        ]
-      }
-    },
-    {
       "name": "ExtensionMetadataEvent",
       "type": {
         "kind": "struct",
@@ -1339,68 +1299,6 @@
           {
             "name": "metadata",
             "type": "bytes"
-          }
-        ]
-      }
-    },
-    {
-      "name": "IssueTokensArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "to",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "TrackerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "asset_mint",
-            "type": "pubkey"
-          },
-          {
-            "name": "owner",
-            "type": "pubkey"
-          },
-          {
-            "name": "transfers",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "Transfer"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "Transfer",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
           }
         ]
       }

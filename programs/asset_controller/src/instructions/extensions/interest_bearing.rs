@@ -1,4 +1,4 @@
-use anchor_lang::{prelude::*, solana_program::program_option::COption};
+use anchor_lang::prelude::*;
 use anchor_spl::token_interface::{
     get_mint_extension_data, interest_bearing_mint_update_rate, InterestBearingMintUpdateRate,
     Mint, Token2022,
@@ -14,10 +14,7 @@ use crate::{AssetControllerAccount, ExtensionMetadataEvent};
 pub struct UpdateInterestBearingMintRate<'info> {
     #[account()]
     pub authority: Signer<'info>,
-    #[account(
-        mut,
-        constraint = asset_mint.mint_authority == COption::Some(authority.key()),
-    )]
+    #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         seeds = [asset_mint.key().as_ref()],

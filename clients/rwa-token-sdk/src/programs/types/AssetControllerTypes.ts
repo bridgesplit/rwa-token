@@ -14,6 +14,99 @@ export type AssetController = {
   },
   "instructions": [
     {
+      "name": "burnTokens",
+      "docs": [
+        "burn shares of the rwa asset"
+      ],
+      "discriminator": [
+        76,
+        15,
+        51,
+        254,
+        229,
+        215,
+        121,
+        66
+      ],
+      "accounts": [
+        {
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "owner"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "closeMintAccount",
       "docs": [
         "close mint account"
@@ -209,11 +302,6 @@ export type AssetController = {
           "name": "authority"
         },
         {
-          "name": "assetMint",
-          "writable": true,
-          "signer": true
-        },
-        {
           "name": "assetController",
           "writable": true,
           "pda": {
@@ -226,40 +314,37 @@ export type AssetController = {
           }
         },
         {
-          "name": "extraMetasAccount",
+          "name": "assetMint",
           "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  120,
-                  116,
-                  114,
-                  97,
-                  45,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  45,
-                  109,
-                  101,
-                  116,
-                  97,
-                  115
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ]
-          }
+          "signer": true
+        },
+        {
+          "name": "extraMetasAccount",
+          "writable": true
+        },
+        {
+          "name": "policyEngineAccount",
+          "writable": true
+        },
+        {
+          "name": "identityRegistryAccount",
+          "writable": true
+        },
+        {
+          "name": "dataRegistryAccount",
+          "writable": true
+        },
+        {
+          "name": "policyEngine",
+          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
+        },
+        {
+          "name": "identityRegistry",
+          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
+        },
+        {
+          "name": "dataRegistry",
+          "address": "dataeP5X1e7XsWN1ovDSEDP5cqaEUnKBmHE5iZhXPVw"
         },
         {
           "name": "systemProgram",
@@ -308,173 +393,6 @@ export type AssetController = {
           "type": {
             "defined": {
               "name": "createAssetControllerArgs"
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "createTokenAccount",
-      "docs": [
-        "create a token account"
-      ],
-      "discriminator": [
-        147,
-        241,
-        123,
-        100,
-        244,
-        132,
-        174,
-        118
-      ],
-      "accounts": [
-        {
-          "name": "payer",
-          "writable": true,
-          "signer": true
-        },
-        {
-          "name": "owner"
-        },
-        {
-          "name": "assetMint"
-        },
-        {
-          "name": "tokenAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "owner"
-              },
-              {
-                "kind": "account",
-                "path": "tokenProgram"
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "trackerAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "assetMint"
-              },
-              {
-                "kind": "account",
-                "path": "owner"
-              }
-            ]
-          }
-        },
-        {
-          "name": "assetController",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "systemProgram",
-          "address": "11111111111111111111111111111111"
-        },
-        {
-          "name": "tokenProgram",
-          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
-        },
-        {
-          "name": "associatedTokenProgram",
-          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
-        },
-        {
-          "name": "eventAuthority",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  95,
-                  95,
-                  101,
-                  118,
-                  101,
-                  110,
-                  116,
-                  95,
-                  97,
-                  117,
-                  116,
-                  104,
-                  111,
-                  114,
-                  105,
-                  116,
-                  121
-                ]
-              }
-            ]
-          }
-        },
-        {
-          "name": "program"
-        }
-      ],
-      "args": [
-        {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "createTokenAccountArgs"
             }
           }
         }
@@ -544,213 +462,32 @@ export type AssetController = {
       "args": []
     },
     {
-      "name": "executeTransaction",
+      "name": "enableMemoTransfer",
       "docs": [
-        "execute transfer hook"
+        "memo transfer enable"
       ],
       "discriminator": [
-        105,
-        37,
-        101,
-        197,
-        75,
-        251,
-        102,
-        26
+        186,
+        78,
+        97,
+        172,
+        71,
+        172,
+        99,
+        0
       ],
       "accounts": [
         {
-          "name": "sourceAccount",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "ownerDelegate"
-              },
-              {
-                "kind": "const",
-                "value": [
-                  6,
-                  221,
-                  246,
-                  225,
-                  238,
-                  117,
-                  143,
-                  222,
-                  24,
-                  66,
-                  93,
-                  188,
-                  228,
-                  108,
-                  205,
-                  218,
-                  182,
-                  26,
-                  252,
-                  77,
-                  131,
-                  185,
-                  13,
-                  39,
-                  254,
-                  189,
-                  249,
-                  40,
-                  216,
-                  161,
-                  139,
-                  252
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "assetMint"
-        },
-        {
-          "name": "destinationAccount"
-        },
-        {
-          "name": "ownerDelegate"
-        },
-        {
-          "name": "extraMetasAccount",
-          "pda": {
-            "seeds": [
-              {
-                "kind": "const",
-                "value": [
-                  101,
-                  120,
-                  116,
-                  114,
-                  97,
-                  45,
-                  97,
-                  99,
-                  99,
-                  111,
-                  117,
-                  110,
-                  116,
-                  45,
-                  109,
-                  101,
-                  116,
-                  97,
-                  115
-                ]
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ]
-          }
-        },
-        {
-          "name": "policyEngine",
-          "address": "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
-        },
-        {
-          "name": "policyEngineAccount"
-        },
-        {
-          "name": "identityRegistry",
-          "address": "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
-        },
-        {
-          "name": "identityRegistryAccount"
-        },
-        {
-          "name": "identityAccount",
-          "writable": true
-        },
-        {
-          "name": "trackerAccount",
-          "writable": true
-        },
-        {
-          "name": "policyAccount"
-        },
-        {
-          "name": "instructionsProgram"
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
-    },
-    {
-      "name": "issueTokens",
-      "docs": [
-        "issue shares of the rwa asset"
-      ],
-      "discriminator": [
-        40,
-        207,
-        145,
-        106,
-        249,
-        54,
-        23,
-        179
-      ],
-      "accounts": [
-        {
-          "name": "authority",
+          "name": "payer",
+          "writable": true,
           "signer": true
         },
         {
-          "name": "assetMint",
-          "writable": true
+          "name": "owner",
+          "signer": true
+        },
+        {
+          "name": "assetMint"
         },
         {
           "name": "tokenAccount",
@@ -758,8 +495,8 @@ export type AssetController = {
           "pda": {
             "seeds": [
               {
-                "kind": "arg",
-                "path": "args.to"
+                "kind": "account",
+                "path": "owner"
               },
               {
                 "kind": "account",
@@ -812,18 +549,374 @@ export type AssetController = {
         {
           "name": "tokenProgram",
           "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        },
+        {
+          "name": "eventAuthority",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  95,
+                  95,
+                  101,
+                  118,
+                  101,
+                  110,
+                  116,
+                  95,
+                  97,
+                  117,
+                  116,
+                  104,
+                  111,
+                  114,
+                  105,
+                  116,
+                  121
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "program"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "freezeTokenAccount",
+      "docs": [
+        "freeze token account"
+      ],
+      "discriminator": [
+        138,
+        168,
+        178,
+        109,
+        205,
+        224,
+        209,
+        93
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "issueTokens",
+      "docs": [
+        "issue shares of the rwa asset"
+      ],
+      "discriminator": [
+        40,
+        207,
+        145,
+        106,
+        249,
+        54,
+        23,
+        179
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "to"
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "to"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
         }
       ],
       "args": [
         {
-          "name": "args",
-          "type": {
-            "defined": {
-              "name": "issueTokensArgs"
-            }
-          }
+          "name": "amount",
+          "type": "u64"
         }
       ]
+    },
+    {
+      "name": "revokeTokens",
+      "docs": [
+        "revoke shares of the rwa asset"
+      ],
+      "discriminator": [
+        215,
+        42,
+        15,
+        134,
+        173,
+        80,
+        33,
+        21
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "authorityTokenAccount",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetController"
+              },
+              {
+                "kind": "account",
+                "path": "tokenProgram"
+              },
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ],
+            "program": {
+              "kind": "const",
+              "value": [
+                140,
+                151,
+                37,
+                143,
+                78,
+                36,
+                137,
+                241,
+                187,
+                61,
+                16,
+                41,
+                20,
+                142,
+                13,
+                131,
+                11,
+                90,
+                19,
+                153,
+                218,
+                255,
+                16,
+                132,
+                4,
+                142,
+                123,
+                216,
+                219,
+                233,
+                248,
+                89
+              ]
+            }
+          }
+        },
+        {
+          "name": "revokeTokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        },
+        {
+          "name": "associatedTokenProgram",
+          "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "thawTokenAccount",
+      "docs": [
+        "thaw token account"
+      ],
+      "discriminator": [
+        199,
+        172,
+        96,
+        93,
+        244,
+        252,
+        137,
+        171
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true
+        },
+        {
+          "name": "assetMint",
+          "writable": true
+        },
+        {
+          "name": "assetController",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "account",
+                "path": "assetMint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "tokenAccount",
+          "writable": true
+        },
+        {
+          "name": "tokenProgram",
+          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+        }
+      ],
+      "args": []
     },
     {
       "name": "updateInterestBearingMintRate",
@@ -996,99 +1089,6 @@ export type AssetController = {
           }
         }
       ]
-    },
-    {
-      "name": "voidTokens",
-      "docs": [
-        "void shares of the rwa asset"
-      ],
-      "discriminator": [
-        101,
-        147,
-        63,
-        157,
-        106,
-        103,
-        119,
-        74
-      ],
-      "accounts": [
-        {
-          "name": "owner",
-          "signer": true
-        },
-        {
-          "name": "assetMint",
-          "writable": true
-        },
-        {
-          "name": "tokenAccount",
-          "writable": true,
-          "pda": {
-            "seeds": [
-              {
-                "kind": "account",
-                "path": "owner"
-              },
-              {
-                "kind": "account",
-                "path": "tokenProgram"
-              },
-              {
-                "kind": "account",
-                "path": "assetMint"
-              }
-            ],
-            "program": {
-              "kind": "const",
-              "value": [
-                140,
-                151,
-                37,
-                143,
-                78,
-                36,
-                137,
-                241,
-                187,
-                61,
-                16,
-                41,
-                20,
-                142,
-                13,
-                131,
-                11,
-                90,
-                19,
-                153,
-                218,
-                255,
-                16,
-                132,
-                4,
-                142,
-                123,
-                216,
-                219,
-                233,
-                248,
-                89
-              ]
-            }
-          }
-        },
-        {
-          "name": "tokenProgram",
-          "address": "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
-        }
-      ],
-      "args": [
-        {
-          "name": "amount",
-          "type": "u64"
-        }
-      ]
     }
   ],
   "accounts": [
@@ -1103,19 +1103,6 @@ export type AssetController = {
         87,
         52,
         105
-      ]
-    },
-    {
-      "name": "trackerAccount",
-      "discriminator": [
-        83,
-        95,
-        166,
-        148,
-        57,
-        30,
-        90,
-        210
       ]
     }
   ],
@@ -1192,21 +1179,6 @@ export type AssetController = {
       "code": 6008,
       "name": "invalidPdaPassedIn",
       "msg": "Pda passed in for transfer is wrong"
-    },
-    {
-      "code": 6009,
-      "name": "invalidCpiTransferProgram",
-      "msg": "Invalid cpi program in transfer"
-    },
-    {
-      "code": 6010,
-      "name": "invalidCpiTransferAmount",
-      "msg": "Invalid cpi amount in transfer"
-    },
-    {
-      "code": 6011,
-      "name": "invalidCpiTransferMint",
-      "msg": "Invalid cpi mint in transfer"
     }
   ],
   "types": [
@@ -1318,18 +1290,6 @@ export type AssetController = {
       }
     },
     {
-      "name": "createTokenAccountArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "memoTransfer",
-            "type": "bool"
-          }
-        ]
-      }
-    },
-    {
       "name": "extensionMetadataEvent",
       "type": {
         "kind": "struct",
@@ -1345,68 +1305,6 @@ export type AssetController = {
           {
             "name": "metadata",
             "type": "bytes"
-          }
-        ]
-      }
-    },
-    {
-      "name": "issueTokensArgs",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "to",
-            "type": "pubkey"
-          }
-        ]
-      }
-    },
-    {
-      "name": "trackerAccount",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "version",
-            "type": "u8"
-          },
-          {
-            "name": "assetMint",
-            "type": "pubkey"
-          },
-          {
-            "name": "owner",
-            "type": "pubkey"
-          },
-          {
-            "name": "transfers",
-            "type": {
-              "vec": {
-                "defined": {
-                  "name": "transfer"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "transfer",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "timestamp",
-            "type": "i64"
           }
         ]
       }

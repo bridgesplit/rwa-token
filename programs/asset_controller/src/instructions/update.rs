@@ -23,16 +23,12 @@ pub struct UpdateAssetMetadata<'info> {
     pub payer: Signer<'info>,
     #[account(mut)]
     pub authority: Signer<'info>,
-    #[account(
-        mut,
-        mint::token_program = token_program,
-        mint::authority = authority,
-    )]
+    #[account(mut)]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         seeds = [asset_mint.key().as_ref()],
         bump,
-        constraint = asset_controller.authority == *authority.key,
+        constraint = asset_controller.authority == authority.key(),
     )]
     pub asset_controller: Box<Account<'info, AssetControllerAccount>>,
     pub system_program: Program<'info, System>,
@@ -47,7 +43,7 @@ impl<'info> UpdateAssetMetadata<'info> {
         signer_seeds: &[&[&[u8]]],
     ) -> Result<()> {
         let cpi_accounts = TokenMetadataUpdateField {
-            token_program_id: self.token_program.to_account_info(),
+            program_id: self.token_program.to_account_info(),
             metadata: self.asset_mint.to_account_info(), // metadata account is the mint, since data is stored in mint
             update_authority: self.asset_controller.to_account_info(),
         };

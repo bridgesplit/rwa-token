@@ -1,8 +1,10 @@
 use anchor_lang::{prelude::*, solana_program::program_option::COption};
 use anchor_spl::token_interface::Mint;
-use rwa_utils::TOKEN22;
+use rwa_utils::META_LIST_ACCOUNT_SEED;
+use spl_tlv_account_resolution::state::ExtraAccountMetaList;
+use spl_transfer_hook_interface::instruction::ExecuteInstruction;
 
-use crate::state::*;
+use crate::{get_extra_account_metas, get_meta_list_size, state::*};
 
 #[derive(Accounts)]
 #[instruction()]
@@ -13,9 +15,7 @@ pub struct CreatePolicyEngine<'info> {
         constraint = asset_mint.mint_authority == COption::Some(signer.key()),
     )]
     pub signer: Signer<'info>,
-    #[account(
-        mint::token_program = TOKEN22
-    )]
+    #[account()]
     pub asset_mint: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
@@ -24,7 +24,16 @@ pub struct CreatePolicyEngine<'info> {
         bump,
         payer = payer,
     )]
-    pub policy_engine: Box<Account<'info, PolicyEngineAccount>>,
+    pub policy_engine_account: Box<Account<'info, PolicyEngineAccount>>,
+    #[account(
+        init,
+        space = get_meta_list_size()?,
+        seeds = [META_LIST_ACCOUNT_SEED, asset_mint.key().as_ref()],
+        bump,
+        payer = payer,
+    )]
+    /// CHECK: extra metas account
+    pub extra_metas_account: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
 }
 
@@ -33,8 +42,14 @@ pub fn handler(
     authority: Pubkey,
     delegate: Option<Pubkey>,
 ) -> Result<()> {
+    // initialize the extra metas account
+    let extra_metas_account = &ctx.accounts.extra_metas_account;
+    let metas = get_extra_account_metas()?;
+    let mut data = extra_metas_account.try_borrow_mut_data()?;
+    ExtraAccountMetaList::init::<ExecuteInstruction>(&mut data, &metas)?;
+
     ctx.accounts
-        .policy_engine
+        .policy_engine_account
         .new(authority, delegate, ctx.accounts.asset_mint.key());
 
     Ok(())

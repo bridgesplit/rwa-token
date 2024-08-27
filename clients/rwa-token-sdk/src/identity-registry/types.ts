@@ -8,3 +8,5 @@ export type IdentityRegistryAccount =
 /** Represents on chain identity account. */
 export type IdentityAccount =
   IdlAccounts<IdentityRegistryIdlTypes>["identityAccount"];
+
+  

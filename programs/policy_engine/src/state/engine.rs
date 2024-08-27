@@ -59,3 +59,12 @@ impl PolicyEngineAccount {
         self.max_timeframe = max_timeframe;
     }
 }
+
+/// bec of circular dependancy acp's pubkey is hardcoded
+pub fn get_asset_controller_account_pda(asset_mint: Pubkey) -> Pubkey {
+    Pubkey::find_program_address(
+        &[asset_mint.as_ref()],
+        &pubkey!("acpcFrzEYKjVLvZGWueTV8vyDjhu3oKC7sN38QELLan"),
+    )
+    .0
+}

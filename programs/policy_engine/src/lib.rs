@@ -15,7 +15,9 @@ use anchor_lang::prelude::*;
 declare_id!("po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau");
 
 #[program]
+#[allow(deprecated)]
 pub mod policy_engine {
+
     use super::*;
 
     /// create a policy registry
@@ -52,5 +54,16 @@ pub mod policy_engine {
         hash: String,
     ) -> Result<()> {
         instructions::account::detach::handler(ctx, hash)
+    }
+
+    /// create tracker account
+    pub fn create_tracker_account(ctx: Context<CreateTrackerAccount>) -> Result<()> {
+        instructions::tracker::handler(ctx)
+    }
+
+    /// execute transfer hook
+    #[interface(spl_transfer_hook_interface::execute)]
+    pub fn execute_transaction(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
+        instructions::execute::handler(ctx, amount)
     }
 }

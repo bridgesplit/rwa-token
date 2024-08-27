@@ -1,3 +1,7 @@
+use crate::{
+    enforce_policy, get_asset_controller_account_pda, verify_cpi_program_is_token22, verify_pda,
+    PolicyAccount, PolicyEngineAccount, TrackerAccount,
+};
 use anchor_lang::{
     prelude::*,
     solana_program::sysvar::{self},
@@ -6,18 +10,12 @@ use anchor_spl::token_interface::{Mint, TokenAccount};
 use identity_registry::{
     program::IdentityRegistry, IdentityAccount, NO_IDENTITY_LEVEL, SKIP_POLICY_LEVEL,
 };
-use policy_engine::{enforce_policy, program::PolicyEngine, PolicyAccount, PolicyEngineAccount};
-
-use crate::{state::*, verify_cpi_program_is_token22, verify_pda};
+use rwa_utils::META_LIST_ACCOUNT_SEED;
 
 #[derive(Accounts)]
 #[instruction(amount: u64)]
 pub struct ExecuteTransferHook<'info> {
-    #[account(
-        associated_token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
-        associated_token::authority = owner_delegate,
-        associated_token::mint = asset_mint,
-    )]
+    #[account()]
     pub source_account: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
         token::token_program = anchor_spl::token_interface::spl_token_2022::id(),
@@ -37,26 +35,17 @@ pub struct ExecuteTransferHook<'info> {
         bump,
     )]
     pub extra_metas_account: UncheckedAccount<'info>,
-    pub policy_engine: Program<'info, PolicyEngine>,
-    #[account(
-        owner = policy_engine.key(),
-    )]
     /// CHECK: internal ix checks
     pub policy_engine_account: UncheckedAccount<'info>,
     pub identity_registry: Program<'info, IdentityRegistry>,
-    #[account()]
     /// CHECK: internal ix checks
     pub identity_registry_account: UncheckedAccount<'info>,
-    #[account(mut)]
     /// CHECK: internal ix checks
     pub identity_account: UncheckedAccount<'info>,
-    #[account(
-        mut,
-        constraint = tracker_account.owner == destination_account.owner,
-        constraint = tracker_account.asset_mint == asset_mint.key(),
-    )]
-    pub tracker_account: Box<Account<'info, TrackerAccount>>,
-    #[account()]
+    #[account(mut)]
+    /// CHECK: internal ix checks
+    pub tracker_account: UncheckedAccount<'info>,
+    #[account(mut)]
     /// CHECK: internal ix checks
     pub policy_account: UncheckedAccount<'info>,
     #[account(constraint = instructions_program.key() == sysvar::instructions::id())]
@@ -65,24 +54,27 @@ pub struct ExecuteTransferHook<'info> {
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
+    let asset_mint = ctx.accounts.asset_mint.key();
+    if ctx.accounts.destination_account.owner == get_asset_controller_account_pda(asset_mint) {
+        // if destination account is asset controller, skip enforcing token hook logic, since it is only used for revoking tokens
+        return Ok(());
+    }
+
     verify_cpi_program_is_token22(
         &ctx.accounts.instructions_program.to_account_info(),
         amount,
-        ctx.accounts.asset_mint.key(),
+        asset_mint,
     )?;
-
-    let asset_mint = ctx.accounts.asset_mint.key();
-
     verify_pda(
         ctx.accounts.policy_engine_account.key(),
         &[&asset_mint.to_bytes()],
-        &policy_engine::id(),
+        &crate::id(),
     )?;
 
     verify_pda(
         ctx.accounts.policy_account.key(),
         &[&ctx.accounts.policy_engine_account.key().to_bytes()],
-        &policy_engine::id(),
+        &crate::id(),
     )?;
 
     // if policy account hasnt been created, skip enforcing token hook logic
@@ -118,10 +110,8 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &identity_registry::id(),
     )?;
 
-    let levels = if let Ok(identity_account) =
-        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])
-    {
-        identity_account.levels
+    let levels = if !ctx.accounts.identity_account.data_is_empty() {
+        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])?.levels
     } else {
         vec![NO_IDENTITY_LEVEL]
     };
@@ -131,6 +121,21 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         return Ok(());
     }
 
+    let mut tracker_account: Option<TrackerAccount> =
+        if ctx.accounts.tracker_account.data_is_empty() {
+            None
+        } else {
+            Some(TrackerAccount::deserialize(
+                &mut &ctx.accounts.tracker_account.data.borrow()[8..],
+            )?)
+        };
+
+    let transfers = if let Some(tracker_account) = tracker_account.clone() {
+        tracker_account.transfers.clone()
+    } else {
+        vec![]
+    };
+
     // evaluate policies
     enforce_policy(
         policy_account.policies.clone(),
@@ -138,15 +143,21 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         Clock::get()?.unix_timestamp,
         &levels,
         ctx.accounts.destination_account.amount,
-        &ctx.accounts.tracker_account.transfers,
+        &transfers,
     )?;
 
-    // update transfer history
-    ctx.accounts.tracker_account.update_transfer_history(
-        amount,
-        Clock::get()?.unix_timestamp,
-        policy_engine_account.max_timeframe,
-    )?;
+    if let Some(ref mut tracker_account) = tracker_account {
+        // update transfer history
+        tracker_account.update_transfer_history(
+            amount,
+            Clock::get()?.unix_timestamp,
+            policy_engine_account.max_timeframe,
+        )?;
+        let tracker_account_data = tracker_account.try_to_vec()?;
+        let tracker_account_data_len = tracker_account_data.len();
+        ctx.accounts.tracker_account.data.borrow_mut()[8..8 + tracker_account_data_len]
+            .copy_from_slice(&tracker_account_data);
+    }
 
     Ok(())
 }

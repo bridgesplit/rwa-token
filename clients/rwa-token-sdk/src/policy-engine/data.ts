@@ -1,6 +1,6 @@
 import { type AnchorProvider } from "@coral-xyz/anchor";
-import { type PolicyEngineAccount, type PolicyAccount } from "./types";
-import { getPolicyAccountPda, getPolicyEnginePda, getPolicyEngineProgram } from "./utils";
+import { type PolicyEngineAccount, type PolicyAccount, TrackerAccount } from "./types";
+import { getPolicyAccountPda, getPolicyEnginePda, getPolicyEngineProgram, getTrackerAccountPda } from "./utils";
 import { GetProgramAccountsFilter, PublicKey } from "@solana/web3.js";
 
 /**
@@ -59,4 +59,22 @@ export async function getPolicyAccount(assetMint: string, provider: AnchorProvid
 	const policyEngineProgram = getPolicyEngineProgram(provider);
 	const policyAccountPda = getPolicyAccountPda(assetMint);
 	return policyEngineProgram.account.policyAccount.fetch(policyAccountPda);
+}
+
+
+
+/**
+ * Retrieves a tracker account pda associated with a specific asset mint and owner.
+ * @param assetMint - The string representation of the asset mint.
+ * @param owner - The string representation of the owner's public key.
+ * @returns A promise resolving to the fetched tracker account, or `undefined` if it doesn't exist.
+ */
+export async function getTrackerAccount(
+	assetMint: string,
+	owner: string,
+	provider: AnchorProvider
+): Promise<TrackerAccount> {
+	const policyEngineProgram = getPolicyEngineProgram(provider);
+	const trackerPda = getTrackerAccountPda(assetMint, owner);
+	return await policyEngineProgram.account.trackerAccount.fetch(trackerPda);
 }
