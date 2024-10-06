@@ -22,6 +22,7 @@ import {
 	getCreateIdentityAccountIx,
 	getIdentityAccountPda,
 	getIdentityRegistryPda,
+	getAddLevelToIdentityAccount,
 } from "../identity-registry";
 import {
 	type CommonArgs,
@@ -368,7 +369,7 @@ export type SetupUserArgs = {
   owner: string;
   signer: string;
   assetMint: string;
-  level: number;
+  levels: number[];
 };
 
 /**
@@ -382,16 +383,34 @@ export async function getSetupUserIxs(
 	args: SetupUserArgs,
 	provider: AnchorProvider
 ): Promise<IxReturn> {
+	const ixs: TransactionInstruction[] = [];
 	const identityAccountIx = await getCreateIdentityAccountIx(
 		{
 			payer: args.payer,
 			signer: args.signer,
 			assetMint: args.assetMint,
 			owner: args.owner,
-			level: args.level,
+			level: args.levels[0],
 		},
 		provider
 	);
+	ixs.push(identityAccountIx);
+	if (args.levels.length > 1) {
+		for (let i = 1; i < args.levels.length; i++) {
+			const addLevelIx = await getAddLevelToIdentityAccount(
+				{
+					authority: args.signer,
+					owner: args.owner,
+					assetMint: args.assetMint,
+					level: args.levels[i],
+					signer: args.signer,
+					payer: args.payer,
+				},
+				provider
+			);
+			ixs.push(addLevelIx);
+		}
+	}
 	const trackerAccountIx = await getCreateTrackerAccountIx(
 		{
 			payer: args.payer,
@@ -400,8 +419,9 @@ export async function getSetupUserIxs(
 		},
 		provider
 	);
+	ixs.push(trackerAccountIx);
 	return {
-		ixs: [identityAccountIx, trackerAccountIx],
+		ixs,
 		signers: [],
 	};
 }

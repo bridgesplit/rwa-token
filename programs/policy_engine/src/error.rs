@@ -34,4 +34,10 @@ pub enum PolicyEngineErrors {
     InvalidPdaPassedIn,
     #[msg("Transfer history full")]
     TransferHistoryFull,
+    #[msg("All Transfers have been paused")]
+    TransferPaused,
+    #[msg("Expected source account to transfer full amount")]
+    ForceFullTransfer,
+    #[msg("Holder limit exceeded")]
+    HolderLimitExceeded,
 }

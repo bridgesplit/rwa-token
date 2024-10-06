@@ -2,7 +2,10 @@ use anchor_lang::prelude::*;
 use num_enum::IntoPrimitive;
 use serde::{Deserialize, Serialize};
 
-use crate::PolicyEngineErrors;
+use crate::{
+    enforce_identity_filter, get_total_amount_transferred_in_timeframe,
+    get_total_transactions_in_timeframe, PolicyEngineErrors, Transfer,
+};
 
 #[derive(
     AnchorDeserialize, AnchorSerialize, Clone, InitSpace, Copy, Debug, Serialize, Deserialize,
@@ -67,6 +70,9 @@ pub enum PolicyType {
     TransactionAmountVelocity { limit: u64, timeframe: i64 },
     TransactionCountVelocity { limit: u64, timeframe: i64 },
     MaxBalance { limit: u64 },
+    TransferPause,
+    ForceFullTransfer,
+    HolderLimit { limit: u64, current_number: u64 },
 }
 
 impl PolicyAccount {
@@ -125,5 +131,85 @@ impl PolicyAccount {
             .policy_type;
         self.policies.retain(|policy| policy.hash != hash);
         Ok(policy_type)
+    }
+
+    /// enforces different types of policies
+    #[inline(never)]
+    pub fn enforce_policy(
+        &mut self,
+        transfer_amount: u64,
+        timestamp: i64,
+        identity: &[u8],
+        source_balance: u64,
+        receiver_balance: u64,
+        transfers: &Vec<Transfer>,
+    ) -> Result<()> {
+        for policy in self.policies.iter_mut() {
+            match &mut policy.policy_type {
+                PolicyType::IdentityApproval => {
+                    enforce_identity_filter(identity, policy.identity_filter)?;
+                }
+                PolicyType::TransactionAmountLimit { limit } => {
+                    if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                        && transfer_amount > *limit
+                    {
+                        return Err(PolicyEngineErrors::TransactionAmountLimitExceeded.into());
+                    }
+                }
+                PolicyType::TransactionAmountVelocity { limit, timeframe } => {
+                    if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
+                        let total_amount_transferred = get_total_amount_transferred_in_timeframe(
+                            transfers, *timeframe, timestamp,
+                        );
+
+                        if total_amount_transferred + transfer_amount > *limit {
+                            return Err(
+                                PolicyEngineErrors::TransactionAmountVelocityExceeded.into()
+                            );
+                        }
+                    }
+                }
+                PolicyType::TransactionCountVelocity { limit, timeframe } => {
+                    if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
+                        let total_transactions =
+                            get_total_transactions_in_timeframe(transfers, *timeframe, timestamp);
+                        if total_transactions + 1 > *limit {
+                            return Err(PolicyEngineErrors::TransactionCountVelocityExceeded.into());
+                        }
+                    }
+                }
+                PolicyType::MaxBalance { limit } => {
+                    if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                        && transfer_amount + receiver_balance > *limit
+                    {
+                        return Err(PolicyEngineErrors::MaxBalanceExceeded.into());
+                    }
+                }
+                PolicyType::TransferPause => {
+                    return Err(PolicyEngineErrors::TransferPaused.into());
+                }
+                PolicyType::ForceFullTransfer => {
+                    if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                        && source_balance != transfer_amount
+                    {
+                        return Err(PolicyEngineErrors::ForceFullTransfer.into());
+                    }
+                }
+                PolicyType::HolderLimit {
+                    limit,
+                    current_number,
+                } => {
+                    if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
+                        if receiver_balance == 0 && source_balance != transfer_amount {
+                            *current_number += 1;
+                        }
+                        if current_number > limit {
+                            return Err(PolicyEngineErrors::HolderLimitExceeded.into());
+                        }
+                    }
+                }
+            }
+        }
+        Ok(())
     }
 }

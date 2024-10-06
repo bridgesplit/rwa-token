@@ -1,6 +1,6 @@
 use crate::{
-    enforce_policy, get_asset_controller_account_pda, verify_cpi_program_is_token22, verify_pda,
-    PolicyAccount, PolicyEngineAccount, TrackerAccount,
+    get_asset_controller_account_pda, verify_cpi_program_is_token22, verify_pda, PolicyAccount,
+    PolicyEngineAccount, TrackerAccount,
 };
 use anchor_lang::{
     prelude::*,
@@ -86,7 +86,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &mut &ctx.accounts.policy_engine_account.data.borrow()[8..],
     )?;
 
-    let policy_account =
+    let mut policy_account =
         PolicyAccount::deserialize(&mut &ctx.accounts.policy_account.data.borrow()[8..])?;
 
     // go through with transfer if there aren't any policies attached
@@ -137,11 +137,11 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     };
 
     // evaluate policies
-    enforce_policy(
-        policy_account.policies.clone(),
+    policy_account.enforce_policy(
         amount,
         Clock::get()?.unix_timestamp,
         &levels,
+        ctx.accounts.source_account.amount,
         ctx.accounts.destination_account.amount,
         &transfers,
     )?;
@@ -158,6 +158,11 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         ctx.accounts.tracker_account.data.borrow_mut()[8..8 + tracker_account_data_len]
             .copy_from_slice(&tracker_account_data);
     }
+
+    let policy_account_data = policy_account.try_to_vec()?;
+    let policy_account_data_len = policy_account_data.len();
+    ctx.accounts.policy_account.data.borrow_mut()[8..8 + policy_account_data_len]
+        .copy_from_slice(&policy_account_data);
 
     Ok(())
 }

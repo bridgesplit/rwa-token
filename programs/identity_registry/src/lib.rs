@@ -70,4 +70,13 @@ pub mod identity_registry {
         // no extra steps needed, identity account is being properly closed
         Ok(())
     }
+
+    /// edit level limit
+    pub fn edit_level_limit(
+        ctx: Context<EditLevelLimit>,
+        level: u8,
+        max_allowed: Option<u64>,
+    ) -> Result<()> {
+        instructions::limit::handler(ctx, level, max_allowed)
+    }
 }
