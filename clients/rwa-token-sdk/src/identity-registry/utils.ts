@@ -32,4 +32,16 @@ export const getIdentityAccountPda = (assetMint: string, owner: string) => Publi
 	identityRegistryProgramId,
 )[0];
 
+
+/**
+ * Retrieves the identity metadata account pda public key for a specific asset mint.
+ * @param assetMint - The string representation of the asset's mint address.
+ * @param level - The level of the identity account.
+ * @returns The identity metadata pda.
+ */
+export const getIdentityMetadataPda = (assetMint: string, level: number) => PublicKey.findProgramAddressSync(
+	[Buffer.from([level]), getIdentityRegistryPda(assetMint).toBuffer()],
+	identityRegistryProgramId,
+)[0];
+
 export const POLICY_SKIP_LEVEL = 255;

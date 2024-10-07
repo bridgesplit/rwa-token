@@ -121,6 +121,10 @@ export type IdentityRegistry = {
           }
         },
         {
+          "name": "identityMetadataAccount",
+          "writable": true
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }

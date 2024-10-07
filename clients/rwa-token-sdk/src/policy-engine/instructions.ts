@@ -5,6 +5,7 @@ import {
 } from "@solana/web3.js";
 import { type CommonArgs, type IxReturn } from "../utils";
 import {
+	getExtraMetasListPda,
 	getPolicyAccountPda,
 	getPolicyEnginePda,
 	getPolicyEngineProgram,
@@ -39,7 +40,8 @@ export async function getCreatePolicyEngineIx(
 			payer: args.payer,
 			signer: args.signer,
 			assetMint: args.assetMint,
-			policyEngine: getPolicyEnginePda(args.assetMint),
+			policyEngineAccount: getPolicyEnginePda(args.assetMint),
+			extraMetasAccount: getExtraMetasListPda(args.assetMint),
 			systemProgram: SystemProgram.programId,
 		})
 		.instruction();

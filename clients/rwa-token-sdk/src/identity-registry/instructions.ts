@@ -8,6 +8,7 @@ import {
 	getIdentityAccountPda,
 	getIdentityRegistryProgram,
 	getIdentityRegistryPda,
+	getIdentityMetadataPda,
 } from "./utils";
 import { type AnchorProvider } from "@coral-xyz/anchor";
 
@@ -66,6 +67,7 @@ export async function getCreateIdentityAccountIx(
 			identityRegistry: getIdentityRegistryPda(args.assetMint),
 			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
 			systemProgram: SystemProgram.programId,
+			identityMetadataAccount: getIdentityMetadataPda(args.assetMint, args.level),
 			signer: args.signer
 				? args.signer
 				: getIdentityRegistryPda(args.assetMint),
@@ -97,6 +99,7 @@ export async function getAddLevelToIdentityAccount(
 			signer: args.signer,
 			identityRegistry: getIdentityRegistryPda(args.assetMint),
 			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+			identityMetadataAccount: getIdentityMetadataPda(args.assetMint, args.level),
 			payer: args.payer,
 			systemProgram: SystemProgram.programId,
 		})
@@ -128,6 +131,7 @@ export async function getRemoveLevelFromIdentityAccount(
 				: getIdentityRegistryPda(args.assetMint),
 			identityRegistry: getIdentityRegistryPda(args.assetMint),
 			identityAccount: getIdentityAccountPda(args.assetMint, args.owner),
+			identityMetadataAccount: getIdentityMetadataPda(args.assetMint, args.level),
 			payer: args.signer,
 			systemProgram: SystemProgram.programId,
 		})
