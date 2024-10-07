@@ -40,4 +40,6 @@ pub enum PolicyEngineErrors {
     ForceFullTransfer,
     #[msg("Holder limit exceeded")]
     HolderLimitExceeded,
+    #[msg("Balance limit exceeded")]
+    BalanceLimitExceeded,
 }

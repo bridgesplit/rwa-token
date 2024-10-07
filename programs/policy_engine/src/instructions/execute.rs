@@ -41,7 +41,7 @@ pub struct ExecuteTransferHook<'info> {
     /// CHECK: internal ix checks
     pub identity_registry_account: UncheckedAccount<'info>,
     /// CHECK: internal ix checks
-    pub identity_account: UncheckedAccount<'info>,
+    pub receiver_identity_account: UncheckedAccount<'info>,
     #[account(mut)]
     /// CHECK: internal ix checks
     pub tracker_account: UncheckedAccount<'info>,
@@ -51,6 +51,8 @@ pub struct ExecuteTransferHook<'info> {
     #[account(constraint = instructions_program.key() == sysvar::instructions::id())]
     /// CHECK: constraint check
     pub instructions_program: UncheckedAccount<'info>,
+    /// CHECK: internal ix checks
+    pub source_identity_account: UncheckedAccount<'info>,
 }
 
 pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
@@ -102,7 +104,7 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     )?;
 
     verify_pda(
-        ctx.accounts.identity_account.key(),
+        ctx.accounts.receiver_identity_account.key(),
         &[
             &ctx.accounts.identity_registry_account.key().to_bytes(),
             &ctx.accounts.destination_account.owner.to_bytes(),
@@ -110,14 +112,33 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         &identity_registry::id(),
     )?;
 
-    let levels = if !ctx.accounts.identity_account.data_is_empty() {
-        IdentityAccount::deserialize(&mut &ctx.accounts.identity_account.data.borrow()[8..])?.levels
+    let receiver_levels = if !ctx.accounts.receiver_identity_account.data_is_empty() {
+        IdentityAccount::deserialize(
+            &mut &ctx.accounts.receiver_identity_account.data.borrow()[8..],
+        )?
+        .levels
+    } else {
+        vec![NO_IDENTITY_LEVEL]
+    };
+
+    verify_pda(
+        ctx.accounts.source_identity_account.key(),
+        &[
+            &ctx.accounts.identity_registry_account.key().to_bytes(),
+            &ctx.accounts.source_account.owner.to_bytes(),
+        ],
+        &identity_registry::id(),
+    )?;
+
+    let source_levels = if !ctx.accounts.source_identity_account.data_is_empty() {
+        IdentityAccount::deserialize(&mut &ctx.accounts.source_identity_account.data.borrow()[8..])?
+            .levels
     } else {
         vec![NO_IDENTITY_LEVEL]
     };
 
     // if user has identity skip level, skip enforcing policy
-    if levels.contains(&SKIP_POLICY_LEVEL) {
+    if receiver_levels.contains(&SKIP_POLICY_LEVEL) {
         return Ok(());
     }
 
@@ -140,7 +161,8 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
     policy_account.enforce_policy(
         amount,
         Clock::get()?.unix_timestamp,
-        &levels,
+        &source_levels,
+        &receiver_levels,
         ctx.accounts.source_account.amount,
         ctx.accounts.destination_account.amount,
         &transfers,

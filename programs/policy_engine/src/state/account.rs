@@ -72,7 +72,8 @@ pub enum PolicyType {
     MaxBalance { limit: u64 },
     TransferPause,
     ForceFullTransfer,
-    HolderLimit { limit: u64, current_number: u64 },
+    HolderLimit { limit: u64, current_holders: u64 },
+    BalanceLimit { limit: u128, current_balance: u128 },
 }
 
 impl PolicyAccount {
@@ -139,7 +140,8 @@ impl PolicyAccount {
         &mut self,
         transfer_amount: u64,
         timestamp: i64,
-        identity: &[u8],
+        source_identity: &[u8],
+        receiver_identity: &[u8],
         source_balance: u64,
         receiver_balance: u64,
         transfers: &Vec<Transfer>,
@@ -147,17 +149,17 @@ impl PolicyAccount {
         for policy in self.policies.iter_mut() {
             match &mut policy.policy_type {
                 PolicyType::IdentityApproval => {
-                    enforce_identity_filter(identity, policy.identity_filter)?;
+                    enforce_identity_filter(receiver_identity, policy.identity_filter)?;
                 }
                 PolicyType::TransactionAmountLimit { limit } => {
-                    if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok()
                         && transfer_amount > *limit
                     {
                         return Err(PolicyEngineErrors::TransactionAmountLimitExceeded.into());
                     }
                 }
                 PolicyType::TransactionAmountVelocity { limit, timeframe } => {
-                    if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok() {
                         let total_amount_transferred = get_total_amount_transferred_in_timeframe(
                             transfers, *timeframe, timestamp,
                         );
@@ -170,7 +172,7 @@ impl PolicyAccount {
                     }
                 }
                 PolicyType::TransactionCountVelocity { limit, timeframe } => {
-                    if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok() {
                         let total_transactions =
                             get_total_transactions_in_timeframe(transfers, *timeframe, timestamp);
                         if total_transactions + 1 > *limit {
@@ -179,7 +181,7 @@ impl PolicyAccount {
                     }
                 }
                 PolicyType::MaxBalance { limit } => {
-                    if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok()
                         && transfer_amount + receiver_balance > *limit
                     {
                         return Err(PolicyEngineErrors::MaxBalanceExceeded.into());
@@ -189,7 +191,7 @@ impl PolicyAccount {
                     return Err(PolicyEngineErrors::TransferPaused.into());
                 }
                 PolicyType::ForceFullTransfer => {
-                    if enforce_identity_filter(identity, policy.identity_filter).is_ok()
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok()
                         && source_balance != transfer_amount
                     {
                         return Err(PolicyEngineErrors::ForceFullTransfer.into());
@@ -197,18 +199,34 @@ impl PolicyAccount {
                 }
                 PolicyType::HolderLimit {
                     limit,
-                    current_number,
+                    current_holders,
                 } => {
-                    if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
-                        if receiver_balance == 0 && source_balance != transfer_amount {
-                            *current_number += 1;
-                        }
-                        if source_balance == transfer_amount {
-                            *current_number -= 1;
-                        }
-                        if current_number > limit {
-                            return Err(PolicyEngineErrors::HolderLimitExceeded.into());
-                        }
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok()
+                        && receiver_balance == 0
+                    {
+                        *current_holders += 1;
+                    }
+                    if enforce_identity_filter(source_identity, policy.identity_filter).is_ok()
+                        && source_balance == transfer_amount
+                    {
+                        *current_holders -= 1;
+                    }
+                    if current_holders > limit {
+                        return Err(PolicyEngineErrors::HolderLimitExceeded.into());
+                    }
+                }
+                PolicyType::BalanceLimit {
+                    limit,
+                    current_balance,
+                } => {
+                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok() {
+                        *current_balance += transfer_amount as u128;
+                    }
+                    if enforce_identity_filter(source_identity, policy.identity_filter).is_ok() {
+                        *current_balance -= transfer_amount as u128;
+                    }
+                    if current_balance > limit {
+                        return Err(PolicyEngineErrors::HolderLimitExceeded.into());
                     }
                 }
             }

@@ -25,7 +25,11 @@ pub struct EditIdentityMetadata<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<EditIdentityMetadata>, level: u8, max_allowed: Option<u64>) -> Result<()> {
+pub fn handler(
+    ctx: Context<EditIdentityMetadata>,
+    level: u8,
+    max_allowed: Option<u64>,
+) -> Result<()> {
     let max_allowed = max_allowed.unwrap_or(u64::MAX);
     // init limit account if level is not present
     if ctx.accounts.limit_account.level == 0 {
