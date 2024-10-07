@@ -265,6 +265,11 @@ export async function getTransferTokensIxs(
 			isWritable: false,
 			isSigner: false,
 		},
+		{
+			pubkey: getIdentityAccountPda(args.assetMint, args.from),
+			isWritable: false,
+			isSigner: false,
+		}
 	];
 
 	const ixs: TransactionInstruction[] = [];
@@ -661,6 +666,11 @@ export async function getRevokeTokensIx(
 			isWritable: false,
 			isSigner: false,
 		},
+		{
+			pubkey: getIdentityAccountPda(args.assetMint, args.owner),
+			isWritable: false,
+			isSigner: false,
+		}
 	];
 	const ixs: TransactionInstruction[] = [];
 	const ix = await assetProgram.methods

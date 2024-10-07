@@ -72,21 +72,21 @@ describe("e2e tests", async () => {
 			payer: setup.payer.toString(),
 			owner: setup.user1.toString(),
 			signer: setup.authority.toString(),
-			level: 1,
+			levels: [1],
 		}, rwaClient.provider);
 		const setupUser2Ixs = await getSetupUserIxs({
 			assetMint: mint,
 			payer: setup.payer.toString(),
 			owner: setup.user2.toString(),
 			signer: setup.authority.toString(),
-			level: 1,
+			levels: [1],
 		}, rwaClient.provider);
 		const setupUser3Ixs = await getSetupUserIxs({
 			assetMint: mint,
 			payer: setup.payer.toString(),
 			owner: setup.authority.toString(),
 			signer: setup.authority.toString(),
-			level: 255,
+			levels: [255],
 		}, rwaClient.provider);
 		const txnId = await sendAndConfirmTransaction(
 			rwaClient.provider.connection,

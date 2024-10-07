@@ -21,7 +21,7 @@ pub struct EditIdentityMetadata<'info> {
         seeds = [&[level], identity_registry.key().as_ref()],
         bump,
     )]
-    pub limit_account: Box<Account<'info, IdentityMetadataAccount>>,
+    pub identity_metadata_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 
@@ -32,10 +32,12 @@ pub fn handler(
 ) -> Result<()> {
     let max_allowed = max_allowed.unwrap_or(u64::MAX);
     // init limit account if level is not present
-    if ctx.accounts.limit_account.level == 0 {
-        ctx.accounts
-            .limit_account
-            .new(ctx.accounts.identity_registry.key(), level, max_allowed);
+    if ctx.accounts.identity_metadata_account.level == 0 {
+        ctx.accounts.identity_metadata_account.new(
+            ctx.accounts.identity_registry.key(),
+            level,
+            max_allowed,
+        );
     }
     Ok(())
 }

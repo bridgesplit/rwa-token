@@ -119,7 +119,7 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
             false,
             false,
         )?,
-        // user identity account
+        // receiver identity account
         ExtraAccountMeta::new_external_pda_with_seeds(
             6,
             &[
@@ -151,5 +151,19 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
         ExtraAccountMeta::new_with_seeds(&[Seed::AccountKey { index: 5 }], false, true)?,
         // instructions program
         ExtraAccountMeta::new_with_pubkey(&sysvar::instructions::id(), false, false)?,
+        // source identity account
+        ExtraAccountMeta::new_external_pda_with_seeds(
+            6,
+            &[
+                Seed::AccountKey { index: 7 },
+                Seed::AccountData {
+                    account_index: 0,
+                    data_index: 32,
+                    length: 32,
+                },
+            ],
+            false,
+            false,
+        )?,
     ])
 }

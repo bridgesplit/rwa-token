@@ -31,18 +31,20 @@ pub struct AddLevelToIdentityAccount<'info> {
         seeds = [&[level], identity_account.identity_registry.as_ref()],
         bump,
     )]
-    pub limit_account: Box<Account<'info, IdentityMetadataAccount>>,
+    pub identity_metadata_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<AddLevelToIdentityAccount>, level: u8) -> Result<()> {
     // init limit account if level is not present
-    if ctx.accounts.limit_account.level == 0 {
-        ctx.accounts
-            .limit_account
-            .new(ctx.accounts.identity_registry.key(), level, u64::MAX);
+    if ctx.accounts.identity_metadata_account.level == 0 {
+        ctx.accounts.identity_metadata_account.new(
+            ctx.accounts.identity_registry.key(),
+            level,
+            u64::MAX,
+        );
     }
     ctx.accounts.identity_account.add_level(level)?;
-    ctx.accounts.limit_account.add_user()?;
+    ctx.accounts.identity_metadata_account.add_user()?;
     Ok(())
 }

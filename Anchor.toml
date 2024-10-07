@@ -10,10 +10,10 @@ wallet = "~/.config/solana/id.json"
 
 [workspace]
 members = [
-  "asset_controller",
-  "data_registry",
-  "identity_registry",
-  "policy_engine",
+  "programs/asset_controller",
+  "programs/data_registry",
+  "programs/identity_registry",
+  "programs/policy_engine",
 ]
 
 [programs.localnet]
@@ -23,7 +23,7 @@ identity_registry = "idtynCMYbdisCTv4FrCWPSQboZb1uM4TV2cPi79yxQf"
 policy_engine = "po1cPf1eyUJJPqULw4so3T4JU9pdFn83CDyuLEKFAau"
 
 [scripts]
-test = "cd ../clients/rwa-token-sdk && yarn test"
+test = "cd clients/rwa-token-sdk && yarn test"
 
 [test.validator]
 url = "https://api.mainnet-beta.solana.com"

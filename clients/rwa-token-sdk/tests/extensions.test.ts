@@ -66,7 +66,7 @@ describe("extension tests", async () => {
 				payer: setup.payer.toString(),
 				owner: setup.authority.toString(),
 				signer: setup.authority.toString(),
-				level: 255,
+				levels: [255],
 			},
 			rwaClient.provider
 		);

@@ -167,6 +167,7 @@
       "accounts": [
         {
           "name": "signer",
+          "writable": true,
           "signer": true
         },
         {

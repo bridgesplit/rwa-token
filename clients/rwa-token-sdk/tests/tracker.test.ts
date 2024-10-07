@@ -70,7 +70,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			owner: setup.user1.toString(),
 			signer: setup.authority.toString(),
 			assetMint: mint,
-			level: 1,
+			levels: [1],
 		};
 		const setupIx1 = await rwaClient.identityRegistry.setupUserIxns(
 			setupUser1Args
@@ -86,7 +86,7 @@ describe("test suite to test tracker account is being updated correctly on trans
 			owner: setup.user2.toString(),
 			signer: setup.authority.toString(),
 			assetMint: mint,
-			level: 1,
+			levels: [1],
 		};
 		const setupIx2 = await rwaClient.identityRegistry.setupUserIxns(
 			setupUser2Args

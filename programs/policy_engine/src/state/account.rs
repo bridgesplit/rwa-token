@@ -136,6 +136,7 @@ impl PolicyAccount {
 
     /// enforces different types of policies
     #[inline(never)]
+    #[allow(clippy::too_many_arguments)]
     pub fn enforce_policy(
         &mut self,
         transfer_amount: u64,

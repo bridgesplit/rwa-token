@@ -26,12 +26,12 @@ pub struct RemoveLevelFromIdentityAccount<'info> {
         seeds = [&[level], identity_account.identity_registry.as_ref()],
         bump,
     )]
-    pub limit_account: Box<Account<'info, IdentityMetadataAccount>>,
+    pub identity_metadata_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<RemoveLevelFromIdentityAccount>, level: u8) -> Result<()> {
     ctx.accounts.identity_account.remove_level(level)?;
-    ctx.accounts.limit_account.remove_user()?;
+    ctx.accounts.identity_metadata_account.remove_user()?;
     Ok(())
 }
