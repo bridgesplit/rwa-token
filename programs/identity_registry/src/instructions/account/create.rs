@@ -25,7 +25,7 @@ pub struct CreateIdentityAccount<'info> {
         init_if_needed,
         payer = payer,
         space = 8 + IdentityMetadataAccount::INIT_SPACE,
-        seeds = [&[level], identity_account.identity_registry.as_ref()],
+        seeds = [&[level], identity_registry.key().as_ref()],
         bump,
     )]
     pub identity_metadata_account: Box<Account<'info, IdentityMetadataAccount>>,
