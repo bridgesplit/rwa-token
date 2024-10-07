@@ -203,6 +203,9 @@ impl PolicyAccount {
                         if receiver_balance == 0 && source_balance != transfer_amount {
                             *current_number += 1;
                         }
+                        if source_balance == transfer_amount {
+                            *current_number -= 1;
+                        }
                         if current_number > limit {
                             return Err(PolicyEngineErrors::HolderLimitExceeded.into());
                         }
