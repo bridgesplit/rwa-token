@@ -163,8 +163,8 @@ pub fn handler(ctx: Context<ExecuteTransferHook>, amount: u64) -> Result<()> {
         Clock::get()?.unix_timestamp,
         &source_levels,
         &receiver_levels,
-        ctx.accounts.source_account.amount,
-        ctx.accounts.destination_account.amount,
+        ctx.accounts.source_account.amount + amount, // execute runs after transfer happens, hance balance must be updated
+        ctx.accounts.destination_account.amount - amount,
         &transfers,
     )?;
 

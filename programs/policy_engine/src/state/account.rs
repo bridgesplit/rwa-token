@@ -192,7 +192,7 @@ impl PolicyAccount {
                     return Err(PolicyEngineErrors::TransferPaused.into());
                 }
                 PolicyType::ForceFullTransfer => {
-                    if enforce_identity_filter(receiver_identity, policy.identity_filter).is_ok()
+                    if enforce_identity_filter(source_identity, policy.identity_filter).is_ok()
                         && source_balance != transfer_amount
                     {
                         return Err(PolicyEngineErrors::ForceFullTransfer.into());
@@ -224,7 +224,7 @@ impl PolicyAccount {
                         *current_balance += transfer_amount as u128;
                     }
                     if enforce_identity_filter(source_identity, policy.identity_filter).is_ok() {
-                        *current_balance -= transfer_amount as u128;
+                        *current_balance = current_balance.saturating_sub(transfer_amount as u128);
                     }
                     if current_balance > limit {
                         return Err(PolicyEngineErrors::HolderLimitExceeded.into());
