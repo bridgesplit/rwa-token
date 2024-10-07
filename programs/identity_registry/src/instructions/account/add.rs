@@ -27,11 +27,11 @@ pub struct AddLevelToIdentityAccount<'info> {
     #[account(
         init_if_needed,
         payer = payer,
-        space = 8 + IdentityLimitAccount::INIT_SPACE,
+        space = 8 + IdentityMetadataAccount::INIT_SPACE,
         seeds = [&[level], identity_account.identity_registry.as_ref()],
         bump,
     )]
-    pub limit_account: Box<Account<'info, IdentityLimitAccount>>,
+    pub limit_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 

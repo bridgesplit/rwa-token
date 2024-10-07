@@ -4,7 +4,7 @@ use crate::IdentityRegistryErrors;
 
 #[account()]
 #[derive(InitSpace)]
-pub struct IdentityLimitAccount {
+pub struct IdentityMetadataAccount {
     /// version of the account
     pub version: u8,
     /// identity registry to which the account belongs
@@ -17,7 +17,7 @@ pub struct IdentityLimitAccount {
     pub max_users: u64,
 }
 
-impl IdentityLimitAccount {
+impl IdentityMetadataAccount {
     pub const VERSION: u8 = 1;
     pub fn new(&mut self, identity_registry: Pubkey, level: u8, max_users: u64) {
         self.identity_registry = identity_registry;

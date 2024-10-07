@@ -26,7 +26,7 @@ pub struct RemoveLevelFromIdentityAccount<'info> {
         seeds = [&[level], identity_account.identity_registry.as_ref()],
         bump,
     )]
-    pub limit_account: Box<Account<'info, IdentityLimitAccount>>,
+    pub limit_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 

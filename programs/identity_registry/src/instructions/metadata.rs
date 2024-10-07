@@ -5,7 +5,7 @@ use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
 #[instruction(level: u8)]
-pub struct EditLevelLimit<'info> {
+pub struct EditIdentityMetadata<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account(
@@ -17,15 +17,15 @@ pub struct EditLevelLimit<'info> {
     #[account(
         init_if_needed,
         payer = payer,
-        space = 8 + IdentityLimitAccount::INIT_SPACE,
+        space = 8 + IdentityMetadataAccount::INIT_SPACE,
         seeds = [&[level], identity_registry.key().as_ref()],
         bump,
     )]
-    pub limit_account: Box<Account<'info, IdentityLimitAccount>>,
+    pub limit_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<EditLevelLimit>, level: u8, max_allowed: Option<u64>) -> Result<()> {
+pub fn handler(ctx: Context<EditIdentityMetadata>, level: u8, max_allowed: Option<u64>) -> Result<()> {
     let max_allowed = max_allowed.unwrap_or(u64::MAX);
     // init limit account if level is not present
     if ctx.accounts.limit_account.level == 0 {

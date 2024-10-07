@@ -71,12 +71,12 @@ pub mod identity_registry {
         Ok(())
     }
 
-    /// edit level limit
-    pub fn edit_level_limit(
-        ctx: Context<EditLevelLimit>,
+    /// edit identity metadata
+    pub fn edit_identity_metdata(
+        ctx: Context<EditIdentityMetadata>,
         level: u8,
         max_allowed: Option<u64>,
     ) -> Result<()> {
-        instructions::limit::handler(ctx, level, max_allowed)
+        instructions::metadata::handler(ctx, level, max_allowed)
     }
 }
