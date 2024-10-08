@@ -1,6 +1,6 @@
 {
     "name": "@bridgesplit/rwa-token-sdk",
-    "version": "0.0.27",
+    "version": "0.0.31",
     "description": "RWA Token SDK for the development of permissioned tokens on SVM blockchains.",
     "homepage": "https://github.com/bridgesplit/rwa-token#readme",
     "main": "dist/index",
@@ -44,8 +44,8 @@
     "author": "Standard Labs, Inc.",
     "contributors": [
         "Luke Truitt <luke@fromstandard.com>",
-        "Bhargava Sai Macha <bhargava@bridgesplit.com>",
-        "Chris Hagedorn <chris@bridgesplit.com>"
+        "Bhargava Sai Macha <bhargava@loopscale.com>",
+        "Chris Hagedorn <chris@loopscale.com>"
     ],
     "license": "MIT"
 }

@@ -1,9 +1,11 @@
+use std::u64;
+
 use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction(owner: Pubkey, level: u8)]
-pub struct CreateIdentityAccount<'info> {
+#[instruction(level: u8)]
+pub struct EditIdentityMetadata<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account(
@@ -12,15 +14,6 @@ pub struct CreateIdentityAccount<'info> {
     pub signer: Signer<'info>,
     #[account()]
     pub identity_registry: Box<Account<'info, IdentityRegistryAccount>>,
-    #[account(
-        init,
-        space = 8 + IdentityAccount::INIT_SPACE,
-        seeds = [identity_registry.key().as_ref(), owner.as_ref()],
-        bump,
-        payer = payer,
-        constraint = level != 0,
-    )]
-    pub identity_account: Box<Account<'info, IdentityAccount>>,
     #[account(
         init_if_needed,
         payer = payer,
@@ -32,18 +25,19 @@ pub struct CreateIdentityAccount<'info> {
     pub system_program: Program<'info, System>,
 }
 
-pub fn handler(ctx: Context<CreateIdentityAccount>, owner: Pubkey, level: u8) -> Result<()> {
+pub fn handler(
+    ctx: Context<EditIdentityMetadata>,
+    level: u8,
+    max_allowed: Option<u64>,
+) -> Result<()> {
+    let max_allowed = max_allowed.unwrap_or(u64::MAX);
     // init limit account if level is not present
     if ctx.accounts.identity_metadata_account.level == 0 {
         ctx.accounts.identity_metadata_account.new(
             ctx.accounts.identity_registry.key(),
             level,
-            u64::MAX,
+            max_allowed,
         );
     }
-    ctx.accounts.identity_account.add_level(level)?;
-    ctx.accounts
-        .identity_account
-        .new(owner, ctx.accounts.identity_registry.key(), level);
     Ok(())
 }

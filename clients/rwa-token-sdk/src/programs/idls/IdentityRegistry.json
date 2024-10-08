@@ -54,6 +54,10 @@
           }
         },
         {
+          "name": "identity_metadata_account",
+          "writable": true
+        },
+        {
           "name": "system_program",
           "address": "11111111111111111111111111111111"
         }
@@ -109,6 +113,10 @@
               }
             ]
           }
+        },
+        {
+          "name": "identity_metadata_account",
+          "writable": true
         },
         {
           "name": "system_program",
@@ -218,6 +226,56 @@
       ]
     },
     {
+      "name": "edit_identity_metdata",
+      "docs": [
+        "edit identity metadata"
+      ],
+      "discriminator": [
+        140,
+        213,
+        200,
+        29,
+        44,
+        134,
+        114,
+        206
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "identity_registry"
+        },
+        {
+          "name": "identity_metadata_account",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "level",
+          "type": "u8"
+        },
+        {
+          "name": "max_allowed",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ]
+    },
+    {
       "name": "remove_level_from_identity_account",
       "docs": [
         "remove level from identity account"
@@ -261,6 +319,10 @@
               }
             ]
           }
+        },
+        {
+          "name": "identity_metadata_account",
+          "writable": true
         },
         {
           "name": "system_program",
@@ -352,6 +414,19 @@
       ]
     },
     {
+      "name": "IdentityMetadataAccount",
+      "discriminator": [
+        170,
+        131,
+        34,
+        74,
+        232,
+        122,
+        201,
+        9
+      ]
+    },
+    {
       "name": "IdentityRegistryAccount",
       "discriminator": [
         154,
@@ -385,6 +460,11 @@
       "code": 6003,
       "name": "UnauthorizedSigner",
       "msg": "Unauthorized signer"
+    },
+    {
+      "code": 6004,
+      "name": "LimitReached",
+      "msg": "Identity limit reached"
     }
   ],
   "types": [
@@ -417,6 +497,49 @@
           {
             "name": "levels",
             "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "IdentityMetadataAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "docs": [
+              "version of the account"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "identity_registry",
+            "docs": [
+              "identity registry to which the account belongs"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "level",
+            "docs": [
+              "identity level"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "current_users",
+            "docs": [
+              "current number of users"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "max_users",
+            "docs": [
+              "max number of users"
+            ],
+            "type": "u64"
           }
         ]
       }

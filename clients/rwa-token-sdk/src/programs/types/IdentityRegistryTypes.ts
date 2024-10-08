@@ -60,6 +60,10 @@ export type IdentityRegistry = {
           }
         },
         {
+          "name": "identityMetadataAccount",
+          "writable": true
+        },
+        {
           "name": "systemProgram",
           "address": "11111111111111111111111111111111"
         }
@@ -115,6 +119,10 @@ export type IdentityRegistry = {
               }
             ]
           }
+        },
+        {
+          "name": "identityMetadataAccount",
+          "writable": true
         },
         {
           "name": "systemProgram",
@@ -224,6 +232,56 @@ export type IdentityRegistry = {
       ]
     },
     {
+      "name": "editIdentityMetdata",
+      "docs": [
+        "edit identity metadata"
+      ],
+      "discriminator": [
+        140,
+        213,
+        200,
+        29,
+        44,
+        134,
+        114,
+        206
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "signer",
+          "signer": true
+        },
+        {
+          "name": "identityRegistry"
+        },
+        {
+          "name": "identityMetadataAccount",
+          "writable": true
+        },
+        {
+          "name": "systemProgram",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "level",
+          "type": "u8"
+        },
+        {
+          "name": "maxAllowed",
+          "type": {
+            "option": "u64"
+          }
+        }
+      ]
+    },
+    {
       "name": "removeLevelFromIdentityAccount",
       "docs": [
         "remove level from identity account"
@@ -267,6 +325,10 @@ export type IdentityRegistry = {
               }
             ]
           }
+        },
+        {
+          "name": "identityMetadataAccount",
+          "writable": true
         },
         {
           "name": "systemProgram",
@@ -358,6 +420,19 @@ export type IdentityRegistry = {
       ]
     },
     {
+      "name": "identityMetadataAccount",
+      "discriminator": [
+        170,
+        131,
+        34,
+        74,
+        232,
+        122,
+        201,
+        9
+      ]
+    },
+    {
       "name": "identityRegistryAccount",
       "discriminator": [
         154,
@@ -391,6 +466,11 @@ export type IdentityRegistry = {
       "code": 6003,
       "name": "unauthorizedSigner",
       "msg": "Unauthorized signer"
+    },
+    {
+      "code": 6004,
+      "name": "limitReached",
+      "msg": "Identity limit reached"
     }
   ],
   "types": [
@@ -423,6 +503,49 @@ export type IdentityRegistry = {
           {
             "name": "levels",
             "type": "bytes"
+          }
+        ]
+      }
+    },
+    {
+      "name": "identityMetadataAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "version",
+            "docs": [
+              "version of the account"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "identityRegistry",
+            "docs": [
+              "identity registry to which the account belongs"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "level",
+            "docs": [
+              "identity level"
+            ],
+            "type": "u8"
+          },
+          {
+            "name": "currentUsers",
+            "docs": [
+              "current number of users"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "maxUsers",
+            "docs": [
+              "max number of users"
+            ],
+            "type": "u64"
           }
         ]
       }

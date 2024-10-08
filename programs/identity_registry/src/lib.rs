@@ -70,4 +70,13 @@ pub mod identity_registry {
         // no extra steps needed, identity account is being properly closed
         Ok(())
     }
+
+    /// edit identity metadata
+    pub fn edit_identity_metdata(
+        ctx: Context<EditIdentityMetadata>,
+        level: u8,
+        max_allowed: Option<u64>,
+    ) -> Result<()> {
+        instructions::metadata::handler(ctx, level, max_allowed)
+    }
 }

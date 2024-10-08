@@ -10,4 +10,6 @@ pub enum IdentityRegistryErrors {
     LevelNotFound,
     #[msg("Unauthorized signer")]
     UnauthorizedSigner,
+    #[msg("Identity limit reached")]
+    LimitReached,
 }

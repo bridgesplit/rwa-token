@@ -174,7 +174,7 @@ describe("test policy setup", async () => {
 			payer: setup.payer.toString(),
 			owner: setup.user1.toString(),
 			assetMint: mint,
-			level: 1,
+			levels: [1],
 			signer: setup.authorityKp.publicKey.toString()
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, setup.authorityKp, ...setupUser.signers]);
@@ -186,7 +186,7 @@ describe("test policy setup", async () => {
 			payer: setup.payer.toString(),
 			owner: setup.user2.toString(),
 			assetMint: mint,
-			level: 2,
+			levels: [2],
 			signer: setup.authorityKp.publicKey.toString()
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, setup.authorityKp, ...setupUser.signers]);
@@ -198,7 +198,7 @@ describe("test policy setup", async () => {
 			payer: setup.payer.toString(),
 			owner: setup.user3.toString(),
 			assetMint: mint,
-			level: 255, // Skips all policies
+			levels: [255], // Skips all policies
 			signer: setup.authorityKp.publicKey.toString()
 		});
 		const txnId = await sendAndConfirmTransaction(setup.provider.connection, new Transaction().add(...setupUser.ixs), [setup.payerKp, setup.authorityKp, ...setupUser.signers]);

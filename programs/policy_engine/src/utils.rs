@@ -67,59 +67,6 @@ pub struct Transfer {
     pub timestamp: i64,
 }
 
-/// enforces different types of policies
-#[inline(never)]
-pub fn enforce_policy(
-    policies: Vec<Policy>,
-    amount: u64,
-    timestamp: i64,
-    identity: &[u8],
-    balance: u64,
-    transfers: &Vec<Transfer>,
-) -> Result<()> {
-    for policy in policies.iter() {
-        match policy.policy_type {
-            PolicyType::IdentityApproval => {
-                enforce_identity_filter(identity, policy.identity_filter)?;
-            }
-            PolicyType::TransactionAmountLimit { limit } => {
-                if enforce_identity_filter(identity, policy.identity_filter).is_ok()
-                    && amount > limit
-                {
-                    return Err(PolicyEngineErrors::TransactionAmountLimitExceeded.into());
-                }
-            }
-            PolicyType::TransactionAmountVelocity { limit, timeframe } => {
-                if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
-                    let total_amount_transferred =
-                        get_total_amount_transferred_in_timeframe(transfers, timeframe, timestamp);
-
-                    if total_amount_transferred + amount > limit {
-                        return Err(PolicyEngineErrors::TransactionAmountVelocityExceeded.into());
-                    }
-                }
-            }
-            PolicyType::TransactionCountVelocity { limit, timeframe } => {
-                if enforce_identity_filter(identity, policy.identity_filter).is_ok() {
-                    let total_transactions =
-                        get_total_transactions_in_timeframe(transfers, timeframe, timestamp);
-                    if total_transactions + 1 > limit {
-                        return Err(PolicyEngineErrors::TransactionCountVelocityExceeded.into());
-                    }
-                }
-            }
-            PolicyType::MaxBalance { limit } => {
-                if enforce_identity_filter(identity, policy.identity_filter).is_ok()
-                    && amount + balance > limit
-                {
-                    return Err(PolicyEngineErrors::MaxBalanceExceeded.into());
-                }
-            }
-        }
-    }
-    Ok(())
-}
-
 pub const TRANSFER_HOOK_MINT_INDEX: usize = 1;
 
 pub fn verify_cpi_program_is_token22(
@@ -172,7 +119,7 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
             false,
             false,
         )?,
-        // user identity account
+        // receiver identity account
         ExtraAccountMeta::new_external_pda_with_seeds(
             6,
             &[
@@ -204,5 +151,19 @@ pub fn get_extra_account_metas() -> Result<Vec<ExtraAccountMeta>> {
         ExtraAccountMeta::new_with_seeds(&[Seed::AccountKey { index: 5 }], false, true)?,
         // instructions program
         ExtraAccountMeta::new_with_pubkey(&sysvar::instructions::id(), false, false)?,
+        // source identity account
+        ExtraAccountMeta::new_external_pda_with_seeds(
+            6,
+            &[
+                Seed::AccountKey { index: 7 },
+                Seed::AccountData {
+                    account_index: 0,
+                    data_index: 32,
+                    length: 32,
+                },
+            ],
+            false,
+            false,
+        )?,
     ])
 }

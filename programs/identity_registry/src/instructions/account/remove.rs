@@ -2,7 +2,7 @@ use crate::state::*;
 use anchor_lang::prelude::*;
 
 #[derive(Accounts)]
-#[instruction()]
+#[instruction(level: u8)]
 pub struct RemoveLevelFromIdentityAccount<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
@@ -21,10 +21,17 @@ pub struct RemoveLevelFromIdentityAccount<'info> {
         realloc::payer = payer,
     )]
     pub identity_account: Box<Account<'info, IdentityAccount>>,
+    #[account(
+        mut,
+        seeds = [&[level], identity_account.identity_registry.as_ref()],
+        bump,
+    )]
+    pub identity_metadata_account: Box<Account<'info, IdentityMetadataAccount>>,
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<RemoveLevelFromIdentityAccount>, level: u8) -> Result<()> {
     ctx.accounts.identity_account.remove_level(level)?;
+    ctx.accounts.identity_metadata_account.remove_user()?;
     Ok(())
 }

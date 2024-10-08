@@ -173,6 +173,7 @@ export type DataRegistry = {
       "accounts": [
         {
           "name": "signer",
+          "writable": true,
           "signer": true
         },
         {
