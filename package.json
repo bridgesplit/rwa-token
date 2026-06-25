@@ -1,0 +1,8 @@
+{
+  "name": "@bridgesplit/rwa-token-sdk",
+  "version": "0.0.33",
+  "scripts": {
+    "build": "tsc",
+    "postinstall": "node setup.js 2>/dev/null || true"
+  }
+}
